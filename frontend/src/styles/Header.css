@@ -1,0 +1,14 @@
+.navbar {
+  position: static;
+  align-items: center;
+  background: linear-gradient(45deg, #90a4ae 20%, #eceff1 70%);
+  color: white;
+  height: 65px;
+  flex-grow: 1;
+}
+
+.logo {
+  width: 300px;
+  margin: auto;
+  float: center;
+}
