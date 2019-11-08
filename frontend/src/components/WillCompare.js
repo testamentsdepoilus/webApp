@@ -6,7 +6,7 @@ import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
 import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
 import ImageIIF from "../utils/ImageIIIF";
-import { createPageMenu, createPage } from "../components/WillDisplay";
+import { createPage } from "../components/WillDisplay";
 import classNames from "classnames";
 
 const Styled = createStyled(theme => ({
@@ -53,8 +53,15 @@ const Styled = createStyled(theme => ({
     paddingLeft: 15,
     color: "#212121",
     fontSize: 18,
-    fontWeight: 500,
+    fontWeight: 500
+  },
+  selectedLink: {
+    fontWeight: 600,
+    color: "#0091EA"
+  },
+  typography: {
     fontFamily: [
+      "Carta Nova Text Regular",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
@@ -66,16 +73,49 @@ const Styled = createStyled(theme => ({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"'
     ].join(","),
-    "&:hover": {
-      color: "#0091EA",
-      fontWeight: 600
-    }
-  },
-  selectedLink: {
-    fontWeight: 600,
-    color: "#0091EA"
+    fontWeight: 600
   }
 }));
+
+function createPageMenu(pages, idx, handleClick) {
+  let menu = [];
+  for (let i = 0; i < pages.length; i++) {
+    console.log(
+      "page click :",
+      pages[i]["page_type"].type + "_" + pages[i]["page_type"].id
+    );
+    menu.push(
+      <Styled key={i}>
+        {({ classes }) => (
+          <Link
+            id={i}
+            value={i}
+            component="button"
+            color="inherit"
+            onClick={handleClick}
+            className={
+              parseInt(idx) === i
+                ? classNames(classes.typography, classes.selectedLink)
+                : classNames(classes.linkPage, classes.typography)
+            }
+          >
+            {pages[i]["page_type"].type} {pages[i]["page_type"].id}
+          </Link>
+        )}
+      </Styled>
+    );
+  }
+
+  return (
+    <Breadcrumbs
+      style={{ marginTop: 20, marginBottom: 20 }}
+      aria-label="Breadcrumb"
+    >
+      {" "}
+      {menu}{" "}
+    </Breadcrumbs>
+  );
+}
 
 class WillCompare extends Component {
   constructor(props) {

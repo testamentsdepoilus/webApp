@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link as RouterLink, withRouter } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
 import {
   createStyled,
@@ -70,42 +71,6 @@ const Styled = createStyled(theme => ({
     fontSize: 18
   }
 }));
-
-export function createPageMenu(pages, idx, handleClick) {
-  let menu = [];
-  for (let i = 0; i < pages.length; i++) {
-    menu.push(
-      <Styled key={i}>
-        {({ classes }) => (
-          <Link
-            id={i}
-            value={i}
-            component="button"
-            color="inherit"
-            href="#"
-            onClick={handleClick}
-            className={
-              parseInt(idx) === i
-                ? classNames(classes.typography, classes.selectedLink)
-                : classNames(classes.linkPage, classes.typography)
-            }
-          >
-            {pages[i]["page_type"].type} {pages[i]["page_type"].id}
-          </Link>
-        )}
-      </Styled>
-    );
-  }
-  return (
-    <Breadcrumbs
-      style={{ marginTop: 20, marginBottom: 20 }}
-      aria-label="Breadcrumb"
-    >
-      {" "}
-      {menu}{" "}
-    </Breadcrumbs>
-  );
-}
 
 export function createPage(page, type) {
   let output = (
@@ -370,7 +335,8 @@ export default class WillDisplay extends Component {
                   </Paper>
                 </Grid>
                 <Grid key={0} item>
-                  {createPageMenu(
+                  {this.props.createPageMenu(
+                    this.props.data["_id"],
                     this.props.data["will_pages"],
                     cur_idx,
                     this.handlePageClick

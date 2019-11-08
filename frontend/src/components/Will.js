@@ -14,9 +14,96 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import "../styles/Wills.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { getParamConfig } from "../utils/functions";
+import { getParamConfig, createStyled } from "../utils/functions";
+import classNames from "classnames";
 
 const { ResultListWrapper } = ReactiveList;
+
+const Styled = createStyled(theme => ({
+  link: {
+    textTransform: "none",
+    paddingLeft: 15,
+    color: "#212121",
+    fontSize: 18,
+    fontWeight: 500,
+    fontFamily: "-apple-system",
+    "&:hover, &:focus": {
+      color: "#0091EA",
+      fontWeight: 600,
+      backgroundColor: "#eceff1"
+    },
+    "&:active": {
+      color: "#0091EA",
+      fontWeight: 600
+    }
+  },
+  activedLink: {
+    color: "#0091EA",
+    fontWeight: 600
+  },
+
+  linkPage: {
+    color: "#212121",
+    fontSize: 18,
+    fontWeight: 400,
+    "&:hover": {
+      color: "#0091EA"
+    }
+  },
+  selectedLink: {
+    fontWeight: 600,
+    color: "#0091EA",
+    fontSize: 18
+  }
+}));
+
+function createPageMenu(will_id, pages, idx, handleClick) {
+  let menu = [];
+  for (let i = 0; i < pages.length; i++) {
+    console.log(
+      "page click :",
+      pages[i]["page_type"].type + "_" + pages[i]["page_type"].id
+    );
+    menu.push(
+      <Styled key={i}>
+        {({ classes }) => (
+          <Link
+            id={i}
+            value={i}
+            component="button"
+            color="inherit"
+            component={RouterLink}
+            to={
+              "/will/" +
+              will_id +
+              "/" +
+              pages[i]["page_type"].type +
+              "_" +
+              pages[i]["page_type"].id
+            }
+            onClick={handleClick}
+            className={
+              parseInt(idx) === i
+                ? classNames(classes.typography, classes.selectedLink)
+                : classNames(classes.linkPage, classes.typography)
+            }
+          >
+            {pages[i]["page_type"].type} {pages[i]["page_type"].id}
+          </Link>
+        )}
+      </Styled>
+    );
+  }
+  return (
+    <Breadcrumbs
+      style={{ marginTop: 20, marginBottom: 20 }}
+      aria-label="Breadcrumb"
+    >
+      {" "}
+      {menu}{" "}
+    </Breadcrumbs>
+  );
+}
 
 class Will extends Component {
   constructor(props) {
@@ -41,7 +128,11 @@ class Will extends Component {
       return (
         <div className="root">
           <Paper>
-            <WillDisplay data={res.data[0]} cur_page={this.state.page} />
+            <WillDisplay
+              data={res.data[0]}
+              cur_page={this.state.page}
+              createPageMenu={createPageMenu}
+            />
           </Paper>
         </div>
       );

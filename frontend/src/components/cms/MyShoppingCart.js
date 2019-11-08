@@ -18,13 +18,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import EditIcon from "@material-ui/icons/Edit";
+import VisibilityIcon from "@material-ui/icons/VisibilityOutlined";
+import ExportIcon from "@material-ui/icons/SaveAltOutlined";
+import CompareIcon from "@material-ui/icons/CompareOutlined";
 
 import {
   createStyled,
-  getHits,
   getParamConfig,
-  removePost
+  updateMyListWills,
+  getHitsFromQuery,
+  getUserToken
 } from "../../utils/functions";
 import {
   NativeSelect,
@@ -34,7 +37,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Snackbar
+  Snackbar,
+  Grid
 } from "@material-ui/core";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import NewPost from "./NewPost";
@@ -45,23 +49,6 @@ import Menu from "./Menu";
 function createData(author, title) {
   return { author, title };
 }
-/*
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Honeycomb", 408, 3.2, 87, 6.5),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0),
-  createData("KitKat", 518, 26.0, 65, 7.0),
-  createData("Lollipop", 392, 0.2, 98, 0.0),
-  createData("Marshmallow", 318, 0, 81, 2.0),
-  createData("Nougat", 360, 19.0, 9, 37.0),
-  createData("Oreo", 437, 18.0, 63, 4.0)
-];
-*/
 
 function desc(a, b, orderBy) {
   if (b._source[orderBy] < a._source[orderBy]) {
@@ -90,12 +77,11 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "title", numeric: false, disablePadding: false, label: "Titre" },
   {
-    id: "author",
+    id: "will_identifier.name",
     numeric: false,
     disablePadding: false,
-    label: "Auteur"
+    label: "Nom de testateur"
   }
 ];
 
@@ -186,7 +172,7 @@ const Styled_1 = createStyled(theme => ({
 }));
 
 const EnhancedTableToolbar = props => {
-  const { numSelected, selectComponent, addButton, deleteButton } = props;
+  const { numSelected, addButton, actionButton } = props;
 
   return (
     <Styled_1>
@@ -207,11 +193,11 @@ const EnhancedTableToolbar = props => {
             </Typography>
           ) : (
             <Typography className={classes.title} variant="h6" id="tableTitle">
-              Gestion de contenu
+              Mes testaments
             </Typography>
           )}
 
-          {numSelected > 0 ? deleteButton : selectComponent}
+          {numSelected > 0 ? actionButton : null}
         </Toolbar>
       )}
     </Styled_1>
@@ -220,9 +206,8 @@ const EnhancedTableToolbar = props => {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  selectComponent: PropTypes.element.isRequired,
   addButton: PropTypes.element.isRequired,
-  deleteButton: PropTypes.element.isRequired
+  actionButton: PropTypes.element.isRequired
 };
 const AlertMessage = props => {
   const { openAlert, handleClose, message } = props;
@@ -290,7 +275,7 @@ const Styled_2 = createStyled(theme => ({
   }
 }));
 
-export default class Manage extends Component {
+export default class MyShoppingCart extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -300,14 +285,13 @@ export default class Manage extends Component {
       page: 0,
       rowsPerPage: 5,
       data: [],
-      selectData: [],
-      type: 1,
       choice: 2,
       open: false,
       openAlert: false,
       mess: "",
       editData: null
     };
+    this.userToken = getUserToken();
   }
 
   handleRequestSort = (event, property) => {
@@ -321,7 +305,7 @@ export default class Manage extends Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = this.state.selectData.map(n => n["_id"]);
+      const newSelecteds = this.state.data.map(n => n["_id"]);
       this.setState({
         selected: newSelecteds
       });
@@ -368,18 +352,6 @@ export default class Manage extends Component {
     });
   };
 
-  handleTypeChange = event => {
-    const newSelectData = this.state.data.filter(
-      item =>
-        parseInt(item._source["type"], 10) === parseInt(event.target.value, 10)
-    );
-    console.log("newSelectData :", newSelectData);
-    this.setState({
-      type: event.target.value,
-      selectData: newSelectData
-    });
-  };
-
   handleAddNewPost = event => {
     this.setState({
       choice: 0
@@ -390,7 +362,7 @@ export default class Manage extends Component {
     document.location.reload();
   };
 
-  handleRemovePost = event => {
+  handleRemoveWill = event => {
     this.setState({
       open: true
     });
@@ -404,18 +376,28 @@ export default class Manage extends Component {
 
   handleDialogConfirm = event => {
     event.preventDefault();
-    removePost(this.state.selected).then(res => {
+    let myWills_ = sessionStorage.myWills
+      .split(",")
+      .filter(item => !this.state.selected.includes(item));
+
+    const newItem = {
+      email: this.userToken.email,
+      myWills: myWills_
+    };
+    updateMyListWills(newItem).then(res => {
       if (res.status === 200) {
         this.setState({
           open: false,
           openAlert: true,
-          mess: res.mess
+          mess: "Vos éléments sélectionnés ont été supprimés !"
         });
+        sessionStorage.setItem("myWills", myWills_);
       } else {
+        const err = res.err ? res.err : "Connexion au serveur a échoué !";
         this.setState({
           open: false,
           openAlert: true,
-          mess: res.err
+          mess: err
         });
       }
     });
@@ -425,25 +407,33 @@ export default class Manage extends Component {
     document.location.reload();
   };
 
-  handleUpdatePost = data => {
+  handleDisplayWill = id => {
     return function(e) {
-      this.setState({
-        choice: 1,
-        editData: data
-      });
-    }.bind(this);
+      window.location.href = getParamConfig("web_url") + "/will/" + id;
+    };
+  };
+
+  handleCompareWill = event => {
+    window.location.href =
+      getParamConfig("web_url") + "/compare/" + this.state.selected.join("+");
   };
 
   componentDidMount() {
-    const newData = getHits(
-      getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
-    );
-    const newSelectData = newData.filter(
-      item => item._source["type"] === this.state.type
-    );
+    const newData =
+      sessionStorage.myWills.length > 0
+        ? getHitsFromQuery(
+            getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+            JSON.stringify({
+              query: {
+                ids: {
+                  values: sessionStorage.myWills.split(",")
+                }
+              }
+            })
+          )
+        : [];
     this.setState({
-      data: newData,
-      selectData: newSelectData
+      data: newData
     });
   }
   render() {
@@ -452,26 +442,9 @@ export default class Manage extends Component {
       this.state.rowsPerPage -
       Math.min(
         this.state.rowsPerPage,
-        this.state.selectData.length - this.state.page * this.state.rowsPerPage
+        this.state.data.length - this.state.page * this.state.rowsPerPage
       );
-    const selectComponent = (
-      <Styled_2>
-        {({ classes }) => (
-          <NativeSelect
-            id="type"
-            className={classes.typeSelect}
-            variant="outlined"
-            value={this.state.type}
-            name="type"
-            onChange={this.handleTypeChange}
-          >
-            <option value={1}>Article</option>
-            <option value={2}>Actualité</option>
-            <option value={3}>A propos</option>
-          </NativeSelect>
-        )}
-      </Styled_2>
-    );
+
     const addButton = (
       <Styled_2>
         {({ classes }) => (
@@ -500,12 +473,30 @@ export default class Manage extends Component {
       </Styled_2>
     );
 
-    const deleteButton = (
-      <Tooltip title="Suppression de contenu">
-        <IconButton onClick={this.handleRemovePost} aria-label="delete">
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
+    const actionButton = (
+      <Grid container direction="row" justify="flex-end" alignItems="center">
+        <Grid item>
+          <Tooltip title="Suppression de stestaments">
+            <IconButton onClick={this.handleRemoveWill} aria-label="delete">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="Export des testament">
+            <IconButton onClick={this.handleExportWill} aria-label="export">
+              <ExportIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="Comparer des testaments">
+            <IconButton onClick={this.handleCompareWill} aria-label="compare">
+              <CompareIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+      </Grid>
     );
 
     const defaultView = (
@@ -513,12 +504,12 @@ export default class Manage extends Component {
         {({ classes }) => (
           <div className={classes.root}>
             <Menu />
+
             <Paper className={classes.paper}>
               <EnhancedTableToolbar
                 numSelected={this.state.selected.length}
-                selectComponent={selectComponent}
                 addButton={addButton}
-                deleteButton={deleteButton}
+                actionButton={actionButton}
               />
               <div className={classes.tableWrapper}>
                 <Table
@@ -534,11 +525,11 @@ export default class Manage extends Component {
                     orderBy={this.state.orderBy}
                     onSelectAllClick={this.handleSelectAllClick}
                     onRequestSort={this.handleRequestSort}
-                    rowCount={this.state.selectData.length}
+                    rowCount={this.state.data.length}
                   />
                   <TableBody>
                     {stableSort(
-                      this.state.selectData,
+                      this.state.data,
                       getSorting(this.state.order, this.state.orderBy)
                     )
                       .slice(
@@ -574,18 +565,19 @@ export default class Manage extends Component {
                               scope="row"
                               padding="none"
                             >
-                              {row._source["title"]}
+                              {row._source["will_identifier.name"].replace(
+                                "Testament de",
+                                ""
+                              )}
                             </TableCell>
-                            <TableCell align="left">
-                              {row._source["author"]}
-                            </TableCell>
+
                             <TableCell align="center">
-                              <Tooltip title="Mise à jour du contenu">
+                              <Tooltip title="Afficher le testatement">
                                 <IconButton
-                                  onClick={this.handleUpdatePost(row)}
-                                  aria-label="update"
+                                  onClick={this.handleDisplayWill(row["_id"])}
+                                  aria-label="display"
                                 >
-                                  <EditIcon />
+                                  <VisibilityIcon />
                                 </IconButton>
                               </Tooltip>
                             </TableCell>
@@ -603,7 +595,7 @@ export default class Manage extends Component {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={this.state.selectData.length}
+                count={this.state.data.length}
                 rowsPerPage={this.state.rowsPerPage}
                 page={this.state.page}
                 backIconButtonProps={{

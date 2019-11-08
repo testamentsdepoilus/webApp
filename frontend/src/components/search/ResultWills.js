@@ -26,7 +26,9 @@ import {
   createStyled,
   getParamConfig,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
+  getHits_bis,
+  getHitsFromQuery
 } from "../../utils/functions";
 import WillCompare from "../WillCompare";
 import InfoIcon from "@material-ui/icons/Info";
@@ -117,8 +119,9 @@ export default class ResultWills extends React.Component {
       displayType: null,
       anchorEl: null,
       message: "",
-      userToken: null
+      myWills: []
     };
+    this.userToken = getUserToken();
     this.displayMore = this.displayMore.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleClickWill = this.handleClickWill.bind(this);
@@ -157,18 +160,23 @@ export default class ResultWills extends React.Component {
 
   handleAddShoppingWill(id) {
     return function(e) {
-      let curToken = this.state.userToken;
-      curToken.myWills.push(id);
+      let myWills_ =
+        sessionStorage.myWills.length > 0
+          ? sessionStorage.myWills.split(",")
+          : [];
+      myWills_.push(id);
       const newItem = {
-        email: curToken.email,
-        myWills: curToken.myWills
+        email: this.userToken.email,
+        myWills: myWills_
       };
+
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
             message: res.mess,
-            userToken: curToken
+            myWills: myWills_
           });
+          sessionStorage.setItem("myWills", myWills_);
         } else {
           const err = res.err ? res.err : "Connexion au serveur a échoué !";
 
@@ -182,21 +190,22 @@ export default class ResultWills extends React.Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let curToken = this.state.userToken;
-      curToken.myWills = curToken.myWills.filter(item => item !== id);
+      let myWills_ = sessionStorage.myWills
+        .split(",")
+        .filter(item => item !== id);
       const newItem = {
-        email: this.state.userToken.email,
-        myWills: curToken.myWills
+        email: this.userToken.email,
+        myWills: myWills_
       };
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
             message: res.mess,
-            userToken: curToken
+            myWills: myWills_
           });
+          sessionStorage.setItem("myWills", myWills_);
         } else {
           const err = res.err ? res.err : "Connexion au serveur a échoué !";
-
           this.setState({
             message: err
           });
@@ -262,10 +271,10 @@ export default class ResultWills extends React.Component {
   }
 
   handleCompareClick() {
-    this.setState({
-      openDialog: true,
-      displayType: "Compare"
-    });
+    const url_ids = this.state.chipData.map(item => item["id"]);
+
+    window.location.href =
+      getParamConfig("web_url") + "/compare/" + url_ids.join("+");
   }
 
   componentDidUpdate() {
@@ -303,13 +312,18 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      userToken: getUserToken()
-    });
+    if (sessionStorage.myWills) {
+      this.setState({
+        myWills:
+          sessionStorage.myWills.length > 0
+            ? sessionStorage.myWills.split(",")
+            : []
+      });
+    }
   }
+
   render() {
-    console.log("message :", this.state.message);
-    /*ReactDOM.render(<App />, document.getElementById('root'));*/
+    console.log("mess :", this.state.message);
     const results = this.state.curData.map((item, j) => {
       let descriptions = [];
       if (item.inner_hits) {
@@ -366,8 +380,8 @@ export default class ResultWills extends React.Component {
         });
       }
 
-      const isAdded = Boolean(this.state.userToken)
-        ? this.state.userToken.myWills.findIndex(el => el === item["_id"])
+      const isAdded = Boolean(this.userToken)
+        ? this.state.myWills.findIndex(el => el === item["_id"])
         : -1;
       return (
         <Styled key={j}>
@@ -422,7 +436,7 @@ export default class ResultWills extends React.Component {
                               )}
                             </Tooltip>
                           </Grid>
-                          {Boolean(this.state.userToken) ? (
+                          {Boolean(this.userToken) ? (
                             <Grid item>
                               {isAdded === -1 ? (
                                 <Tooltip
@@ -443,6 +457,7 @@ export default class ResultWills extends React.Component {
                                   style={{ cursor: "hand" }}
                                 >
                                   <RemoveShoppingCartIcon
+                                    color="action"
                                     onClick={this.handleremoveShoppingWill(
                                       item["_id"]
                                     )}

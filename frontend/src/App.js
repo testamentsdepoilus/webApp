@@ -14,6 +14,9 @@ import Home from "./components/Home";
 import Articles from "./components/Articles";
 import LogRegister from "./components/admin/LogRegister";
 import MySpace from "./components/admin/MySpace";
+import MyShoppingCart from "./components/cms/MyShoppingCart";
+import Manage from "./components/cms/Manage";
+import Compare from "./components/Compare";
 
 function App() {
   return (
@@ -25,14 +28,17 @@ function App() {
         <Route path="/news" component={News} />
         <Route path="/articles" component={Articles} />
         <Route exact path="/about" component={About} />
-        <Route exact path="/wills" component={Wills} />
-        <Route exact path="/profile" component={Profile} />
+        <Route path="/wills" component={Wills} />
         <Route exact path="/testators" component={Testators} />
         <Route exact path="/places" component={Places} />
         <Route path="/will" component={Will} />
         <Route path="/home" component={Home} />
         <Route exact path="/login" component={LogRegister} />
-        <Route path="/espace" component={MySpace} />
+        <Route exact path="/espace" component={MySpace} />
+        <Route exact path="/espace/profile" component={Profile} />
+        <Route exact path="/espace/panier" component={MyShoppingCart} />
+        <Route exact path="/espace/cms" component={Manage} />
+        <Route path="/compare" component={Compare} />
       </div>
     </BrowserRouter>
   );

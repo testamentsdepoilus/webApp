@@ -2,12 +2,22 @@ import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 import { Typography, List, ListItem, Grid } from "@material-ui/core";
 
-import { createStyled } from "../../utils/functions";
+import {
+  createStyled,
+  getUserToken,
+  getParamConfig
+} from "../../utils/functions";
+import Menu from "../cms/Menu";
 
 const Styled = createStyled(theme => ({
   root: {
+    width: "100%",
+    marginTop: theme.spacing(2)
+  },
+  profile: {
     width: "60%",
-    margin: "auto"
+    margin: "auto",
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -22,14 +32,15 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    const token = sessionStorage.usertoken;
-    if (token) {
-      const decoded = jwt_decode(token);
+    const myToken = getUserToken();
+    if (myToken) {
       this.setState({
-        first_name: decoded.user_name,
-        last_name: decoded.last_name,
-        email: decoded.email
+        first_name: myToken.user_name,
+        last_name: myToken.last_name,
+        email: myToken.email
       });
+    } else {
+      window.location.replace(getParamConfig("web_url") + "/login");
     }
   }
   render() {
@@ -37,29 +48,34 @@ class Profile extends Component {
       <Styled>
         {({ classes }) => (
           <div className={classes.root}>
-            <Grid container direction="column" justify="center">
-              <Grid item>
-                <Typography variant="h3"> PROFILE</Typography>
+            <Menu />
+            <div className={classes.profile}>
+              <Grid container direction="column" justify="center">
+                <Grid item>
+                  <Typography variant="h3"> PROFILE</Typography>
+                </Grid>
+                <Grid item>
+                  <List>
+                    <ListItem>
+                      Nom :{" "}
+                      <Typography variant="h5">
+                        {this.state.first_name}
+                      </Typography>
+                    </ListItem>
+                    <ListItem>
+                      Prénom :
+                      <Typography variant="h5">
+                        {this.state.last_name}
+                      </Typography>
+                    </ListItem>
+                    <ListItem>
+                      Adresse mail :
+                      <Typography variant="h5">{this.state.email}</Typography>
+                    </ListItem>
+                  </List>
+                </Grid>
               </Grid>
-              <Grid item>
-                <List>
-                  <ListItem>
-                    Nom :{" "}
-                    <Typography variant="h5">
-                      {this.state.first_name}
-                    </Typography>
-                  </ListItem>
-                  <ListItem>
-                    Prénom :
-                    <Typography variant="h5">{this.state.last_name}</Typography>
-                  </ListItem>
-                  <ListItem>
-                    Adresse mail :
-                    <Typography variant="h5">{this.state.email}</Typography>
-                  </ListItem>
-                </List>
-              </Grid>
-            </Grid>
+            </div>
           </div>
         )}
       </Styled>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { createStyled, getParamConfig } from "../utils/functions";
 import { Breadcrumbs, Paper, Link, Typography } from "@material-ui/core";
+import { ExplorMenu } from "./Wills";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -20,6 +21,7 @@ class Testators extends Component {
       <Styled>
         {({ classes }) => (
           <div className={classes.root}>
+            <ExplorMenu />
             <Paper elevation={0} className={classes.paper}>
               <Breadcrumbs
                 separator={<NavigateNextIcon fontSize="small" />}
