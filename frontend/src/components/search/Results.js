@@ -13,6 +13,7 @@ import classNames from "classnames";
 import GeoMap from "./GeoMap_bis";
 
 import ResultWills from "./ResultWills";
+import TextSearch from "./TextSearch";
 
 // Style button
 const Styled = createStyled(theme => ({
@@ -116,7 +117,8 @@ class Results extends React.Component {
     return (
       <div key={0}>
         <div className="main-container">
-          <SelectedFilters clearAllLabel="Supprimer mes critères" />
+          <TextSearch />
+          <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
 
           <ReactiveList
             react={{
@@ -141,7 +143,7 @@ class Results extends React.Component {
             infiniteScroll={true}
             loader="Loading Results.."
             renderResultStats={function(stats) {
-              return `Affichage ${stats.displayedResults} / ${stats.numberOfResults} dans ${stats.time} ms`;
+              return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
             }}
           >
             {({ data, error, loading }) => <ResultWills data={data} />}

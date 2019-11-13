@@ -104,6 +104,8 @@ const Styled = createStyled(theme => ({
   }
 }));
 
+const listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
+
 export default class ResultWills extends React.Component {
   constructor(props) {
     super(props);
@@ -328,6 +330,15 @@ export default class ResultWills extends React.Component {
       let descriptions = [];
       if (item.inner_hits) {
         const hits_size = item.inner_hits.will_pages.hits.hits.length;
+
+        item.inner_hits.will_pages.hits.hits.sort(function(a, b) {
+          return b._source["page_type"]["type"].localeCompare(
+            a._source["page_type"]["type"]
+          );
+        });
+        item.inner_hits.will_pages.hits.hits.sort(function(a, b) {
+          return a._source["page_type"]["id"] - b._source["page_type"]["id"];
+        });
         descriptions = item.inner_hits.will_pages.hits.hits.map((hit, i) => {
           let div_id_page = (
             <React.Fragment>
@@ -338,7 +349,7 @@ export default class ResultWills extends React.Component {
                 component="button"
                 style={{ color: "#424242", fontSize: 16 }}
               >
-                {hit._source["page_type"]["type"]}{" "}
+                {listMenu[hit._source["page_type"]["type"]]}{" "}
                 {hit._source["page_type"]["id"]}
               </Link>
             </React.Fragment>

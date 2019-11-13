@@ -122,6 +122,7 @@ export function ExplorMenu() {
 
 function createPageMenu(will_id, pages, idx, handleClick) {
   let menu = [];
+  let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
   for (let i = 0; i < pages.length; i++) {
     console.log(
       "page click :",
@@ -142,7 +143,7 @@ function createPageMenu(will_id, pages, idx, handleClick) {
                 : classNames(classes.linkPage, classes.typography)
             }
           >
-            {pages[i]["page_type"].type} {pages[i]["page_type"].id}
+            {listMenu[pages[i]["page_type"].type]} {pages[i]["page_type"].id}
           </Link>
         )}
       </Styled>
@@ -175,22 +176,50 @@ class Wills extends Component {
       case 1:
         this.setState({
           value: event.target.value,
-          field: "testator_name.keyword",
+          field: "testator_name_norm.keyword",
           order: "asc"
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
-          field: "testator_name.keyword",
+          field: "testator_name_norm.keyword",
+          order: "desc"
+        });
+        break;
+      case 3:
+        this.setState({
+          value: event.target.value,
+          field: "will_contents.will_date",
+          order: "asc"
+        });
+        break;
+      case 4:
+        this.setState({
+          value: event.target.value,
+          field: "will_contents.will_date",
+          order: "desc"
+        });
+        break;
+      case 5:
+        this.setState({
+          value: event.target.value,
+          field: "will_identifier.cote.keyword",
+          order: "asc"
+        });
+        break;
+      case 6:
+        this.setState({
+          value: event.target.value,
+          field: "will_identifier.cote.keyword",
           order: "desc"
         });
         break;
       default:
         this.setState({
           value: event.target.value,
-          field: "",
-          order: ""
+          field: "will_contents.will_date",
+          order: "asc"
         });
         break;
     }
@@ -235,6 +264,8 @@ class Wills extends Component {
             <MenuItem value={4}>
               date de rédaction <TrendingDownIcon />
             </MenuItem>
+            <MenuItem value={5}>Cote (A-Z)</MenuItem>
+            <MenuItem value={6}>Cote (Z-A)</MenuItem>
           </Select>
         </div>
 

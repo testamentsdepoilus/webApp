@@ -38,7 +38,7 @@ export function uploadImageCallBack(file) {
 export function getParamConfig(param) {
   let config = {};
   config["es_host"] = "http://127.0.0.1:9200";
-  config["es_index_wills"] = "testaments_de_poilus";
+  config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
   config["es_index_user"] = "tde_users";
   config["web_url"] = "http://localhost:3000"; //"http://patrimeph.ensea.fr/testaments-de-poilus";
@@ -92,8 +92,8 @@ export function getTotalHits(host) {
 }
 
 // Get total hits from host
-export function getHits(host) {
-  const totalHits = getTotalHits(host);
+export function getHits(host, size = null) {
+  const totalHits = size ? size : getTotalHits(host);
   const total = typeof totalHits === "object" ? totalHits.value : totalHits;
   const hits = JSON.parse(getHttpRequest(host + "/_search?size=" + total)).hits;
   return hits.hits;
@@ -101,7 +101,6 @@ export function getHits(host) {
 
 // Get total hits from host
 export function getHitsFromQuery(host, query) {
-  console.log("query :", host + "/_search?pretty -d " + query);
   const hits = JSON.parse(
     getHttpRequest(host + "/_search?pretty", "POST", query)
   ).hits;

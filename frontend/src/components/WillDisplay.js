@@ -32,23 +32,12 @@ const Styled = createStyled(theme => ({
     color: "#212121",
     backgroundColor: "#FAFAFA",
     textAlign: "justify",
-    fontSize: 20
+    fontSize: 18
   },
 
   typography: {
-    fontFamily: [
-      "Carta Nova Text Regular",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(","),
+    fontFamily: "-apple-system",
+
     fontWeight: 600
   },
   title: {
@@ -73,11 +62,12 @@ const Styled = createStyled(theme => ({
 }));
 
 export function createPage(page, type) {
+  let listTypes = { transcription: "Transcription", edition: "Édition" };
   let output = (
     <Styled>
       {({ classes }) => (
         <div>
-          <Typography className={classes.title}>{type}</Typography>
+          <Typography className={classes.title}>{listTypes[type]}</Typography>
           <Paper className={classes.paper}>
             {
               <div
@@ -260,6 +250,7 @@ export default class WillDisplay extends Component {
   }
 
   render() {
+    console.log("data :", this.props.data);
     let output = null;
     if (this.props.data) {
       const cur_idx =
@@ -283,43 +274,26 @@ export default class WillDisplay extends Component {
                 </Grid>
                 <Grid key={2} item>
                   <Paper>
-                    <Grid
-                      container
-                      justify="flex-start"
-                      alignItems="center"
-                      spacing={2}
-                    >
-                      <Grid item>
-                        <img
-                          src={
-                            getParamConfig("web_host") +
-                            "/images/default-testator.png"
-                          }
-                          alt="testator_icon"
-                        />
-                      </Grid>
+                    <Grid container justify="flex-start" alignItems="center">
                       <Grid
                         item
                         className={classNames(
                           classes.typography,
                           classes.paper
                         )}
+                        xs={6}
                       >
-                        <Typography variant="h5">
+                        <Typography>
                           {this.props.data["will_identifier.name"]}
                         </Typography>
-                        <Typography variant="h5">
-                          Mort pour la france le ...
-                        </Typography>
-                        <Typography variant="h5">
-                          Testament rédigé le ...
-                        </Typography>
-                        <Typography variant="h5">
+                        <Typography>Mort pour la france le ...</Typography>
+                        <Typography>Testament rédigé le ...</Typography>
+                        <Typography>
                           Cote aux{" "}
                           {this.props.data["will_identifier.institution"]}{" "}
                           {this.props.data["will_identifier.cote"]}
                         </Typography>
-                        <Typography variant="h5">
+                        <Typography>
                           {this.props.data[
                             "will_physDesc.support"
                           ][0].toUpperCase() +
@@ -330,6 +304,28 @@ export default class WillDisplay extends Component {
                           {this.props.data["will_physDesc.dim"]["height"]}
                           {this.props.data["will_physDesc.dim"]["unit"]}
                         </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        className={classNames(
+                          classes.typography,
+                          classes.paper
+                        )}
+                        xs={6}
+                      >
+                        <Typography variant="h6">
+                          Les contributeurs :
+                        </Typography>
+                        {this.props.data["contributions"].map(contributor => {
+                          return (
+                            <Typography>
+                              {" "}
+                              {contributor["resp"][0].toUpperCase() +
+                                contributor["resp"].substring(1)}{" "}
+                              : {contributor["persName"].join(", ")}
+                            </Typography>
+                          );
+                        })}
                       </Grid>
                     </Grid>
                   </Paper>

@@ -8,7 +8,12 @@ import classNames from "classnames";
 const Styled = createStyled(theme => ({
   root: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    margin: theme.spacing(1, 1, 4, 1)
+  },
+  inputSearch: {
+    borderRadius: "22px",
+    border: "10px solid red"
   },
   typography: {
     fontFamily: [
@@ -82,7 +87,7 @@ class TextSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "will_pages.edition_text"
+      value: "will_pages.transcription_text"
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -109,39 +114,38 @@ class TextSearch extends React.Component {
             spacing={1}
           >
             <Grid item>
-              <Grid container direction="row">
-                <Grid item xs={8}>
+              <Grid container direction="row" spacing={1}>
+                <Grid item>
                   <Typography
                     className={classNames(
                       classes.typography,
                       classes.typoTitle
                     )}
                   >
-                    Recherche dans
+                    Effectuer votre recherche dans
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item>
                   <Select
                     value={this.state.value}
                     onChange={this.handleChange}
                     className={classes.select}
                     name="value"
                   >
-                    <MenuItem value="will_pages.edition_text">édition</MenuItem>
                     <MenuItem value="will_pages.transcription_text">
                       transcription
                     </MenuItem>
+                    <MenuItem value="will_pages.edition_text">édition</MenuItem>
                   </Select>
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item>
+            <Grid item className={classes.dataSearch}>
               <DataSearch
-                className="datasearch"
                 componentId="mainSearch"
                 dataField={[this.state.value]}
                 queryFormat="or"
-                placeholder={"Recherche dans " + page_name}
+                placeholder={"Que recherchez-vous dans " + page_name + " ?"}
                 iconPosition="right"
                 filterLabel="search"
                 autosuggest={false}
@@ -152,6 +156,9 @@ class TextSearch extends React.Component {
                 onQueryChange={function(prevQuery, nextQuery) {}}
                 searchOperators={true}
                 fuzziness={"AUTO"}
+                innerClass={{
+                  input: classes.inputSearch
+                }}
               />
             </Grid>
           </Grid>

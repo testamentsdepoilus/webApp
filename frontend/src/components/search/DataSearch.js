@@ -1,7 +1,10 @@
 import React from "react";
-import { DataSearch } from "@appbaseio/reactivesearch";
+import {
+  DataSearch,
+  SingleList,
+  SingleDropdownList
+} from "@appbaseio/reactivesearch";
 import "../../styles/leftBar.css";
-import TextSearch from "./TextSearch";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -17,26 +20,57 @@ const CustumerDataSearch = () => (
       aria-controls="panel1a-content"
       id="panel1a-header"
     >
-      <Grid container justify="center" direction="column" spacing={1}>
+      <Grid container direction="column" spacing={1}>
         <Grid item>
-          <TextSearch />
-        </Grid>
-        <Grid item>
-          <DataSearch
+          {/*<DataSearch
             className="datasearch"
             componentId="testatorSearch"
             dataField={["testator_name"]}
             queryFormat="and"
-            placeholder="Nom"
+            placeholder="Nom de testateur"
             title="Nom du testateur"
             iconPosition="right"
             filterLabel="search"
             autosuggest={true}
             URLParams
           />
+          <SingleList
+            componentId="testatorSearch"
+            dataField="testator_name.keyword"
+            sortBy="asc"
+            queryFormat="and"
+            URLParams
+            showSearch={false}
+            className="datasearch"
+            innerClass={{
+              list: "list"
+            }}
+            filterLabel="search"
+          />*/}
+
+          <SingleList
+            className="datasearch"
+            react={{
+              and: ["mainSearch", "cote", "date", "institution", "contributors"]
+            }}
+            componentId="testatorSearch"
+            dataField="testator_name.keyword"
+            title="Nom du testateur"
+            size={1000}
+            sortBy="count"
+            showCount={true}
+            placeholder="Nom de testateur"
+            showFilter={true}
+            filterLabel="search"
+            URLParams={true}
+            loader="Loading ..."
+            innerClass={{
+              list: "list"
+            }}
+          />
         </Grid>
         <Grid item>
-          <DataSearch
+          {/* <DataSearch
             className="datasearch"
             componentId="cote"
             dataField={["will_identifier.cote"]}
@@ -47,6 +81,33 @@ const CustumerDataSearch = () => (
             filterLabel="search"
             autosuggest={false}
             URLParams
+         />*/}
+          <SingleList
+            className="datasearch"
+            react={{
+              and: [
+                "mainSearch",
+                "testatorSearch",
+                "date",
+                "institution",
+                "contributors"
+              ]
+            }}
+            componentId="cote"
+            dataField="will_identifier.cote.keyword"
+            title="Cote du testament"
+            size={1000}
+            sortBy="count"
+            showCount={true}
+            placeholder="Cote du testament"
+            showFilter={true}
+            filterLabel="search"
+            URLParams={true}
+            iconPosition="right"
+            loader="Loading ..."
+            innerClass={{
+              list: "list"
+            }}
           />
         </Grid>
       </Grid>

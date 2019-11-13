@@ -14,7 +14,7 @@ import {
   Menu,
   MenuItem
 } from "@material-ui/core";
-import { createStyled } from "../utils/functions";
+import { createStyled, getUserToken } from "../utils/functions";
 import classNames from "classnames";
 import AccountIcon from "@material-ui/icons/AccountCircleOutlined";
 import CloseIcon from "@material-ui/icons/Close";
@@ -126,7 +126,15 @@ class NavBar extends Component {
       anchorElExplor: null
     };
     this.handleListItemClick = this.handleListItemClick.bind(this);
-    this.tabLinks = ["search", "wills", "about", "testators", "places", "news"];
+    this.tabLinks = [
+      "search",
+      "wills",
+      "about",
+      "testators",
+      "places",
+      "news",
+      "units"
+    ];
     this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -183,86 +191,17 @@ class NavBar extends Component {
     });
   }
 
-  /*componentDidUpdate() {
-    const findLink = this.tabLinks.find(link =>
-      document.location.href.includes(link)
-    );
-    console.log(
-      "selectedId : ",
-      this.state.selectedId,
-      " | findLink :",
-      findLink
-    );
-    if (findLink !== this.state.selectedId) {
-      this.setState({
-        selectedId: findLink
-      });
-    }
-  }*/
-
   componentDidMount() {
     const findLink = this.tabLinks.find(link =>
       document.location.href.includes(link)
     );
+
     this.setState({
       selectedId: findLink
     });
   }
 
   render() {
-    /* const curLink = window.location.pathname.substr(
-      window.location.pathname.lastIndexOf("/") + 1
-    );
-    */
-
-    const token = sessionStorage.usertoken;
-    let isRoot = false;
-    if (token) {
-      const decoded = jwt_decode(token);
-      isRoot = decoded.isRoot;
-    }
-
-    const menuPerso = (
-      <div>
-        <Button
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={this.handleMenuClick}
-        >
-          Mon espace
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={this.state.anchorEl}
-          keepMounted
-          open={Boolean(this.state.anchorEl)}
-          onClose={this.handleMenuClose}
-        >
-          <MenuItem onClick={this.handleMenuClose}>Mon profile</MenuItem>
-          <MenuItem onClick={this.handleMenuClose}>Mon pannier</MenuItem>
-          {isRoot ? (
-            <MenuItem onClick={this.handleMenuClose}>CMS</MenuItem>
-          ) : null}
-        </Menu>
-      </div>
-    );
-
-    /*const linkProfile = (
-      <Link
-        id="profile"
-        className={
-          curLink === "profile"
-            ? classNames(classes.link, classes.activedLink)
-            : classes.link
-        }
-        component={RouterLink}
-        to="/profile"
-      >
-        {" "}
-        Mon espace{" "}
-      </Link>
-    );*/
-
     const userLogin = (
       <Styled>
         {({ classes }) => (
@@ -350,8 +289,7 @@ class NavBar extends Component {
                         to="/wills"
                         onClick={this.handleListItemClick}
                       >
-                        {" "}
-                        Les testaments{" "}
+                        Les testaments
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={this.handleExplorClose}>
@@ -366,8 +304,7 @@ class NavBar extends Component {
                         to="/testators"
                         onClick={this.handleListItemClick}
                       >
-                        {" "}
-                        Les testateurs{" "}
+                        Les testateurs
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={this.handleExplorClose}>
@@ -382,8 +319,22 @@ class NavBar extends Component {
                         to="/places"
                         onClick={this.handleListItemClick}
                       >
-                        {" "}
-                        Les lieux{" "}
+                        Les lieux
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={this.handleExplorClose}>
+                      <Link
+                        id="units"
+                        className={
+                          this.state.selectedId === "units"
+                            ? classNames(classes.link, classes.activedLink)
+                            : classes.link
+                        }
+                        component={RouterLink}
+                        to="/units"
+                        onClick={this.handleListItemClick}
+                      >
+                        Les unités militaires
                       </Link>
                     </MenuItem>
                   </Menu>

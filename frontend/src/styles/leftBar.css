@@ -1,6 +1,10 @@
 .datasearch {
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
+}
+
+.datasearch .list {
+  text-align: left;
+  height: 10em;
 }
 
 .datasearch .searchbox {

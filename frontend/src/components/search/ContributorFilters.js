@@ -4,7 +4,7 @@ import { MultiList } from "@appbaseio/reactivesearch";
 const ContributorFilters = () => (
   <MultiList
     react={{
-      and: ["mainSearch", "cote", "testatorSearch", "date", "ProvenanceTag"]
+      and: ["mainSearch", "cote", "testatorSearch", "date", "institution"]
     }}
     componentId="contributors"
     dataField="contributions.persName.keyword"

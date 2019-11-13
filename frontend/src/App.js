@@ -27,7 +27,7 @@ function App() {
         <Route exact path="/search" component={Search} />
         <Route path="/news" component={News} />
         <Route path="/articles" component={Articles} />
-        <Route exact path="/about" component={About} />
+        <Route path="/about" component={About} />
         <Route path="/wills" component={Wills} />
         <Route exact path="/testators" component={Testators} />
         <Route exact path="/places" component={Places} />

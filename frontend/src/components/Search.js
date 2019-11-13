@@ -11,6 +11,7 @@ import CustumerDataSearch from "./search/DataSearch";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import { getParamConfig } from "../utils/functions";
+import TextSearch from "./search/TextSearch";
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -26,14 +27,28 @@ class Search extends Component {
       case 1:
         this.setState({
           value: event.target.value,
-          field: "testator_name.keyword",
+          field: "testator_name_norm.keyword",
           order: "asc"
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
-          field: "testator_name.keyword",
+          field: "testator_name_norm.keyword",
+          order: "desc"
+        });
+        break;
+      case 5:
+        this.setState({
+          value: event.target.value,
+          field: "will_identifier.cote.keyword",
+          order: "asc"
+        });
+        break;
+      case 6:
+        this.setState({
+          value: event.target.value,
+          field: "will_identifier.cote.keyword",
           order: "desc"
         });
         break;
@@ -69,6 +84,8 @@ class Search extends Component {
                     <MenuItem value={4}>
                       date de rédaction <TrendingDownIcon />
                     </MenuItem>
+                    <MenuItem value={5}>Cote (A-Z)</MenuItem>
+                    <MenuItem value={6}>Cote (Z-A)</MenuItem>
                   </Select>
                 </Paper>
                 <CustumerDataSearch />

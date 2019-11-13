@@ -1,35 +1,48 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { createStyled, getParamConfig } from "../utils/functions";
+import {
+  createStyled,
+  getParamConfig,
+  getHitsFromQuery,
+  getHits
+} from "../utils/functions";
 import {
   Breadcrumbs,
   Paper,
   Link,
   Typography,
   Grid,
-  IconButton
+  IconButton,
+  MenuList,
+  MenuItem
 } from "@material-ui/core";
 import MoreIcon from "@material-ui/icons/More";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
+import classNames from "classnames";
 
 const { ResultListWrapper } = ReactiveList;
 
 const Styled = createStyled(theme => ({
   root: {
     flexWrap: "wrap",
-    margin: theme.spacing(1, 0, 0, 2)
+    margin: theme.spacing(2, 0, 0, 2)
   },
-  paper: {
+  list: {
     width: "60%",
     border: "1px solid #dadce0",
-    margin: "auto"
+    margin: "auto",
+    marginTop: theme.spacing(4)
+  },
+  detail: {
+    border: "1px solid #dadce0",
+    marginTop: theme.spacing(4)
   },
   item: {
     textAlign: "justify",
     padding: theme.spacing(1),
     margin: theme.spacing(1),
-    backgroundColor: "#efebe9"
+    backgroundColor: "#f5f5f5"
   },
   foot: {
     fontSize: 14,
@@ -41,11 +54,38 @@ const Styled = createStyled(theme => ({
     padding: theme.spacing(1)
   },
   title: {
-    color: "#0d47a1",
-    fontSize: 26
+    color: "#000000",
+    fontSize: "1.5em"
   },
   icon: {
     fontSize: 20
+  },
+  menu: {
+    marginTop: theme.spacing(4),
+    fontSize: 14,
+    textAlign: "justify",
+    display: "block",
+    verticalAlign: "middle"
+  },
+  link: {
+    textTransform: "none",
+    paddingLeft: 15,
+    color: "#212121",
+    fontWeight: 500,
+    fontFamily: "-apple-system",
+    "&:hover, &:focus": {
+      color: "#0091EA",
+      fontWeight: 600,
+      backgroundColor: "#eceff1"
+    },
+    "&:active": {
+      color: "#0091EA",
+      fontWeight: 600
+    }
+  },
+  activedLink: {
+    color: "#0091EA",
+    fontWeight: 600
   }
 }));
 
@@ -53,62 +93,48 @@ class News extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query_term: "",
-      item: null
+      item: null,
+      lastNews: [],
+      selectedId: ""
     };
     this.handleMoreClick = this.handleMoreClick.bind(this);
     this.defaultQuery = this.defaultQuery.bind(this);
+    this.handleListItemClick = this.handleListItemClick.bind(this);
+  }
+
+  handleListItemClick(event) {
+    const itemFind = this.state.lastNews.find(function(item) {
+      return item["_id"] === event.target.id;
+    });
+
+    this.setState({
+      selectedId: event.target.id,
+      item: itemFind ? itemFind._source : this.state.item
+    });
   }
 
   handleMoreClick(item) {
     return function(e) {
-      //document.location.href = "/news/" + item["_id"];
-      if (window.history.pushState) {
-        window.history.pushState(
-          "object or string",
-          "Page Title",
-          "/news/" + item["_id"]
-        );
-        this.setState({
-          item: item
-        });
-      } else {
-        document.location.href = "/news/" + item["_id"];
-      }
+      document.location.href = "/news/" + item["_id"];
     }.bind(this);
   }
 
   defaultQuery() {
-    const query_term_ = this.state.query_term;
-    if (query_term_ !== "") {
-      return {
-        query: {
-          term: {
-            _id: query_term_
-          }
+    return {
+      query: {
+        term: {
+          type: 2
         }
-      };
-    } else {
-      return {
-        query: {
-          term: {
-            type: 2
-          }
-        }
-      };
-    }
+      }
+    };
   }
 
   componentDidUpdate() {
     const url = document.location.href;
     const idx = url.lastIndexOf("news/");
-    if (
-      idx === -1 &&
-      (Boolean(this.state.item) || this.state.query_term !== "")
-    ) {
+    if (idx === -1 && Boolean(this.state.item)) {
       this.setState({
-        item: null,
-        query_term: ""
+        item: null
       });
     }
   }
@@ -116,10 +142,36 @@ class News extends Component {
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("news/");
+
+    const newData = getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
+      JSON.stringify({
+        size: 5,
+        query: {
+          term: {
+            type: 2
+          }
+        },
+        sort: [{ created: { order: "desc" } }]
+      })
+    );
     if (idx !== -1) {
-      const url_query = url.substring(idx + 5).split("/");
+      const id_query = url.substring(idx + 5).split("/");
+      const hits = getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
+        JSON.stringify({
+          query: {
+            term: {
+              _id: id_query[0]
+            }
+          }
+        })
+      );
+
       this.setState({
-        query_term: url_query.length > 0 && url_query[0] ? url_query[0] : ""
+        lastNews: newData,
+        selectedId: hits.length > 0 ? hits[0]["_id"] : newData[0]["_id"],
+        item: hits.length > 0 ? hits[0]._source : null
       });
     }
   }
@@ -151,7 +203,9 @@ class News extends Component {
           {" "}
           Actualités{" "}
         </Link>,
-        <Typography color="textPrimary">{this.state.item["title"]}</Typography>
+        <Typography key={2} color="textPrimary">
+          {this.state.item["title"]}
+        </Typography>
       ]
     );
     const navBar = (
@@ -175,6 +229,35 @@ class News extends Component {
       </Paper>
     );
 
+    const menuNews = (
+      <Styled>
+        {({ classes }) => (
+          <Paper className={classes.menu}>
+            <Typography>Les dernières actualités :</Typography>
+            <MenuList>
+              {this.state.lastNews.map((item, i) => (
+                <MenuItem key={i}>
+                  <Link
+                    id={item["_id"]}
+                    className={
+                      this.state.selectedId === item["_id"]
+                        ? classNames(classes.link, classes.activedLink)
+                        : classes.link
+                    }
+                    component={RouterLink}
+                    to={"/news/" + item["_id"]}
+                    onClick={this.handleListItemClick}
+                  >
+                    {item._source["title"]}
+                  </Link>
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Paper>
+        )}
+      </Styled>
+    );
+
     const date = Boolean(this.state.item)
       ? new Date(this.state.item["created"])
       : null;
@@ -183,43 +266,50 @@ class News extends Component {
       <Styled>
         {({ classes }) =>
           Boolean(this.state.item) ? (
-            <div id="root" className={classes.root}>
+            <div className={classes.root}>
               {navBar}
 
-              <div id="paper" className={classes.paper}>
-                <Paper className={classes.item} key={0}>
-                  <Typography className={classes.title}>
-                    {" "}
-                    {this.state.item["title"]}{" "}
-                  </Typography>
-                  <Paper className={classes.head}>
-                    <Grid
-                      container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="center"
-                    >
-                      <Grid item>{this.state.item["author"]}</Grid>
-                      <Grid item>
-                        {Boolean(date)
-                          ? "Mise à jour le " +
-                            date.toLocaleDateString() +
-                            " à " +
-                            date.toLocaleTimeString()
-                          : ""}
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        this.state.item["detail"] !== ""
-                          ? this.state.item["detail"]
-                          : this.state.item["summary"]
-                    }}
-                  ></div>
-                </Paper>
-              </div>
+              <Grid container direction="row" spacing={2}>
+                <Grid item xs={4}>
+                  {menuNews}
+                </Grid>
+                <Grid item xs={8}>
+                  <div className={classes.detail}>
+                    <Paper className={classes.item} key={0}>
+                      <Typography className={classes.title}>
+                        {" "}
+                        {this.state.item["title"]}{" "}
+                      </Typography>
+                      <Paper className={classes.head}>
+                        <Grid
+                          container
+                          direction="row"
+                          justify="space-between"
+                          alignItems="center"
+                        >
+                          <Grid item>{this.state.item["author"]}</Grid>
+                          <Grid item>
+                            {Boolean(date)
+                              ? "Mise à jour le " +
+                                date.toLocaleDateString() +
+                                " à " +
+                                date.toLocaleTimeString()
+                              : ""}
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            this.state.item["detail"] !== ""
+                              ? this.state.item["detail"]
+                              : this.state.item["summary"]
+                        }}
+                      ></div>
+                    </Paper>
+                  </div>
+                </Grid>
+              </Grid>
             </div>
           ) : (
             <ReactiveBase
@@ -227,9 +317,9 @@ class News extends Component {
               url={getParamConfig("es_host")}
               type="_doc"
             >
-              <div id="root" className={classes.root}>
+              <div className={classes.root}>
                 {navBar}
-                <div id="paper" className={classes.paper}>
+                <div className={classes.list}>
                   <ReactiveList
                     dataField="created"
                     componentId="news_id"

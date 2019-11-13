@@ -59,6 +59,7 @@ const Styled = createStyled(theme => ({
 
 function createPageMenu(will_id, pages, idx, handleClick) {
   let menu = [];
+  let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
   for (let i = 0; i < pages.length; i++) {
     console.log(
       "page click :",
@@ -88,7 +89,7 @@ function createPageMenu(will_id, pages, idx, handleClick) {
                 : classNames(classes.linkPage, classes.typography)
             }
           >
-            {pages[i]["page_type"].type} {pages[i]["page_type"].id}
+            {listMenu[pages[i]["page_type"].type]} {pages[i]["page_type"].id}
           </Link>
         )}
       </Styled>
@@ -200,12 +201,11 @@ class Will extends Component {
               <Link
                 id="search"
                 key={0}
-                color="inherit"
+                color="blue"
                 component={RouterLink}
                 to={prevLink}
               >
-                {" "}
-                Recherche{" "}
+                Modifier ma recherche
               </Link>
               {will_link}
             </Breadcrumbs>
