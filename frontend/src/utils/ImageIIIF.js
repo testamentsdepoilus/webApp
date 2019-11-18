@@ -21,7 +21,7 @@ export default class ImageIIF extends React.Component {
   componentDidMount() {
     this.viewer = OpenSeaDragon({
       id: this.props.id,
-      prefixUrl: getParamConfig("web_host") + "/images/",
+      prefixUrl: getParamConfig("web_url") + "/images/",
       tileSources: {
         type: "image",
         url: this.props.url + "/full/full/0/default.jpg",

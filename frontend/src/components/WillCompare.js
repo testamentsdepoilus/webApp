@@ -379,7 +379,8 @@ class WillCompare extends Component {
                           </div>
                         ) : (
                           createPage(
-                            hit["will"][this.state.idx[i]],
+                            hit["will"],
+                            this.state.idx[i],
                             this.state.type
                           )
                         )}

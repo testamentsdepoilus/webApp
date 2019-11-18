@@ -12,7 +12,8 @@ import {
   Link,
   Typography,
   Grid,
-  IconButton
+  IconButton,
+  Button
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
@@ -58,10 +59,14 @@ const Styled = createStyled(theme => ({
     fontWeight: 600,
     color: "#0091EA",
     fontSize: 18
+  },
+  nextPage: {
+    display: "block",
+    marginLeft: "90%"
   }
 }));
 
-export function createPage(page, type) {
+export function createPage(page, idx, type, nextPage) {
   let listTypes = { transcription: "Transcription", edition: "Édition" };
   let output = (
     <Styled>
@@ -72,10 +77,11 @@ export function createPage(page, type) {
             {
               <div
                 dangerouslySetInnerHTML={{
-                  __html: page[type]
+                  __html: page[idx][type]
                 }}
               />
             }
+            {idx < page.length - 1 ? nextPage : null}
           </Paper>
         </div>
       )}
@@ -94,6 +100,7 @@ export default class WillDisplay extends Component {
 
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleNextPage = this.handleNextPage.bind(this);
   }
 
   handlePageClick(event) {
@@ -107,13 +114,36 @@ export default class WillDisplay extends Component {
   handleExportClick() {
     const token = sessionStorage.usertoken;
     if (token) {
+      // Create an invisible A element
+      const a = document.createElement("a");
+      a.style.display = "none";
+      document.body.appendChild(a);
+
+      // Set the HREF to a Blob representation of the data to be downloaded
+      a.href = getParamConfig("web_url") + "/files/" + this.props.id + ".xml";
+
+      // Use download attribute to set set desired file name
+      a.setAttribute("download", this.props.id + ".xml");
+
+      // Trigger the download by simulating click
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
     } else {
+      alert("il faut se connecter");
       this.setState({
         open: true
       });
     }
   }
 
+  handleNextPage(event) {
+    this.setState({
+      idx: parseInt(this.state.idx, 10) + 1
+    });
+  }
   componentDidMount() {
     const cur_idx = this.props.data["will_pages"].findIndex(item => {
       return isEqual(item["page_type"], this.props.cur_page);
@@ -250,13 +280,27 @@ export default class WillDisplay extends Component {
   }
 
   render() {
-    console.log("data :", this.props.data);
+    const nextPage = (
+      <Styled>
+        {({ classes }) => (
+          <Button
+            color="primary"
+            title="Page suivante"
+            onClick={this.handleNextPage}
+            className={classes.nextPage}
+          >
+            [...]
+          </Button>
+        )}
+      </Styled>
+    );
     let output = null;
     if (this.props.data) {
       const cur_idx =
         this.props.data["will_pages"].length <= this.state.idx
           ? 0
           : this.state.idx;
+
       output = (
         <Styled>
           {({ classes }) => (
@@ -266,8 +310,9 @@ export default class WillDisplay extends Component {
                   <IconButton
                     style={{ marginLeft: "90%" }}
                     id="btExport"
-                    onClick={this.handleExportClick}
                     aria-label="Export"
+                    title="Exporter le testament en format TEI"
+                    onClick={this.handleExportClick}
                   >
                     <ExportIcon fontSize="large" />
                   </IconButton>
@@ -316,23 +361,25 @@ export default class WillDisplay extends Component {
                         <Typography variant="h6">
                           Les contributeurs :
                         </Typography>
-                        {this.props.data["contributions"].map(contributor => {
-                          return (
-                            <Typography>
-                              {" "}
-                              {contributor["resp"][0].toUpperCase() +
-                                contributor["resp"].substring(1)}{" "}
-                              : {contributor["persName"].join(", ")}
-                            </Typography>
-                          );
-                        })}
+                        {this.props.data["contributions"].map(
+                          (contributor, i) => {
+                            return (
+                              <Typography key={i}>
+                                {" "}
+                                {contributor["resp"][0].toUpperCase() +
+                                  contributor["resp"].substring(1)}{" "}
+                                : {contributor["persName"].join(", ")}
+                              </Typography>
+                            );
+                          }
+                        )}
                       </Grid>
                     </Grid>
                   </Paper>
                 </Grid>
                 <Grid key={0} item>
                   {this.props.createPageMenu(
-                    this.props.data["_id"],
+                    this.props.id,
                     this.props.data["will_pages"],
                     cur_idx,
                     this.handlePageClick
@@ -361,14 +408,18 @@ export default class WillDisplay extends Component {
                     </Grid>
                     <Grid key={11} item sm={4}>
                       {createPage(
-                        this.props.data["will_pages"][cur_idx],
-                        "transcription"
+                        this.props.data["will_pages"],
+                        cur_idx,
+                        "transcription",
+                        nextPage
                       )}
                     </Grid>
                     <Grid key={12} item sm={4}>
                       {createPage(
-                        this.props.data["will_pages"][cur_idx],
-                        "edition"
+                        this.props.data["will_pages"],
+                        cur_idx,
+                        "edition",
+                        nextPage
                       )}
                     </Grid>
                   </Grid>

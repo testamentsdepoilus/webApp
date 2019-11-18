@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament 3E44 1002</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="TR">Thierry Rihouey</persName>
+               <persName xml:id="FA">Françoise Auriau</persName>
+               <persName xml:id="SB">Sophie Blanchard</persName>
+               <persName xml:id="MDeuve">Mathilde Deuve</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives départementales des Yvelines</institution>
+                  <collection>Archives notariales</collection>
+                  <idno>3E44 1002, minute du 25 novembre 1916 (dépôt du testament de Aristide Jean Victor Lerouvillois)</idno>
+                  <msName>Testament de Aristide Jean Victor Lerouvillois (11 août 1916)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>11 août 1916</date>.<placeName>Versailles</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-59">
+                           <forename>Aristide</forename>
+                           <forename>Jean</forename>
+                           <forename>Victor</forename>
+                           <surname>Lerouvillois</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-18">Verdun</placeName>,  le <date type="willAuthorDeathDate">15 juillet 1916</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré réglé. Enveloppe : enveloppe commerciale, 5 cachets de cire rouge</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale de Versailles, étude Gayot</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-24/2018-03-23" who="#FMARIECLAIRE #SL. #lelia">transcription</change>
+         <change when-iso="2018-01-24/2018-03-23" who="#PCharbonnier #KPineau #EdChamps">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-envelope-recto" n="01">
+         <graphic url="testament_AD78_0062___JPEG___FRAD78_Poilus_t-0062_02.jpg"
+                  xml:id="FRAD78_Poilus_t-0062_02"/>
+      </surface>
+      <surface type="will-page" n="01">
+         <graphic url="testament_AD78_0062___JPEG___FRAD78_Poilus_t-0062_03.jpg"
+                  xml:id="FRAD78_Poilus_t-0062_03"/>
+      </surface>
+      <surface type="will-page" n="02">
+         <graphic url="testament_AD78_0062___JPEG___FRAD78_Poilus_t-0062_04.jpg"
+                  xml:id="FRAD78_Poilus_t-0062_04"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AD78_0062">
+      <body>
+         <div type="envelope">
+            <pb facs="#FRAD78_Poilus_t-0062_02"/>
+            <p rend="centered">Ceci est mon testament</p>
+            <signed rend="centered">
+               <persName ref="59">A. <surname>
+                     <unclear>Lerouvillois</unclear>
+                  </surname>
+               </persName>
+            </signed>
+         </div>
+         <div type="will">
+            <pb facs="#FRAD78_Poilus_t-0062_03"/>
+            <head>Ceci est mon testament.</head>
+            <dateline>
+               <placeName type="willPlace" ref="35">Versailles</placeName>
+               <date type="willDate" when="1914-08-11">le onze août<choice>
+                     <sic>,</sic>
+                     <corr/>
+                  </choice> mil neuf <lb/>cent quatorze.</date>
+            </dateline>
+            <p>Je soussigné <persName ref="59">Aristide Jean Victor<lb/>
+                  <surname>Lerouvillois</surname>
+               </persName>, officier du génie, époux<lb/> de <choice>
+                  <sic>Madame</sic>
+                  <corr>madame</corr>
+               </choice>
+               <persName>Augustine Louise <surname>Fontaine</surname>
+               </persName>
+               <lb/> demeurant à <placeName type="willAuthorResidence" ref="35">Versailles</placeName>
+               <address>
+                  <addrLine>14 rue Royale</addrLine>
+               </address>,<lb/> au cas<choice>
+                  <sic>,</sic>
+                  <corr/>
+               </choice> où je viendrais à décéder<lb/> sans héritiers directs, enfants ou<lb/>
+               <choice>
+                  <sic>petits enfants</sic>
+                  <corr>petits-enfants</corr>
+               </choice>, déclare par les pré<lb break="no"/>sentes mes dernières volontés.
+</p>
+            <p>Au cas d'absence d'<choice>
+                  <sic>heritiers</sic>
+                  <corr>héritiers</corr>
+               </choice> directs<lb/> je veux que tous les biens me venant<lb/> de ma famille et m'appartenant en<lb/> propre restent dans ma famille.
+</p>
+            <p>J'institue donc pour ma légataire<lb/> universelle de tous mes biens, meubles<lb/> et immeubles, titres hypothèques, com<lb break="no"/>posant ma succession au jour de<lb/> mon <choice>
+                  <sic>décés</sic>
+                  <corr>décès</corr>
+               </choice>, ma nièce <choice>
+                  <sic>Mademoiselle</sic>
+                  <corr>mademoiselle</corr>
+               </choice>
+               <lb/>
+               <persName>Germaine <surname>Rondel</surname>
+               </persName>, demeurant <address>
+                  <addrLine>place<lb/> Divette à <placeName type="otherPlace">Cherbourg</placeName>
+                  </addrLine>
+               </address>, fille de ma soeur<lb/>
+               <choice>
+                  <sic>Madame</sic>
+                  <corr>madame</corr>
+               </choice> veuve <persName>
+                  <surname>Rondel</surname>
+               </persName>, aujourd'hui<lb/> remariée à monsieur <persName>Armand <surname>Martin</surname>
+               </persName>,<lb/> à charge pour ma légataire universelle<lb/> d'exécuter le legs suivant :
+</p>
+            <p>Je donne et <choice>
+                  <sic>légue</sic>
+                  <corr>lègue</corr>
+               </choice> quitte de toutes<lb/> charges la part me revenant dans la <lb/>communauté de biens existant entre<lb/> moi et <choice>
+                  <sic>Madame</sic>
+                  <corr>madame</corr>
+               </choice>
+               <persName>
+                  <surname>Lerouvillois</surname>
+               </persName> mon épouse
+<pb facs="#FRAD78_Poilus_t-0062_04"/>à <choice>
+                  <sic>Mademoiselle</sic>
+                  <corr>mademoiselle</corr>
+               </choice>
+               <persName>Madeleine Clémentine <lb/>
+                  <surname>Huet</surname>
+               </persName> fille de ma femme, et demeu<lb break="no"/>rant <address>
+                  <addrLine>14 rue Royale</addrLine>
+               </address> à <placeName type="otherPlace" ref="35">Versailles</placeName>.<lb/> A son défaut je substitue en ses<lb/> lieux et place pour ce dit legs et<lb/> dans les mêmes conditions <choice>
+                  <sic>;</sic>
+                  <corr>:</corr>
+               </choice>
+               <choice>
+                  <sic>Madame</sic>
+                  <corr>madame</corr>
+               </choice>
+               <lb/>
+               <persName>Augustine Joséphine <surname>Paillet</surname> épouse<lb/> Masseron </persName> fille de <choice>
+                  <sic>Madame</sic>
+                  <corr>madame</corr>
+               </choice>
+               <persName>Paillet</persName>
+               <add>,</add> sœur<lb/> de ma femme.
+</p>
+            <p>Je veux que madame <persName>
+                  <surname>Lerouvillois <lb/> née Fontaine</surname>
+               </persName> mon épouse jouisse sa<lb/> vie <choice>
+                  <sic>durante</sic>
+                  <corr>durant</corr>
+               </choice> de tous mes biens sans<lb/> être aucunement inquiétée à cet égard<lb/> à seule charge par elle <choice>
+                  <sic/>
+                  <corr>de</corr>
+               </choice> faire dresser<lb/> inventaire.
+</p>
+            <p>J'annule formellement tout testa<lb break="no"/>ment legs, donations, codicilles, expres<lb break="no"/>sions de dernières volontés quelles qu'elles<lb/> soient existant à ce jour, reconnaissant<lb/> comme seul et valable le <choice>
+                  <sic>present</sic>
+                  <corr>présent</corr>
+               </choice> testa<lb break="no"/>ment écrit entièrement de ma main<lb/> daté et signé par moi.
+</p>
+            <dateline>
+               <placeName type="willPlace" ref="35">Versailles</placeName> le <date when="1914-08-11" type="willDate">onze août mil <lb/>neuf <add place="above">cent</add> quatorze</date>.
+</dateline>
+            <space quantity="1" unit="lines" dim="vertical"/>
+            <signed rend="centered">
+               <persName ref="59">A.<surname>Lerouvillois</surname>
+               </persName>
+            </signed>
+            <space quantity="1" unit="lines" dim="vertical"/>
+            <dateline>
+               <placeName type="willPlace" ref="35">Versailles</placeName> le <date when="1914-08-11" type="willDate">onze août <lb/>mil neuf cent quatorze</date>
+            </dateline>
+            <space quantity="1" unit="lines" dim="vertical"/>
+            <signed rend="centered">
+               <persName ref="59">A.<surname>Lerouvillois</surname>
+               </persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

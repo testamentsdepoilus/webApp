@@ -61,6 +61,7 @@ class Search extends Component {
         break;
     }
   }
+
   render() {
     return (
       <ReactiveBase

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Testament MC/ET/XLVIII/1736, minute du 15 décembre 1915 - Louis Charles Joseph Julien Maubec</title>
+                <respStmt>
+                    <resp>Identification et description du testament</resp>
+                    <persName xml:id="MD">Marc Durand</persName>
+                    <persName xml:id="AM">Aurelie Massie</persName>
+                    <persName xml:id="MLocatelli">Melisa Locatelli</persName>
+                </respStmt>
+                <respStmt>
+                    <resp>numérisation</resp>
+                    <orgName>Archives nationales. Pôle Image</orgName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName>Université de Cergy-Pontoise</orgName>
+                </publisher>
+                <publisher>
+                    <orgName>Archives nationales</orgName>
+                </publisher>
+                <publisher>
+                    <orgName>Archives départementales des Yvelines</orgName>
+                </publisher>
+                <publisher>
+                    <orgName>École nationale des chartes</orgName>
+                </publisher>
+                <publisher>
+                    <orgName>Archives départementales du Val-dOise</orgName>
+                </publisher>
+                <pubPlace>Paris</pubPlace>
+                <date when="2019-07-25"/>
+                <availability>
+                    <licence>Licence CC BY</licence>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <institution>Archives nationales</institution>
+                        <collection>Minutier central des notaires de Paris</collection>
+                        <idno>MC/ET/XLVIII/1736, minute du 15 décembre 1915 (dépôt du testament de Louis Charles Joseph Julien Maubec)</idno>
+                        <msName>Testament de Louis Charles Joseph Julien Maubec (28 mars 1915)</msName>
+                    </msIdentifier>
+                    <msContents>
+                        <summary>
+                            <p>
+                                <date>28 mars 1915</date>.<placeName>Rouen</placeName>.</p>
+                            <p>
+                                <term
+                                    type="willType">testament olographe</term> de <persName ref="#pers-182">
+                                    <forename>Louis</forename>
+                                    <forename>Charles</forename>
+                                    <forename>Joseph</forename>
+                                    <forename>Julien</forename>
+                                    <surname>Maubec</surname>
+
+                                </persName>, mort pour la France à <placeName
+                                    ref="#pl-303">La Croix-en-Champagne</placeName>,  le <date type="willAuthorDeathDate">13 octobre 1915</date>.</p>
+                        </summary>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>Testament : papier à lettre. Enveloppe : enveloppe cachetée</support>
+                                <extent>X pages<dimensions unit="cm">
+                                    <height>27,2</height>
+                                    <width>20,7</width>
+                                    </dimensions>
+                                </extent>
+                            </supportDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <p>encre</p>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <provenance>
+                            <orgName>étude notariale 048 (CRPCEN : 75047)</orgName>
+                        </provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+            <langUsage>
+                <language ident="fre">français</language>
+            </langUsage>
+        </profileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>Description générale du projet de transcription collaborative etc.</p>
+            </projectDesc>
+            <editorialDecl>
+                <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+                <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+                <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+                <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                        <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                            <persName>Parinet (Élisabeth)</persName>
+                            <resp>(collab.)</resp>
+                        </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+                <interpretation>
+                    <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+                </interpretation>
+                <normalization>
+                    <p/>
+                </normalization>
+                <hyphenation>
+                    <p/>
+                </hyphenation>
+                <punctuation>
+                    <p/>
+                </punctuation>
+            </editorialDecl>
+            <samplingDecl>
+                <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+            </samplingDecl>
+            <variantEncoding location="internal" method="parallel-segmentation"/>
+            <appInfo>
+                <application ident="TranscribeToTEI" version="1.0">
+                    <label>Transcribe To TEI</label>
+                    <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+                </application>
+            </appInfo>
+        </encodingDesc>
+        <revisionDesc>
+            <change when-iso="2018-04-20/2018-07-03" who="#SL. #MFGarreau #FMARIECLAIRE #lelia">transcription</change>
+            <change when-iso="2018-04-20/2018-06-06" who="#PCharbonnier #CNougaret #FClavaud">validation</change>
+        </revisionDesc>
+    </teiHeader>
+    <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+        <surface n="01" type="will-page">
+            <graphic
+                url="testament_AN_0120___JPEG___FRAN_Poilus_t-0120_01.jpg" xml:id="FRAN_Poilus_t-0120_01"/>
+        </surface>
+        <surface n="02" type="will-envelope-recto">
+            <graphic
+                url="testament_AN_0120___JPEG___FRAN_Poilus_t-0120_02.jpg" xml:id="FRAN_Poilus_t-0120_02"/>
+        </surface>
+    </facsimile>
+    <text xml:id="will_AN_0120">
+        <body>
+            <div type="will">
+                <pb facs="#FRAN_Poilus_t-0120_01"/>
+                <!-- correction manuelle ajout alise ouvrante dateline-->
+                <dateline>
+                    <placeName ref="304" type="willPlace">Rouen</placeName>
+                    <date type="willDate" when="1915-03-28">ce 28 mars 1915</date> 6<choice>
+                        <abbr>
+                            <hi rend="superscript">h</hi>
+                        </abbr>
+                        <expan> heures</expan>
+                    </choice>
+                    <choice>
+                        <sic/>
+                        <corr> du </corr>
+                    </choice>soir<lb/> chez <persName>
+                        <choice>
+                            <abbr>M<hi rend="superscript-underlined">e</hi>
+                            </abbr>
+                            <expan>maître</expan>
+                        </choice> Casset </persName>
+                    <lb/> 32 rue d'Ernemont
+</dateline>
+                <space dim="vertical" quantity="5" unit="lines"/>
+                <p>
+Ceci est mon testament au point de vue<lb/> matériel. Si je venais à partir sur le front<lb/> je le compléterais au point de vue moral ; mais<lb/> je tiens dès maintenant à mettre ma femme<lb/>
+                    <persName>Marie Maubec née Marie Roque</persName>  à l'abri de<lb/> toute espèce d'ennui au cas de mon <choice>
+                        <sic>décés</sic>
+                        <corr>décès</corr>
+                    </choice>.<lb/>
+                </p>
+                <p>J'entends <choice>
+                        <sic>expressement</sic>
+                        <corr>expressément</corr>
+                    </choice>, <hi rend="underlined">de la façon la<lb/> plus absolue</hi>, laisser à ma chère femme <persName>Marie<lb/> Maubec née Marie Roque</persName> en toute propriété<lb/> et jouissance la moitié de l'<choice>
+                        <sic>usu fruit</sic>
+                        <corr>usufruit</corr>
+                    </choice> de<lb/> mon avoir tel qu'il sera établi à mon <choice>
+                        <sic>dècès</sic>
+                        <corr>décès</corr>
+                    </choice>.<lb/> Avant mon départ pour <placeName
+                        ref="304" type="otherPlace">Rouen</placeName> j'ai remis à mon<lb/>
+                    <choice>
+                        <sic>beau père</sic>
+                        <corr>beau-père</corr>
+                    </choice>
+                    <persName>Monsieur Roque</persName> la balance de mes<lb/> comptes  <choice>
+                        <sic>arretés</sic>
+                        <corr>arrêtés</corr>
+                    </choice> à fin <choice>
+                        <sic>Février</sic>
+                        <corr>février</corr>
+
+                    </choice> 1915. Je donne tout<lb/> pouvoir à <persName>Monsieur Louis Roque</persName> pour,  dans la mesure<lb/> la plus large possible, régler <add place="above">d'accord avec ma femme</add> au mieux les <choice>
+                        <sic>différents</sic>
+                        <corr>différends</corr>
+                    </choice>
+                    <lb/> qui pourraient survenir par suite d'une circonstance<lb/> quelconque.</p>
+                <dateline rend="centered">Fait à <placeName ref="304" type="willPlace">Rouen</placeName>
+                    <date type="willDate" when="1915-03-28">le 28 <choice>
+                            <sic>Mars</sic>
+                            <corr>mars</corr>
+                        </choice>
+                        <choice>
+                            <sic>
+                                <surplus>Mars</surplus>
+                            </sic>
+                            <corr/>
+                        </choice> 1915</date>
+                </dateline>
+                <signed rend="centered">
+                    <persName ref="182">L. <surname>Maubec</surname>
+                    </persName>
+                </signed>
+                <postscript>
+                    <p>
+                        <app>
+                            <lem>En cas  du <choice>
+                                    <sic>deçés</sic>
+                                    <corr>décès</corr>
+                                </choice> de <persName>Monsieur Louis Roque</persName> je laisse à ma femme le soin de déléguer <lb/>ma confiance et la sienne  à la personne qu'elle pensera en être la plus digne<choice>
+                                    <sic/>
+                                    <corr>.</corr>
+                                </choice>
+                            </lem>
+                            <note resp="SL.">Le post-scriptum est entièrement écrit, avec sa signature, dans la marge de gauche, en tournant la feuille d'un quart de tour dans le sens inverse des aiguilles d'une montre</note>
+                        </app>
+                    </p>
+                </postscript>
+                <signed>
+                    <persName ref="182">L. M</persName>
+                </signed>
+            </div>
+            <div type="envelope">
+                <pb facs="#FRAN_Poilus_t-0120_02"/>
+                <p>Ceci est mon testament qui <lb/>ne devra être<damage agent="stain">
+                        <supplied>ouv</supplied>
+                    </damage>ert qu'après <lb/>mon <choice>
+                        <sic>dècès</sic>
+                        <corr>décès</corr>
+                    </choice>.
+</p>
+                <signed rend="centered">
+                    <persName ref="182">L.<surname>Maubec</surname>
+                    </persName>
+                </signed>
+                <dateline rend="right">
+                    <placeName ref="304" type="willPlace">Rouen</placeName>
+                    <date type="willDate" when="1915-03-28">28 <choice>
+                            <sic>Mars</sic>
+                            <corr>mars</corr>
+                        </choice> 1915</date>
+                </dateline>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -14,7 +14,11 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import "../styles/Wills.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { getParamConfig, createStyled } from "../utils/functions";
+import {
+  getParamConfig,
+  createStyled,
+  getHitsFromQuery
+} from "../utils/functions";
 import classNames from "classnames";
 
 const { ResultListWrapper } = ReactiveList;
@@ -61,10 +65,6 @@ function createPageMenu(will_id, pages, idx, handleClick) {
   let menu = [];
   let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
   for (let i = 0; i < pages.length; i++) {
-    console.log(
-      "page click :",
-      pages[i]["page_type"].type + "_" + pages[i]["page_type"].id
-    );
     menu.push(
       <Styled key={i}>
         {({ classes }) => (
@@ -110,27 +110,21 @@ class Will extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query_term: "",
+      data: [],
       page: 0
     };
 
-    this.defaultQuery = this.defaultQuery.bind(this);
     this.renderFunc = this.renderFunc.bind(this);
   }
 
-  renderFunc(res) {
-    if (res.loading) {
-      return (
-        <div>
-          <h3>En chargement</h3>
-        </div>
-      );
-    } else if (res.data.length > 0) {
+  renderFunc() {
+    if (this.state.data.length > 0) {
       return (
         <div className="root">
           <Paper>
             <WillDisplay
-              data={res.data[0]}
+              id={this.state.data[0]["_id"]}
+              data={this.state.data[0]._source}
               cur_page={this.state.page}
               createPageMenu={createPageMenu}
             />
@@ -145,24 +139,25 @@ class Will extends Component {
       );
     }
   }
-  defaultQuery() {
-    const query_term_ = this.state.query_term;
-    return {
-      query: {
-        term: {
-          _id: query_term_
-        }
-      }
-    };
-  }
 
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("will/");
     if (idx !== -1) {
       const url_query = url.substring(idx + 5).split("/");
+      const query_id = url_query.length > 0 ? url_query[0] : "";
+      const newData = getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+        JSON.stringify({
+          query: {
+            term: {
+              _id: query_id
+            }
+          }
+        })
+      );
       this.setState({
-        query_term: url_query.length > 0 ? url_query[0] : "",
+        data: newData,
         page:
           url_query.length > 1
             ? {
@@ -175,23 +170,19 @@ class Will extends Component {
   }
 
   render() {
-    const prevLink = document.referrer.includes("search?")
-      ? "/search?" + document.referrer.split("?")[1]
+    const prevLink = sessionStorage.uriSearch
+      ? "/search?" + sessionStorage.uriSearch.split("?")[1]
       : "/search";
 
     const will_link =
-      this.state.query_term !== "" ? (
+      this.state.data.length > 0 ? (
         <Typography color="textPrimary" key={2}>
-          {this.state.query_term}
+          {this.state.data[0]._source["will_identifier.name"]}
         </Typography>
       ) : null;
 
     return (
-      <ReactiveBase
-        app={getParamConfig("es_index_wills")}
-        url={getParamConfig("es_host")}
-        type="_doc"
-      >
+      <div>
         <div className="wills_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -200,32 +191,22 @@ class Will extends Component {
             >
               <Link
                 id="search"
+                color="inherit"
                 key={0}
-                color="blue"
                 component={RouterLink}
                 to={prevLink}
               >
-                Modifier ma recherche
+                {sessionStorage.uriSearch
+                  ? "Modifier ma recherche"
+                  : "Recheche"}
               </Link>
               {will_link}
             </Breadcrumbs>
           </Paper>
         </div>
 
-        <div>
-          <ReactiveList
-            componentId="will"
-            stream={true}
-            pagination={false}
-            URLParams={false}
-            defaultQuery={this.defaultQuery}
-            renderResultStats={function(stats) {
-              return ``;
-            }}
-            render={this.renderFunc}
-          />
-        </div>
-      </ReactiveBase>
+        <div>{this.renderFunc()}</div>
+      </div>
     );
   }
 }

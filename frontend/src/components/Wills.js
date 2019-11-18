@@ -124,10 +124,6 @@ function createPageMenu(will_id, pages, idx, handleClick) {
   let menu = [];
   let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
   for (let i = 0; i < pages.length; i++) {
-    console.log(
-      "page click :",
-      pages[i]["page_type"].type + "_" + pages[i]["page_type"].id
-    );
     menu.push(
       <Styled>
         {({ classes }) => (
@@ -292,6 +288,7 @@ class Wills extends Component {
                     <div className="root" key={j}>
                       <Paper>
                         <WillDisplay
+                          id={item["_id"]}
                           data={item}
                           createPageMenu={createPageMenu}
                         />

@@ -4,11 +4,24 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
 
 const { Client } = require("@elastic/elasticsearch");
-const client = new Client({ node: "http://localhost:9200" });
+const client = new Client({ node: "http://127.0.0.1:9200" }); //http://patrimeph.ensea.fr/es700
+const indexES = "tdp_users";
 
+// use bodyParser to parse application/json content-type
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+// enhance your app security with Helmet
+router.use(helmet());
+// enable all CORS requests
 router.use(cors());
+//log HTTP requests
+router.use(morgan("combined"));
+
 process.env.SECRET_KEY = "secret";
 
 /* POST register user listing. */
@@ -29,7 +42,7 @@ router.post("/register", function(req, res, next) {
 
   client.search(
     {
-      index: "tde_users",
+      index: indexES,
       body: {
         query: {
           match_all: {}
@@ -38,7 +51,7 @@ router.post("/register", function(req, res, next) {
     },
     (err, result) => {
       if (err) {
-        res.send({ status: 400, err: "Connexion au serveur a échoué !" });
+        res.send({ status: 400, err: "ES connexion au serveur a échoué !" });
       } else {
         hits = result.body.hits.hits;
         const idx = hits.findIndex(hit => {
@@ -49,7 +62,7 @@ router.post("/register", function(req, res, next) {
             userData.password = hash;
             client.index(
               {
-                index: "tde_users",
+                index: indexES,
                 body: userData
               },
               (err, result) => {
@@ -143,7 +156,7 @@ router.post("/register", function(req, res, next) {
 router.post("/login", (req, res) => {
   client.search(
     {
-      index: "tde_users",
+      index: indexES,
       body: {
         query: {
           match_all: {}
@@ -184,7 +197,7 @@ router.get("/confirmation/:token", async (req, res) => {
     let user = jwt.verify(req.params.token, process.env.SECRET_KEY);
     client.search(
       {
-        index: "tde_users",
+        index: indexES,
         body: {
           query: {
             match_all: {}
@@ -202,7 +215,7 @@ router.get("/confirmation/:token", async (req, res) => {
 
           if (idx !== -1) {
             client.update({
-              index: "tde_users",
+              index: indexES,
               id: hits[idx]._id,
               body: {
                 doc: {
@@ -236,7 +249,7 @@ router.post("/updateMyListWills", function(req, res, next) {
 
   client.search(
     {
-      index: "tde_users",
+      index: indexES,
       body: {
         query: {
           match_all: {}
@@ -255,7 +268,7 @@ router.post("/updateMyListWills", function(req, res, next) {
         if (idx !== -1) {
           let isFailed = false;
           client.update({
-            index: "tde_users",
+            index: indexES,
             id: hits[idx]._id,
             body: {
               doc: {

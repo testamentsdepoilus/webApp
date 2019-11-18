@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament MC/ET/XVIII/1935, minute du 06/08/1919 - Jean Marie Maurice Hillemacher</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="CN">Christine Nougaret</persName>
+               <persName xml:id="LV">Lucie Vieillon</persName>
+               <persName xml:id="MLocatelli">Melisa Locatelli</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives nationales. Pôle Image</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives nationales</institution>
+                  <collection>Minutier central des notaires de Paris</collection>
+                  <idno>MC/ET/XVIII/1935, minute du 06/08/1919 (dépôt du testament de Jean Marie Maurice Hillemacher)</idno>
+                  <msName>Testament de Jean Marie Maurice Hillemacher (02/08/1914)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>02/08/1914</date>.<placeName>Paris</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-244">
+                           <forename>Jean</forename>
+                           <forename>Marie</forename>
+                           <forename>Maurice</forename>
+                           <surname>Hillemacher</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-393">Blesme</placeName>,  le <date type="willAuthorDeathDate">06/09/1914</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier à lettre réglé</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>17,8</height>
+                              <width>11,5</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale 18 (CRPCEN : 75026)</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-07-19/2018-11-09" who="#MFGarreau #SL. #lelia">transcription</change>
+         <change when-iso="2018-07-19/2018-10-23"
+                 who="#PCharbonnier #FClavaud #CNougaret">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AN_0182___JPEG___FRAN_Poilus_t-0182_01.jpg"
+                  xml:id="FRAN_Poilus_t-0182_01"/>
+      </surface>
+      <surface type="will-page" n="02">
+         <graphic url="testament_AN_0182___JPEG___FRAN_Poilus_t-0182_02.jpg"
+                  xml:id="FRAN_Poilus_t-0182_02"/>
+      </surface>
+      <surface type="will-page" n="03">
+         <graphic url="testament_AN_0182___JPEG___FRAN_Poilus_t-0182_03.jpg"
+                  xml:id="FRAN_Poilus_t-0182_03"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AN_0182">
+      <body>
+         <div type="will">
+            <pb facs="#FRAN_Poilus_t-0182_01"/>
+            <dateline rend="right">
+               <date type="willDate" when="1914-08-02">2 août 1914</date>.</dateline>
+            <space dim="vertical" unit="lines" quantity="1"/>
+            <p>Je désire - après mon décès - que <lb/>l'on distribue autour de moi quelques <lb/>souvenirs à ceux qui m'ont connu et <lb/>aimé<choice>
+                  <sic> -</sic>
+                  <corr>.</corr>
+               </choice> La part de fortune qui <lb/>me revient ira directement à mes <lb/>héritiers naturels, ma <choice>
+                  <sic>Mère</sic>
+                  <corr>mère</corr>
+               </choice> et après <lb/>elle ma soeur ou à son défaut ses <lb/>enfants.
+</p>
+            <p>Je lègue mon grand chevalet mécanique<lb/> à mon ami <persName>Sollier</persName> - ce chevalet a appartenu <lb/>à <persName>Roty</persName>.</p>
+            <list>
+               <item>ma montre en or à mon neveu Claude</item>
+               <item>ma <choice>
+                     <sic>chaine</sic>
+                     <corr>chaîne</corr>
+                  </choice> en or à mon neveu Antoine</item>
+               <item>
+mon buffet de <choice>
+                     <sic>chène</sic>
+                     <corr>chêne</corr>
+                  </choice> à ma nièce <choice>
+                     <sic>Francoise</sic>
+                     <corr>Françoise</corr>
+                  </choice>
+               </item>
+               <item>ma médaille "Pro Patria" de <persName>Roty</persName> à mon ami <persName>André Delavesne</persName>.</item>
+               <pb facs="#FRAN_Poilus_t-0182_02"/>
+               <item>à l'<persName>abbé Guiard</persName>
+                  <choice>
+                     <sic>-</sic>
+                     <corr>:</corr>
+                  </choice> un dessin de moi <lb/>qu'il voudra bien choisir <choice>
+                     <sic>-</sic>
+                     <corr/>
+                  </choice>
+               </item>
+               <item>à mon ami <persName>Berthon</persName>
+                  <choice>
+                     <sic>-</sic>
+                     <corr>:</corr>
+                  </choice> mon livre des <lb/>Récits <choice>
+                     <sic>merovingiens</sic>
+                     <corr>mérovingiens</corr>
+                  </choice> illustré par <persName>J-P Laurens</persName>
+                  <choice>
+                     <sic/>
+                     <corr>.</corr>
+                  </choice>
+               </item>
+               <item>
+                  <choice>
+                     <sic>que</sic>
+                     <corr>Que</corr>
+                  </choice> ma mère partage avec ma soeur <lb/>toutes mes oeuvres (si j'ose m'exprimer <lb/>ainsi...) et <add place="above">en</add> distribue autour d'elle et <lb/>comme elle le jugera bon<choice>
+                     <sic> -</sic>
+                     <corr/>
+                  </choice> (<persName>
+                     <unclear>Guindeler</unclear>
+                  </persName>, <lb/>
+                  <persName>
+                     <unclear>Coutori</unclear>
+                  </persName>
+                  <choice>
+                     <sic> - </sic>
+                     <corr>, </corr>
+                  </choice>
+                  <persName>
+                     <unclear>Suffit</unclear>
+                  </persName>
+                  <choice>
+                     <sic> - </sic>
+                     <corr>, </corr>
+                  </choice>
+                  <persName>Bessaud</persName>
+                  <choice>
+                     <sic> - </sic>
+                     <corr>, </corr>
+                  </choice>
+                  <persName>Pierné</persName>
+                  <choice>
+                     <sic> - </sic>
+                     <corr>, </corr>
+                  </choice>
+                  <persName>
+                     <unclear>Viziey</unclear>
+                  </persName>
+                  <choice>
+                     <sic> - </sic>
+                     <corr>, </corr>
+                  </choice>
+                  <lb/>Abbat<choice>
+                     <sic> -</sic>
+                     <corr/>
+                  </choice>) <persName>
+                     <unclear>Marie Antoine</unclear>
+                  </persName>
+                  <choice>
+                     <sic> - </sic>
+                     <corr>, </corr>
+                  </choice>
+                  <persName>
+                     <unclear>Paley</unclear>
+                  </persName>. </item>
+               <item>
+à <persName>ma grand<choice>
+                        <sic/>
+                        <corr>-</corr>
+                     </choice>mère Monbro</persName> deux de mes <lb/>meilleures études<choice>
+                     <sic> -</sic>
+                     <corr/>
+                  </choice>
+               </item>
+               <item>
+à ma tante Marie <choice>
+                     <sic>-</sic>
+                     <corr>:</corr>
+                  </choice> mon porte-plume et <lb/>coupe<choice>
+                     <sic/>
+                     <corr>-</corr>
+                  </choice>papier d'argent<choice>
+                     <sic> -</sic>
+                     <corr>.</corr>
+                  </choice>
+               </item>
+               <item>à ma cousine Jacqueline <choice>
+                     <sic>-</sic>
+                     <corr>:</corr>
+                  </choice> mon coffret <lb/>algérien<choice>
+                     <sic> -</sic>
+                     <corr>.</corr>
+                  </choice>
+               </item>
+               <item>à <persName>Giraldon</persName>, mes deux sous-verres de croquis <lb/>du régiment <choice>
+                     <sic>-</sic>
+                     <corr>.</corr>
+                  </choice>
+               </item>
+            </list>
+            <pb facs="#FRAN_Poilus_t-0182_03"/>
+            <p>Ceci est écrit en <choice>
+                  <sic>hàte</sic>
+                  <corr>hâte</corr>
+               </choice>, la veille de <lb/>mon départ pour la guerre<choice>
+                  <sic> -</sic>
+                  <corr>.</corr>
+               </choice>
+            </p>
+            <p>Je demande <add place="above">pardon</add> à ceux que je ne cite <lb/>pas<choice>
+                  <sic> -</sic>
+                  <corr>,</corr>
+               </choice> mais j'écris ceci à la hâte.</p>
+            <p>ma bicyclette au fils de la <persName>mère Richard</persName>.</p>
+            <p>Que ma mère donne ma toile du <lb/>Concours de Rome - La <choice>
+                  <sic>passion</sic>
+                  <corr>Passion</corr>
+               </choice> de la <lb/>Vierge - à quelque église où elle sera <lb/>bien exposée - en bon jour - la lumière <lb/>venant de la gauche<choice>
+                  <sic> -</sic>
+                  <corr>.</corr>
+               </choice>
+            </p>
+            <metamark function="separating" rend="horizontal-line"/>
+            <p>Tout ce <supplied unit="chars" reason="hidden" quantity="1" resp="SL.">q</supplied>ui me restera d'argent sur ma <lb/>petite bourse personnelle<choice>
+                  <sic> -</sic>
+                  <corr/>
+               </choice> (Laurens, prix <lb/>de l'Institut etc.) aux pauvres<choice>
+                  <sic> -</sic>
+                  <corr>.</corr>
+               </choice>
+            </p>
+            <space dim="vertical" unit="lines" quantity="1"/>
+            <dateline>
+               <space dim="horizontal" unit="chars" quantity="15"/>
+               <choice>
+                  <sic>fait</sic>
+                  <corr>Fait</corr>
+               </choice> à <placeName type="willPlace" ref="2">Paris</placeName>, 7 rue Garancière<lb/>
+               <choice>
+                  <abbr>11 h soir</abbr>
+                  <expan>11 heures du soir</expan>
+               </choice>
+               <choice>
+                  <sic> -</sic>
+                  <corr>, le</corr>
+               </choice>
+               <date type="willDate" when="1914-08-02">2 août 1914</date>.
+</dateline>
+            <signed rend="centered">
+               <persName ref="244">Jean <surname>Hillemacher</surname>
+               </persName>.
+</signed>
+         </div>
+      </body>
+   </text>
+</TEI>

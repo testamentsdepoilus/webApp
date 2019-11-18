@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament MC/ET/CXX/1540, minute du 28 juin 1915 - Lucien Beau</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="AM">Aurelie Massie</persName>
+               <persName xml:id="MLocatelli">Melisa Locatelli</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives nationales. Pôle Image</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives nationales</institution>
+                  <collection>Minutier central des notaires de Paris</collection>
+                  <idno>MC/ET/CXX/1540, minute du 28 juin 1915 (dépôt du testament de Lucien Beau)</idno>
+                  <msName>Testament de Lucien Beau (2 août 1914)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>2 août 1914</date>.<placeName>Le Kremlin-Bicêtre</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-82">
+                           <forename>Lucien</forename>
+                           <surname>Beau</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-151">Les Éparges</placeName>,  le <date type="willAuthorDeathDate">25 avril 1915</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré réglé</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale 120 (CRPCEN : 75100)</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-24/2018-05-02"
+                 who="#LBIsabelle #lelia #ALemoine #Jideuxhemme">transcription</change>
+         <change when-iso="2018-01-24/2018-03-09"
+                 who="#PCharbonnier #CNougaret #KPineau">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AN_0024___JPEG___FRAN_Poilus_t-0024_01.jpg"
+                  xml:id="FRAN_Poilus_t-0024_01"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AN_0024">
+      <body>
+         <div type="will">
+            <pb facs="#FRAN_Poilus_t-0024_01"/>
+            <dateline rend="right">
+               <placeName ref="150" type="willPlace">Bicêtre</placeName> le <date type="willDate" when="1914-08-02">2 <choice>
+                     <sic>aout</sic>
+                     <corr>août</corr>
+                  </choice> 1914</date>
+            </dateline>
+            <space dim="vertical" unit="lines" quantity="2"/>
+            <p>Je lègue à ma mère<choice>
+                  <sic/>
+                  <corr>, </corr>
+               </choice> que je considère<lb/> ma seule héritière<choice>
+                  <sic/>
+                  <corr>, </corr>
+               </choice>tous mes biens présents et futurs.<lb/>
+Je l'institue ma légataire universelle.<lb/>
+               <persName>Madame Veuve Beau</persName> veuve de <persName>Louis Antoine Beau</persName>
+               <lb/> ma mère <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice> qui je <choice>
+                  <sic>legue</sic>
+                  <corr>lègue</corr>
+               </choice> tous mes biens meubles<lb/> et immeubles que je <choice>
+                  <sic>possederai</sic>
+                  <corr>possèderai</corr>
+               </choice> au jour de mon <choice>
+                  <sic>decès</sic>
+                  <corr>décès</corr>
+               </choice>.<lb/>
+Je révoque tout testament antérieur ou préscrit.</p>
+            <space dim="vertical" unit="lines" quantity="1"/>
+            <p>Je donne à mon ami <persName>
+                  <surname>Giraud</surname>
+               </persName> qui<lb/> fut pour moi le meilleur camarade mon épingle en<lb/> diamant.</p>
+            <p>
+               <choice>
+                  <sic>A</sic>
+                  <corr> À</corr>
+               </choice> mon ami <persName>Rousset</persName> ma <choice>
+                  <sic>chaine</sic>
+                  <corr>chaîne</corr>
+               </choice> et ma montre<lb/> en or. </p>
+            <p>Je prie ma mère de <choice>
+                  <sic>considerer</sic>
+                  <corr>considérer</corr>
+               </choice> madame<lb/>
+               <persName>
+                  <surname>Appay</surname>
+               </persName> comme une bonne amie et de lui faire<lb/> un cadeau en souvenir de moi. 
+</p>
+            <space dim="vertical" unit="lines" quantity="1"/>
+            <dateline>Fait au <placeName type="willPlace" ref="150">
+                  <choice>
+                     <sic>Kremlin Bicetre</sic>
+                     <corr>Kremlin-Bicêtre</corr>
+                  </choice>
+               </placeName> le<lb/>
+               <date type="willDate" when="1914-08-02">deux <choice>
+                     <sic>Août</sic>
+                     <corr>août</corr>
+                  </choice> mille neuf cent quatorze</date>.</dateline>
+            <space dim="vertical" unit="lines" quantity="1"/>
+            <signed>
+               <persName ref="82">
+                  <surname>Beau</surname> Lucien</persName> employé à la <orgName>Banque de<lb/> France</orgName>
+               <choice>
+                  <sic/>
+                  <corr>.</corr>
+               </choice>
+            </signed>
+            <space quantity="2" unit="lines" dim="vertical"/>
+            <signed rend="centered">
+               <persName ref="82">L <surname>Beau</surname>
+               </persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

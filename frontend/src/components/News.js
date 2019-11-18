@@ -115,7 +115,8 @@ class News extends Component {
 
   handleMoreClick(item) {
     return function(e) {
-      document.location.href = "/news/" + item["_id"];
+      document.location.href =
+        getParamConfig("web_url") + "/news/" + item["_id"];
     }.bind(this);
   }
 

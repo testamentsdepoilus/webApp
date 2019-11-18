@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament 3E44 1008</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="TR">Thierry Rihouey</persName>
+               <persName xml:id="FA">Françoise Auriau</persName>
+               <persName xml:id="SB">Sophie Blanchard</persName>
+               <persName xml:id="MDeuve">Mathilde Deuve</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives départementales des Yvelines</institution>
+                  <collection>Archives notariales</collection>
+                  <idno>3E44 1008, minute du 31 octobre 1917 (dépôt du testament de Henri Alfred Durand)</idno>
+                  <msName>Testament de Henri Alfred Durand (17 décembre 1914)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>17 décembre 1914</date>.<placeName>Viroflay</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-64">
+                           <forename>Henri</forename>
+                           <forename>Alfred</forename>
+                           <surname>Durand</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-120">Nanteuil-la-Fosse</placeName>,  le <date type="willAuthorDeathDate">2 mai 1917 [NOT] ǀ 3 mai 1917 [MDH]</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré réglé</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale de Versailles, étude Gayot</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-24/2018-03-21" who="#lelia #SL. #MFGarreau #tvboy76">transcription</change>
+         <change when-iso="2018-01-24/2018-03-08" who="#FClavaud #EdChamps #KPineau">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AD78_0067___JPEG___FRAD78_Poilus_t-0067_01.jpg"
+                  xml:id="FRAD78_Poilus_t-0067_01"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AD78_0067">
+      <body>
+         <div type="will">
+            <pb facs="#FRAD78_Poilus_t-0067_01"/>
+            <p>
+    Je soussigné <persName ref="64">
+                  <surname>Durand</surname> Henri<lb/> Alfred</persName>
+               <choice>
+                  <sic>Entrepreneur</sic>
+                  <corr>entrepreneur</corr>
+               </choice> de <choice>
+                  <sic>Menuiserie</sic>
+                  <corr>menuiserie</corr>
+               </choice>
+               <lb/> à <placeName ref="35" type="otherPlace">Versailles<choice>
+                     <sic>. Seine et Oise</sic>
+                     <corr>, Seine-et-Oise</corr>
+                  </choice>
+               </placeName>
+               <lb/> époux de <persName>Pauline Marie <surname>Pellat</surname>
+               </persName>
+               <lb/> demeurant ensemble à <placeName ref="111" type="willAuthorResidence">Viroflay</placeName>
+               <lb/> 17 route Nationale (<choice>
+                  <abbr>S et O</abbr>
+                  <expan>Seine-et-Oise</expan>
+               </choice>)<lb/> avons fait par le présent nos<lb/> dispositions testamentaires suivantes<choice>
+                  <sic/>
+                  <corr>.</corr>
+               </choice>
+               <lb/> J'institue ma dite épouse ma<lb/>
+               <choice>
+                  <sic>Légataire</sic>
+                  <corr>légataire</corr>
+               </choice> universelle.</p>
+            <p>
+    En conséquence je lui donne et<lb/>
+               <choice>
+                  <sic>légue</sic>
+                  <corr>lègue</corr>
+               </choice> la totalité de tous mes <choice>
+                  <sic>bien</sic>
+                  <corr>biens</corr>
+               </choice>
+               <lb/> meubles et immeubles<choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice> linges<choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice> droits<lb/> et <choice>
+                  <sic>action</sic>
+                  <corr>actions</corr>
+               </choice>qui m'appartiendront<lb/> au jour de mon décès.</p>
+            <p>
+               <choice>
+                  <sic>ceci</sic>
+                  <corr>Ceci</corr>
+               </choice> est mon testament <choice>
+                  <sic>Olographe</sic>
+                  <corr>olographe</corr>
+               </choice>
+               <lb/> fait en bonne <choice>
+                  <sic>fois</sic>
+                  <corr>foi</corr>
+               </choice> et pleine<lb/> connaissance de cause lequel pourra<lb/> servir en temps et lieu en cas<lb/> de décès<choice>
+                  <sic>.</sic>
+                  <corr/>
+               </choice> de l'un des deux conjoints<choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice>
+               <lb/> fait et écrit en entier de ma main<lb/> à <choice>
+                  <sic>Notre</sic>
+                  <corr>notre</corr>
+               </choice> domicile à <placeName ref="111" type="willPlace">Viroflay</placeName>.</p>
+            <dateline>
+               <placeName ref="111" type="willPlace">Viroflay</placeName> le <del>17</del>
+               <choice>
+                  <sic>Dix sept Décembre</sic>
+                  <corr>dix-sept décembre</corr>
+               </choice> mil<lb/>
+               <choice>
+                  <sic>neuf-cent</sic>
+                  <corr> neuf cent</corr>
+               </choice> quatorze.</dateline>
+            <signed rend="centered">
+               <persName ref="64">
+                  <surname>Durand</surname> Henri Alfred</persName>
+               <!-- ajout manuel balise fermante signed-->
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

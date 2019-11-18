@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament 3E30 676</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="CS">Catherine Souchon</persName>
+               <persName xml:id="SB">Sophie Blanchard</persName>
+               <persName xml:id="MD">Mathilde Deuve</persName>
+               <persName xml:id="FAuriau">Françoise Auriau</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives départementales des Yvelines</institution>
+                  <collection>Archives notariales</collection>
+                  <idno>3E30 676, minute du 9 octobre 1918 (dépôt du testament de André Lelandais)</idno>
+                  <msName>Testament de André Lelandais (16 juin 1915)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>16 juin 1915</date>.<placeName>Berneuil-sur-Aisne</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-24">
+                           <forename>André</forename>
+                           <surname>Lelandais</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-53">Belfort</placeName>,  le <date type="willAuthorDeathDate">13 aout 1918</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : Papier timbré réglé</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale de Neauphle-le-Château</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-24/2018-10-15"
+                 who="#SL. #LBIsabelle #ALemoine #lelia #TPellé #Jideuxhemme">transcription</change>
+         <change when-iso="2018-01-24/2018-09-26" who="#PCharbonnier #EdChamps #KPineau">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AD78_0025___JPEG___FRAD78_Poilus_t-0025_01.jpg"
+                  xml:id="FRAD78_Poilus_t-0025_01"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AD78_0025">
+      <body>
+         <div type="will">
+            <pb facs="#FRAD78_Poilus_t-0025_01"/>
+            <dateline rend="right">
+               <placeName type="willPlace" ref="54">
+                  <choice>
+                     <sic>Berneuil-sur-aisne</sic>
+                     <corr>Berneuil-sur-Aisne</corr>
+                  </choice>
+               </placeName> le <date type="willDate" when="1915-06-16">
+                  <choice>
+                     <sic>Seize Juin<lb/> Mil Neuf Cent Quinze</sic>
+                     <corr>seize juin mille neuf-cent quinze</corr>
+                  </choice>
+               </date>.
+</dateline>
+            <space quantity="4" unit="lines" dim="vertical"/>
+            <p>Ceci est mon testament révoquant<lb/> toutes dispositions antérieures.
+</p>
+            <p>Je, soussigné, <persName ref="24">André <surname>Lelandais</surname>
+               </persName>
+               <lb/>
+               <choice>
+                  <sic>Employé</sic>
+                  <corr>employé</corr>
+               </choice> à <orgName>la Société <choice>
+                     <sic>G</sic>
+                     <corr>g</corr>
+                  </choice>énérale <choice>
+                     <sic>F</sic>
+                     <corr>f</corr>
+                  </choice>rançaise<lb/> d'assurances mutuelles sur la <choice>
+                     <sic>V</sic>
+                     <corr>v</corr>
+                  </choice>ie</orgName>
+               <lb/>
+               <address>
+                  <addrLine> 27 <choice>
+                        <sic>Boulevard</sic>
+                        <corr>boulevard</corr>
+                     </choice> des Italiens, <placeName type="otherPlace" ref="2">Paris</placeName>
+                  </addrLine>
+               </address>
+               <lb/> demeurant à <address>
+                  <addrLine>
+                     <placeName type="willAuthorResidence" ref="2">Paris</placeName>, rue Berthollet, <choice>
+                        <abbr>N<hi rend="superscript-underlined">o</hi>
+                        </abbr>
+                        <expan>numéro</expan>
+                     </choice> 24</addrLine>
+               </address>,<lb/> en ce moment aux <choice>
+                  <sic>A</sic>
+                  <corr>a</corr>
+               </choice>rmées.</p>
+            <p>Donne et lègue par le présent à<lb/>
+               <persName>
+                  <app>
+                     <lem>Anna</lem>
+                     <note resp="SL.">corrigé en Anne au crayon</note>
+                  </app> Louise Henriette <surname>Fournou</surname>
+               </persName> ma<lb/> femme, l'usufruit pendant sa vie de<lb/> l'universalité de tous les biens, meubles et<lb/> immeubles, qui m'appartiendront au jour<lb/> de mon <choice>
+                  <sic>dèçés</sic>
+                  <corr>décès</corr>
+               </choice> et composeront ma succession<lb/> sans aucune exception ni réserve.<lb/>Ce legs sera réduit à <add place="above">l'usufruit de</add> la moitié des mêmes<lb/> biens si je laisse des enfants ou autres descendants.</p>
+            <p>Dans l'un comme dans l'autre cas,<lb/> ma femme jouira de l'usufruit <choice>
+                  <sic>lègué</sic>
+                  <corr>légué</corr>
+               </choice> à<lb/> compter dudit jour de mon <choice>
+                  <sic>dèçés</sic>
+                  <corr>décès</corr>
+               </choice> sans être<lb/> tenue de fournir caution ni de faire emploi,<lb/> mais à la charge de faire faire inventaire.</p>
+            <dateline>Ecrit et signé en entier de ma main<choice>
+                  <sic/>
+                  <corr>.</corr>
+               </choice>
+               <lb/> Le <date type="willDate" when="1915-06-16">
+                  <choice>
+                     <sic>Seize Juin Mil Neuf Cent Quinze</sic>
+                     <corr>seize juin mille neuf-cent quinze.</corr>
+                  </choice>
+               </date>
+            </dateline>
+            <signed rend="centered">
+               <persName ref="24">
+                  <surname>Lelandais</surname>. A</persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

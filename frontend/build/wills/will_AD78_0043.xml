@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament 3E44 989</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="TR">Thierry Rihouey</persName>
+               <persName xml:id="FA">Françoise Auriau</persName>
+               <persName xml:id="SB">Sophie Blanchard</persName>
+               <persName xml:id="MDeuve">Mathilde Deuve</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives départementales des Yvelines</institution>
+                  <collection>Archives notariales</collection>
+                  <idno>3E44 989, minute du 11 décembre 1914 (dépôt du testament de Marcel Eugène Gustave Delor)</idno>
+                  <msName>Testament de Marcel Eugène Gustave Delor (2 août 1914)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>2 août 1914</date>.<placeName>Versailles</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-41">
+                           <forename>Marcel</forename>
+                           <forename>Eugène</forename>
+                           <forename>Gustave</forename>
+                           <surname>Delor</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-88">Puisieux</placeName>,  le <date type="willAuthorDeathDate">29 septembre 1914</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré. Enveloppe : enveloppe grise doublée de noir, 5 cachets de cire rouge</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale de Versailles, étude Gayot</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-24/2018-04-23"
+                 who="#LBIsabelle #emmanuelleph #MFGarreau">transcription</change>
+         <change when-iso="2018-01-24/2018-02-16" who="#PCharbonnier #KPineau #EdChamps">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-envelope-recto" n="01">
+         <graphic url="testament_AD78_0043___JPEG___FRAD78_Poilus_t-0043_01.jpg"
+                  xml:id="FRAD78_Poilus_t-0043_01"/>
+      </surface>
+      <surface type="will-page" n="02">
+         <graphic url="testament_AD78_0043___JPEG___FRAD78_Poilus_t-0043_03.jpg"
+                  xml:id="FRAD78_Poilus_t-0043_03"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AD78_0043">
+      <body>
+         <div type="envelope">
+            <pb facs="#FRAD78_Poilus_t-0043_01"/>
+            <p rend="left">
+               <persName ref="41">
+                  <surname>Delor </surname>(Marcel)</persName>
+            </p>
+            <p rend="centered">Testament de M <persName ref="41">Marcel <surname>Delor</surname>
+               </persName>
+               <lb/>
+               <choice>
+                  <abbr>d<hi rend="superscript">ant</hi>
+                  </abbr>
+                  <expan>demeurant</expan>
+               </choice>
+               <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice>
+               <placeName ref="35">Versailles</placeName>
+               <address>
+                  <addrLine>rue de Noailles 31</addrLine>
+               </address>
+            </p>
+            <space dim="vertical" unit="lines" quantity="1"/>
+            <p rend="left">
+               <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice> moi remis le <date when="1914-08-03">3 <choice>
+                     <sic>Aout</sic>
+                     <corr>août</corr>
+                  </choice> 1914</date>
+            </p>
+            <signed>MD</signed>
+         </div>
+         <div type="will">
+            <pb facs="#FRAD78_Poilus_t-0043_03"/>
+            <p rend="left">
+    Ceci est mon testament<lb/> qui révoque toutes dispositions<lb/> antérieures.</p>
+            <p>J'institue pour ma<lb/> légataire universelle mon<lb/> épouse née <persName>Denise Marie<lb/> Michaut</persName>.</p>
+            <p>En <choice>
+                  <sic>consequence</sic>
+                  <corr>conséquence</corr>
+               </choice> je<lb/> lui donne et lègue l'universalité<lb/> des biens qui composeront<lb/> ma succession sans aucune<lb/> exception ni réserve<choice>
+                  <sic/>
+                  <corr>.</corr>
+               </choice>
+            </p>
+            <dateline rend="right">
+               <placeName ref="35" type="willPlace">Versailles</placeName> le <date when="1914-08-02" type="willDate"> 2 <choice>
+                     <sic>Août</sic>
+                     <corr>août</corr>
+                  </choice> 1914</date>
+            </dateline>
+            <signed rend="right">
+               <persName ref="41"> Marcel <surname>Delor</surname>.</persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

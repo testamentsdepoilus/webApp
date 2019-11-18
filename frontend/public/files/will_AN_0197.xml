@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament MC/ET/XXXI/1560, minute du 29/03/1917 - MULOT Victor Gaston</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="CN">Christine Nougaret</persName>
+               <persName xml:id="LV">Lucie Vieillon</persName>
+               <persName xml:id="MLocatelli">Melisa Locatelli</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives nationales. Pôle Image</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives nationales</institution>
+                  <collection>Minutier central des notaires de Paris</collection>
+                  <idno>MC/ET/XXXI/1560, minute du 29/03/1917 (dépôt du testament de Victor Gaston Mulot)</idno>
+                  <msName>Testament de Victor Gaston Mulot (03/08/1914)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>03/08/1914</date>.<placeName>Paris</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-258">
+                           <forename>Victor</forename>
+                           <forename>Gaston</forename>
+                           <surname>Mulot</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-65">Esnes-en-Argonne</placeName>,  le <date type="willAuthorDeathDate">21/11/1916</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré réglé</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale 31 (CRPCEN : 75078)</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-07-19/2019-01-21" who="#SL. #MFGarreau #lelia">transcription</change>
+         <change when-iso="2018-07-19/2018-10-01"
+                 who="#PCharbonnier #CNougaret #FClavaud">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AN_0197___JPEG___FRAN_Poilus_t-0197_01_ab.jpg"
+                  xml:id="FRAN_Poilus_t-0197_01_ab"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AN_0197">
+      <body>
+         <div type="will">
+            <pb facs="#FRAN_Poilus_t-0197_01_ab"/>
+            <dateline rend="right">
+               <placeName type="willPlace" ref="2">Paris</placeName>
+               <date type="willDate" when="1914-08-03">
+                  <choice>
+                     <sic>Lundi</sic>
+                     <corr>lundi</corr>
+                  </choice> 3 <choice>
+                     <sic>Août</sic>
+                     <corr>août</corr>
+                  </choice> 1914</date>
+            </dateline>
+            <space dim="vertical" unit="lines" quantity="4"/>
+            <p>
+               <address>
+                  <addrLine rend="centered">A <persName>
+                        <choice>
+                           <sic>Maitre Vintain</sic>
+                           <corr>Maître Vingtain</corr>
+                        </choice>
+                     </persName> notaire <lb/>
+                  </addrLine>
+                  <addrLine rend="centered">26 <choice>
+                        <sic>Avenue</sic>
+                        <corr>avenue</corr>
+                     </choice> de la Grande Armée<lb/>
+                  </addrLine>
+                  <addrLine rend="right"> à <placeName type="otherPlace" ref="2">Paris</placeName>
+                  </addrLine>
+               </address>
+            </p>
+            <space dim="vertical" unit="lines" quantity="2"/>
+            <p>
+               <space dim="horizontal" unit="chars" quantity="8"/>Monsieur,<lb/>
+Ceci est mon testament. Partant<lb/> pour la guerre<choice>
+                  <sic>.</sic>
+                  <corr>,</corr>
+               </choice>
+               <choice>
+                  <sic>En</sic>
+                  <corr>en</corr>
+               </choice> cas de décès<choice>
+                  <sic>.</sic>
+                  <corr>,</corr>
+               </choice>
+               <lb/>
+               <persName ref="258">
+                  <choice>
+                     <sic>M</sic>
+                     <corr>m</corr>
+                  </choice>onsieur Gaston Victor <surname>Mulot</surname>
+               </persName>
+               <lb/> né <date when="1879-06-20" type="willAuthorBirthDate">le 20 Juin 1879</date>
+               <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice>
+               <address>
+                  <addrLine>
+                     <placeName type="willAuthorBirthPlace" ref="2">Paris</placeName> trois<lb/> rue Chabanais<choice>
+                        <sic>.</sic>
+                        <corr>, </corr>
+                     </choice>
+                  </addrLine>
+               </address>
+               <lb/>
+               <choice>
+                  <sic>Etant</sic>
+                  <corr>étant</corr>
+               </choice> sain de corps et d'esprit<choice>
+                  <sic>.</sic>
+                  <corr>,</corr>
+               </choice>
+               <lb/>
+               <choice>
+                  <sic>Donne</sic>
+                  <corr>donne</corr>
+               </choice> ou fait à  <persName>
+                  <choice>
+                     <sic>M</sic>
+                     <corr>m</corr>
+                  </choice>ademoiselle<lb/> Gabrielle Jeanne Lafalise</persName>
+               <add place="below">née le <date type="otherDate" when="1885-08-26">26 <choice>
+                        <sic>Août</sic>
+                        <corr>août</corr>
+                     </choice> 1885</date>
+               </add>
+               <add place="marginLeft">Née <date type="otherDate" when="1885-08-26">le 26 <choice>
+                        <sic>Août</sic>
+                        <corr>août</corr>
+                     </choice>
+                     <supplied unit="chars" reason="hidden" quantity="3">1885</supplied>
+                  </date>
+                  <signed>
+                     <persName ref="258">G. <surname>M.</surname>
+                     </persName>
+                  </signed>
+               </add>, sa<lb/> légataire universelle, des biens qu'il<lb/> possède au Plant <placeName type="otherPlace" ref="134">Champigny<choice>
+                     <sic/>
+                     <corr>,</corr>
+                  </choice> Seine</placeName>
+               <choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice>
+               <lb/> pavillons et terrain <address>
+                  <addrLine>2 <choice>
+                        <sic>Avenue</sic>
+                        <corr>avenue</corr>
+                     </choice> des<lb/>
+                     <choice>
+                        <sic>Tilleuils</sic>
+                        <corr>Tilleuls</corr>
+                     </choice>
+                  </addrLine>
+               </address> et mon fonds de blanchisseur<choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice>
+               <lb/> meubles<choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice> bijoux<choice>
+                  <sic/>
+                  <corr>,</corr>
+               </choice> etc<choice>
+                  <sic/>
+                  <corr>.</corr>
+               </choice>
+            </p>
+            <dateline>
+               <space dim="horizontal" unit="chars" quantity="14"/>Fait en double à <placeName ref="2" type="willPlace">Paris</placeName> le<lb/>
+               <date type="willDate" when="1914-08-03">3 <choice>
+                     <sic>Août</sic>
+                     <corr>août</corr>
+                  </choice> 1914</date>
+            </dateline>
+            <signed>
+               <space dim="horizontal" unit="chars" quantity="14"/>Je soussigné <persName ref="258">Gaston<lb/> Victor <surname>Mulot</surname>
+               </persName>
+               <space dim="horizontal" unit="chars" quantity="17"/>
+               <address>
+                  <addrLine>225 et 212 <choice>
+                        <sic>Rue</sic>
+                        <corr>rue</corr>
+                     </choice> Lafayette<lb/>
+                  </addrLine>
+                  <addrLine>
+                     <space dim="horizontal" unit="chars" quantity="23"/>
+                     <placeName type="willPlace" ref="2">Paris</placeName>
+                  </addrLine>
+               </address>
+            </signed>
+            <dateline>Fait en double à <placeName type="willPlace" ref="2">Paris</placeName>
+               <lb/> le <date type="willDate" when="1914-08-03">3 <choice>
+                     <sic>Août</sic>
+                     <corr>août</corr>
+                  </choice> 1914</date>
+            </dateline>
+            <signed rend="centered">
+               <persName ref="258">G. <surname>Mulot</surname>
+               </persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

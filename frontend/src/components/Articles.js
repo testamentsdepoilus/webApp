@@ -114,7 +114,8 @@ class Articles extends Component {
 
   handleMoreClick(item) {
     return function(e) {
-      document.location.href = "/articles/" + item["_id"];
+      document.location.href =
+        getParamConfig("web_url") + "/articles/" + item["_id"];
     }.bind(this);
   }
 

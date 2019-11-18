@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament MC/ET/LXIX/1541, minute du 28 juin 1915 - Fernand Marius Paulat</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="MLocatelli">Melisa Locatelli</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives nationales. Pôle Image</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>transcription</resp>
+               <persName>GIROD</persName>
+           
+               <persName>lelia</persName>
+               <persName>Marie-Françoise Garreau</persName>
+               <persName>Silver08</persName>
+             
+               
+            </respStmt>
+            <respStmt>
+               <resp>corrections finales et validation</resp>
+               
+               <persName>Pauline Charbonnier</persName>
+               
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives nationales</institution>
+                  <collection>Minutier central des notaires de Paris</collection>
+                  <idno>MC/ET/LXIX/1541, minute du 28 juin 1915 (dépôt du testament de Fernand Marius Paulat)</idno>
+                  <msName>Testament de Fernand Marius Paulat (4 août 1914)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date type="willDate" when="1914-08-04">4 août 1914</date>.<placeName type="willPlace">Paris</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-168">
+                           <forename>Fernand</forename>
+                           <forename>Marius</forename>
+                           <surname>Paulat</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-231" type="willAuthorDeathPlace">Barcy</placeName>,  le <date type="willAuthorDeathDate" when="1914-09-06">6 septembre 1914</date>, <date type="willAuthorDeathDate" when="1914-09-07">7 septembre 1914</date> ou <date type="willAuthorDeathDate" when="1914-09-08">8 septembre 1914</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré réglé</support>
+                        <extent>1 page, <dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale 069 (CRPCEN : 75007)</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-25/2018-03-13"
+                 who="#lelia #MFGarreau #Silver08 #GIROD">transcription</change>
+         <change when-iso="2018-01-25/2018-02-21" who="#PCharbonnier #KPineau">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AN_0003___JPEG___FRAN_Poilus_t-0003_01.jpg"
+                  xml:id="FRAN_Poilus_t-0003_01"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AN_0003">
+      <body>
+         <div type="will">
+            <pb facs="#FRAN_Poilus_t-0003_01"/>
+            <dateline rend="centered">
+               <placeName ref="2" type="willPlace">Paris</placeName> ce <date type="willDate" when="1914-08-04">quatre <choice>
+                     <sic>aout<lb/> mil-neuf-cent-quatorze</sic>
+                     <corr>août mil neuf cent quatorze</corr>
+                  </choice>
+               </date>
+            </dateline>
+            <space quantity="1" unit="lines" dim="vertical"/>
+            <p rend="left"> En prévision des événements<lb/> actuels, devant partir en guerre<lb/> par la présente et en toute<lb/> connaissance : <choice>
+                  <sic>Je</sic>
+                  <corr>je</corr>
+               </choice>
+               <choice>
+                  <sic>lêgue</sic>
+                  <corr>lègue</corr>
+               </choice>
+               <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice>
+               <lb/>
+               <choice>
+                  <sic>Ma</sic>
+                  <corr>ma</corr>
+               </choice> femme : <persName>Madame <surname>Paulat</surname>
+                  <lb/> née Lisy-Férère</persName>
+               <choice>
+                  <sic>.</sic>
+                  <corr>,</corr>
+               </choice>
+               <lb/>
+               <choice>
+                  <sic>Mes</sic>
+                  <corr>mes</corr>
+               </choice> biens<choice>
+                  <sic>.</sic>
+                  <corr>,</corr>
+               </choice> concernant en<lb/> argent liquide, celui restant<lb/>
+               <orgName>au <choice>
+                     <sic>comptoir</sic>
+                     <corr>Comptoir</corr>
+                  </choice>
+                  <choice>
+                     <sic>D</sic>
+                     <corr>d</corr>
+                  </choice>'escompte</orgName>,<lb/> argent dehors, clientèle,<lb/> meubles et bijoux<choice>
+                  <sic>.</sic>
+                  <corr>,</corr>
+               </choice> ainsi que<lb/> le fonds de commerce,<lb/> et les marchandises<choice>
+                  <sic>,.</sic>
+                  <corr>.</corr>
+               </choice>
+            </p>
+            <!--correction manuelle<space quantity="1" unit="lines" dim="vertical"/
+   >-->
+            <space quantity="1" unit="lines" dim="vertical"/>
+            <dateline>Fait <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice>
+               <placeName type="willPlace" ref="2">Paris</placeName> le <date type="willDate" when="1914-08-04">quatre<lb/>
+                  <choice>
+                     <sic>aout</sic>
+                     <corr>août</corr>
+                  </choice> mille<choice>
+                     <sic>-</sic>
+                     <corr/>
+                  </choice>neuf<choice>
+                     <sic>-</sic>
+                     <corr/>
+                  </choice>cent<lb/> quatorze</date>.
+</dateline>
+            <signed rend="right">
+               <persName ref="168">Marius <surname>Paulat</surname>
+               </persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

@@ -13,7 +13,7 @@ const Styled = createStyled(theme => ({
   },
   inputSearch: {
     borderRadius: "22px",
-    border: "10px solid red"
+    border: "1px solid red"
   },
   typography: {
     fontFamily: [

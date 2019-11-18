@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/testaments-de-poilus/static/css/main.8b875deb.chunk.css",
+    "main.js": "/testaments-de-poilus/static/js/main.6b0fb02b.chunk.js",
+    "main.js.map": "/testaments-de-poilus/static/js/main.6b0fb02b.chunk.js.map",
+    "runtime~main.js": "/testaments-de-poilus/static/js/runtime~main.26487918.js",
+    "runtime~main.js.map": "/testaments-de-poilus/static/js/runtime~main.26487918.js.map",
+    "static/css/2.4eb2fbb5.chunk.css": "/testaments-de-poilus/static/css/2.4eb2fbb5.chunk.css",
+    "static/js/2.0d0b68bc.chunk.js": "/testaments-de-poilus/static/js/2.0d0b68bc.chunk.js",
+    "static/js/2.0d0b68bc.chunk.js.map": "/testaments-de-poilus/static/js/2.0d0b68bc.chunk.js.map",
+    "index.html": "/testaments-de-poilus/index.html",
+    "precache-manifest.d58e1ca345ae21645037ea3cd9685ff3.js": "/testaments-de-poilus/precache-manifest.d58e1ca345ae21645037ea3cd9685ff3.js",
+    "service-worker.js": "/testaments-de-poilus/service-worker.js",
+    "static/css/2.4eb2fbb5.chunk.css.map": "/testaments-de-poilus/static/css/2.4eb2fbb5.chunk.css.map",
+    "static/css/main.8b875deb.chunk.css.map": "/testaments-de-poilus/static/css/main.8b875deb.chunk.css.map"
+  }
+}

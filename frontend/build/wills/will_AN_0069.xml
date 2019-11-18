@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="TeiModel_for_FirstWorldWarWills_v2_transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Testament MC/ET/CXX/1622, minute du 4 mars 1919 - Joseph Peyragrosse</title>
+            <respStmt>
+               <resp>Identification et description du testament</resp>
+               <persName xml:id="AM">Aurelie Massie</persName>
+               <persName xml:id="MLocatelli">Melisa Locatelli</persName>
+            </respStmt>
+            <respStmt>
+               <resp>numérisation</resp>
+               <orgName>Archives nationales. Pôle Image</orgName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <orgName>Université de Cergy-Pontoise</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives nationales</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales des Yvelines</orgName>
+            </publisher>
+            <publisher>
+               <orgName>École nationale des chartes</orgName>
+            </publisher>
+            <publisher>
+               <orgName>Archives départementales du Val-dOise</orgName>
+            </publisher>
+            <pubPlace>Paris</pubPlace>
+            <date when="2019-07-25"/>
+            <availability>
+               <licence>Licence CC BY</licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <institution>Archives nationales</institution>
+                  <collection>Minutier central des notaires de Paris</collection>
+                  <idno>MC/ET/CXX/1622, minute du 4 mars 1919 (dépôt du testament de Joseph Peyragrosse)</idno>
+                  <msName>Testament de Joseph Peyragrosse (30 septembre 1916)</msName>
+               </msIdentifier>
+               <msContents>
+                  <summary>
+                     <p>
+                        <date>30 septembre 1916</date>.<placeName>Paris</placeName>.</p>
+                     <p>
+                        <term type="willType">testament olographe</term> de <persName ref="#pers-126">
+                           <forename>Joseph</forename>
+                           <surname>Peyragrosse</surname>
+                        </persName>, mort pour la France à <placeName ref="#pl-219">Poperinge</placeName>,  le <date type="willAuthorDeathDate">16 juin 1918</date>.</p>
+                  </summary>
+               </msContents>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>Testament : papier timbré réglé</support>
+                        <extent>X pages<dimensions unit="cm">
+                              <height>24,9</height>
+                              <width>17,8</width>
+                           </dimensions>
+                        </extent>
+                     </supportDesc>
+                  </objectDesc>
+                  <handDesc>
+                     <p>encre</p>
+                  </handDesc>
+               </physDesc>
+               <history>
+                  <provenance>
+                     <orgName>étude notariale 120 (CRPCEN : 75100)</orgName>
+                  </provenance>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <creation>Fichier produit à partir des données saisies avant import initial dans la plate-forme, et de la transcription du testament qui a été produite directement dans la plate-forme, converties automatiquement en TEI</creation>
+         <langUsage>
+            <language ident="fre">français</language>
+         </langUsage>
+      </profileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Description générale du projet de transcription collaborative etc.</p>
+         </projectDesc>
+         <editorialDecl>
+            <p>L'édition est séquencée par document (le testament et sa ou ses éventuelles
+               enveloppes) : pour chacun d'entre eux, un fichier TEI est produit. Ce choix est
+               adapté à la fois à la nature du corpus (une collection homogène de documents) et aux
+               modalités du travail collaboratif. L’édition liste également, et inclut,
+               l’intégralité des images numériques des documents, qui ont été produites par les
+               Archives nationales et les Archives départementales des Yvelines. A un document
+               correspondent plusieurs image snumériques, lesquelles correspondent en général
+               chacune à une page du testament ou à un des côtés (recto ou verso ) d'une enveloppe.
+               Parfois cependant, le document ayant été relié et étant solidaire des autres pièces
+               composant la minute, il a fallu produire deux images complémentaires pour la même
+               page.</p>
+            <p>Chaque document a reçu un numéro d’ordre qui reflète l'ordre chronologique dans
+               lequel le travail d'identification a été mené, sans autre signification.</p>
+            <p>Chaque testament est décrit par une brève analyse donnant : sa date de temps et de
+               lieu ; le nom de son auteur, les circonstances et la date du décès du Poilu ; une
+               description matérielle du testament (type de papier, pagination, dimensions, matière
+               de l’écriture) ; sa cote aux Archives nationales ou aux Archives départementales des
+               Yvelines.</p>
+            <p>Nous avons fait le choix de livrer au lecteur une édition lui permettant à la fois de
+               lire une transcription imitative du texte, permettant de respecter le plus fidèlement
+               possible l’écriture et la mise en page du Poilu, et de rendre compte ainsi de la
+               matérialité du texte ; et une édition du texte définitif, modernisée (orthographe) et
+               normalisée (harmonisation de l’écriture des dates, de la ponctuation et de la
+               présentation, et résolution des abréviations correction des fautes de syntaxe), qui
+               permet une lecture plus fluide. Pour cette dernière, nous avons suivi les règles
+               d’édition de l’École des Chartes (<bibl>
+                  <author>Nougaret (Christine)</author>,<author>Parinet (Élisabeth)</author>,<respStmt>
+                     <persName>Parinet (Élisabeth)</persName>
+                     <resp>(collab.)</resp>
+                  </respStmt>,<title level="a">L’édition critique des textes contemporains, XIXe-XXIe siècle</title>. Paris : École nationale des chartes, 2015.</bibl>.</p>
+            <interpretation>
+               <p>Les expressions évoquant la vision de la mort et celles dénotant l'état d'esprit
+                  des testateurs ont fait l'objet d'un balisage renvoyant à une grille d'analyse
+                  contenant deux micro-vocabulaires.</p>
+            </interpretation>
+            <normalization>
+               <p/>
+            </normalization>
+            <hyphenation>
+               <p/>
+            </hyphenation>
+            <punctuation>
+               <p/>
+            </punctuation>
+         </editorialDecl>
+         <samplingDecl>
+            <p>L’édition porte sur les testaments olographes et leurs enveloppes éventuelles, si
+               elles sont de la main du Poilu. Seules les parties du texte de la main du testateur
+               sont transcrites. La présente édition ne concerne donc pas les éléments textuels
+               ajoutés au testament lors de son ouverture au tribunal (pagination, paraphes,
+               signature du juge...) ni les autres mentions hors teneur. Seul est donc édité le
+               texte autographe tel que délimité par le bâtonnage du juge.</p>
+         </samplingDecl>
+         <variantEncoding method="parallel-segmentation" location="internal"/>
+         <appInfo>
+            <application version="1.0" ident="TranscribeToTEI">
+               <label>Transcribe To TEI</label>
+               <ref target="https://github.com/TranscribeToTEI">https://github.com/TranscribeToTEI</ref>
+            </application>
+         </appInfo>
+      </encodingDesc>
+      <revisionDesc>
+         <change when-iso="2018-01-24/2018-07-10" who="#SL. #MFGarreau #lelia">transcription</change>
+         <change when-iso="2018-01-24/2018-05-07" who="#PCharbonnier #KPineau">validation</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:base="https://testaments-de-poilus.huma-num.fr/iiif/2/">
+      <surface type="will-page" n="01">
+         <graphic url="testament_AN_0069___JPEG___FRAN_Poilus_t-0069_01.jpg"
+                  xml:id="FRAN_Poilus_t-0069_01"/>
+      </surface>
+   </facsimile>
+   <text xml:id="will_AN_0069">
+      <body>
+         <div type="will">
+            <pb facs="#FRAN_Poilus_t-0069_01"/>
+            <p>Je <choice>
+                  <sic>Sousigne</sic>
+                  <corr>soussigné</corr>
+               </choice>
+               <persName ref="126">Joseph <surname>Peyragrosse</surname>
+               </persName>
+               <lb/>
+               <choice>
+                  <sic>Marchand de Vin</sic>
+                  <corr>marchand de vin</corr>
+               </choice>, demeurant à<lb/>
+               <address>
+                  <addrLine>
+                     <placeName ref="2" type="willAuthorResidence"> Paris</placeName>, <choice>
+                        <sic>Rue de l Industrie</sic>
+                        <corr>rue de l'Industrie</corr>
+                     </choice>
+                     <choice>
+                        <abbr>No</abbr>
+                        <expan>numéro</expan>
+                     </choice> 5</addrLine>
+               </address>,<lb/>
+               <choice>
+                  <sic>ait</sic>
+                  <corr>ai</corr>
+               </choice> fait <choice>
+                  <sic>Mon</sic>
+                  <corr>mon</corr>
+               </choice> testament <choice>
+                  <sic>ainssi</sic>
+                  <corr>ainsi</corr>
+               </choice>
+               <lb/> qu'il suit.
+</p>
+            <p>J'institue pour mon légataire<lb/> universel, de tous les biens,<lb/>
+               <choice>
+                  <sic>Meubles et Immeubles</sic>
+                  <corr>meubles et immeubles</corr>
+               </choice> qui com<lb break="no"/>poseront ma succession, sans<lb/> aucune exception ni réserve, <lb/>
+               <persName>Monsieur Jean Marie Joseph<lb/> Bourgier</persName>, <choice>
+                  <sic>employer</sic>
+                  <corr>employé</corr>
+               </choice> demeurant<lb/>
+               <choice>
+                  <sic>a</sic>
+                  <corr>à</corr>
+               </choice>
+               <address>
+                  <addrLine>
+                     <placeName type="otherPlace" ref="2">Paris</placeName>
+                     <choice>
+                        <sic>Rue de l Industrie</sic>
+                        <corr>rue de l'Industrie</corr>
+                     </choice>
+                     <choice>
+                        <abbr>No</abbr>
+                        <expan>numéro</expan>
+                     </choice> 5</addrLine>
+               </address>,<lb/>
+               <choice>
+                  <sic>Mon beau Frere</sic>
+                  <corr>mon beau-frère</corr>
+               </choice>, pour en <choice>
+                  <sic>Jouir</sic>
+                  <corr>jouir</corr>
+               </choice>,<lb/> et en disposer, comme<choice>
+                  <sic>, </sic>
+                  <corr/>
+               </choice>de choses<lb/> lui appartenant, en toute propriété,<lb/> à compter du jour de mon <choice>
+                  <sic>décés</sic>
+                  <corr>décès</corr>
+               </choice>.
+</p>
+            <dateline rend="right">
+               <choice>
+                  <sic>fait</sic>
+                  <corr>Fait</corr>
+               </choice> et écrit <choice>
+                  <sic>entierement</sic>
+                  <corr>entièrement</corr>
+               </choice>
+               <lb/> de ma main, <choice>
+                  <sic>a </sic>
+                  <corr>à</corr>
+               </choice>
+               <placeName type="willPlace" ref="2">Paris</placeName> le <date type="willDate" when="1916-09-30">trente<lb/> septembre <choice>
+                     <sic>Mil</sic>
+                     <corr>mil</corr>
+                  </choice> neuf cent seize</date>
+               <lb/> (1916)</dateline>
+            <signed rend="centered">
+               <persName ref="126">
+                  <surname>Peyragrosse</surname> Joseph</persName>
+            </signed>
+         </div>
+      </body>
+   </text>
+</TEI>

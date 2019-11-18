@@ -150,7 +150,7 @@ class About extends Component {
     } else {
       this.setState({
         data: newData,
-        selectedId: newData[0]["_id"]
+        selectedId: newData.length > 0 ? newData[0]["_id"] : ""
       });
     }
   }

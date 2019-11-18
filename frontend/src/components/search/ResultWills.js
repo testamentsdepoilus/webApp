@@ -280,6 +280,14 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidUpdate() {
+    if (sessionStorage.uriSearch !== document.location.href) {
+      if (document.location.href.split("?")[1]) {
+        sessionStorage.setItem("uriSearch", document.location.href);
+      } else {
+        sessionStorage.removeItem("uriSearch");
+      }
+    }
+
     if (this.state.chipData !== undefined) {
       let chip = (
         <div id="chipWill">
@@ -325,7 +333,6 @@ export default class ResultWills extends React.Component {
   }
 
   render() {
-    console.log("mess :", this.state.message);
     const results = this.state.curData.map((item, j) => {
       let descriptions = [];
       if (item.inner_hits) {
@@ -403,8 +410,7 @@ export default class ResultWills extends React.Component {
                   <Avatar
                     alt="avatar-testator"
                     src={
-                      getParamConfig("web_host") +
-                      "/images/default-testator.png"
+                      getParamConfig("web_url") + "/images/default-testator.png"
                     }
                   />
                 </ListItemAvatar>

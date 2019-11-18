@@ -37,12 +37,12 @@ export function uploadImageCallBack(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://127.0.0.1:9200";
+  config["es_host"] = "http://127.0.0.1:9200"; //http://patrimeph.ensea.fr/es700
   config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
-  config["es_index_user"] = "tde_users";
-  config["web_url"] = "http://localhost:3000"; //"http://patrimeph.ensea.fr/testaments-de-poilus";
-  config["web_host"] = "http://patrimeph.ensea.fr/tdp";
+  config["es_index_user"] = "tdp_users";
+  config["web_url"] = "http://127.0.0.1:3000"; //"http://patrimeph.ensea.fr/testaments-de-poilus";
+  config["web_host"] = "http://127.0.0.1:3005"; // http://127.0.0.1/testaments-de-poilus
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -264,7 +264,8 @@ export function htmlSubstring(s, n) {
 // Register post function
 export const register = async newUser => {
   try {
-    const res = await axios.post("http://127.0.0.1:3005/users/register", {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/users/register", {
       email: newUser.email,
       user_name: newUser.user_name,
       password: newUser.password
@@ -279,7 +280,8 @@ export const register = async newUser => {
 // login post function
 export const login = async user => {
   try {
-    const res = await axios.post("http://127.0.0.1:3005/users/login", {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/users/login", {
       email: user.email,
       password: user.password
     });
@@ -293,7 +295,8 @@ export const login = async user => {
 // publish post function
 export const publish = async item => {
   try {
-    const res = await axios.post("http://127.0.0.1:3005/cms/publish", {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/cms/publish", {
       title: item.title,
       summary: item.summary,
       detail: item.detail,
@@ -309,7 +312,8 @@ export const publish = async item => {
 // publish post function
 export const removePost = async item => {
   try {
-    const res = await axios.post("http://127.0.0.1:3005/cms/removePost", {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/cms/removePost", {
       ids: item
     });
     return res.data;
@@ -321,7 +325,8 @@ export const removePost = async item => {
 // update post function
 export const updatePost = async item => {
   try {
-    const res = await axios.post("http://127.0.0.1:3005/cms/updatePost", {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/cms/updatePost", {
       id: item.id,
       title: item.title,
       summary: item.summary,
@@ -339,13 +344,11 @@ export const updatePost = async item => {
 // update post function
 export const updateMyListWills = async item => {
   try {
-    const res = await axios.post(
-      "http://127.0.0.1:3005/users/updateMyListWills",
-      {
-        email: item.email,
-        myWills: item.myWills
-      }
-    );
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/users/updateMyListWills", {
+      email: item.email,
+      myWills: item.myWills
+    });
     return res.data;
   } catch (err) {
     console.log("err dans catch :", err);

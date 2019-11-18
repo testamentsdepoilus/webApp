@@ -3,7 +3,7 @@ const router = express.Router();
 const cors = require("cors");
 
 const { Client } = require("@elastic/elasticsearch");
-const client = new Client({ node: "http://localhost:9200" });
+const client = new Client({ node: "http://127.0.0.1:9200" }); //http://patrimeph.ensea.fr/es700
 const es_index = "tdp_cms";
 
 router.use(cors());
