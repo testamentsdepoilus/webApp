@@ -172,14 +172,14 @@ class Wills extends Component {
       case 1:
         this.setState({
           value: event.target.value,
-          field: "testator_name_norm.keyword",
+          field: "testator.name_norm.keyword",
           order: "asc"
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
-          field: "testator_name_norm.keyword",
+          field: "testator.name_norm.keyword",
           order: "desc"
         });
         break;

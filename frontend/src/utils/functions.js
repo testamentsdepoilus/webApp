@@ -37,12 +37,12 @@ export function uploadImageCallBack(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://127.0.0.1:9200"; //http://patrimeph.ensea.fr/es700
+  config["es_host"] = "http://patrimeph.ensea.fr/es700"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
   config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
   config["es_index_user"] = "tdp_users";
-  config["web_url"] = "http://127.0.0.1:3000"; //"http://patrimeph.ensea.fr/testaments-de-poilus";
-  config["web_host"] = "http://127.0.0.1:3005"; // http://127.0.0.1/testaments-de-poilus
+  config["web_url"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
+  config["web_host"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -354,4 +354,24 @@ export const updateMyListWills = async item => {
     console.log("err dans catch :", err);
     return err;
   }
+};
+
+export const downloadFile = (url, fileName) => {
+  // Create an invisible A element
+  const a = document.createElement("a");
+  a.style.display = "none";
+  document.body.appendChild(a);
+
+  // Set the HREF to a Blob representation of the data to be downloaded
+  a.href = url;
+
+  // Use download attribute to set set desired file name
+  a.setAttribute("download", fileName);
+
+  // Trigger the download by simulating click
+  a.click();
+
+  // Cleanup
+  window.URL.revokeObjectURL(a.href);
+  document.body.removeChild(a);
 };

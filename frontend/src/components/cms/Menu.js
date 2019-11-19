@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link as RouterLink, withRouter } from "react-router-dom";
-import { AppBar, Link, Breadcrumbs } from "@material-ui/core";
+import { Link, Breadcrumbs } from "@material-ui/core";
 import classNames from "classnames";
 
 import {

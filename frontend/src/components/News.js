@@ -4,8 +4,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   createStyled,
   getParamConfig,
-  getHitsFromQuery,
-  getHits
+  getHitsFromQuery
 } from "../utils/functions";
 import {
   Breadcrumbs,
@@ -117,7 +116,7 @@ class News extends Component {
     return function(e) {
       document.location.href =
         getParamConfig("web_url") + "/news/" + item["_id"];
-    }.bind(this);
+    };
   }
 
   defaultQuery() {

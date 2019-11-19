@@ -13,15 +13,11 @@ import {
   Link,
   Typography,
   Grid,
-  IconButton,
   MenuList,
   MenuItem
 } from "@material-ui/core";
-import MoreIcon from "@material-ui/icons/More";
-import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
-import classNames from "classnames";
 
-const { ResultListWrapper } = ReactiveList;
+import classNames from "classnames";
 
 const Styled = createStyled(theme => ({
   root: {

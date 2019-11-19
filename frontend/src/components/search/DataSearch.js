@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  DataSearch,
-  SingleList,
-  SingleDropdownList
-} from "@appbaseio/reactivesearch";
+import { DataSearch, SingleList } from "@appbaseio/reactivesearch";
 import "../../styles/leftBar.css";
 import {
   ExpansionPanel,
@@ -25,7 +21,7 @@ const CustumerDataSearch = () => (
           {/*<DataSearch
             className="datasearch"
             componentId="testatorSearch"
-            dataField={["testator_name"]}
+            dataField={["testator.name"]}
             queryFormat="and"
             placeholder="Nom de testateur"
             title="Nom du testateur"
@@ -36,7 +32,7 @@ const CustumerDataSearch = () => (
           />
           <SingleList
             componentId="testatorSearch"
-            dataField="testator_name.keyword"
+            dataField="testator.name.keyword"
             sortBy="asc"
             queryFormat="and"
             URLParams
@@ -54,7 +50,7 @@ const CustumerDataSearch = () => (
               and: ["mainSearch", "cote", "date", "institution", "contributors"]
             }}
             componentId="testatorSearch"
-            dataField="testator_name.keyword"
+            dataField="testator.name.keyword"
             title="Nom du testateur"
             size={1000}
             sortBy="count"

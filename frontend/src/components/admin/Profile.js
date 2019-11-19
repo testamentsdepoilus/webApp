@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import jwt_decode from "jwt-decode";
 import { Typography, List, ListItem, Grid } from "@material-ui/core";
 
 import {

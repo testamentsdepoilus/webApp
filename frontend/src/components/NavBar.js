@@ -14,13 +14,12 @@ import {
   Menu,
   MenuItem
 } from "@material-ui/core";
-import { createStyled, getUserToken } from "../utils/functions";
+import { createStyled } from "../utils/functions";
 import classNames from "classnames";
 import AccountIcon from "@material-ui/icons/AccountCircleOutlined";
 import CloseIcon from "@material-ui/icons/Close";
 import LogRegister from "./admin/LogRegister";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import jwt_decode from "jwt-decode";
 
 const Styled = createStyled(theme => ({
   nav_root: {
@@ -364,7 +363,7 @@ class NavBar extends Component {
                   to="/articles"
                 >
                   {" "}
-                  L'état de l'art{" "}
+                  L'état de la recherche{" "}
                 </Link>
                 <Link
                   id="about"

@@ -7,26 +7,23 @@ import {
 } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-//import htmlToDraft from "html-to-draftjs";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { createStyled, publish, updatePost } from "../../utils/functions";
+import { createStyled, updatePost } from "../../utils/functions";
 import {
-  Container,
   TextField,
   Button,
   Typography,
   Grid,
   InputAdornment,
-  Input,
   IconButton,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   NativeSelect,
-  Paper
+  Paper,
+  Dialog,
+  DialogContent,
+  DialogTitle
 } from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import CloseIcon from "@material-ui/icons/Close";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -134,7 +131,8 @@ export default class EditPost extends Component {
       url_image: "",
       type: props.data._source["type"],
       message: "",
-      openAlert: false
+      openAlert: false,
+      openDialog: false
     };
   }
 
@@ -216,12 +214,13 @@ export default class EditPost extends Component {
       };
 
       updatePost(item).then(res => {
-        console.log("res dans editPost :", res);
         if (res.status === 200) {
           this.setState({
             openAlert: true,
             message: res.mess
           });
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
         } else {
           this.setState({
             openAlert: true,
@@ -237,6 +236,31 @@ export default class EditPost extends Component {
       openAlert: false,
       message: ""
     });
+  };
+
+  handleDisplay = event => {
+    this.setState({
+      openDialog: true
+    });
+  };
+
+  handleClose = event => {
+    this.setState({
+      openDialog: false
+    });
+  };
+
+  convertToHtml = object => {
+    console.log("object :", object);
+
+    const obj_raw = object.hasOwnProperty("blocks")
+      ? object
+      : convertToRaw(object.getCurrentContent());
+
+    const found_obj = obj_raw["blocks"].find(item => {
+      return item["text"].trim().length > 0;
+    });
+    return Boolean(found_obj) ? draftToHtml(obj_raw) : "";
   };
 
   componentDidMount() {
@@ -408,16 +432,35 @@ export default class EditPost extends Component {
                     }}
                   />
                 </div>
-
-                <Button
-                  id="btPublication"
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  type="submit"
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-evenly"
+                  alignItems="center"
                 >
-                  Editer
-                </Button>
+                  <Grid item>
+                    <Button
+                      id="btPublication"
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      type="submit"
+                    >
+                      Editer
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      id="btDisplay"
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={this.handleDisplay}
+                    >
+                      Visualiser
+                    </Button>
+                  </Grid>
+                </Grid>
               </form>
             </Paper>
             <this.props.alertMessage
@@ -425,6 +468,55 @@ export default class EditPost extends Component {
               openAlert={this.state.openAlert}
               handleClose={this.handleAlertClose}
             />
+            <Dialog
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              open={this.state.openDialog}
+              onClose={this.handleClose}
+            >
+              <DialogTitle id="dialog-display-post">
+                <IconButton aria-label="close" onClick={this.handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </DialogTitle>
+
+              <DialogContent>
+                <Grid
+                  container
+                  direction="column"
+                  alignItems="center"
+                  spacing={3}
+                >
+                  <Grid item>
+                    <Paper>
+                      <Typography>Titre : {this.state.title}</Typography>
+                    </Paper>
+                  </Grid>
+                  <Grid item>
+                    <Paper>
+                      <Typography>Résumé :</Typography>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: this.convertToHtml(
+                            this.state.editStateSummary
+                          )
+                        }}
+                      ></div>
+                    </Paper>
+                  </Grid>
+                  <Grid item>
+                    <Paper>
+                      <Typography>Détail :</Typography>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: this.convertToHtml(this.state.editStateDetail)
+                        }}
+                      ></div>
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
       </Styled>

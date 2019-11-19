@@ -116,7 +116,7 @@ class Articles extends Component {
     return function(e) {
       document.location.href =
         getParamConfig("web_url") + "/articles/" + item["_id"];
-    }.bind(this);
+    };
   }
 
   defaultQuery() {
@@ -189,7 +189,7 @@ class Articles extends Component {
         to="/articles"
       >
         {" "}
-        L'état de l'art{" "}
+        L'état de la recherche{" "}
       </Link>
     ) : (
       [
@@ -201,7 +201,7 @@ class Articles extends Component {
           to="/articles"
         >
           {" "}
-          L'état de l'art{" "}
+          L'état de la recherche{" "}
         </Link>,
         <Typography key={2} color="textPrimary">
           {this.state.item["title"]}

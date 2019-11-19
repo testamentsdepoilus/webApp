@@ -26,9 +26,7 @@ import {
   createStyled,
   getParamConfig,
   getUserToken,
-  updateMyListWills,
-  getHits_bis,
-  getHitsFromQuery
+  updateMyListWills
 } from "../../utils/functions";
 import WillCompare from "../WillCompare";
 import InfoIcon from "@material-ui/icons/Info";
@@ -242,7 +240,7 @@ export default class ResultWills extends React.Component {
           chipData_.push({
             will: will["will_pages"],
             id: will["_id"],
-            name: will["testator_name"]
+            name: will["testator.name"]
           });
         } else {
           this.setState({

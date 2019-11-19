@@ -11,7 +11,7 @@ import CustumerDataSearch from "./search/DataSearch";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import { getParamConfig } from "../utils/functions";
-import TextSearch from "./search/TextSearch";
+
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -27,14 +27,28 @@ class Search extends Component {
       case 1:
         this.setState({
           value: event.target.value,
-          field: "testator_name_norm.keyword",
+          field: "testator.name_norm.keyword",
           order: "asc"
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
-          field: "testator_name_norm.keyword",
+          field: "testator.name_norm.keyword",
+          order: "desc"
+        });
+        break;
+      case 3:
+        this.setState({
+          value: event.target.value,
+          field: "will_contents.will_date",
+          order: "asc"
+        });
+        break;
+      case 4:
+        this.setState({
+          value: event.target.value,
+          field: "will_contents.will_date",
           order: "desc"
         });
         break;

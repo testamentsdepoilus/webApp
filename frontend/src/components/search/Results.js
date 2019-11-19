@@ -114,6 +114,7 @@ class Results extends React.Component {
 
   // Render
   render() {
+    console.log("this.state.curOrder :", this.state.curOrder);
     return (
       <div key={0}>
         <div className="main-container">

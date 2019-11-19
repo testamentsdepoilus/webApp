@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { Link as RouterLink, withRouter } from "react-router-dom";
+
 import ReactDOMServer from "react-dom/server";
 import {
   createStyled,
   createElementFromHTML,
-  getParamConfig
+  getParamConfig,
+  downloadFile
 } from "../utils/functions";
 import {
-  Breadcrumbs,
   Paper,
-  Link,
   Typography,
   Grid,
   IconButton,
-  Button
+  Button,
+  Snackbar
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
@@ -25,7 +25,6 @@ import isEqual from "lodash/isEqual";
 import ListAddIcon from "@material-ui/icons/PlaylistAddOutlined";
 import ListAddCheckIcon from "@material-ui/icons/PlaylistAddCheckOutlined";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
-import Login from "./admin/Login";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -101,7 +100,14 @@ export default class WillDisplay extends Component {
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleExportClick = this.handleExportClick.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
+    this.handleAlertClose = this.handleAlertClose.bind(this);
   }
+
+  handleAlertClose = event => {
+    this.setState({
+      open: false
+    });
+  };
 
   handlePageClick(event) {
     if (event.target.getAttribute("value") !== this.state.idx) {
@@ -114,25 +120,11 @@ export default class WillDisplay extends Component {
   handleExportClick() {
     const token = sessionStorage.usertoken;
     if (token) {
-      // Create an invisible A element
-      const a = document.createElement("a");
-      a.style.display = "none";
-      document.body.appendChild(a);
-
-      // Set the HREF to a Blob representation of the data to be downloaded
-      a.href = getParamConfig("web_url") + "/files/" + this.props.id + ".xml";
-
-      // Use download attribute to set set desired file name
-      a.setAttribute("download", this.props.id + ".xml");
-
-      // Trigger the download by simulating click
-      a.click();
-
-      // Cleanup
-      window.URL.revokeObjectURL(a.href);
-      document.body.removeChild(a);
+      downloadFile(
+        getParamConfig("web_url") + "/files/" + this.props.id + ".xml",
+        this.props.id + ".xml"
+      );
     } else {
-      alert("il faut se connecter");
       this.setState({
         open: true
       });
@@ -425,6 +417,20 @@ export default class WillDisplay extends Component {
                   </Grid>
                 </Grid>
               </Grid>
+              <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                key="topCenter"
+                open={this.state.open}
+                onClose={this.handleAlertClose}
+                ContentProps={{
+                  "aria-describedby": "message-id"
+                }}
+                message={
+                  <span id="message-id">
+                    Merci de vous identifier pour télécharger les testaments !
+                  </span>
+                }
+              ></Snackbar>
             </div>
           )}
         </Styled>

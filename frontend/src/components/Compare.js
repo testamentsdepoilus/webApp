@@ -36,10 +36,10 @@ class Compare extends Component {
           return {
             will: will._source["will_pages"],
             id: will["_id"],
-            name: will._source["testator_name"]
+            name: will._source["testator.name"]
           };
         });
-        console.log("dataFilter :", dataFilter);
+
         this.setState({
           data: dataFilter,
           ids_term: ids_term_

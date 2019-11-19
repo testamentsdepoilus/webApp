@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 import WillDisplay from "./WillDisplay";
-import {
-  Paper,
-  Select,
-  MenuItem,
-  Breadcrumbs,
-  Link,
-  Typography
-} from "@material-ui/core";
+import { Paper, Breadcrumbs, Link, Typography } from "@material-ui/core";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import "../styles/Wills.css";
@@ -20,8 +12,6 @@ import {
   getHitsFromQuery
 } from "../utils/functions";
 import classNames from "classnames";
-
-const { ResultListWrapper } = ReactiveList;
 
 const Styled = createStyled(theme => ({
   link: {
@@ -71,7 +61,6 @@ function createPageMenu(will_id, pages, idx, handleClick) {
           <Link
             id={i}
             value={i}
-            component="button"
             color="inherit"
             component={RouterLink}
             to={

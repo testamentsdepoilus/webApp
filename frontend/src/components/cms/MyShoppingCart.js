@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import { lighten } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,22 +15,21 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+
 import VisibilityIcon from "@material-ui/icons/VisibilityOutlined";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import CompareIcon from "@material-ui/icons/CompareOutlined";
-
 import {
   createStyled,
   getParamConfig,
   updateMyListWills,
   getHitsFromQuery,
-  getUserToken
+  getUserToken,
+  downloadFile
 } from "../../utils/functions";
 import {
-  NativeSelect,
   Button,
   Dialog,
   DialogTitle,
@@ -40,15 +39,11 @@ import {
   Snackbar,
   Grid
 } from "@material-ui/core";
-import PostAddIcon from "@material-ui/icons/PostAdd";
+
 import NewPost from "./NewPost";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EditPost from "./EditPost";
 import Menu from "./Menu";
-
-function createData(author, title) {
-  return { author, title };
-}
 
 function desc(a, b, orderBy) {
   if (b._source[orderBy] < a._source[orderBy]) {
@@ -146,7 +141,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired
 };
 
-const Styled_1 = createStyled(theme => ({
+const Styled1 = createStyled(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1)
@@ -172,17 +167,16 @@ const Styled_1 = createStyled(theme => ({
 }));
 
 const EnhancedTableToolbar = props => {
-  const { numSelected, addButton, actionButton } = props;
+  const { numSelected, actionButton } = props;
 
   return (
-    <Styled_1>
+    <Styled1>
       {({ classes }) => (
         <Toolbar
           className={clsx(classes.root, {
             [classes.highlight]: numSelected > 0
           })}
         >
-          {numSelected === 0 ? addButton : null}
           {numSelected > 0 ? (
             <Typography
               className={classes.title}
@@ -200,13 +194,12 @@ const EnhancedTableToolbar = props => {
           {numSelected > 0 ? actionButton : null}
         </Toolbar>
       )}
-    </Styled_1>
+    </Styled1>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  addButton: PropTypes.element.isRequired,
   actionButton: PropTypes.element.isRequired
 };
 const AlertMessage = props => {
@@ -233,7 +226,7 @@ AlertMessage.propTypes = {
   message: PropTypes.string.isRequired
 };
 
-const Styled_2 = createStyled(theme => ({
+const Styled2 = createStyled(theme => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(2)
@@ -418,6 +411,19 @@ export default class MyShoppingCart extends Component {
       getParamConfig("web_url") + "/compare/" + this.state.selected.join("+");
   };
 
+  handleExportWill = event => {
+    const myWills_ = sessionStorage.myWills
+      .split(",")
+      .filter(item => this.state.selected.includes(item));
+
+    myWills_.forEach(item =>
+      downloadFile(
+        getParamConfig("web_url") + "/files/" + item + ".xml",
+        item + ".xml"
+      )
+    );
+  };
+
   componentDidMount() {
     const newData =
       sessionStorage.myWills.length > 0
@@ -445,19 +451,8 @@ export default class MyShoppingCart extends Component {
         this.state.data.length - this.state.page * this.state.rowsPerPage
       );
 
-    const addButton = (
-      <Styled_2>
-        {({ classes }) => (
-          <Tooltip title="Ajouter un nouveau post">
-            <IconButton onClick={this.handleAddNewPost} aria-label="add">
-              <PostAddIcon className={classes.addBt} />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Styled_2>
-    );
     const backButton = (
-      <Styled_2>
+      <Styled2>
         {({ classes }) => (
           <Tooltip title="Retour dans gestion de contenu">
             <Button
@@ -470,7 +465,7 @@ export default class MyShoppingCart extends Component {
             </Button>
           </Tooltip>
         )}
-      </Styled_2>
+      </Styled2>
     );
 
     const actionButton = (
@@ -489,18 +484,20 @@ export default class MyShoppingCart extends Component {
             </IconButton>
           </Tooltip>
         </Grid>
-        <Grid item>
-          <Tooltip title="Comparer des testaments">
-            <IconButton onClick={this.handleCompareWill} aria-label="compare">
-              <CompareIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
+        {this.state.selected.length < 4 ? (
+          <Grid item>
+            <Tooltip title="Comparer des testaments">
+              <IconButton onClick={this.handleCompareWill} aria-label="compare">
+                <CompareIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        ) : null}
       </Grid>
     );
 
     const defaultView = (
-      <Styled_2>
+      <Styled2>
         {({ classes }) => (
           <div className={classes.root}>
             <Menu />
@@ -508,7 +505,6 @@ export default class MyShoppingCart extends Component {
             <Paper className={classes.paper}>
               <EnhancedTableToolbar
                 numSelected={this.state.selected.length}
-                addButton={addButton}
                 actionButton={actionButton}
               />
               <div className={classes.tableWrapper}>
@@ -646,7 +642,7 @@ export default class MyShoppingCart extends Component {
             />
           </div>
         )}
-      </Styled_2>
+      </Styled2>
     );
 
     switch (this.state.choice) {
