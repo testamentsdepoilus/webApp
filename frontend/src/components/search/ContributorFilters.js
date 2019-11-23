@@ -1,26 +1,34 @@
 import React from "react";
-import { MultiList } from "@appbaseio/reactivesearch";
+import { MultiList, SingleDropdownList } from "@appbaseio/reactivesearch";
 
 const ContributorFilters = () => (
-  <MultiList
+  <SingleDropdownList
+    className="contributors"
     react={{
-      and: ["mainSearch", "cote", "testatorSearch", "date", "institution"]
+      and: [
+        "mainSearch",
+        "cote",
+        "date",
+        "testatorSearch",
+        "institution",
+        "collection",
+        "will_place",
+        "birth_place"
+      ]
     }}
     componentId="contributors"
     dataField="contributions.persName.keyword"
-    nestedField="contributions"
-    title="Contributeurs"
-    sortBy="count"
-    queryFormat="and"
-    URLParams
-    showCheckbox={false}
+    size={1000}
+    showCount={true}
+    autosuggest={true}
+    placeholder="Nom du contributeur"
+    URLParams={true}
+    loader="En chargement ..."
     showSearch={true}
-    className="contributors"
+    searchPlaceholder="Taper le nom ici"
     innerClass={{
       list: "list"
     }}
-    placeholder="Nom du contributeur"
-    filterLabel="contributeurs"
   />
 );
 

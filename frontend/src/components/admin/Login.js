@@ -89,9 +89,9 @@ class Login extends Component {
       };
       login(user).then(res => {
         if (res.status === 200) {
-          sessionStorage.setItem("usertoken", res.res);
+          localStorage.setItem("usertoken", res.res);
           const myToken = getUserToken();
-          sessionStorage.setItem("myWills", myToken.myWills);
+          localStorage.setItem("myWills", myToken.myWills);
           document.location.reload(true);
         } else {
           const err = res.error ? res.error : "Connexion au serveur a échoué !";

@@ -109,46 +109,55 @@ class About extends Component {
     const url = document.location.href;
     const idx = url.lastIndexOf("about/");
 
-    const totalHits = getTotalHits(
+    getTotalHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
-    );
-    const total = typeof totalHits === "object" ? totalHits.value : totalHits;
-
-    const newData = getHitsFromQuery(
-      getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
-      JSON.stringify({
-        size: total,
-        query: {
-          term: {
-            type: 3
-          }
-        },
-        sort: [{ created: { order: "desc" } }]
-      })
-    );
-
-    if (idx !== -1) {
-      const id_query = url.substring(idx + 6).split("/");
-      const hits = getHitsFromQuery(
+    ).then(res => {
+      const total = typeof res === "object" ? res.value : res;
+      getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
         JSON.stringify({
+          size: total,
           query: {
             term: {
-              _id: id_query[0]
+              type: 3
             }
+          },
+          sort: [{ created: { order: "desc" } }]
+        })
+      )
+        .then(data => {
+          if (idx !== -1) {
+            const id_query = url.substring(idx + 6).split("/");
+            getHitsFromQuery(
+              getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
+              JSON.stringify({
+                query: {
+                  term: {
+                    _id: id_query[0]
+                  }
+                }
+              })
+            )
+              .then(hits => {
+                this.setState({
+                  data: data,
+                  selectedId: hits.length > 0 ? hits[0]["_id"] : data[0]["_id"]
+                });
+              })
+              .catch(error => {
+                console.log("error: ", error);
+              });
+          } else {
+            this.setState({
+              data: data,
+              selectedId: data.length > 0 ? data[0]["_id"] : ""
+            });
           }
         })
-      );
-      this.setState({
-        data: newData,
-        selectedId: hits.length > 0 ? hits[0]["_id"] : newData[0]["_id"]
-      });
-    } else {
-      this.setState({
-        data: newData,
-        selectedId: newData.length > 0 ? newData[0]["_id"] : ""
-      });
-    }
+        .catch(error => {
+          console.log("error: ", error);
+        });
+    });
   }
 
   render() {
@@ -161,9 +170,9 @@ class About extends Component {
             }.bind(this)
           );
 
-    const prevLink = document.referrer.includes("search?")
-      ? "/search?" + document.referrer.split("?")[1]
-      : "/search";
+    const prevLink = document.referrer.includes("recherche?")
+      ? "/recherche?" + document.referrer.split("?")[1]
+      : "/recherche";
     const currLink = [
       <Link
         id="about"
@@ -281,9 +290,7 @@ class About extends Component {
               </Grid>
             </div>
           ) : (
-            <Typography variant="h3">
-              Aucune information à afficher !
-            </Typography>
+            <Typography variant="h4">A props</Typography>
           )
         }
       </Styled>

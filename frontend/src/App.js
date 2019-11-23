@@ -17,6 +17,7 @@ import MySpace from "./components/admin/MySpace";
 import MyShoppingCart from "./components/cms/MyShoppingCart";
 import Manage from "./components/cms/Manage";
 import Compare from "./components/Compare";
+import Testator from "./components/Testator";
 
 function App() {
   return (
@@ -24,14 +25,15 @@ function App() {
       <div className="App">
         <Navbar />
         <Route exact path="/" component={Search} />
-        <Route exact path="/search" component={Search} />
+        <Route exact path="/recherche" component={Search} />
         <Route path="/news" component={News} />
         <Route path="/articles" component={Articles} />
-        <Route path="/about" component={About} />
-        <Route path="/wills" component={Wills} />
-        <Route exact path="/testators" component={Testators} />
+        <Route path="/apropos" component={About} />
+        <Route exact path="/testaments" component={Wills} />
+        <Route exact path="/testateurs" component={Testators} />
         <Route exact path="/places" component={Places} />
-        <Route path="/will" component={Will} />
+        <Route path="/testament" component={Will} />
+        <Route path="/testateur" component={Testator} />
         <Route path="/home" component={Home} />
         <Route exact path="/login" component={LogRegister} />
         <Route exact path="/espace" component={MySpace} />

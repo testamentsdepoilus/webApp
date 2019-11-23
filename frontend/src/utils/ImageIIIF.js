@@ -29,7 +29,6 @@ export default class ImageIIF extends React.Component {
         ajaxWithCredentials: false
       }
     });
-    console.log(this.viewer);
   }
 
   render() {

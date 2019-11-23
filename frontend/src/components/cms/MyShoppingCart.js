@@ -369,7 +369,7 @@ export default class MyShoppingCart extends Component {
 
   handleDialogConfirm = event => {
     event.preventDefault();
-    let myWills_ = sessionStorage.myWills
+    let myWills_ = localStorage.myWills
       .split(",")
       .filter(item => !this.state.selected.includes(item));
 
@@ -384,7 +384,7 @@ export default class MyShoppingCart extends Component {
           openAlert: true,
           mess: "Vos éléments sélectionnés ont été supprimés !"
         });
-        sessionStorage.setItem("myWills", myWills_);
+        localStorage.setItem("myWills", myWills_);
       } else {
         const err = res.err ? res.err : "Connexion au serveur a échoué !";
         this.setState({
@@ -402,7 +402,7 @@ export default class MyShoppingCart extends Component {
 
   handleDisplayWill = id => {
     return function(e) {
-      window.location.href = getParamConfig("web_url") + "/will/" + id;
+      window.location.href = getParamConfig("web_url") + "/testament/" + id;
     };
   };
 
@@ -412,7 +412,7 @@ export default class MyShoppingCart extends Component {
   };
 
   handleExportWill = event => {
-    const myWills_ = sessionStorage.myWills
+    const myWills_ = localStorage.myWills
       .split(",")
       .filter(item => this.state.selected.includes(item));
 
@@ -425,22 +425,26 @@ export default class MyShoppingCart extends Component {
   };
 
   componentDidMount() {
-    const newData =
-      sessionStorage.myWills.length > 0
-        ? getHitsFromQuery(
-            getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-            JSON.stringify({
-              query: {
-                ids: {
-                  values: sessionStorage.myWills.split(",")
-                }
-              }
-            })
-          )
-        : [];
-    this.setState({
-      data: newData
-    });
+    if (localStorage.myWills.length > 0) {
+      getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+        JSON.stringify({
+          query: {
+            ids: {
+              values: localStorage.myWills.split(",")
+            }
+          }
+        })
+      )
+        .then(data => {
+          this.setState({
+            data: data
+          });
+        })
+        .catch(error => {
+          console.log("error :", error);
+        });
+    }
   }
   render() {
     const isSelected = name => this.state.selected.indexOf(name) !== -1;

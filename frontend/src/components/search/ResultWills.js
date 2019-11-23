@@ -4,8 +4,6 @@ import WillDisplay from "../WillDisplay";
 import CloseIcon from "@material-ui/icons/Close";
 import {
   ListItemText,
-  ListItemAvatar,
-  Avatar,
   Typography,
   Grid,
   Dialog,
@@ -154,16 +152,15 @@ export default class ResultWills extends React.Component {
 
       url_param += page ? "/" + page["type"] + "_" + page["id"] : "";
 
-      window.location.href = getParamConfig("web_url") + "/will/" + url_param;
+      window.location.href =
+        getParamConfig("web_url") + "/testament/" + url_param;
     };
   }
 
   handleAddShoppingWill(id) {
     return function(e) {
       let myWills_ =
-        sessionStorage.myWills.length > 0
-          ? sessionStorage.myWills.split(",")
-          : [];
+        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
       myWills_.push(id);
       const newItem = {
         email: this.userToken.email,
@@ -176,7 +173,7 @@ export default class ResultWills extends React.Component {
             message: res.mess,
             myWills: myWills_
           });
-          sessionStorage.setItem("myWills", myWills_);
+          localStorage.setItem("myWills", myWills_);
         } else {
           const err = res.err ? res.err : "Connexion au serveur a échoué !";
 
@@ -190,7 +187,7 @@ export default class ResultWills extends React.Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let myWills_ = sessionStorage.myWills
+      let myWills_ = localStorage.myWills
         .split(",")
         .filter(item => item !== id);
       const newItem = {
@@ -203,7 +200,7 @@ export default class ResultWills extends React.Component {
             message: res.mess,
             myWills: myWills_
           });
-          sessionStorage.setItem("myWills", myWills_);
+          localStorage.setItem("myWills", myWills_);
         } else {
           const err = res.err ? res.err : "Connexion au serveur a échoué !";
           this.setState({
@@ -278,11 +275,11 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidUpdate() {
-    if (sessionStorage.uriSearch !== document.location.href) {
+    if (localStorage.uriSearch !== document.location.href) {
       if (document.location.href.split("?")[1]) {
-        sessionStorage.setItem("uriSearch", document.location.href);
+        localStorage.setItem("uriSearch", document.location.href);
       } else {
-        sessionStorage.removeItem("uriSearch");
+        localStorage.removeItem("uriSearch");
       }
     }
 
@@ -320,12 +317,10 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidMount() {
-    if (sessionStorage.myWills) {
+    if (localStorage.myWills) {
       this.setState({
         myWills:
-          sessionStorage.myWills.length > 0
-            ? sessionStorage.myWills.split(",")
-            : []
+          localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : []
       });
     }
   }
@@ -404,14 +399,6 @@ export default class ResultWills extends React.Component {
           {({ classes }) => (
             <React.Fragment>
               <ListItem alignItems="flex-start" component="div">
-                <ListItemAvatar>
-                  <Avatar
-                    alt="avatar-testator"
-                    src={
-                      getParamConfig("web_url") + "/images/default-testator.png"
-                    }
-                  />
-                </ListItemAvatar>
                 <ListItemText
                   primary={
                     <Grid container direction="row" spacing={1}>

@@ -8,7 +8,9 @@ import {
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography
+  Typography,
+  Grid,
+  IconButton
 } from "@material-ui/core";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
@@ -16,12 +18,13 @@ import "../styles/Wills.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, createStyled } from "../utils/functions";
 import classNames from "classnames";
+import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
 
 const { ResultListWrapper } = ReactiveList;
 
 const Styled = createStyled(theme => ({
   explorMenu: {
-    marginTop: theme.spacing(2)
+    margin: theme.spacing(2, 0, 1, 2)
   },
   menu: {
     display: "flex"
@@ -63,8 +66,8 @@ const Styled = createStyled(theme => ({
   }
 }));
 
-export function ExplorMenu() {
-  const [selectedId, setSelectId] = React.useState("wills");
+export function ExplorMenu(props) {
+  const [selectedId, setSelectId] = React.useState(props.selectedId);
 
   const handleListItemClick = event => {
     setSelectId(event.target.id);
@@ -82,7 +85,7 @@ export function ExplorMenu() {
                 : classes.link
             }
             component={RouterLink}
-            to="/wills"
+            to="/testaments"
             onClick={handleListItemClick}
           >
             Les testaments
@@ -96,7 +99,7 @@ export function ExplorMenu() {
                 : classes.link
             }
             component={RouterLink}
-            to="/testators"
+            to="/testateurs"
             onClick={handleListItemClick}
           >
             Les testateurs
@@ -120,27 +123,37 @@ export function ExplorMenu() {
   );
 }
 
-function createPageMenu(will_id, pages, idx, handleClick) {
+function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
   let menu = [];
   let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
   for (let i = 0; i < pages.length; i++) {
     menu.push(
       <Styled>
         {({ classes }) => (
-          <Link
-            id={i}
-            value={i}
-            component="button"
-            color="inherit"
-            onClick={handleClick}
-            className={
-              parseInt(idx) === i
-                ? classNames(classes.typography, classes.selectedLink)
-                : classNames(classes.linkPage, classes.typography)
-            }
-          >
-            {listMenu[pages[i]["page_type"].type]} {pages[i]["page_type"].id}
-          </Link>
+          <Grid container direction="row" alignItems="center">
+            <Grid>
+              <Link
+                id={will_id}
+                value={i}
+                component="button"
+                color="inherit"
+                onClick={handleClick}
+                className={
+                  parseInt(idx) === i
+                    ? classNames(classes.typography, classes.selectedLink)
+                    : classNames(classes.linkPage, classes.typography)
+                }
+              >
+                {listMenu[pages[i]["page_type"].type]}{" "}
+                {pages[i]["page_type"].id}
+              </Link>
+            </Grid>
+            <Grid>
+              <IconButton id={"icon_" + will_id} onClick={handeOpenModal}>
+                <InsertLinkIcon value={i} />
+              </IconButton>
+            </Grid>
+          </Grid>
         )}
       </Styled>
     );
@@ -228,7 +241,7 @@ class Wills extends Component {
         url={getParamConfig("es_host")}
         type="_doc"
       >
-        <ExplorMenu />
+        <ExplorMenu selectedId="wills" />
         <div className="wills_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -240,7 +253,7 @@ class Wills extends Component {
                 key={0}
                 color="inherit"
                 component={RouterLink}
-                to="/search"
+                to="/recherche"
               >
                 {" "}
                 Recherche{" "}
@@ -279,11 +292,16 @@ class Wills extends Component {
             renderResultStats={function(stats) {
               return `${stats.numberOfResults} testaments trouvés.`;
             }}
-            URLParams={true}
+            URLParams={false}
           >
             {({ data, error, loading }) => (
               <ResultListWrapper>
                 {data.map((item, j) => {
+                  window.history.pushState(
+                    "will",
+                    "title",
+                    "/testament/" + item["_id"]
+                  );
                   return (
                     <div className="root" key={j}>
                       <Paper>

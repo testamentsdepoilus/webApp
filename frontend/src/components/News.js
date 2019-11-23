@@ -142,44 +142,52 @@ class News extends Component {
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("news/");
-
-    const newData = getHitsFromQuery(
-      getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
-      JSON.stringify({
-        size: 5,
-        query: {
-          term: {
-            type: 2
-          }
-        },
-        sort: [{ created: { order: "desc" } }]
-      })
-    );
     if (idx !== -1) {
-      const id_query = url.substring(idx + 5).split("/");
-      const hits = getHitsFromQuery(
+      getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
         JSON.stringify({
+          size: 5,
           query: {
             term: {
-              _id: id_query[0]
+              type: 2
             }
-          }
+          },
+          sort: [{ created: { order: "desc" } }]
         })
-      );
-
-      this.setState({
-        lastNews: newData,
-        selectedId: hits.length > 0 ? hits[0]["_id"] : newData[0]["_id"],
-        item: hits.length > 0 ? hits[0]._source : null
-      });
+      )
+        .then(data => {
+          const id_query = url.substring(idx + 5).split("/");
+          getHitsFromQuery(
+            getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
+            JSON.stringify({
+              query: {
+                term: {
+                  _id: id_query[0]
+                }
+              }
+            })
+          )
+            .then(hits => {
+              this.setState({
+                lastNews: data,
+                selectedId: hits.length > 0 ? hits[0]["_id"] : data[0]["_id"],
+                item: hits.length > 0 ? hits[0]._source : null
+              });
+            })
+            .catch(error => {
+              console.log("error :", error);
+            });
+        })
+        .catch(error => {
+          console.log("error :", error);
+        });
     }
   }
 
   render() {
-    const prevLink = document.referrer.includes("search?")
-      ? "/search?" + document.referrer.split("?")[1]
-      : "/search";
+    const prevLink = document.referrer.includes("recherche?")
+      ? "/recherche?" + document.referrer.split("?")[1]
+      : "/recherche";
     const currLink = !Boolean(this.state.item) ? (
       <Link
         id="news"

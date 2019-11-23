@@ -446,7 +446,7 @@ export default class EditPost extends Component {
                       className={classes.submit}
                       type="submit"
                     >
-                      Editer
+                      Enregistrer
                     </Button>
                   </Grid>
                   <Grid item>

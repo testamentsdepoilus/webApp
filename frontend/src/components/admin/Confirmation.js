@@ -8,7 +8,7 @@ class Confirmation extends Component {
     };
   }
   componentDidMount() {
-    /* const token = sessionStorage.usertoken;
+    /* const token = localStorage.usertoken;
     if (token) {
       //const decoded = jwt_decode(token);
       if (token.mess) {

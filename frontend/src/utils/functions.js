@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 
 // Get user token
 export function getUserToken() {
-  const token = sessionStorage.usertoken;
+  const token = localStorage.usertoken;
   if (token) {
     const decoded = jwt_decode(token);
     return decoded;
@@ -37,12 +37,13 @@ export function uploadImageCallBack(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://patrimeph.ensea.fr/es700"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
+  config["es_host"] = "http://127.0.0.1:9200"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
   config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
   config["es_index_user"] = "tdp_users";
-  config["web_url"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
-  config["web_host"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
+  config["es_index_testators"] = "tdp_testators";
+  config["web_url"] = "http://127.0.0.1:3000/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
+  config["web_host"] = "http://127.0.0.1:3005"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -62,14 +63,32 @@ export function queryBuilderFunc(queryString) {
 
 // Get response from url
 export function getHttpRequest(url, type = "POST", body = "", async = false) {
+  /*return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(type, url);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(body);
+    xhr.addEventListener("load", () => {
+      const response = xhr.responseText;
+      resolve(response);
+    });
+    xhr.addEventListener("error", () => {
+      const error = JSON.parse(xhr.responseText);
+      reject(error);
+    });
+  });*/
+
   let req = new XMLHttpRequest();
   req.open(type, url, async);
   req.setRequestHeader("Content-type", "application/json");
+  req.setRequestHeader("Access-Control-Allow-Headers", "*");
   req.send(body);
-  if (req.status === 200) {
-    return req.responseText;
-  } else {
-    return null;
+  if (req.readyState === XMLHttpRequest.DONE) {
+    if (req.status === 200) {
+      return req.responseText;
+    } else {
+      return null;
+    }
   }
 }
 
@@ -85,26 +104,62 @@ function removeDups(names) {
 
 // Get total hits from host
 export function getTotalHits(host) {
-  const totalHits = JSON.parse(
-    getHttpRequest(host + "/_search?filter_path=hits.total")
-  ).hits.total;
-  return totalHits;
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", host + "/_search?filter_path=hits.total");
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send();
+    xhr.addEventListener("load", () => {
+      const response = JSON.parse(xhr.responseText);
+      resolve(response.hits.total);
+    });
+    xhr.addEventListener("error", () => {
+      const error = JSON.parse(xhr.responseText);
+      reject(error);
+    });
+  });
 }
 
 // Get total hits from host
 export function getHits(host, size = null) {
-  const totalHits = size ? size : getTotalHits(host);
-  const total = typeof totalHits === "object" ? totalHits.value : totalHits;
-  const hits = JSON.parse(getHttpRequest(host + "/_search?size=" + total)).hits;
-  return hits.hits;
+  return new Promise((resolve, reject) => {
+    getTotalHits(host).then(res => {
+      const totalHits = size ? size : res;
+      const total = typeof totalHits === "object" ? totalHits.value : totalHits;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", host + "/_search?size=" + total);
+      xhr.setRequestHeader("Content-type", "application/json");
+      xhr.send();
+      xhr.addEventListener("load", () => {
+        const response = JSON.parse(xhr.responseText);
+        resolve(response.hits.hits);
+      });
+      xhr.addEventListener("error", () => {
+        const error = JSON.parse(xhr.responseText);
+        reject(error);
+      });
+    });
+  });
 }
 
 // Get total hits from host
 export function getHitsFromQuery(host, query) {
-  const hits = JSON.parse(
-    getHttpRequest(host + "/_search?pretty", "POST", query)
-  ).hits;
-  return hits.hits;
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", host + "/_search?pretty");
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(query);
+    xhr.addEventListener("load", () => {
+      const response = JSON.parse(xhr.responseText);
+      const output = response.hits ? response.hits.hits : [];
+      resolve(output);
+    });
+    xhr.addEventListener("error", () => {
+      const error = JSON.parse(xhr.responseText);
+      reject(error);
+    });
+  });
 }
 
 // Get child from parent ES
@@ -374,4 +429,23 @@ export const downloadFile = (url, fileName) => {
   // Cleanup
   window.URL.revokeObjectURL(a.href);
   document.body.removeChild(a);
+};
+
+export const equalsArray = (array1, array2) => {
+  if (!array2) return false;
+
+  // compare lengths - can save a lot of time
+  if (array1.length !== array2.length) return false;
+
+  for (var i = 0, l = array1.length; i < l; i++) {
+    // Check if we have nested arrays
+    if (array1[i] instanceof Array && array2[i] instanceof Array) {
+      // recurse into the nested arrays
+      if (!array1[i].equals(array2[i])) return false;
+    } else if (array1[i] !== array2[i]) {
+      // Warning - two different object instances will never be equal: {x:20} != {x:20}
+      return false;
+    }
+  }
+  return true;
 };

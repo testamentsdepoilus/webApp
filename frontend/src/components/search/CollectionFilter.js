@@ -1,30 +1,29 @@
 import React from "react";
 import { SingleList } from "@appbaseio/reactivesearch";
 
-const InstitutionFilters = () => (
+const CollectionFilter = () => (
   <SingleList
     react={{
       and: [
         "mainSearch",
-        "coteSearch",
+        "cote",
         "testatorSearch",
         "date",
         "contributors",
-        "collection",
+        "institution",
         "will_place",
         "birth_place"
       ]
     }}
-    componentId="institution"
-    dataField="will_identifier.institution.keyword"
-    title="Institution de conservation"
+    componentId="collection"
+    dataField="will_identifier.collection.keyword"
+    title="Notaire"
     sortBy="count"
     URLParams
     showCount={true}
     showSearch={false}
-    className="contributors"
-    filterLabel="Institution"
+    filterLabel="collection"
   />
 );
 
-export default InstitutionFilters;
+export default CollectionFilter;

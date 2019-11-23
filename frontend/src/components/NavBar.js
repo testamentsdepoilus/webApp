@@ -157,7 +157,7 @@ class NavBar extends Component {
   }
 
   handleLogoutClick(event) {
-    sessionStorage.removeItem("usertoken");
+    localStorage.removeItem("usertoken");
     document.location.reload();
   }
   handleClose() {
@@ -255,7 +255,7 @@ class NavBar extends Component {
                       : classes.link
                   }
                   component={RouterLink}
-                  to="/search"
+                  to="/recherche"
                 >
                   {" "}
                   Recherche{" "}
@@ -285,7 +285,7 @@ class NavBar extends Component {
                             : classes.link
                         }
                         component={RouterLink}
-                        to="/wills"
+                        to="/testaments"
                         onClick={this.handleListItemClick}
                       >
                         Les testaments
@@ -300,7 +300,7 @@ class NavBar extends Component {
                             : classes.link
                         }
                         component={RouterLink}
-                        to="/testators"
+                        to="/testateurs"
                         onClick={this.handleListItemClick}
                       >
                         Les testateurs
@@ -373,12 +373,12 @@ class NavBar extends Component {
                       : classes.link
                   }
                   component={RouterLink}
-                  to="/about"
+                  to="/apropos"
                 >
                   {" "}
                   A propos{" "}
                 </Link>
-                {sessionStorage.usertoken ? (
+                {localStorage.usertoken ? (
                   <Link
                     id="mySpace"
                     className={
@@ -395,13 +395,13 @@ class NavBar extends Component {
                 ) : null}
               </Breadcrumbs>
               <div className={classes.logIn}>
-                {sessionStorage.usertoken ? userLogout : userLogin}
+                {localStorage.usertoken ? userLogout : userLogin}
               </div>
             </AppBar>
             <Dialog
               aria-labelledby="simple-modal-title"
               aria-describedby="simple-modal-description"
-              open={sessionStorage.usertoken ? false : this.state.open}
+              open={localStorage.usertoken ? false : this.state.open}
               onClose={this.handleClose}
             >
               <DialogTitle

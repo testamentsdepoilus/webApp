@@ -413,15 +413,16 @@ export default class Manage extends Component {
   };
 
   componentDidMount() {
-    const newData = getHits(
+    getHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
-    );
-    const newSelectData = newData.filter(
-      item => item._source["type"] === this.state.type
-    );
-    this.setState({
-      data: newData,
-      selectData: newSelectData
+    ).then(data => {
+      const newSelectData = data.filter(
+        item => item._source["type"] === this.state.type
+      );
+      this.setState({
+        data: data,
+        selectData: newSelectData
+      });
     });
   }
   render() {

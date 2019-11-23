@@ -22,7 +22,7 @@ class Compare extends Component {
       const ids_term_ = url.substring(idx + 8);
       if (ids_term_.length > 0) {
         const ids = ids_term_.split("+");
-        const newData = getHitsFromQuery(
+        getHitsFromQuery(
           getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
           JSON.stringify({
             query: {
@@ -31,27 +31,32 @@ class Compare extends Component {
               }
             }
           })
-        );
-        const dataFilter = newData.map(will => {
-          return {
-            will: will._source["will_pages"],
-            id: will["_id"],
-            name: will._source["testator.name"]
-          };
-        });
+        )
+          .then(data => {
+            const dataFilter = data.map(will => {
+              return {
+                will: will._source["will_pages"],
+                id: will["_id"],
+                name: will._source["testator.name"]
+              };
+            });
 
-        this.setState({
-          data: dataFilter,
-          ids_term: ids_term_
-        });
+            this.setState({
+              data: dataFilter,
+              ids_term: ids_term_
+            });
+          })
+          .catch(error => {
+            console.log("error :", error);
+          });
       }
     }
   }
 
   render() {
-    const prevLink = document.referrer.includes("search?")
-      ? "/search?" + document.referrer.split("?")[1]
-      : "/search";
+    const prevLink = document.referrer.includes("recherche?")
+      ? "/recherche?" + document.referrer.split("?")[1]
+      : "/recherche";
 
     const will_link =
       this.state.ids_term !== "" ? (

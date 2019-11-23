@@ -13,7 +13,11 @@ import {
   Grid,
   IconButton,
   Button,
-  Snackbar
+  Snackbar,
+  TextField,
+  Link,
+  Modal,
+  Dialog
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
@@ -62,6 +66,21 @@ const Styled = createStyled(theme => ({
   nextPage: {
     display: "block",
     marginLeft: "90%"
+  },
+  urlWill: {
+    color: "#0091EA",
+    fontSize: 14
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  modalPaper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
   }
 }));
 
@@ -94,13 +113,31 @@ export default class WillDisplay extends Component {
     super(props);
     this.state = {
       idx: 0,
-      cur_page: null
+      cur_page: null,
+      copyLink: null,
+      openModal: false
     };
 
+    this.months = [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ];
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleExportClick = this.handleExportClick.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleAlertClose = this.handleAlertClose.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   handleAlertClose = event => {
@@ -110,6 +147,21 @@ export default class WillDisplay extends Component {
   };
 
   handlePageClick(event) {
+    window.history.pushState(
+      "will",
+      "title",
+      "/testament/" +
+        this.props.id +
+        "/" +
+        this.props.data["will_pages"][event.target.getAttribute("value")][
+          "page_type"
+        ].type +
+        "_" +
+        this.props.data["will_pages"][event.target.getAttribute("value")][
+          "page_type"
+        ].id
+    );
+
     if (event.target.getAttribute("value") !== this.state.idx) {
       this.setState({
         idx: event.target.getAttribute("value")
@@ -117,8 +169,37 @@ export default class WillDisplay extends Component {
     }
   }
 
+  handleOpenModal(event) {
+    const curLink = event.target.getAttribute("value")
+      ? getParamConfig("web_url") +
+        "/testament/" +
+        this.props.id +
+        "/" +
+        this.props.data["will_pages"][event.target.getAttribute("value")][
+          "page_type"
+        ].type +
+        "_" +
+        this.props.data["will_pages"][event.target.getAttribute("value")][
+          "page_type"
+        ].id
+      : null;
+
+    if (curLink) {
+      this.setState({
+        copyLink: curLink,
+        openModal: true
+      });
+    }
+  }
+
+  handleCloseModal() {
+    this.setState({
+      openModal: false
+    });
+  }
+
   handleExportClick() {
-    const token = sessionStorage.usertoken;
+    const token = localStorage.usertoken;
     if (token) {
       downloadFile(
         getParamConfig("web_url") + "/files/" + this.props.id + ".xml",
@@ -132,6 +213,7 @@ export default class WillDisplay extends Component {
   }
 
   handleNextPage(event) {
+    document.documentElement.scrollTop = 0;
     this.setState({
       idx: parseInt(this.state.idx, 10) + 1
     });
@@ -288,11 +370,27 @@ export default class WillDisplay extends Component {
     );
     let output = null;
     if (this.props.data) {
+      const will_uri =
+        getParamConfig("web_url") + "/testament/" + this.props.id;
       const cur_idx =
         this.props.data["will_pages"].length <= this.state.idx
           ? 0
           : this.state.idx;
+      let death_date = Boolean(this.props.data["will_contents.death_date"])
+        ? new Date(this.props.data["will_contents.death_date"])
+        : null;
 
+      death_date = Boolean(death_date)
+        ? death_date.toLocaleDateString().split("/")
+        : null;
+      let will_date = Boolean(this.props.data["will_contents.will_date"])
+        ? new Date(this.props.data["will_contents.will_date"])
+        : null;
+
+      will_date = Boolean(will_date)
+        ? will_date.toLocaleDateString().split("/")
+        : null;
+      console.log("this.props.data :", this.props.data);
       output = (
         <Styled>
           {({ classes }) => (
@@ -321,10 +419,63 @@ export default class WillDisplay extends Component {
                         xs={6}
                       >
                         <Typography>
-                          {this.props.data["will_identifier.name"]}
+                          Testament de{" "}
+                          <Link
+                            href={
+                              getParamConfig("web_url") +
+                              "/testateur/" +
+                              this.props.data["testator.ref"]
+                            }
+                            target="_blank"
+                          >
+                            {" "}
+                            {this.props.data["testator.name"]}{" "}
+                          </Link>
                         </Typography>
-                        <Typography>Mort pour la france le ...</Typography>
-                        <Typography>Testament rédigé le ...</Typography>
+                        <Typography>
+                          Mort pour la france le{" "}
+                          {Boolean(death_date)
+                            ? death_date[0] +
+                              " " +
+                              this.months[death_date[1] - 1] +
+                              " " +
+                              death_date[2]
+                            : ""}{" "}
+                          à{" "}
+                          {Boolean(
+                            this.props.data["will_contents.death_place_norm"]
+                          ) ? (
+                            <Link target="_blank">
+                              {
+                                this.props.data[
+                                  "will_contents.death_place_norm"
+                                ]
+                              }
+                            </Link>
+                          ) : (
+                            ""
+                          )}
+                        </Typography>
+                        <Typography>
+                          Testament rédigé le{" "}
+                          {Boolean(will_date)
+                            ? will_date[0] +
+                              " " +
+                              this.months[will_date[1] - 1] +
+                              " " +
+                              will_date[2]
+                            : ""}{" "}
+                          à{" "}
+                          {Boolean(
+                            this.props.data["will_contents.will_place_norm"]
+                          ) ? (
+                            <Link target="_blank">
+                              {this.props.data["will_contents.will_place_norm"]}
+                            </Link>
+                          ) : (
+                            ""
+                          )}
+                        </Typography>
                         <Typography>
                           Cote aux{" "}
                           {this.props.data["will_identifier.institution"]}{" "}
@@ -341,6 +492,21 @@ export default class WillDisplay extends Component {
                           {this.props.data["will_physDesc.dim"]["height"]}
                           {this.props.data["will_physDesc.dim"]["unit"]}
                         </Typography>
+                        <Grid container direction="row" spacing={1}>
+                          <Grid item>
+                            <Typography> Lien de testament : </Typography>
+                          </Grid>
+                          <Grid item>
+                            <Link
+                              href={will_uri}
+                              target="_blank"
+                              className={classes.urlWill}
+                            >
+                              {" "}
+                              {will_uri}{" "}
+                            </Link>
+                          </Grid>
+                        </Grid>
                       </Grid>
                       <Grid
                         item
@@ -374,7 +540,8 @@ export default class WillDisplay extends Component {
                     this.props.id,
                     this.props.data["will_pages"],
                     cur_idx,
-                    this.handlePageClick
+                    this.handlePageClick,
+                    this.handleOpenModal
                   )}
                 </Grid>
                 <Grid key={1} item>
@@ -431,6 +598,39 @@ export default class WillDisplay extends Component {
                   </span>
                 }
               ></Snackbar>
+
+              <Dialog
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.openModal}
+                onClose={this.handleCloseModal}
+                maxWidth="md"
+                fullWidth={true}
+              >
+                <div className={classes.paper}>
+                  <Grid
+                    container
+                    alignItems="center"
+                    justify="flex-start"
+                    direction="row"
+                    className={classNames(classes.typography, classes.paper)}
+                    spacing={1}
+                  >
+                    <Grid item>
+                      <Typography> Lien de testament : </Typography>
+                    </Grid>
+                    <Grid item xs>
+                      <TextField
+                        defaultValue={this.state.copyLink}
+                        fullWidth={true}
+                        InputProps={{
+                          readOnly: true
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </div>
+              </Dialog>
             </div>
           )}
         </Styled>

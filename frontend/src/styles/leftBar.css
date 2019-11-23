@@ -4,7 +4,7 @@
 
 .datasearch .list {
   text-align: left;
-  height: 10em;
+  max-height: 12em;
 }
 
 .datasearch .searchbox {

@@ -127,10 +127,12 @@ class Results extends React.Component {
                 "mainSearch",
                 "contributors",
                 "institution",
+                "collection",
                 "date",
                 "cote",
                 "testatorSearch",
-                "ProvenanceTag",
+                "will_place",
+                "birth_place",
                 "checkBox"
               ]
             }}
@@ -180,20 +182,49 @@ class Results extends React.Component {
                     "mainSearch",
                     "contributors",
                     "institution",
+                    "collection",
                     "date",
                     "cote",
-                    "testatorSearch",
-                    "ProvenanceTag"
+                    "will_place",
+                    "birth_place",
+                    "testatorSearch"
                   ]
                 }}
                 defaultQuery={() => ({
-                  _source: ["will_contents.will_place", "will_identifier.name"],
-                  size: 100,
+                  _source: [
+                    "will_contents.birth_place",
+                    "testator.name",
+                    "will_contents.death_place",
+                    "will_contents.death_date",
+                    "will_contents.birth_date",
+                    "will_contents.birth_place_norm",
+                    "will_contents.death_place_norm"
+                  ],
+                  size: 1000,
                   query: {
                     match_all: {}
                   }
                 })}
-                render={({ data }) => <GeoMap data={data} />}
+                render={({ data }) => {
+                  const new_data = data.map(item => {
+                    return {
+                      "will_contents.birth_place":
+                        item["will_contents.birth_place"],
+                      "testator.name": item["testator.name"],
+                      "will_contents.death_place":
+                        item["will_contents.death_place"],
+                      "will_contents.death_datee":
+                        item["will_contents.death_date"],
+                      "will_contents.birth_date":
+                        item["will_contents.birth_date"],
+                      "will_contents.birth_place_norm":
+                        item["will_contents.birth_place_norm"],
+                      "will_contents.death_place_norm":
+                        item["will_contents.death_place_norm"]
+                    };
+                  });
+                  return <GeoMap data={new_data} />;
+                }}
               />
             </Grid>
             <Grid item>

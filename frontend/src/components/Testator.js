@@ -9,7 +9,9 @@ import {
   Grid,
   IconButton
 } from "@material-ui/core";
-import "../styles/Wills.css";
+import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
+import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
+import "../styles/Testator.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
@@ -18,6 +20,7 @@ import {
 } from "../utils/functions";
 import classNames from "classnames";
 import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
+import TestatorDisplay from "./TestatorDisplay";
 
 const Styled = createStyled(theme => ({
   link: {
@@ -57,66 +60,11 @@ const Styled = createStyled(theme => ({
   }
 }));
 
-function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
-  let menu = [];
-  let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
-  for (let i = 0; i < pages.length; i++) {
-    menu.push(
-      <Styled key={i}>
-        {({ classes }) => (
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
-              <Link
-                id={i}
-                value={i}
-                color="inherit"
-                component={RouterLink}
-                to={
-                  "/testament/" +
-                  will_id +
-                  "/" +
-                  pages[i]["page_type"].type +
-                  "_" +
-                  pages[i]["page_type"].id
-                }
-                onClick={handleClick}
-                className={
-                  parseInt(idx) === i
-                    ? classNames(classes.typography, classes.selectedLink)
-                    : classNames(classes.linkPage, classes.typography)
-                }
-              >
-                {listMenu[pages[i]["page_type"].type]}{" "}
-                {pages[i]["page_type"].id}
-              </Link>
-            </Grid>
-            <Grid item>
-              <IconButton id={"icon_" + will_id} onClick={handeOpenModal}>
-                <InsertLinkIcon value={i} />
-              </IconButton>
-            </Grid>
-          </Grid>
-        )}
-      </Styled>
-    );
-  }
-  return (
-    <Breadcrumbs
-      style={{ marginTop: 20, marginBottom: 20 }}
-      aria-label="Breadcrumb"
-    >
-      {" "}
-      {menu}{" "}
-    </Breadcrumbs>
-  );
-}
-
-class Will extends Component {
+class Testator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      page: {}
+      data: []
     };
 
     this.renderFunc = this.renderFunc.bind(this);
@@ -125,13 +73,11 @@ class Will extends Component {
   renderFunc() {
     if (this.state.data.length > 0) {
       return (
-        <div className="root">
+        <div className="testator_detail">
           <Paper>
-            <WillDisplay
+            <TestatorDisplay
               id={this.state.data[0]["_id"]}
               data={this.state.data[0]._source}
-              cur_page={this.state.page}
-              createPageMenu={createPageMenu}
             />
           </Paper>
         </div>
@@ -147,12 +93,12 @@ class Will extends Component {
 
   componentDidMount() {
     const url = document.location.href;
-    const idx = url.lastIndexOf("testament/");
+    const idx = url.lastIndexOf("testateur/");
     if (idx !== -1) {
       const url_query = url.substring(idx + 10).split("/");
       const query_id = url_query.length > 0 ? url_query[0] : "";
       getHitsFromQuery(
-        getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
           query: {
             term: {
@@ -163,14 +109,7 @@ class Will extends Component {
       )
         .then(data => {
           this.setState({
-            data: data,
-            page:
-              url_query.length > 1
-                ? {
-                    type: url_query[1].split("_")[0],
-                    id: parseInt(url_query[1].split("_")[1])
-                  }
-                : {}
+            data: data
           });
         })
         .catch(error => {
@@ -184,16 +123,16 @@ class Will extends Component {
       ? "/recherche?" + localStorage.uriSearch.split("?")[1]
       : "/recherche";
 
-    const will_link =
+    const testator_link =
       this.state.data.length > 0 ? (
         <Typography color="textPrimary" key={2}>
-          {this.state.data[0]._source["will_identifier.name"]}
+          {this.state.data[0]._source["persName.fullProseForm"]}
         </Typography>
       ) : null;
 
     return (
       <div>
-        <div className="wills_menu">
+        <div className="testator_menu">
           <Paper elevation={0}>
             <Breadcrumbs
               separator={<NavigateNextIcon fontSize="small" />}
@@ -208,7 +147,7 @@ class Will extends Component {
               >
                 {localStorage.uriSearch ? "Modifier ma recherche" : "Recheche"}
               </Link>
-              {will_link}
+              {testator_link}
             </Breadcrumbs>
           </Paper>
         </div>
@@ -219,4 +158,4 @@ class Will extends Component {
   }
 }
 
-export default Will;
+export default Testator;

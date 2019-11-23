@@ -11,6 +11,8 @@ import CustumerDataSearch from "./search/DataSearch";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import { getParamConfig } from "../utils/functions";
+import CollectionFilters from "./search/CollectionFilter";
+import CollectionFilter from "./search/CollectionFilter";
 
 class Search extends Component {
   constructor(props) {
@@ -107,7 +109,9 @@ class Search extends Component {
                 <Paper>
                   <DateFilter />
                 </Paper>
-
+                <Paper>
+                  <CollectionFilter />
+                </Paper>
                 <Paper>
                   <InstitutionFilter />
                 </Paper>

@@ -67,7 +67,7 @@ export default function LogRegister() {
     setValue(index);
   };
 
-  return !sessionStorage.usertoken ? (
+  return !localStorage.usertoken ? (
     <div className={classes.root}>
       <Avatar className={classes.avatar}>
         <LockOutlined />

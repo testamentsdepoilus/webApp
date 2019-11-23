@@ -29,7 +29,7 @@ class Places extends Component {
               >
                 <Link
                   color="inherit"
-                  href={getParamConfig("web_url") + "/search"}
+                  href={getParamConfig("web_url") + "/recherche"}
                 >
                   {" "}
                   Recherche{" "}
