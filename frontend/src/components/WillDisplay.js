@@ -433,48 +433,56 @@ export default class WillDisplay extends Component {
                           </Link>
                         </Typography>
                         <Typography>
-                          Mort pour la france le{" "}
+                          Mort pour la france
                           {Boolean(death_date)
-                            ? death_date[0] +
+                            ? " le " +
+                              death_date[0] +
                               " " +
                               this.months[death_date[1] - 1] +
                               " " +
                               death_date[2]
-                            : ""}{" "}
-                          à{" "}
+                            : ""}
                           {Boolean(
                             this.props.data["will_contents.death_place_norm"]
-                          ) ? (
-                            <Link target="_blank">
-                              {
-                                this.props.data[
-                                  "will_contents.death_place_norm"
-                                ]
-                              }
-                            </Link>
-                          ) : (
-                            ""
-                          )}
+                          )
+                            ? [
+                                " à ",
+
+                                <Link target="_blank">
+                                  {
+                                    this.props.data[
+                                      "will_contents.death_place_norm"
+                                    ]
+                                  }
+                                </Link>
+                              ]
+                            : ""}
                         </Typography>
                         <Typography>
-                          Testament rédigé le{" "}
+                          Testament rédigé
                           {Boolean(will_date)
-                            ? will_date[0] +
+                            ? " le " +
+                              will_date[0] +
                               " " +
                               this.months[will_date[1] - 1] +
                               " " +
                               will_date[2]
                             : ""}{" "}
-                          à{" "}
                           {Boolean(
                             this.props.data["will_contents.will_place_norm"]
-                          ) ? (
-                            <Link target="_blank">
-                              {this.props.data["will_contents.will_place_norm"]}
-                            </Link>
-                          ) : (
-                            ""
-                          )}
+                          )
+                            ? [
+                                " à ",
+
+                                <Link target="_blank">
+                                  {
+                                    this.props.data[
+                                      "will_contents.will_place_norm"
+                                    ]
+                                  }
+                                </Link>
+                              ]
+                            : ""}
                         </Typography>
                         <Typography>
                           Cote aux{" "}

@@ -12,7 +12,11 @@ const InstitutionFilters = () => (
         "contributors",
         "collection",
         "will_place",
-        "birth_place"
+        "birth_place",
+        "death_place",
+        "provenance",
+        "occupation",
+        "affiliation"
       ]
     }}
     componentId="institution"

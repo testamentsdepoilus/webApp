@@ -12,7 +12,11 @@ const CollectionFilter = () => (
         "contributors",
         "institution",
         "will_place",
-        "birth_place"
+        "birth_place",
+        "death_place",
+        "provenance",
+        "occupation",
+        "affiliation"
       ]
     }}
     componentId="collection"

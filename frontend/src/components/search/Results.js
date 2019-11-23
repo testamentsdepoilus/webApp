@@ -2,7 +2,8 @@ import React from "react";
 import {
   ReactiveList,
   SelectedFilters,
-  ReactiveComponent
+  ReactiveComponent,
+  TagCloud
 } from "@appbaseio/reactivesearch";
 
 import { Fab, Grid, Tooltip } from "@material-ui/core";
@@ -133,6 +134,10 @@ class Results extends React.Component {
                 "testatorSearch",
                 "will_place",
                 "birth_place",
+                "death_place",
+                "provenance",
+                "occupation",
+                "affiliation",
                 "checkBox"
               ]
             }}
@@ -187,7 +192,11 @@ class Results extends React.Component {
                     "cote",
                     "will_place",
                     "birth_place",
-                    "testatorSearch"
+                    "testatorSearch",
+                    "death_place",
+                    "provenance",
+                    "occupation",
+                    "affiliation"
                   ]
                 }}
                 defaultQuery={() => ({
@@ -227,11 +236,11 @@ class Results extends React.Component {
                 }}
               />
             </Grid>
-            <Grid item>
-              {/*<TagCloud
+            {/* <Grid item>
+              <TagCloud
                 className="tag-container"
                 componentId="ProvenanceTag"
-                dataField="will_identifier.institution.keyword"
+                dataField="will_provenance.keyword"
                 title="Provenance"
                 size={50}
                 showCount={true}
@@ -242,17 +251,22 @@ class Results extends React.Component {
                     "mainSearch",
                     "contributors",
                     "institution",
+                    "collection",
                     "date",
                     "cote",
-                    "testatorSearch"
+                    "will_place",
+                    "birth_place",
+                    "testatorSearch",
+                    "death_place",
+                    "provenance"
                   ]
                 }}
                 showFilter={true}
                 filterLabel="Provenance"
                 URLParams={true}
                 loader="Loading ..."
-              />*/}
-            </Grid>
+              />
+            </Grid>*/}
           </Grid>
         </div>
         <Styled>

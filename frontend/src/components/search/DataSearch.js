@@ -56,7 +56,11 @@ const CustumerDataSearch = () => (
                 "contributors",
                 "collection",
                 "will_place",
-                "birth_place"
+                "birth_place",
+                "death_place",
+                "provenance",
+                "occupation",
+                "affiliation"
               ]
             }}
             componentId="testatorSearch"
@@ -87,7 +91,11 @@ const CustumerDataSearch = () => (
                 "testatorSearch",
                 "collection",
                 "will_place",
-                "birth_place"
+                "birth_place",
+                "death_place",
+                "provenance",
+                "occupation",
+                "affiliation"
               ]
             }}
             componentId="cote"
@@ -122,7 +130,11 @@ const CustumerDataSearch = () => (
                 "contributors",
                 "testatorSearch",
                 "collection",
-                "birth_place"
+                "birth_place",
+                "death_place",
+                "provenance",
+                "occupation",
+                "affiliation"
               ]
             }}
             componentId="will_place"
@@ -152,7 +164,11 @@ const CustumerDataSearch = () => (
                 "contributors",
                 "testatorSearch",
                 "collection",
-                "will_place"
+                "will_place",
+                "death_place",
+                "provenance",
+                "occupation",
+                "affiliation"
               ]
             }}
             componentId="birth_place"
@@ -172,17 +188,136 @@ const CustumerDataSearch = () => (
           />
         </Grid>
         <Grid item>
-          <DataSearch
+          <SingleDropdownList
             className="datasearch"
-            componentId="willPlace"
-            dataField={["will_place"]}
-            queryFormat="and"
-            placeholder="Commune"
-            title="Commune d'origine"
-            iconPosition="left"
-            filterLabel="search"
-            autosuggest={false}
-            URLParams
+            react={{
+              and: [
+                "mainSearch",
+                "date",
+                "institution",
+                "contributors",
+                "testatorSearch",
+                "collection",
+                "will_place",
+                "birth_date",
+                "provenance",
+                "occupation",
+                "affiliation"
+              ]
+            }}
+            componentId="death_place"
+            dataField="will_contents.death_place_norm.keyword"
+            size={1000}
+            sortBy="count"
+            showCount={true}
+            autosuggest={true}
+            placeholder="Lieu de décès"
+            URLParams={true}
+            loader="En chargement ..."
+            showSearch={true}
+            searchPlaceholder="Taper le cote ici"
+            innerClass={{
+              list: "list"
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <SingleDropdownList
+            className="datasearch"
+            react={{
+              and: [
+                "mainSearch",
+                "date",
+                "institution",
+                "contributors",
+                "testatorSearch",
+                "collection",
+                "will_place",
+                "birth_date",
+                "occupation",
+                "affiliation"
+              ]
+            }}
+            componentId="provenance"
+            dataField="will_provenance.keyword"
+            size={1000}
+            sortBy="count"
+            showCount={true}
+            autosuggest={true}
+            placeholder="Provenance"
+            URLParams={true}
+            loader="En chargement ..."
+            showSearch={true}
+            searchPlaceholder="Taper le cote ici"
+            innerClass={{
+              list: "list"
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <SingleDropdownList
+            className="datasearch"
+            react={{
+              and: [
+                "mainSearch",
+                "date",
+                "institution",
+                "contributors",
+                "testatorSearch",
+                "collection",
+                "will_place",
+                "birth_date",
+                "provenance",
+                "affiliation"
+              ]
+            }}
+            componentId="occupation"
+            dataField="testator.occupation.keyword"
+            size={1000}
+            sortBy="count"
+            showCount={true}
+            autosuggest={true}
+            placeholder="Profession"
+            URLParams={true}
+            loader="En chargement ..."
+            showSearch={true}
+            searchPlaceholder="Taper le cote ici"
+            innerClass={{
+              list: "list"
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <SingleDropdownList
+            className="datasearch"
+            react={{
+              and: [
+                "mainSearch",
+                "date",
+                "institution",
+                "contributors",
+                "testatorSearch",
+                "collection",
+                "will_place",
+                "birth_date",
+                "provenance",
+                "occupation"
+              ]
+            }}
+            componentId="affiliation"
+            dataField="testator.affiliation.keyword"
+            size={1000}
+            sortBy="count"
+            showCount={true}
+            autosuggest={true}
+            placeholder="Unité militaire"
+            URLParams={true}
+            loader="En chargement ..."
+            showSearch={true}
+            searchPlaceholder="Taper le cote ici"
+            innerClass={{
+              list: "list"
+            }}
           />
         </Grid>
       </Grid>

@@ -13,10 +13,15 @@ const ContributorFilters = () => (
         "institution",
         "collection",
         "will_place",
-        "birth_place"
+        "birth_place",
+        "death_place",
+        "provenance",
+        "occupation",
+        "affiliation"
       ]
     }}
     componentId="contributors"
+    nestedField="contributions"
     dataField="contributions.persName.keyword"
     size={1000}
     showCount={true}
