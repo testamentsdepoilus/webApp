@@ -1,0 +1,12 @@
+.unit_menu {
+  margin: 1em 0em 1em 2em;
+}
+
+.unit_detail {
+  margin: 5em 0 0 2em;
+}
+
+.unit_order {
+  position: static;
+  float: right;
+}

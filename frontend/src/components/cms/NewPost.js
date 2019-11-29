@@ -137,7 +137,6 @@ export default class NewPost extends Component {
   };
 
   handleFileChange = event => {
-    console.log("file input :", event.target.files[0]);
     if (event.target.files[0]) {
       const reader = new FileReader();
       const in_file = event.target.files[0];

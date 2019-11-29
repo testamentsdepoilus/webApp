@@ -12,7 +12,8 @@ import {
   DialogTitle,
   Button,
   Menu,
-  MenuItem
+  MenuItem,
+  Grid
 } from "@material-ui/core";
 import { createStyled } from "../utils/functions";
 import classNames from "classnames";
@@ -23,18 +24,17 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const Styled = createStyled(theme => ({
   nav_root: {
-    height: 130,
-    marginTop: 10,
     background: "#eceff1",
     color: "white",
     position: "static",
-    flexGrow: 1
+    flexGrow: 1,
+    textAlign: "center"
   },
   link: {
     textTransform: "none",
     paddingLeft: 15,
     color: "#212121",
-    fontSize: 18,
+    fontSize: "1rem",
     fontWeight: 500,
     fontFamily: [
       "-apple-system",
@@ -49,7 +49,7 @@ const Styled = createStyled(theme => ({
       '"Segoe UI Symbol"'
     ].join(","),
     "&:hover, &:focus": {
-      color: "#0091EA",
+      color: "#0d5367",
       fontWeight: 600,
       backgroundColor: "#eceff1"
     },
@@ -63,8 +63,7 @@ const Styled = createStyled(theme => ({
     fontWeight: 600
   },
   menu: {
-    paddingLeft: "10%",
-    paddingTop: 45
+    padding: theme.spacing(4, 0, 2, 2)
   },
   typography: {
     color: "#fff",
@@ -85,10 +84,9 @@ const Styled = createStyled(theme => ({
     ].join(",")
   },
   logIn: {
-    margin: theme.spacing(1),
+    padding: theme.spacing(1, 1, 1, 0),
     position: "absolute",
-    right: "5%",
-    marginTop: 50
+    right: "5%"
   },
   logTitle: {
     color: "#1769aa",
@@ -241,162 +239,166 @@ class NavBar extends Component {
         {({ classes }) => (
           <div>
             <AppBar className={classNames(classes.nav_root)}>
-              <div className="logo">
-                <Typography className={classes.typography}>
-                  Testaments de Poilus
-                </Typography>
-              </div>
-              <Breadcrumbs aria-label="Breadcrumb" className={classes.menu}>
-                <Link
-                  id="search"
-                  className={
-                    this.state.selectedId === "search"
-                      ? classNames(classes.link, classes.activedLink)
-                      : classes.link
-                  }
-                  component={RouterLink}
-                  to="/recherche"
-                >
-                  {" "}
-                  Recherche{" "}
-                </Link>
-                <div>
-                  <Button
-                    className={classNames(classes.link)}
-                    onClick={this.handleExplorClick}
-                  >
-                    Explorer
-                    <ExpandMoreIcon className={classNames(classes.icon)} />
-                  </Button>
-                  <Menu
-                    id="simple-menu-explor"
-                    anchorEl={this.state.anchorElExplor}
-                    keepMounted
-                    open={Boolean(this.state.anchorElExplor)}
-                    onClose={this.handleExplorClose}
-                  >
-                    <MenuItem onClick={this.handleExplorClose}>
+              <Typography className={classes.typography}>
+                Testaments de Poilus
+              </Typography>
+              <Grid container direction="row" spacing={2}>
+                <Grid item xs={8}>
+                  <Breadcrumbs aria-label="Breadcrumb" className={classes.menu}>
+                    <Link
+                      id="search"
+                      className={
+                        this.state.selectedId === "search"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/recherche"
+                    >
                       {" "}
-                      <Link
-                        id="wills"
-                        className={
-                          this.state.selectedId === "wills"
-                            ? classNames(classes.link, classes.activedLink)
-                            : classes.link
-                        }
-                        component={RouterLink}
-                        to="/testaments"
-                        onClick={this.handleListItemClick}
+                      Recherche{" "}
+                    </Link>
+                    <div>
+                      <Button
+                        className={classNames(classes.link)}
+                        onClick={this.handleExplorClick}
                       >
-                        Les testaments
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={this.handleExplorClose}>
-                      <Link
-                        id="testators"
-                        className={
-                          this.state.selectedId === "testators"
-                            ? classNames(classes.link, classes.activedLink)
-                            : classes.link
-                        }
-                        component={RouterLink}
-                        to="/testateurs"
-                        onClick={this.handleListItemClick}
+                        Explorer
+                        <ExpandMoreIcon className={classNames(classes.icon)} />
+                      </Button>
+                      <Menu
+                        id="simple-menu-explor"
+                        anchorEl={this.state.anchorElExplor}
+                        keepMounted
+                        open={Boolean(this.state.anchorElExplor)}
+                        onClose={this.handleExplorClose}
                       >
-                        Les testateurs
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={this.handleExplorClose}>
-                      <Link
-                        id="places"
-                        className={
-                          this.state.selectedId === "places"
-                            ? classNames(classes.link, classes.activedLink)
-                            : classes.link
-                        }
-                        component={RouterLink}
-                        to="/places"
-                        onClick={this.handleListItemClick}
-                      >
-                        Les lieux
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={this.handleExplorClose}>
-                      <Link
-                        id="units"
-                        className={
-                          this.state.selectedId === "units"
-                            ? classNames(classes.link, classes.activedLink)
-                            : classes.link
-                        }
-                        component={RouterLink}
-                        to="/units"
-                        onClick={this.handleListItemClick}
-                      >
-                        Les unités militaires
-                      </Link>
-                    </MenuItem>
-                  </Menu>
-                </div>
+                        <MenuItem onClick={this.handleExplorClose}>
+                          {" "}
+                          <Link
+                            id="wills"
+                            className={
+                              this.state.selectedId === "wills"
+                                ? classNames(classes.link, classes.activedLink)
+                                : classes.link
+                            }
+                            component={RouterLink}
+                            to="/testaments"
+                            onClick={this.handleListItemClick}
+                          >
+                            Les testaments
+                          </Link>
+                        </MenuItem>
+                        <MenuItem onClick={this.handleExplorClose}>
+                          <Link
+                            id="testators"
+                            className={
+                              this.state.selectedId === "testators"
+                                ? classNames(classes.link, classes.activedLink)
+                                : classes.link
+                            }
+                            component={RouterLink}
+                            to="/testateurs"
+                            onClick={this.handleListItemClick}
+                          >
+                            Les testateurs
+                          </Link>
+                        </MenuItem>
+                        <MenuItem onClick={this.handleExplorClose}>
+                          <Link
+                            id="places"
+                            className={
+                              this.state.selectedId === "places"
+                                ? classNames(classes.link, classes.activedLink)
+                                : classes.link
+                            }
+                            component={RouterLink}
+                            to="/places"
+                            onClick={this.handleListItemClick}
+                          >
+                            Les lieux
+                          </Link>
+                        </MenuItem>
+                        <MenuItem onClick={this.handleExplorClose}>
+                          <Link
+                            id="units"
+                            className={
+                              this.state.selectedId === "units"
+                                ? classNames(classes.link, classes.activedLink)
+                                : classes.link
+                            }
+                            component={RouterLink}
+                            to="/armees"
+                            onClick={this.handleListItemClick}
+                          >
+                            Les unités militaires
+                          </Link>
+                        </MenuItem>
+                      </Menu>
+                    </div>
 
-                <Link
-                  id="news"
-                  className={
-                    this.state.selectedId === "news"
-                      ? classNames(classes.link, classes.activedLink)
-                      : classes.link
-                  }
-                  component={RouterLink}
-                  to="/news"
-                >
-                  {" "}
-                  Les actualités{" "}
-                </Link>
-                <Link
-                  id="articles"
-                  className={
-                    this.state.selectedId === "articles"
-                      ? classNames(classes.link, classes.activedLink)
-                      : classes.link
-                  }
-                  component={RouterLink}
-                  to="/articles"
-                >
-                  {" "}
-                  L'état de la recherche{" "}
-                </Link>
-                <Link
-                  id="about"
-                  className={
-                    this.state.selectedId === "about"
-                      ? classNames(classes.link, classes.activedLink)
-                      : classes.link
-                  }
-                  component={RouterLink}
-                  to="/apropos"
-                >
-                  {" "}
-                  A propos{" "}
-                </Link>
-                {localStorage.usertoken ? (
-                  <Link
-                    id="mySpace"
-                    className={
-                      this.state.selectedId === "mySpace"
-                        ? classNames(classes.link, classes.activedLink)
-                        : classes.link
-                    }
-                    component={RouterLink}
-                    to="/espace"
-                  >
-                    {" "}
-                    Mon espace{" "}
-                  </Link>
-                ) : null}
-              </Breadcrumbs>
-              <div className={classes.logIn}>
-                {localStorage.usertoken ? userLogout : userLogin}
-              </div>
+                    <Link
+                      id="news"
+                      className={
+                        this.state.selectedId === "news"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/news"
+                    >
+                      {" "}
+                      Les actualités{" "}
+                    </Link>
+                    <Link
+                      id="articles"
+                      className={
+                        this.state.selectedId === "articles"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/articles"
+                    >
+                      {" "}
+                      L'état de la recherche{" "}
+                    </Link>
+                    <Link
+                      id="about"
+                      className={
+                        this.state.selectedId === "about"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/apropos"
+                    >
+                      {" "}
+                      A propos{" "}
+                    </Link>
+                    {localStorage.usertoken ? (
+                      <Link
+                        id="mySpace"
+                        className={
+                          this.state.selectedId === "mySpace"
+                            ? classNames(classes.link, classes.activedLink)
+                            : classes.link
+                        }
+                        component={RouterLink}
+                        to="/espace"
+                      >
+                        {" "}
+                        Mon espace{" "}
+                      </Link>
+                    ) : null}
+                  </Breadcrumbs>
+                </Grid>
+                <Grid item xs={4}>
+                  <div className={classes.logIn}>
+                    {localStorage.usertoken ? userLogout : userLogin}
+                  </div>
+                </Grid>
+              </Grid>
             </AppBar>
             <Dialog
               aria-labelledby="simple-modal-title"

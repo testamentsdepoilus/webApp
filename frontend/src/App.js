@@ -18,6 +18,9 @@ import MyShoppingCart from "./components/cms/MyShoppingCart";
 import Manage from "./components/cms/Manage";
 import Compare from "./components/Compare";
 import Testator from "./components/Testator";
+import Place from "./components/Place";
+import Unit from "./components/Unit";
+import Units from "./components/Units";
 
 function App() {
   return (
@@ -32,8 +35,11 @@ function App() {
         <Route exact path="/testaments" component={Wills} />
         <Route exact path="/testateurs" component={Testators} />
         <Route exact path="/places" component={Places} />
+        <Route exact path="/armees" component={Units} />
         <Route path="/testament" component={Will} />
         <Route path="/testateur" component={Testator} />
+        <Route path="/place" component={Place} />
+        <Route path="/armee" component={Unit} />
         <Route path="/home" component={Home} />
         <Route exact path="/login" component={LogRegister} />
         <Route exact path="/espace" component={MySpace} />

@@ -2,34 +2,30 @@
   margin: 0 auto;
   width: 90%;
   display: block;
-  text-align: center;
 }
 
 .main-container {
-  width: 50%;
   height: calc(100vh - 52px);
-  position: absolute;
-  padding: 10px 30px;
-}
-
-.search {
-  position: static;
+  max-width: 50em;
 }
 
 .map-container {
-  width: 100%;
+  width: 35em;
   height: 35em;
-  position: absolute;
-  right: 0;
-  padding: 10px 30px;
-  margin-top: 60px;
+  position: relative;
+  margin-top: 2em;
 }
+.map-popup {
+  overflow-y: scroll;
+  max-height: 9em;
+  font-size: 0.8rem;
+}
+.map-popup h4 {
+  text-align: center;
+}
+
 .rightSidebar {
-  width: 25%;
-  position: absolute;
-  right: 0;
-  margin-right: 5%;
-  margin-top: 10px;
+  margin-top: 1em;
 }
 
 .tag-container {
@@ -60,9 +56,9 @@
 }
 
 .legend img {
-  width: 18px;
-  height: 18px;
+  width: 1em;
+  height: 1.1em;
   float: left;
   margin: 0 8px 0 0;
-  opacity: 0.7;
+  opacity: 0.8;
 }

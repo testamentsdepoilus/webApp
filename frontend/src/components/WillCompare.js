@@ -80,10 +80,6 @@ const Styled = createStyled(theme => ({
 function createPageMenu(pages, idx, handleClick) {
   let menu = [];
   for (let i = 0; i < pages.length; i++) {
-    console.log(
-      "page click :",
-      pages[i]["page_type"].type + "_" + pages[i]["page_type"].id
-    );
     menu.push(
       <Styled key={i}>
         {({ classes }) => (

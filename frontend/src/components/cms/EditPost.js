@@ -142,7 +142,6 @@ export default class EditPost extends Component {
     });
   };
   onEditorStateResumeChange = editStateSummary => {
-    console.log("editorState :", draftToHtml(editStateSummary));
     this.setState({
       editStateSummary: editStateSummary
     });
@@ -251,8 +250,6 @@ export default class EditPost extends Component {
   };
 
   convertToHtml = object => {
-    console.log("object :", object);
-
     const obj_raw = object.hasOwnProperty("blocks")
       ? object
       : convertToRaw(object.getCurrentContent());
@@ -278,7 +275,6 @@ export default class EditPost extends Component {
       src_img = this.state.url_image;
     }
 
-    console.log("alert ", this.state.openAlert, " | ", this.state.message);
     return (
       <Styled>
         {({ classes }) => (

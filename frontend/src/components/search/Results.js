@@ -2,19 +2,18 @@ import React from "react";
 import {
   ReactiveList,
   SelectedFilters,
-  ReactiveComponent,
-  TagCloud
+  ReactiveComponent
 } from "@appbaseio/reactivesearch";
 
-import { Fab, Grid, Tooltip } from "@material-ui/core";
+import { Fab, Grid, Tooltip, IconButton, Popper } from "@material-ui/core";
 import { createStyled } from "../../utils/functions";
 import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 import CompareIcon from "@material-ui/icons/CompareOutlined";
 import classNames from "classnames";
 import GeoMap from "./GeoMap_bis";
-
 import ResultWills from "./ResultWills";
 import TextSearch from "./TextSearch";
+import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
 
 // Style button
 const Styled = createStyled(theme => ({
@@ -63,6 +62,11 @@ const Styled = createStyled(theme => ({
   },
   divider: {
     color: "#212121"
+  },
+  popper: {
+    border: "1px solid",
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper
   }
 }));
 
@@ -90,15 +94,30 @@ class Results extends React.Component {
     super(props);
     this.state = {
       curField: "",
-      curOrder: ""
+      curOrder: "",
+      anchorEl: null
     };
     this.topFunction = this.topFunction.bind(this);
+    this.handleHelpOpen = this.handleHelpOpen.bind(this);
+    this.handleHelpClose = this.handleHelpClose.bind(this);
   }
 
   topFunction = function() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   };
+
+  handleHelpOpen(event) {
+    this.setState({
+      anchorEl: this.state.anchorEl ? null : event.currentTarget
+    });
+  }
+
+  handleHelpClose(event) {
+    this.setState({
+      anchorEl: null
+    });
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (
@@ -115,73 +134,43 @@ class Results extends React.Component {
 
   // Render
   render() {
-    console.log("this.state.curOrder :", this.state.curOrder);
+    const open = Boolean(this.state.anchorEl);
+    const id = open ? "transitions-popper" : undefined;
     return (
       <div key={0}>
-        <div className="main-container">
-          <TextSearch />
-          <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
-
-          <ReactiveList
-            react={{
-              and: [
-                "mainSearch",
-                "contributors",
-                "institution",
-                "collection",
-                "date",
-                "cote",
-                "testatorSearch",
-                "will_place",
-                "birth_place",
-                "death_place",
-                "provenance",
-                "occupation",
-                "affiliation",
-                "checkBox"
-              ]
-            }}
-            dataField={this.state.curField}
-            sortBy={this.state.curOrder}
-            componentId="searchResult"
-            stream={true}
-            pagination={false}
-            size={15}
-            showResultStats={true}
-            infiniteScroll={true}
-            loader="Loading Results.."
-            renderResultStats={function(stats) {
-              return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
-            }}
-          >
-            {({ data, error, loading }) => <ResultWills data={data} />}
-          </ReactiveList>
-        </div>
-        <div className="rightSidebar">
-          <Grid container direction="row" spacing={1}>
-            <Grid item>
-              <Grid container direction="row" spacing={1}>
-                <Grid item>
-                  <div id="chipRoot">
-                    <div id="chipWill"></div>
-                  </div>
+        <Grid container alignItems="baseline" justify="center" direction="row">
+          <Grid item xs={6}>
+            <div className="main-container">
+              <Grid container direction="row" alignItems="center" spacing={2}>
+                <Grid item xs={8}>
+                  <TextSearch />
                 </Grid>
-                <Grid item>
-                  <Tooltip
-                    title="Comparer les testaments"
-                    style={{ cursor: "hand" }}
-                    interactive
+                <Grid item xs={4}>
+                  <IconButton
+                    aria-describedby={id}
+                    onClick={this.handleHelpOpen}
                   >
-                    <Fab id="btCompare" aria-label="Compare" size="small">
-                      <CompareIcon />
-                    </Fab>
-                  </Tooltip>
+                    <HelpIcon />
+                  </IconButton>
+                  <Styled>
+                    {({ classes }) => (
+                      <Popper
+                        id={id}
+                        open={open}
+                        anchorEl={this.state.anchorEl}
+                        placement="bottom"
+                      >
+                        <div className={classes.popper}>
+                          Aide à la recherche :
+                        </div>
+                      </Popper>
+                    )}
+                  </Styled>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item>
-              <ReactiveComponent
-                componentId="mapSearch"
+
+              <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
+              <ReactiveList
                 react={{
                   and: [
                     "mainSearch",
@@ -190,53 +179,145 @@ class Results extends React.Component {
                     "collection",
                     "date",
                     "cote",
+                    "testatorSearch",
                     "will_place",
                     "birth_place",
-                    "testatorSearch",
                     "death_place",
                     "provenance",
                     "occupation",
-                    "affiliation"
+                    "affiliation",
+                    "checkBox"
                   ]
                 }}
-                defaultQuery={() => ({
-                  _source: [
-                    "will_contents.birth_place",
-                    "testator.name",
-                    "will_contents.death_place",
-                    "will_contents.death_date",
-                    "will_contents.birth_date",
-                    "will_contents.birth_place_norm",
-                    "will_contents.death_place_norm"
-                  ],
-                  size: 1000,
-                  query: {
-                    match_all: {}
-                  }
-                })}
-                render={({ data }) => {
-                  const new_data = data.map(item => {
-                    return {
-                      "will_contents.birth_place":
-                        item["will_contents.birth_place"],
-                      "testator.name": item["testator.name"],
-                      "will_contents.death_place":
-                        item["will_contents.death_place"],
-                      "will_contents.death_datee":
-                        item["will_contents.death_date"],
-                      "will_contents.birth_date":
-                        item["will_contents.birth_date"],
-                      "will_contents.birth_place_norm":
-                        item["will_contents.birth_place_norm"],
-                      "will_contents.death_place_norm":
-                        item["will_contents.death_place_norm"]
-                    };
-                  });
-                  return <GeoMap data={new_data} />;
+                dataField={this.state.curField}
+                sortBy={this.state.curOrder}
+                componentId="searchResult"
+                stream={true}
+                pagination={false}
+                size={15}
+                showResultStats={true}
+                infiniteScroll={true}
+                loader="Loading Results.."
+                renderResultStats={function(stats) {
+                  return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
                 }}
-              />
-            </Grid>
-            {/* <Grid item>
+              >
+                {({ data, error, loading }) => <ResultWills data={data} />}
+              </ReactiveList>
+            </div>
+          </Grid>
+          <Grid item xs={4}>
+            <Grid container direction="column" spacing={1}>
+              <Grid item>
+                <div className="rightSidebar">
+                  <Grid container direction="row" spacing={1}>
+                    <Grid item>
+                      <div id="chipRoot">
+                        <div id="chipWill"></div>
+                      </div>
+                    </Grid>
+                    <Grid item>
+                      <Tooltip
+                        title="Comparer les testaments"
+                        style={{ cursor: "hand" }}
+                        interactive
+                      >
+                        <Fab id="btCompare" aria-label="Compare" size="small">
+                          <CompareIcon />
+                        </Fab>
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
+                </div>
+              </Grid>
+              <Grid item>
+                <ReactiveComponent
+                  componentId="mapSearch"
+                  react={{
+                    and: [
+                      "mainSearch",
+                      "contributors",
+                      "institution",
+                      "collection",
+                      "date",
+                      "cote",
+                      "will_place",
+                      "birth_place",
+                      "testatorSearch",
+                      "death_place",
+                      "provenance",
+                      "occupation",
+                      "affiliation"
+                    ]
+                  }}
+                  defaultQuery={() => ({
+                    _source: [
+                      "will_contents.birth_place",
+                      "testator.name",
+                      "testator.ref",
+                      "will_contents.death_place",
+                      "will_contents.death_date",
+                      "will_contents.birth_date",
+                      "will_contents.birth_place_norm",
+                      "will_contents.death_place_norm",
+                      "will_contents.birth_place_ref",
+                      "will_contents.death_place_ref"
+                    ],
+                    size: 1000,
+                    query: {
+                      match_all: {}
+                    }
+                  })}
+                  render={({ data }) => {
+                    let birth_data = {};
+                    let death_data = {};
+
+                    data.forEach(item => {
+                      if (Boolean(item["will_contents.birth_place_ref"])) {
+                        if (
+                          Boolean(
+                            birth_data[item["will_contents.birth_place_ref"]]
+                          )
+                        ) {
+                          birth_data[
+                            item["will_contents.birth_place_ref"]
+                          ].push(item);
+                        } else {
+                          birth_data[
+                            item["will_contents.birth_place_ref"]
+                          ] = [];
+                          birth_data[
+                            item["will_contents.birth_place_ref"]
+                          ].push(item);
+                        }
+                      }
+                      if (Boolean(item["will_contents.death_place_ref"])) {
+                        if (
+                          Boolean(
+                            death_data[item["will_contents.death_place_ref"]]
+                          )
+                        ) {
+                          death_data[
+                            item["will_contents.death_place_ref"]
+                          ].push(item);
+                        } else {
+                          death_data[
+                            item["will_contents.death_place_ref"]
+                          ] = [];
+                          death_data[
+                            item["will_contents.death_place_ref"]
+                          ].push(item);
+                        }
+                      }
+                    });
+
+                    return (
+                      <GeoMap birth_data={birth_data} death_data={death_data} />
+                    );
+                  }}
+                />
+              </Grid>
+              {/* <Grid item>
               <TagCloud
                 className="tag-container"
                 componentId="ProvenanceTag"
@@ -267,8 +348,9 @@ class Results extends React.Component {
                 loader="Loading ..."
               />
             </Grid>*/}
+            </Grid>
           </Grid>
-        </div>
+        </Grid>
         <Styled>
           {({ classes }) => (
             <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>

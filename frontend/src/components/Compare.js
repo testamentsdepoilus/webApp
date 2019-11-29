@@ -58,13 +58,6 @@ class Compare extends Component {
       ? "/recherche?" + document.referrer.split("?")[1]
       : "/recherche";
 
-    const will_link =
-      this.state.ids_term !== "" ? (
-        <Typography color="textPrimary" key={2}>
-          {this.state.ids_term}
-        </Typography>
-      ) : null;
-
     return (
       <div>
         <div className="wills_menu">
@@ -83,7 +76,9 @@ class Compare extends Component {
                 {" "}
                 Recherche{" "}
               </Link>
-              {will_link}
+              <Typography color="textPrimary" key={2}>
+                Comparaison des testaments
+              </Typography>
             </Breadcrumbs>
           </Paper>
         </div>

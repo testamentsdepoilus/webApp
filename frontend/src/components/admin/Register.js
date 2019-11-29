@@ -120,7 +120,6 @@ class Register extends Component {
               open: true
             });
           } else {
-            console.log("error register :", res);
             const err = res.err ? res.err : "Connexion au serveur a échoué !";
             this.setState({
               error: err

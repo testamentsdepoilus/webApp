@@ -14,55 +14,11 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import "../styles/Testator.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { getParamConfig, createStyled } from "../utils/functions";
+import { getParamConfig } from "../utils/functions";
 import TestatorDisplay from "./TestatorDisplay";
 import { ExplorMenu } from "./Wills";
 
 const { ResultListWrapper } = ReactiveList;
-
-const Styled = createStyled(theme => ({
-  explorMenu: {
-    marginTop: theme.spacing(2)
-  },
-  menu: {
-    display: "flex"
-  },
-
-  link: {
-    textTransform: "none",
-    paddingLeft: 15,
-    color: "#212121",
-    fontSize: 18,
-    fontWeight: 500,
-    fontFamily: "-apple-system",
-    "&:hover, &:focus": {
-      color: "#0091EA",
-      fontWeight: 600,
-      backgroundColor: "#eceff1"
-    },
-    "&:active": {
-      color: "#0091EA",
-      fontWeight: 600
-    }
-  },
-  activedLink: {
-    color: "#0091EA",
-    fontWeight: 600
-  },
-  linkPage: {
-    color: "#212121",
-    fontSize: 18,
-    fontWeight: 400,
-    "&:hover": {
-      color: "#0091EA"
-    }
-  },
-  selectedLink: {
-    fontWeight: 600,
-    color: "#0091EA",
-    fontSize: 18
-  }
-}));
 
 class Testators extends Component {
   constructor(props) {
@@ -94,35 +50,35 @@ class Testators extends Component {
       case 3:
         this.setState({
           value: event.target.value,
-          field: "will_contents.will_date",
+          field: "birth.date",
           order: "asc"
         });
         break;
       case 4:
         this.setState({
           value: event.target.value,
-          field: "will_contents.will_date",
+          field: "birth.date",
           order: "desc"
         });
         break;
       case 5:
         this.setState({
           value: event.target.value,
-          field: "will_identifier.cote.keyword",
+          field: "death.date",
           order: "asc"
         });
         break;
       case 6:
         this.setState({
           value: event.target.value,
-          field: "will_identifier.cote.keyword",
+          field: "death.date",
           order: "desc"
         });
         break;
       default:
         this.setState({
           value: event.target.value,
-          field: "will_contents.will_date",
+          field: "persName.norm.keyword",
           order: "asc"
         });
         break;
@@ -168,6 +124,12 @@ class Testators extends Component {
             <MenuItem value={4}>
               date de naissance <TrendingDownIcon />
             </MenuItem>
+            <MenuItem value={5}>
+              date de décès <TrendingUpIcon />
+            </MenuItem>
+            <MenuItem value={6}>
+              date de décès <TrendingDownIcon />
+            </MenuItem>
           </Select>
         </div>
 
@@ -190,10 +152,10 @@ class Testators extends Component {
             {({ data, error, loading }) => (
               <ResultListWrapper>
                 {data.map((item, j) => {
-                  window.history.pushState(
+                  window.history.replaceState(
+                    getParamConfig("web_url"),
                     "testator",
-                    "title",
-                    "/testateur/" + item["_id"]
+                    getParamConfig("web_url") + "/testateur/" + item["_id"]
                   );
                   return (
                     <div className="root" key={j}>

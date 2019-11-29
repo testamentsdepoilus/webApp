@@ -9,7 +9,7 @@ const Styled = createStyled(theme => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
-    margin: theme.spacing(1, 1, 4, 1)
+    margin: theme.spacing(2, 1, 4, 1)
   },
   inputSearch: {
     borderRadius: "22px",
@@ -61,9 +61,10 @@ let customQuery = function(value, props) {
         nested: {
           path: "will_pages",
           query: {
-            simple_query_string: {
+            query_string: {
               fields: [field_name],
-              query: field_value
+              query: field_value,
+              allow_leading_wildcard: true
             }
           },
           inner_hits: {

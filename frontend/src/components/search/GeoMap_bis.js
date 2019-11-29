@@ -3,7 +3,8 @@ import "leaflet.markercluster";
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactDOMServer from "react-dom/server";
-import { Checkbox, Grid } from "@material-ui/core";
+import { Checkbox, Grid, Link } from "@material-ui/core";
+import { getParamConfig } from "../../utils/functions";
 //import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 /*
@@ -25,7 +26,8 @@ export default class GeoMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      curData: [],
+      birth_data: [],
+      death_data: [],
       checkedA: true,
       checkedB: true
     };
@@ -65,17 +67,10 @@ export default class GeoMap extends React.Component {
     }*/
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const new_data = nextProps.data.filter(
-      (item, i) =>
-        nextProps.data
-          .map(function(e) {
-            return e["testator.name"];
-          })
-          .indexOf(item["testator.name"]) === i
-    );
-    if (new_data !== prevState.curData && nextProps.data !== undefined) {
+    if (Boolean(nextProps.birth_data) && Boolean(nextProps.death_data)) {
       return {
-        curData: new_data
+        birth_data: nextProps.birth_data,
+        death_data: nextProps.death_data
       };
     }
     return null;
@@ -129,55 +124,92 @@ export default class GeoMap extends React.Component {
     );
 
     ReactDOM.render(element, document.getElementById("legend"));
-
     this.markers.clearLayers();
-    this.state.curData.forEach((point, i) => {
+    Object.values(this.state.birth_data).forEach((point, i) => {
       if (
-        point["will_contents.birth_place"] !== undefined &&
+        Boolean(point[0]["will_contents.birth_place"]) &&
         this.state.checkedA
       ) {
-        let marker = L.marker(point["will_contents.birth_place"], {
+        let marker = L.marker(point[0]["will_contents.birth_place"], {
           icon: this.blueIcon
         });
-        const popupContent = (
-          <p>
-            <h4>{point["testator.name"]}</h4>
-            Né{" "}
-            {point["will_contents.birth_date"]
-              ? " le " + point["will_contents.birth_date"]
-              : ""}
-            {point["will_contents.birth_place_norm"]
-              ? " à " + point["will_contents.birth_place_norm"]
-              : ""}
-          </p>
-        );
-        marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
-        this.markers.addLayer(marker);
-      }
-      if (
-        point["will_contents.death_place"] !== undefined &&
-        this.state.checkedB
-      ) {
-        let marker = L.marker(point["will_contents.death_place"], {
-          icon: this.redIcon
-        });
-        const popupContent = (
-          <p>
-            <h4>{point["testator.name"]}</h4>
-            Mort pour la France{" "}
-            {point["will_contents.death_date"]
-              ? "le " + point["will_contents.death_date"]
-              : ""}
-            {point["will_contents.death_place_norm"]
-              ? "à " + point["will_contents.death_place_norm"]
-              : ""}
-          </p>
-        );
+        let contents = [];
 
+        contents.push(<h4>{point[0]["will_contents.birth_place_norm"]}</h4>);
+        if (point.length === 1) {
+          contents.push(<h4>Lieu de naissance du testateur suivant :</h4>);
+        } else if (point.length > 1) {
+          contents.push(<h4>Lieu de naissance des testateurs suivants :</h4>);
+        }
+        let myList = [];
+        point.forEach(item => {
+          myList.push(
+            <li>
+              <Link
+                href={
+                  getParamConfig("web_url") +
+                  "/testateur/" +
+                  item["testator.ref"]
+                }
+                target="_blank"
+              >
+                {item["testator.name"]}
+              </Link>
+            </li>
+          );
+        });
+        if (myList.length > 0) {
+          contents.push(<ul>{myList}</ul>);
+        }
+
+        const popupContent = <div className="map-popup">{contents}</div>;
         marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
         this.markers.addLayer(marker);
       }
     });
+    Object.values(this.state.death_data).forEach((point, i) => {
+      if (
+        Boolean(point[0]["will_contents.death_place"]) &&
+        this.state.checkedB
+      ) {
+        let marker = L.marker(point[0]["will_contents.death_place"], {
+          icon: this.redIcon
+        });
+        let contents = [];
+
+        contents.push(<h4>{point[0]["will_contents.death_place_norm"]}</h4>);
+        if (point.length === 1) {
+          contents.push(<h4>Lieu de décès du testateur suivant :</h4>);
+        } else if (point.length > 1) {
+          contents.push(<h4>Lieu de décès des testateurs suivants :</h4>);
+        }
+        let myList = [];
+        point.forEach(item => {
+          myList.push(
+            <li>
+              <Link
+                href={
+                  getParamConfig("web_url") +
+                  "/testateur/" +
+                  item["testator.ref"]
+                }
+                target="_blank"
+              >
+                {item["testator.name"]}
+              </Link>
+            </li>
+          );
+        });
+        if (myList.length > 0) {
+          contents.push(<ul>{myList}</ul>);
+        }
+
+        const popupContent = <div className="map-popup">{contents}</div>;
+        marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+        this.markers.addLayer(marker);
+      }
+    });
+
     this.map.addLayer(this.markers);
   }
   componentDidMount() {
@@ -198,30 +230,80 @@ export default class GeoMap extends React.Component {
     };
     legend.addTo(this.map);
 
-    let markerCG = L.markerClusterGroup();
-    this.state.curData.forEach((point, i) => {
-      if (point.birth_place !== undefined) {
-        let marker = L.marker(point.birth_place, { icon: this.blueIcon });
-        const popupContent = (
-          <div>
-            <p>{point.testator.name}</p>{" "}
-            <p>
-              Né le {point.birth_date} à {point.birth_place}
-            </p>
-          </div>
-        );
+    Object.values(this.state.birth_data).forEach((point, i) => {
+      if (
+        Boolean(point[0]["will_contents.birth_place"]) &&
+        this.state.checkedA
+      ) {
+        let marker = L.marker(point[0]["will_contents.birth_place"], {
+          icon: this.blueIcon
+        });
+        let contents = [];
+
+        contents.push(<h4>{point[0]["will_contents.birth_place_norm"]}</h4>);
+        if (point.length === 1) {
+          contents.push(<h4>Lieu de naissance du testateur suivant :</h4>);
+        } else if (point.length > 1) {
+          contents.push(<h4>Lieu de naissance des testateurs suivants :</h4>);
+        }
+
+        let myList = [];
+        point.forEach(item => {
+          myList.push(<li>{item["testator.name"]}</li>);
+        });
+        if (myList.length > 1) {
+          contents.push(<ul>{myList}</ul>);
+        }
+
+        const popupContent = <div className="map-popup">{contents}</div>;
         marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
-        markerCG.addLayer(marker);
-        this.markers.push(marker);
-      }
-      if (point.death_place !== undefined) {
-        let marker = L.marker(point.death_place, { icon: this.redIcon });
-        marker.bindPopup(point.will_name);
-        markerCG.addLayer(marker);
+
         this.markers.push(marker);
       }
     });
-    this.map.addLayer(markerCG);
+    Object.values(this.state.death_data).forEach((point, i) => {
+      if (
+        Boolean(point[0]["will_contents.death_place"]) &&
+        this.state.checkedB
+      ) {
+        let marker = L.marker(point[0]["will_contents.death_place"], {
+          icon: this.redIcon
+        });
+        let contents = [];
+
+        contents.push(<h4>{point[0]["will_contents.death_place_norm"]}</h4>);
+        if (point.length === 1) {
+          contents.push(<h4>Lieu de décès du testateur suivant :</h4>);
+        } else if (point.length > 1) {
+          contents.push(<h4>Lieu de décès des testateurs suivants :</h4>);
+        }
+        let myList = [];
+        point.forEach(item => {
+          myList.push(
+            <li>
+              <Link
+                href={
+                  getParamConfig("web_url") +
+                  "/testateur/" +
+                  item["testator.ref"]
+                }
+                target="_blank"
+              >
+                {item["testator.name"]}
+              </Link>
+            </li>
+          );
+        });
+        if (myList.length > 0) {
+          contents.push(<ul>{myList}</ul>);
+        }
+
+        const popupContent = <div className="map-popup">{contents}</div>;
+        marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+        this.markers.addLayer(marker);
+      }
+    });
+    this.map.addLayer(this.markers);
   }
   componentWillUnmount() {
     if (!this.map) return;

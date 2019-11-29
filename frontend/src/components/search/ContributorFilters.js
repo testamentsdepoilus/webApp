@@ -1,5 +1,5 @@
 import React from "react";
-import { MultiList, SingleDropdownList } from "@appbaseio/reactivesearch";
+import { SingleDropdownList } from "@appbaseio/reactivesearch";
 
 const ContributorFilters = () => (
   <SingleDropdownList

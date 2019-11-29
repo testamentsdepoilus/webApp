@@ -2,6 +2,9 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import JSZipUtils from "jszip-utils";
+import JSZip from "jszip";
+import FileSaver from "file-saver";
 
 // Get user token
 export function getUserToken() {
@@ -34,16 +37,33 @@ export function uploadImageCallBack(file) {
   });
 }
 
+export function readXmlFile(file) {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", file, true);
+
+    xhr.addEventListener("load", () => {
+      resolve(xhr.responseXML);
+    });
+    xhr.addEventListener("error", () => {
+      const error = JSON.parse(xhr.responseXML);
+      reject(error);
+    });
+  });
+}
+
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://127.0.0.1:9200"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
+  config["es_host"] = "http://patrimeph.ensea.fr/es700"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
   config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
   config["es_index_user"] = "tdp_users";
   config["es_index_testators"] = "tdp_testators";
-  config["web_url"] = "http://127.0.0.1:3000/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
-  config["web_host"] = "http://127.0.0.1:3005"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
+  config["es_index_places"] = "tdp_places";
+  config["es_index_units"] = "tdp_military_unit";
+  config["web_url"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
+  config["web_host"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -63,21 +83,6 @@ export function queryBuilderFunc(queryString) {
 
 // Get response from url
 export function getHttpRequest(url, type = "POST", body = "", async = false) {
-  /*return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open(type, url);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(body);
-    xhr.addEventListener("load", () => {
-      const response = xhr.responseText;
-      resolve(response);
-    });
-    xhr.addEventListener("error", () => {
-      const error = JSON.parse(xhr.responseText);
-      reject(error);
-    });
-  });*/
-
   let req = new XMLHttpRequest();
   req.open(type, url, async);
   req.setRequestHeader("Content-type", "application/json");
@@ -327,7 +332,6 @@ export const register = async newUser => {
     });
     return res.data;
   } catch (err) {
-    console.log("error rester :", err);
     return err;
   }
 };
@@ -389,7 +393,6 @@ export const updatePost = async item => {
       type: item.type,
       author: item.author
     });
-    console.log("res :", res);
     return res.data;
   } catch (err) {
     return err;
@@ -406,7 +409,6 @@ export const updateMyListWills = async item => {
     });
     return res.data;
   } catch (err) {
-    console.log("err dans catch :", err);
     return err;
   }
 };
@@ -419,6 +421,26 @@ export const downloadFile = (url, fileName) => {
 
   // Set the HREF to a Blob representation of the data to be downloaded
   a.href = url;
+
+  // Use download attribute to set set desired file name
+  a.setAttribute("download", fileName);
+
+  // Trigger the download by simulating click
+  a.click();
+
+  // Cleanup
+  window.URL.revokeObjectURL(a.href);
+  document.body.removeChild(a);
+};
+
+export const downloadZip = (content, fileName) => {
+  // Create an invisible A element
+  const a = document.createElement("a");
+  a.style.display = "none";
+  document.body.appendChild(a);
+
+  // Set the HREF to a Blob representation of the data to be downloaded
+  a.href = URL.createObjectURL(content);
 
   // Use download attribute to set set desired file name
   a.setAttribute("download", fileName);
@@ -449,3 +471,47 @@ export const equalsArray = (array1, array2) => {
   }
   return true;
 };
+
+export function selectText(node) {
+  node = document.getElementById(node);
+
+  if (document.body.createTextRange) {
+    const range = document.body.createTextRange();
+    range.moveToElementText(node);
+    range.select();
+  } else if (window.getSelection) {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  } else {
+    console.warn("Could not select text in node: Unsupported browser.");
+  }
+}
+
+// convert content of url to data for JSZip
+function urlToPromise(url) {
+  return new Promise(function(resolve, reject) {
+    JSZipUtils.getBinaryContent(url, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+// Create & download zip
+export function downloadZipFiles(urls, fileName) {
+  var zip = new JSZip();
+  urls.forEach(url => {
+    const file_name = url.slice(url.lastIndexOf("/") + 1);
+    zip.file(file_name, urlToPromise(url));
+  });
+
+  zip.generateAsync({ type: "blob" }).then(function(content) {
+    FileSaver.saveAs(content, fileName);
+  });
+}

@@ -85,8 +85,13 @@ class Search extends Component {
         type="_doc"
       >
         <div className="search">
-          <Grid container justify="center" direction="row" spacing={1}>
-            <Grid item xs={2}>
+          <Grid
+            container
+            justify="center"
+            alignItems="baseline"
+            direction="row"
+          >
+            <Grid item xs="auto">
               <div className="leftSidebar">
                 <Paper>
                   Trier par :{" "}
@@ -119,10 +124,8 @@ class Search extends Component {
                 </Paper>
               </div>
             </Grid>
-            <Grid item xs={10}>
-              <div style={{ display: "flex" }}>
-                <Results field={this.state.field} order={this.state.order} />
-              </div>
+            <Grid item xs={8}>
+              <Results field={this.state.field} order={this.state.order} />
             </Grid>
           </Grid>
         </div>

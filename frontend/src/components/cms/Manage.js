@@ -351,7 +351,7 @@ export default class Manage extends Component {
       item =>
         parseInt(item._source["type"], 10) === parseInt(event.target.value, 10)
     );
-    console.log("newSelectData :", newSelectData);
+
     this.setState({
       type: event.target.value,
       selectData: newSelectData

@@ -117,6 +117,19 @@ export function ExplorMenu(props) {
           >
             Les lieux
           </Link>
+          <Link
+            id="units"
+            className={
+              selectedId === "units"
+                ? classNames(classes.link, classes.activedLink)
+                : classes.link
+            }
+            component={RouterLink}
+            to="/armees"
+            onClick={handleListItemClick}
+          >
+            Les unités militaires
+          </Link>
         </Breadcrumbs>
       )}
     </Styled>
@@ -128,7 +141,7 @@ function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
   let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
   for (let i = 0; i < pages.length; i++) {
     menu.push(
-      <Styled>
+      <Styled key={i}>
         {({ classes }) => (
           <Grid container direction="row" alignItems="center">
             <Grid>
@@ -149,8 +162,8 @@ function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
               </Link>
             </Grid>
             <Grid>
-              <IconButton id={"icon_" + will_id} onClick={handeOpenModal}>
-                <InsertLinkIcon value={i} />
+              <IconButton id={i} onClick={handeOpenModal}>
+                <InsertLinkIcon id={i} />
               </IconButton>
             </Grid>
           </Grid>
@@ -297,10 +310,10 @@ class Wills extends Component {
             {({ data, error, loading }) => (
               <ResultListWrapper>
                 {data.map((item, j) => {
-                  window.history.pushState(
+                  window.history.replaceState(
+                    getParamConfig("web_url"),
                     "will",
-                    "title",
-                    "/testament/" + item["_id"]
+                    getParamConfig("web_url") + "/testament/" + item["_id"]
                   );
                   return (
                     <div className="root" key={j}>

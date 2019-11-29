@@ -27,7 +27,8 @@ import {
   updateMyListWills,
   getHitsFromQuery,
   getUserToken,
-  downloadFile
+  downloadFile,
+  downloadZipFiles
 } from "../../utils/functions";
 import {
   Button,
@@ -416,12 +417,18 @@ export default class MyShoppingCart extends Component {
       .split(",")
       .filter(item => this.state.selected.includes(item));
 
-    myWills_.forEach(item =>
+    if (myWills_.length === 1) {
       downloadFile(
-        getParamConfig("web_url") + "/files/" + item + ".xml",
-        item + ".xml"
-      )
-    );
+        getParamConfig("web_url") + "/files/will_" + myWills_[0] + ".xml",
+        "will_" + myWills_[0] + ".xml"
+      );
+    } else if (myWills_.length > 1) {
+      let urls = myWills_.map(item => {
+        const url = getParamConfig("web_url") + "/files/will_" + item + ".xml";
+        return url;
+      });
+      downloadZipFiles(urls, "testaments.zip");
+    }
   };
 
   componentDidMount() {

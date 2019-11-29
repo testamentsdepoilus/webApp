@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
-
-import { Paper, Breadcrumbs, Link, Typography } from "@material-ui/core";
-
-import "../styles/Testator.css";
+import { Breadcrumbs, Link, Typography } from "@material-ui/core";
+import "../styles/Unit.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
+import UnitDisplay from "./UnitDisplay";
 
-import TestatorDisplay from "./TestatorDisplay";
-
-class Testator extends Component {
+class Unit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,13 +19,11 @@ class Testator extends Component {
   renderFunc() {
     if (this.state.data.length > 0) {
       return (
-        <div className="testator_detail">
-          <Paper>
-            <TestatorDisplay
-              id={this.state.data[0]["_id"]}
-              data={this.state.data[0]._source}
-            />
-          </Paper>
+        <div className="unit_detail">
+          <UnitDisplay
+            id={this.state.data[0]["_id"]}
+            data={this.state.data[0]._source}
+          />
         </div>
       );
     } else {
@@ -42,12 +37,12 @@ class Testator extends Component {
 
   componentDidMount() {
     const url = document.location.href;
-    const idx = url.lastIndexOf("testateur/");
+    const idx = url.lastIndexOf("armee/");
     if (idx !== -1) {
-      const url_query = url.substring(idx + 10).split("/");
+      const url_query = url.substring(idx + 6).split("/");
       const query_id = url_query.length > 0 ? url_query[0] : "";
       getHitsFromQuery(
-        getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_units"),
         JSON.stringify({
           query: {
             term: {
@@ -72,33 +67,31 @@ class Testator extends Component {
       ? "/recherche?" + localStorage.uriSearch.split("?")[1]
       : "/recherche";
 
-    const testator_link =
+    const unit_link =
       this.state.data.length > 0 ? (
         <Typography color="textPrimary" key={2}>
-          {this.state.data[0]._source["persName.fullProseForm"]}
+          {this.state.data[0]._source["unit"]}
         </Typography>
       ) : null;
 
     return (
       <div>
-        <div className="testator_menu">
-          <Paper elevation={0}>
-            <Breadcrumbs
-              separator={<NavigateNextIcon fontSize="small" />}
-              aria-label="Breadcrumb"
+        <div className="unit_menu">
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="Breadcrumb"
+          >
+            <Link
+              id="search"
+              color="inherit"
+              key={0}
+              component={RouterLink}
+              to={prevLink}
             >
-              <Link
-                id="search"
-                color="inherit"
-                key={0}
-                component={RouterLink}
-                to={prevLink}
-              >
-                {localStorage.uriSearch ? "Modifier ma recherche" : "Recheche"}
-              </Link>
-              {testator_link}
-            </Breadcrumbs>
-          </Paper>
+              {localStorage.uriSearch ? "Modifier ma recherche" : "Recheche"}
+            </Link>
+            {unit_link}
+          </Breadcrumbs>
         </div>
 
         <div>{this.renderFunc()}</div>
@@ -107,4 +100,4 @@ class Testator extends Component {
   }
 }
 
-export default Testator;
+export default Unit;

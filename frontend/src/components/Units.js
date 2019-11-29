@@ -10,19 +10,20 @@ import {
   Link,
   Typography
 } from "@material-ui/core";
-import "../styles/Testator.css";
+import "../styles/Unit.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig } from "../utils/functions";
 import { ExplorMenu } from "./Wills";
-import PlaceDisplay from "./PlaceDisplay";
+
+import UnitDisplay from "./UnitDisplay";
 
 const { ResultListWrapper } = ReactiveList;
 
-class Places extends Component {
+class Units extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      field: "city.keyword",
+      field: "corps.keyword",
       order: "asc",
       value: 1
     };
@@ -34,49 +35,22 @@ class Places extends Component {
       case 1:
         this.setState({
           value: event.target.value,
-          field: "city.keyword",
+          field: "corps.keyword",
           order: "asc"
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
-          field: "city.keyword",
+          field: "corps.keyword",
           order: "desc"
         });
         break;
-      case 3:
-        this.setState({
-          value: event.target.value,
-          field: "region.keyword",
-          order: "asc"
-        });
-        break;
-      case 4:
-        this.setState({
-          value: event.target.value,
-          field: "region.keyword",
-          order: "desc"
-        });
-        break;
-      case 5:
-        this.setState({
-          value: event.target.value,
-          field: "country.keyword",
-          order: "asc"
-        });
-        break;
-      case 6:
-        this.setState({
-          value: event.target.value,
-          field: "country.keyword",
-          order: "desc"
-        });
-        break;
+
       default:
         this.setState({
           value: event.target.value,
-          field: "city.keyword",
+          field: "corps.keyword",
           order: "asc"
         });
         break;
@@ -86,12 +60,12 @@ class Places extends Component {
   render() {
     return (
       <ReactiveBase
-        app={getParamConfig("es_index_places")}
+        app={getParamConfig("es_index_units")}
         url={getParamConfig("es_host")}
         type="_doc"
       >
-        <ExplorMenu selectedId="places" />
-        <div className="wills_menu">
+        <ExplorMenu selectedId="units" />
+        <div className="unit_menu">
           <Paper elevation={0}>
             <Breadcrumbs
               separator={<NavigateNextIcon fontSize="small" />}
@@ -107,26 +81,22 @@ class Places extends Component {
                 {" "}
                 Recherche{" "}
               </Link>
-              <Typography color="textPrimary">Les lieux</Typography>
+              <Typography color="textPrimary">Les unités militaires</Typography>
             </Breadcrumbs>
           </Paper>
         </div>
-        <div className="wills_order">
+        <div className="unit_order">
           Trier par :
           <Select value={this.state.value} onChange={this.handleChange}>
-            <MenuItem value={1}>commune (A-Z)</MenuItem>
-            <MenuItem value={2}>commune (Z-A)</MenuItem>
-            <MenuItem value={3}>région (A-Z)</MenuItem>
-            <MenuItem value={4}>région (Z-A)</MenuItem>
-            <MenuItem value={5}>pays (A-Z)</MenuItem>
-            <MenuItem value={6}>pays (Z-A)</MenuItem>
+            <MenuItem value={1}>corps (A-Z)</MenuItem>
+            <MenuItem value={2}>corps (Z-A)</MenuItem>
           </Select>
         </div>
 
         <div>
           <ReactiveList
             dataField={this.state.field}
-            componentId="place"
+            componentId="unit"
             stream={true}
             pagination={true}
             paginationAt="top"
@@ -135,7 +105,7 @@ class Places extends Component {
             sortBy={this.state.order}
             showEndPage={false}
             renderResultStats={function(stats) {
-              return `${stats.numberOfResults} lieux trouvés.`;
+              return `${stats.numberOfResults} unités militaires trouvés.`;
             }}
             URLParams={false}
           >
@@ -144,13 +114,13 @@ class Places extends Component {
                 {data.map((item, j) => {
                   window.history.replaceState(
                     getParamConfig("web_url"),
-                    "place",
-                    getParamConfig("web_url") + "/place/" + item["_id"]
+                    "armee",
+                    getParamConfig("web_url") + "/armee/" + item["_id"]
                   );
                   return (
-                    <div className="root" key={j}>
+                    <div key={j}>
                       <Paper>
-                        <PlaceDisplay id={item["_id"]} data={item} />
+                        <UnitDisplay id={item["_id"]} data={item} />
                       </Paper>
                     </div>
                   );
@@ -164,4 +134,4 @@ class Places extends Component {
   }
 }
 
-export default Places;
+export default Units;

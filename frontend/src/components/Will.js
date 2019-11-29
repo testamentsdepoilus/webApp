@@ -91,8 +91,8 @@ function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
               </Link>
             </Grid>
             <Grid item>
-              <IconButton id={"icon_" + will_id} onClick={handeOpenModal}>
-                <InsertLinkIcon value={i} />
+              <IconButton id={i} onClick={handeOpenModal}>
+                <InsertLinkIcon id={i} />
               </IconButton>
             </Grid>
           </Grid>

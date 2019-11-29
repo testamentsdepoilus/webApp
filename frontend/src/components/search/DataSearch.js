@@ -1,5 +1,5 @@
 import React from "react";
-import { DataSearch, SingleDropdownList } from "@appbaseio/reactivesearch";
+import { SingleDropdownList } from "@appbaseio/reactivesearch";
 import "../../styles/leftBar.css";
 import {
   ExpansionPanel,
@@ -16,35 +16,14 @@ const CustumerDataSearch = () => (
       aria-controls="panel1a-content"
       id="panel1a-header"
     >
-      <Grid container direction="column" spacing={1}>
+      <Grid
+        onClick={event => event.stopPropagation()}
+        onFocus={event => event.stopPropagation()}
+        container
+        direction="column"
+        spacing={1}
+      >
         <Grid item>
-          {/* <DataSearch
-            className="datasearch"
-            componentId="testatorSearch"
-            dataField={["testator.name"]}
-            queryFormat="and"
-            placeholder="Recherche par nom"
-            title="Nom du testateur"
-            iconPosition="right"
-            filterLabel="search"
-            autosuggest={true}
-            sortBy="asc"
-            URLParams
-          />
-         <SingleList
-            componentId="testatorSearch"
-            dataField="testator.name.keyword"
-            sortBy="asc"
-            queryFormat="and"
-            URLParams
-            showSearch={false}
-            className="datasearch"
-            innerClass={{
-              list: "list"
-            }}
-            filterLabel="search"
-          />*/}
-
           <SingleDropdownList
             className="datasearch"
             react={{
@@ -233,7 +212,8 @@ const CustumerDataSearch = () => (
                 "testatorSearch",
                 "collection",
                 "will_place",
-                "birth_date",
+                "birth_place",
+                "death_place",
                 "occupation",
                 "affiliation"
               ]
@@ -266,7 +246,8 @@ const CustumerDataSearch = () => (
                 "testatorSearch",
                 "collection",
                 "will_place",
-                "birth_date",
+                "birth_place",
+                "death_place",
                 "provenance",
                 "affiliation"
               ]
@@ -299,7 +280,8 @@ const CustumerDataSearch = () => (
                 "testatorSearch",
                 "collection",
                 "will_place",
-                "birth_date",
+                "birth_place",
+                "death_place",
                 "provenance",
                 "occupation"
               ]

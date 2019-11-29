@@ -13,10 +13,8 @@ import {
   Grid,
   IconButton,
   Button,
-  Snackbar,
   TextField,
   Link,
-  Modal,
   Dialog
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
@@ -26,8 +24,6 @@ import ImageIIF from "../utils/ImageIIIF";
 import "../styles/WillDisplay.css";
 import classNames from "classnames";
 import isEqual from "lodash/isEqual";
-import ListAddIcon from "@material-ui/icons/PlaylistAddOutlined";
-import ListAddCheckIcon from "@material-ui/icons/PlaylistAddCheckOutlined";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 
 const Styled = createStyled(theme => ({
@@ -115,7 +111,8 @@ export default class WillDisplay extends Component {
       idx: 0,
       cur_page: null,
       copyLink: null,
-      openModal: false
+      openModal: false,
+      anchorEl: null
     };
 
     this.months = [
@@ -147,10 +144,11 @@ export default class WillDisplay extends Component {
   };
 
   handlePageClick(event) {
-    window.history.pushState(
+    window.history.replaceState(
+      getParamConfig("web_url"),
       "will",
-      "title",
-      "/testament/" +
+      getParamConfig("web_url") +
+        "/testament/" +
         this.props.id +
         "/" +
         this.props.data["will_pages"][event.target.getAttribute("value")][
@@ -170,24 +168,25 @@ export default class WillDisplay extends Component {
   }
 
   handleOpenModal(event) {
-    const curLink = event.target.getAttribute("value")
+    const curLink = event.target.getAttribute("id")
       ? getParamConfig("web_url") +
         "/testament/" +
         this.props.id +
         "/" +
-        this.props.data["will_pages"][event.target.getAttribute("value")][
+        this.props.data["will_pages"][event.target.getAttribute("id")][
           "page_type"
         ].type +
         "_" +
-        this.props.data["will_pages"][event.target.getAttribute("value")][
+        this.props.data["will_pages"][event.target.getAttribute("id")][
           "page_type"
         ].id
       : null;
-
+    console.log("click modale :", event.target);
     if (curLink) {
       this.setState({
         copyLink: curLink,
-        openModal: true
+        openModal: true,
+        anchorEl: Boolean(this.state.anchorEl) ? null : event.currentTarget
       });
     }
   }
@@ -199,17 +198,10 @@ export default class WillDisplay extends Component {
   }
 
   handleExportClick() {
-    const token = localStorage.usertoken;
-    if (token) {
-      downloadFile(
-        getParamConfig("web_url") + "/files/" + this.props.id + ".xml",
-        this.props.id + ".xml"
-      );
-    } else {
-      this.setState({
-        open: true
-      });
-    }
+    downloadFile(
+      getParamConfig("web_url") + "/files/will_" + this.props.id + ".xml",
+      "will_" + this.props.id + ".xml"
+    );
   }
 
   handleNextPage(event) {
@@ -278,24 +270,6 @@ export default class WillDisplay extends Component {
   }
 
   componentDidUpdate() {
-    const idx = document.location.href.lastIndexOf("&page_type");
-    if (idx !== -1) {
-      const cur_idx = this.props.data["will_pages"].findIndex(item => {
-        return isEqual(item["page_type"], this.props.cur_page);
-      });
-
-      if (cur_idx !== -1 && cur_idx !== this.state.idx) {
-        window.history.replaceState(
-          {},
-          document.title,
-          document.location.href.substring(0, idx)
-        );
-        this.setState({
-          idx: cur_idx
-        });
-      }
-    }
-
     if (document.getElementById("newLine_lb") === null) {
       let lbCollection = document.getElementsByClassName("lb");
       for (let item of lbCollection) {
@@ -354,6 +328,9 @@ export default class WillDisplay extends Component {
   }
 
   render() {
+    /* const popper_open = Boolean(this.state.anchorEl);
+    const popper_id = popper_open ? "transitions-popper" : undefined;*/
+
     const nextPage = (
       <Styled>
         {({ classes }) => (
@@ -390,7 +367,7 @@ export default class WillDisplay extends Component {
       will_date = Boolean(will_date)
         ? will_date.toLocaleDateString().split("/")
         : null;
-      console.log("this.props.data :", this.props.data);
+
       output = (
         <Styled>
           {({ classes }) => (
@@ -444,46 +421,92 @@ export default class WillDisplay extends Component {
                             : ""}
                           {Boolean(
                             this.props.data["will_contents.death_place_norm"]
-                          )
-                            ? [
-                                " à ",
-
-                                <Link target="_blank">
+                          ) ? (
+                            <span>
+                              {" "}
+                              à{" "}
+                              {Boolean(
+                                this.props.data["will_contents.death_place_ref"]
+                              ) ? (
+                                <Link
+                                  href={
+                                    getParamConfig("web_url") +
+                                    "/place/" +
+                                    this.props.data[
+                                      "will_contents.death_place_ref"
+                                    ]
+                                  }
+                                  target="_blank"
+                                >
                                   {
                                     this.props.data[
                                       "will_contents.death_place_norm"
                                     ]
                                   }
                                 </Link>
-                              ]
-                            : ""}
+                              ) : (
+                                this.props.data[
+                                  "will_contents.death_place_norm"
+                                ]
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )}
                         </Typography>
-                        <Typography>
-                          Testament rédigé
-                          {Boolean(will_date)
-                            ? " le " +
-                              will_date[0] +
-                              " " +
-                              this.months[will_date[1] - 1] +
-                              " " +
-                              will_date[2]
-                            : ""}{" "}
-                          {Boolean(
-                            this.props.data["will_contents.will_place_norm"]
-                          )
-                            ? [
-                                " à ",
-
-                                <Link target="_blank">
-                                  {
-                                    this.props.data[
-                                      "will_contents.will_place_norm"
-                                    ]
-                                  }
-                                </Link>
-                              ]
-                            : ""}
-                        </Typography>
+                        {Boolean(will_date) ||
+                        Boolean(
+                          this.props.data["will_contents.will_place_norm"]
+                        ) ? (
+                          <Typography>
+                            {Boolean(will_date)
+                              ? " Testament rédigé le " +
+                                will_date[0] +
+                                " " +
+                                this.months[will_date[1] - 1] +
+                                " " +
+                                will_date[2]
+                              : ""}{" "}
+                            {Boolean(
+                              this.props.data["will_contents.will_place_norm"]
+                            ) ? (
+                              <span>
+                                {" "}
+                                à{" "}
+                                {Boolean(
+                                  this.props.data[
+                                    "will_contents.will_place_ref"
+                                  ]
+                                ) ? (
+                                  <Link
+                                    href={
+                                      getParamConfig("web_url") +
+                                      "/place/" +
+                                      this.props.data[
+                                        "will_contents.will_place_ref"
+                                      ]
+                                    }
+                                    target="_blank"
+                                  >
+                                    {
+                                      this.props.data[
+                                        "will_contents.will_place_norm"
+                                      ]
+                                    }
+                                  </Link>
+                                ) : (
+                                  this.props.data[
+                                    "will_contents.will_place_norm"
+                                  ]
+                                )}
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </Typography>
+                        ) : (
+                          ""
+                        )}
                         <Typography>
                           Cote aux{" "}
                           {this.props.data["will_identifier.institution"]}{" "}
@@ -592,7 +615,7 @@ export default class WillDisplay extends Component {
                   </Grid>
                 </Grid>
               </Grid>
-              <Snackbar
+              {/* <Snackbar
                 anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 key="topCenter"
                 open={this.state.open}
@@ -605,7 +628,7 @@ export default class WillDisplay extends Component {
                     Merci de vous identifier pour télécharger les testaments !
                   </span>
                 }
-              ></Snackbar>
+              ></Snackbar> */}
 
               <Dialog
                 aria-labelledby="simple-modal-title"
@@ -629,6 +652,7 @@ export default class WillDisplay extends Component {
                     </Grid>
                     <Grid item xs>
                       <TextField
+                        id="uriSelect"
                         defaultValue={this.state.copyLink}
                         fullWidth={true}
                         InputProps={{
@@ -639,6 +663,46 @@ export default class WillDisplay extends Component {
                   </Grid>
                 </div>
               </Dialog>
+              {/* <Popper
+                id={
+                  popper_id
+                }
+                open={popper}
+                anchorEl={this.state.anchorEl}
+                transition
+              >
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={350}>
+                    <div className={classes.paper}>
+                      <Grid
+                        container
+                        alignItems="center"
+                        justify="flex-start"
+                        direction="row"
+                        className={classNames(
+                          classes.typography,
+                          classes.paper
+                        )}
+                        spacing={1}
+                      >
+                        <Grid item>
+                          <Typography> Lien de testament : </Typography>
+                        </Grid>
+                        <Grid item xs>
+                          <TextField
+                            id="uriSelect"
+                            defaultValue={this.state.copyLink}
+                            fullWidth={true}
+                            InputProps={{
+                              readOnly: true
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Fade>
+                )}
+                          </Popper>*/}
             </div>
           )}
         </Styled>
