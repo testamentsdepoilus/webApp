@@ -107,7 +107,7 @@ class About extends Component {
 
   componentDidMount() {
     const url = document.location.href;
-    const idx = url.lastIndexOf("about/");
+    const idx = url.lastIndexOf("apropos/");
 
     getTotalHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
@@ -127,7 +127,7 @@ class About extends Component {
       )
         .then(data => {
           if (idx !== -1) {
-            const id_query = url.substring(idx + 6).split("/");
+            const id_query = url.substring(idx + 8).split("/");
             getHitsFromQuery(
               getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
               JSON.stringify({
@@ -179,7 +179,7 @@ class About extends Component {
         key={1}
         color="inherit"
         component={RouterLink}
-        to="/about"
+        to="/apropos"
       >
         {" "}
         A propos{" "}
@@ -225,7 +225,7 @@ class About extends Component {
                         : classes.link
                     }
                     component={RouterLink}
-                    to={"/about/" + item["_id"]}
+                    to={"/apropos/" + item["_id"]}
                     onClick={this.handleListItemClick}
                   >
                     {item._source["title"]}

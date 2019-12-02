@@ -59,7 +59,11 @@ const Styled = createStyled(theme => ({
 
 function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
   let menu = [];
-  let listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
+  const listMenu = {
+    page: "Page",
+    envelope: "Enveloppe",
+    codicil: "Codicille"
+  };
   for (let i = 0; i < pages.length; i++) {
     menu.push(
       <Styled key={i}>

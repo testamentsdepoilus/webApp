@@ -5,7 +5,8 @@ import {
   createStyled,
   createElementFromHTML,
   getParamConfig,
-  downloadFile
+  downloadFile,
+  generatePDF
 } from "../utils/functions";
 import {
   Paper,
@@ -15,7 +16,9 @@ import {
   Button,
   TextField,
   Link,
-  Dialog
+  Dialog,
+  Menu,
+  MenuItem
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
@@ -81,7 +84,7 @@ const Styled = createStyled(theme => ({
 }));
 
 export function createPage(page, idx, type, nextPage) {
-  let listTypes = { transcription: "Transcription", edition: "Édition" };
+  const listTypes = { transcription: "Transcription", edition: "Édition" };
   let output = (
     <Styled>
       {({ classes }) => (
@@ -112,7 +115,8 @@ export default class WillDisplay extends Component {
       cur_page: null,
       copyLink: null,
       openModal: false,
-      anchorEl: null
+      anchorEl: null,
+      anchorElMenu: null
     };
 
     this.months = [
@@ -130,11 +134,14 @@ export default class WillDisplay extends Component {
       "décembre"
     ];
     this.handlePageClick = this.handlePageClick.bind(this);
-    this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleExportTEIClick = this.handleExportTEIClick.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleAlertClose = this.handleAlertClose.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleExportClose = this.handleExportClose.bind(this);
+    this.handleExportPDFClick = this.handleExportPDFClick.bind(this);
   }
 
   handleAlertClose = event => {
@@ -181,7 +188,6 @@ export default class WillDisplay extends Component {
           "page_type"
         ].id
       : null;
-    console.log("click modale :", event.target);
     if (curLink) {
       this.setState({
         copyLink: curLink,
@@ -197,11 +203,15 @@ export default class WillDisplay extends Component {
     });
   }
 
-  handleExportClick() {
+  handleExportTEIClick() {
     downloadFile(
       getParamConfig("web_url") + "/files/will_" + this.props.id + ".xml",
       "will_" + this.props.id + ".xml"
     );
+  }
+
+  handleExportPDFClick() {
+    generatePDF(this.props.data);
   }
 
   handleNextPage(event) {
@@ -267,6 +277,18 @@ export default class WillDisplay extends Component {
         )
       );
     }
+  }
+
+  handleExportClick(event) {
+    this.setState({
+      anchorElMenu: event.currentTarget
+    });
+  }
+
+  handleExportClose() {
+    this.setState({
+      anchorElMenu: null
+    });
   }
 
   componentDidUpdate() {
@@ -383,6 +405,34 @@ export default class WillDisplay extends Component {
                   >
                     <ExportIcon fontSize="large" />
                   </IconButton>
+                  <Menu
+                    id="simple-menu-explor"
+                    anchorEl={this.state.anchorElMenu}
+                    keepMounted
+                    open={Boolean(this.state.anchorElMenu)}
+                    onClose={this.handleExportClose}
+                    elevation={0}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center"
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center"
+                    }}
+                  >
+                    <MenuItem onClick={this.handleExplorClose}>
+                      <Button id="bt-tei" onClick={this.handleExportTEIClick}>
+                        TEI
+                      </Button>
+                    </MenuItem>
+                    <MenuItem onClick={this.handleExplorClose}>
+                      <Button id="bt-pdf" onClick={this.handleExportPDFClick}>
+                        PDF
+                      </Button>
+                    </MenuItem>
+                  </Menu>
                 </Grid>
                 <Grid key={2} item>
                   <Paper>

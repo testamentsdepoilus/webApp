@@ -135,16 +135,22 @@ export default class GeoMap extends React.Component {
         });
         let contents = [];
 
-        contents.push(<h4>{point[0]["will_contents.birth_place_norm"]}</h4>);
+        contents.push(
+          <h4 key={0}>{point[0]["will_contents.birth_place_norm"]}</h4>
+        );
         if (point.length === 1) {
-          contents.push(<h4>Lieu de naissance du testateur suivant :</h4>);
+          contents.push(
+            <h4 key={1}>Lieu de naissance du testateur suivant :</h4>
+          );
         } else if (point.length > 1) {
-          contents.push(<h4>Lieu de naissance des testateurs suivants :</h4>);
+          contents.push(
+            <h4 key={1}>Lieu de naissance des testateurs suivants :</h4>
+          );
         }
         let myList = [];
-        point.forEach(item => {
+        point.forEach((item, i) => {
           myList.push(
-            <li>
+            <li key={i}>
               <Link
                 href={
                   getParamConfig("web_url") +
@@ -159,7 +165,7 @@ export default class GeoMap extends React.Component {
           );
         });
         if (myList.length > 0) {
-          contents.push(<ul>{myList}</ul>);
+          contents.push(<ul key={i * 10}>{myList}</ul>);
         }
 
         const popupContent = <div className="map-popup">{contents}</div>;
@@ -177,16 +183,20 @@ export default class GeoMap extends React.Component {
         });
         let contents = [];
 
-        contents.push(<h4>{point[0]["will_contents.death_place_norm"]}</h4>);
+        contents.push(
+          <h4 key={0}>{point[0]["will_contents.death_place_norm"]}</h4>
+        );
         if (point.length === 1) {
-          contents.push(<h4>Lieu de décès du testateur suivant :</h4>);
+          contents.push(<h4 key={1}>Lieu de décès du testateur suivant :</h4>);
         } else if (point.length > 1) {
-          contents.push(<h4>Lieu de décès des testateurs suivants :</h4>);
+          contents.push(
+            <h4 key={1}>Lieu de décès des testateurs suivants :</h4>
+          );
         }
         let myList = [];
-        point.forEach(item => {
+        point.forEach((item, i) => {
           myList.push(
-            <li>
+            <li key={i}>
               <Link
                 href={
                   getParamConfig("web_url") +
@@ -201,7 +211,7 @@ export default class GeoMap extends React.Component {
           );
         });
         if (myList.length > 0) {
-          contents.push(<ul>{myList}</ul>);
+          contents.push(<ul key={i * 10}>{myList}</ul>);
         }
 
         const popupContent = <div className="map-popup">{contents}</div>;

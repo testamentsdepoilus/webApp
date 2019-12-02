@@ -5,6 +5,11 @@ import jwt_decode from "jwt-decode";
 import JSZipUtils from "jszip-utils";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
+import * as jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
+// Global declaration for jsPDF (needed before call html())
+window.html2canvas = html2canvas;
 
 // Get user token
 export function getUserToken() {
@@ -513,5 +518,70 @@ export function downloadZipFiles(urls, fileName) {
 
   zip.generateAsync({ type: "blob" }).then(function(content) {
     FileSaver.saveAs(content, fileName);
+  });
+}
+
+export function generatePDF(data) {
+  let doc = new jsPDF("p", "pt", "a4");
+
+  const listMenu = {
+    page: "Page",
+    envelope: "Enveloppe",
+    codicil: "Codicille"
+  };
+  let outputHtml =
+    '<div style="position: static; width: 596px;"> <h4 style=" text-align: center; margin-bottom: 10px; font-weight: bold;"> ' +
+    data["will_identifier.name"] +
+    "</h4>";
+
+  /*let outputIdentity =
+    '<div id="identity" style="margin-top: 5%; margin-left: 5%; width: 70%;">';
+  outputIdentity +=
+    "<p>Testament de " +
+    "<a href={" +
+    getParamConfig("web_url") +
+    "/testateur/" +
+    data["testator.ref"] +
+    '} target="_blank">' +
+    data["testator.name"] +
+    "</a></p>";
+  outputIdentity += '<p>Mort pour la france';
+  */
+  let outputImage =
+    '<div id="image" style="margin-top: 5%; margin-left: 5%; width: 70%;"> <h4>Image :</h4>';
+  let outputTranscription =
+    '<div id="transcription" style="margin-top: 5%; margin-left: 5%; width: 70%; font-size: 12px;"> <h4>Transcription :</h4>';
+  let outputEdition =
+    '<div id="edition" style="margin-top: 5%; margin-left: 5%; width: 70%; font-size: 12px;";> <h4>Edition :</h4>';
+  data["will_pages"].forEach(page => {
+    const title =
+      "<h5>[" +
+      listMenu[page["page_type"].type] +
+      " " +
+      page["page_type"].id +
+      "]</h5>";
+    outputImage += title;
+    outputImage +=
+      '<img src="' +
+      page["picture_url"] +
+      "/full/full/0/default.jpg" +
+      '" style="display: block;  margin-left: auto; margin-right: auto; width: 50%; height: 25%"></img>';
+    outputTranscription += title;
+    outputTranscription += page["transcription"];
+    outputEdition += title;
+    outputEdition += page["edition"];
+  });
+  outputImage += '</div> <hr width="80%">';
+  outputHtml += outputImage;
+  outputTranscription += '</div> <hr width="80%">';
+  outputHtml += outputTranscription;
+  outputEdition += "</div>";
+  outputHtml += outputEdition;
+  outputHtml += "</div>";
+
+  doc.html(outputHtml, {
+    callback: function(doc) {
+      doc.save(data["will_id"] + ".pdf");
+    }
   });
 }

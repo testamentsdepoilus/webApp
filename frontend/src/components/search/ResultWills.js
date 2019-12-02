@@ -380,13 +380,11 @@ export default class ResultWills extends React.Component {
           }
 
           return (
-            <React.Fragment key={i * 1000 + 1}>
+            <span key={i * 1000 + 1}>
               {div_id_page}
               {div_text_page}
-              {i < hits_size - 1 ? (
-                <Divider variant="inset" light={true} />
-              ) : null}
-            </React.Fragment>
+              {i < hits_size - 1 ? <Divider variant="inset" /> : null}
+            </span>
           );
         });
       }
@@ -397,7 +395,7 @@ export default class ResultWills extends React.Component {
       return (
         <Styled key={j}>
           {({ classes }) => (
-            <React.Fragment>
+            <div>
               <ListItem alignItems="flex-start" component="div">
                 <ListItemText
                   primary={
@@ -475,8 +473,8 @@ export default class ResultWills extends React.Component {
                   secondary={descriptions}
                 />
               </ListItem>
-              <Divider variant="inset" light={true} />
-            </React.Fragment>
+              <Divider variant="inset" />
+            </div>
           )}
         </Styled>
       );

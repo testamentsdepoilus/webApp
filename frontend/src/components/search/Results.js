@@ -17,32 +17,6 @@ import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
 
 // Style button
 const Styled = createStyled(theme => ({
-  typography: {
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(",")
-  },
-  typoName: {
-    fontSize: 20,
-    fontStyle: "oblique",
-    fontWeight: 600
-  },
-  typoText: {
-    fontSize: 16,
-    fontWeight: 500,
-    marginTop: 15,
-    paddingLeft: 20,
-    display: "block"
-  },
   margin: {
     margin: theme.spacing(12)
   },
@@ -60,13 +34,14 @@ const Styled = createStyled(theme => ({
       borderColor: "#bcaaa4"
     }
   },
-  divider: {
-    color: "#212121"
-  },
   popper: {
     border: "1px solid",
+    fontSize: "0.9rem",
     padding: theme.spacing(1),
     backgroundColor: theme.palette.background.paper
+  },
+  popperTitle: {
+    fontWeight: 600
   }
 }));
 
@@ -158,10 +133,29 @@ class Results extends React.Component {
                         id={id}
                         open={open}
                         anchorEl={this.state.anchorEl}
-                        placement="bottom"
+                        placement="bottom-end"
                       >
                         <div className={classes.popper}>
-                          Aide à la recherche :
+                          <p className={classes.popperTitle}>
+                            Aide à la recherche :
+                          </p>
+                          <p>
+                            OR, | : opérateur de disjonction par défault (armée
+                            guerre)
+                          </p>
+                          <p>
+                            AND, + : opérateur de conjonction (armée + guerre)
+                          </p>
+                          <p>NOT, - : opérateur d'exclusion (armée -guerre) </p>
+                          <p>+ : opérateur d'inclusion (armée +guerre) </p>
+                          <p>* : troncature</p>
+                          <p>
+                            " " : recherche exactment une suite de mots (ou
+                            phrase)
+                          </p>
+                          <p>
+                            ^ : rendre un terme plus pertinent (armée guerre^2)
+                          </p>
                         </div>
                       </Popper>
                     )}

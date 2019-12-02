@@ -135,8 +135,6 @@ class NavBar extends Component {
     this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleMenuClose = this.handleMenuClose.bind(this);
     this.handleExplorClick = this.handleExplorClick.bind(this);
     this.handleExplorClose = this.handleExplorClose.bind(this);
   }
@@ -161,18 +159,6 @@ class NavBar extends Component {
   handleClose() {
     this.setState({
       open: false
-    });
-  }
-
-  handleMenuClick(event) {
-    this.setState({
-      anchorEl: event.currentTarget
-    });
-  }
-
-  handleMenuClose() {
-    this.setState({
-      anchorEl: null
     });
   }
 
@@ -272,6 +258,16 @@ class NavBar extends Component {
                         keepMounted
                         open={Boolean(this.state.anchorElExplor)}
                         onClose={this.handleExplorClose}
+                        elevation={0}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center"
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center"
+                        }}
                       >
                         <MenuItem onClick={this.handleExplorClose}>
                           {" "}
