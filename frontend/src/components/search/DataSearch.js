@@ -178,7 +178,7 @@ const CustumerDataSearch = () => (
                 "testatorSearch",
                 "collection",
                 "will_place",
-                "birth_date",
+                "birth_place",
                 "provenance",
                 "occupation",
                 "affiliation"

@@ -149,6 +149,7 @@ class Results extends React.Component {
                           <p>NOT, - : opérateur d'exclusion (armée -guerre) </p>
                           <p>+ : opérateur d'inclusion (armée +guerre) </p>
                           <p>* : troncature</p>
+                          <p>? : substitution</p>
                           <p>
                             " " : recherche exactment une suite de mots (ou
                             phrase)
@@ -171,7 +172,8 @@ class Results extends React.Component {
                     "contributors",
                     "institution",
                     "collection",
-                    "date",
+                    "death_date",
+                    "will_date",
                     "cote",
                     "testatorSearch",
                     "will_place",
@@ -233,7 +235,8 @@ class Results extends React.Component {
                       "contributors",
                       "institution",
                       "collection",
-                      "date",
+                      "will_date",
+                      "death_date",
                       "cote",
                       "will_place",
                       "birth_place",

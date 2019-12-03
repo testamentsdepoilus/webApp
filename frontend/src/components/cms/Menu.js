@@ -99,7 +99,7 @@ class Menu extends Component {
               to="/espace/panier"
               onClick={this.handleListItemClick}
             >
-              Mom panier
+              Mon panier
             </Link>
             {this.state.myData.isRoot ? (
               <Link
