@@ -6,20 +6,9 @@ import {
   getHitsFromQuery,
   downloadFile
 } from "../utils/functions";
-import {
-  Paper,
-  Typography,
-  Grid,
-  Link,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
-  IconButton
-} from "@material-ui/core";
+import { Paper, Typography, Grid, Link, IconButton } from "@material-ui/core";
 
 import classNames from "classnames";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import GeoMap from "../utils/GeoMap";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 
@@ -148,6 +137,7 @@ export default class PlaceDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
+          size: 100,
           query: {
             term: {
               "birth.place.ref": this.props.id
@@ -170,16 +160,10 @@ export default class PlaceDisplay extends Component {
             })
           )
             .then(wills => {
-              if (wills.length > 0) {
-                new_birth_hits["wills"] = wills;
-                this.setState({
-                  birth_hits: new_birth_hits
-                });
-              } else {
-                this.setState({
-                  birth_hits: new_birth_hits
-                });
-              }
+              new_birth_hits["wills"] = wills;
+              this.setState({
+                birth_hits: new_birth_hits
+              });
             })
             .catch(err => console.log("erreur :", err));
         } else {
@@ -193,6 +177,7 @@ export default class PlaceDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
+          size: 100,
           query: {
             term: {
               "death.place.ref": this.props.id
@@ -218,16 +203,10 @@ export default class PlaceDisplay extends Component {
               })
             )
               .then(wills => {
-                if (wills.length > 0) {
-                  new_death_hits["wills"] = wills;
-                  this.setState({
-                    death_hits: new_death_hits
-                  });
-                } else {
-                  this.setState({
-                    death_hits: new_death_hits
-                  });
-                }
+                new_death_hits["wills"] = wills;
+                this.setState({
+                  death_hits: new_death_hits
+                });
               })
               .catch(err => console.log("erreur :", err));
           } else {
@@ -242,6 +221,7 @@ export default class PlaceDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
+          size: 100,
           query: {
             term: {
               "residence.ref": this.props.id
@@ -267,16 +247,10 @@ export default class PlaceDisplay extends Component {
               })
             )
               .then(wills => {
-                if (wills.length > 0) {
-                  new_residence_hits["wills"] = wills;
-                  this.setState({
-                    residence_hits: new_residence_hits
-                  });
-                } else {
-                  this.setState({
-                    residence_hits: new_residence_hits
-                  });
-                }
+                new_residence_hits["wills"] = wills;
+                this.setState({
+                  residence_hits: new_residence_hits
+                });
               })
               .catch(err => console.log("erreur :", err));
           } else {
@@ -298,6 +272,7 @@ export default class PlaceDisplay extends Component {
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
+        size: 100,
         query: {
           term: {
             "birth.place.ref": this.props.id
@@ -320,12 +295,10 @@ export default class PlaceDisplay extends Component {
           })
         )
           .then(wills => {
-            if (wills.length > 0) {
-              new_birth_hits["wills"] = wills;
-              this.setState({
-                birth_hits: new_death_hits
-              });
-            }
+            new_birth_hits["wills"] = wills;
+            this.setState({
+              birth_hits: new_birth_hits
+            });
           })
           .catch(err => console.log("erreur :", err));
       }
@@ -333,6 +306,7 @@ export default class PlaceDisplay extends Component {
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
+        size: 100,
         query: {
           term: {
             "death.place.ref": this.props.id
@@ -356,12 +330,10 @@ export default class PlaceDisplay extends Component {
             })
           )
             .then(wills => {
-              if (wills.length > 0) {
-                new_death_hits["wills"] = wills;
-                this.setState({
-                  death_hits: new_death_hits
-                });
-              }
+              new_death_hits["wills"] = wills;
+              this.setState({
+                death_hits: new_death_hits
+              });
             })
             .catch(err => console.log("erreur :", err));
         }
@@ -370,6 +342,7 @@ export default class PlaceDisplay extends Component {
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
+        size: 100,
         query: {
           term: {
             "residence.ref": this.props.id
@@ -393,12 +366,10 @@ export default class PlaceDisplay extends Component {
             })
           )
             .then(wills => {
-              if (wills.length > 0) {
-                new_residence_hits["wills"] = wills;
-                this.setState({
-                  residence_hits: new_residence_hits
-                });
-              }
+              new_residence_hits["wills"] = wills;
+              this.setState({
+                residence_hits: new_residence_hits
+              });
             })
             .catch(err => console.log("erreur :", err));
         }
@@ -408,7 +379,6 @@ export default class PlaceDisplay extends Component {
 
   render() {
     let output = null;
-
     if (this.props.data) {
       const place_uri = getParamConfig("web_url") + "/place/" + this.props.id;
       output = (
@@ -480,247 +450,261 @@ export default class PlaceDisplay extends Component {
                             </Grid>
                           </Grid>
 
-                          {Object.keys(this.state.death_hits).length > 0 ? (
-                            <ExpansionPanel className={classes.panel}>
-                              <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="death_hits"
-                              >
-                                <Typography className={classes.text}>
-                                  Le lieu de décès
-                                  {this.state.death_hits["testators"].length > 1
-                                    ? " des poilus suivants :"
-                                    : " du poilus suivant :"}{" "}
-                                </Typography>
-                              </ExpansionPanelSummary>
-                              <ExpansionPanelDetails>
-                                <ul>
-                                  {this.state.death_hits["testators"].map(
-                                    (hit, i) => {
-                                      let date = Boolean(
-                                        hit._source["death.date"]
-                                      )
-                                        ? new Date(hit._source["death.date"])
-                                        : null;
-
-                                      date = Boolean(date)
-                                        ? date.toLocaleDateString().split("/")
-                                        : null;
-
-                                      const will = Boolean(
-                                        this.state.death_hits["wills"]
-                                      )
-                                        ? this.state.death_hits["wills"].find(
-                                            item =>
-                                              item._source["testator.ref"] ===
-                                              hit._id
-                                          )
-                                        : null;
-                                      return (
-                                        <li key={i} className={classes.text}>
-                                          {Boolean(will) ? (
-                                            <Link
-                                              href={
-                                                getParamConfig("web_url") +
-                                                "/testament/" +
-                                                will["_id"]
-                                              }
-                                              target="_blank"
-                                            >
-                                              {
-                                                hit._source[
-                                                  "persName.fullProseForm"
-                                                ]
-                                              }
-                                              {Boolean(date[i])
-                                                ? ", décédé le " +
-                                                  date[0] +
-                                                  " " +
-                                                  this.months[date[1] - 1] +
-                                                  " " +
-                                                  date[2]
-                                                : " "}
-                                            </Link>
-                                          ) : (
-                                            <Typography>
-                                              {
-                                                hit._source[
-                                                  "persName.fullProseForm"
-                                                ]
-                                              }
-                                              {Boolean(date[i])
-                                                ? ", décédé le " +
-                                                  date[0] +
-                                                  " " +
-                                                  this.months[date[1] - 1] +
-                                                  " " +
-                                                  date[2]
-                                                : " "}
-                                            </Typography>
-                                          )}
-                                        </li>
-                                      );
-                                    }
-                                  )}
-                                </ul>
-                              </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                          ) : (
-                            ""
-                          )}
                           {Object.keys(this.state.birth_hits).length > 0 ? (
-                            <ExpansionPanel className={classes.panel}>
-                              <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="death_hits"
-                              >
-                                <Typography className={classes.text}>
-                                  Le lieu de naissance
-                                  {this.state.birth_hits["testators"].length > 1
-                                    ? " des poilus suivants :"
-                                    : " du poilus suivant :"}{" "}
-                                </Typography>
-                              </ExpansionPanelSummary>
-                              <ExpansionPanelDetails>
-                                <ul>
-                                  {this.state.birth_hits["testators"].map(
-                                    (hit, i) => {
-                                      let date = Boolean(
-                                        hit._source["birth.date"]
-                                      )
-                                        ? new Date(hit._source["birth.date"])
-                                        : null;
+                            <div className={classes.panel}>
+                              <Typography className={classes.text}>
+                                Le lieu de naissance
+                                {this.state.birth_hits["testators"].length > 1
+                                  ? " des poilus suivants :"
+                                  : " du poilus suivant :"}{" "}
+                              </Typography>
+                              <ul>
+                                {this.state.birth_hits["testators"].map(
+                                  (hit, i) => {
+                                    let date = Boolean(
+                                      hit._source["birth.date"]
+                                    )
+                                      ? new Date(hit._source["birth.date"])
+                                      : null;
 
-                                      date = Boolean(date)
-                                        ? date.toLocaleDateString().split("/")
-                                        : null;
+                                    date = Boolean(date)
+                                      ? date.toLocaleDateString().split("/")
+                                      : null;
 
-                                      const will = Boolean(
-                                        this.state.birth_hits["wills"]
-                                      )
-                                        ? this.state.birth_hits["wills"].find(
-                                            item =>
-                                              item._source["testator.ref"] ===
-                                              hit._id
-                                          )
-                                        : null;
-                                      return (
-                                        <li key={i} className={classes.text}>
-                                          {Boolean(will) ? (
-                                            <Link
-                                              href={
-                                                getParamConfig("web_url") +
-                                                "/testament/" +
-                                                will["_id"]
-                                              }
-                                              target="_blank"
-                                            >
-                                              {
-                                                hit._source[
-                                                  "persName.fullProseForm"
-                                                ]
-                                              }
-                                              {Boolean(date[i])
-                                                ? ", né le " +
-                                                  date[0] +
-                                                  " " +
-                                                  this.months[date[1] - 1] +
-                                                  " " +
-                                                  date[2]
-                                                : " "}
-                                            </Link>
-                                          ) : (
-                                            <Typography>
-                                              {
-                                                hit._source[
-                                                  "persName.fullProseForm"
-                                                ]
-                                              }
-                                              {Boolean(date[i])
-                                                ? ", né le " +
-                                                  date[0] +
-                                                  " " +
-                                                  this.months[date[1] - 1] +
-                                                  " " +
-                                                  date[2]
-                                                : " "}
-                                            </Typography>
-                                          )}
-                                        </li>
-                                      );
-                                    }
-                                  )}
-                                </ul>
-                              </ExpansionPanelDetails>
-                            </ExpansionPanel>
+                                    const will = Boolean(
+                                      this.state.birth_hits["wills"]
+                                    )
+                                      ? this.state.birth_hits["wills"].find(
+                                          item =>
+                                            item._source["testator.ref"] ===
+                                            hit._id
+                                        )
+                                      : null;
+                                    return (
+                                      <li key={i} className={classes.text}>
+                                        {Boolean(will) ? (
+                                          <Link
+                                            href={
+                                              getParamConfig("web_url") +
+                                              "/testament/" +
+                                              will["_id"]
+                                            }
+                                            target="_blank"
+                                          >
+                                            {
+                                              hit._source[
+                                                "persName.fullProseForm"
+                                              ]
+                                            }
+                                            {Boolean(date)
+                                              ? ", né le " +
+                                                date[0] +
+                                                " " +
+                                                this.months[date[1] - 1] +
+                                                " " +
+                                                date[2]
+                                              : " "}
+                                          </Link>
+                                        ) : (
+                                          <Typography>
+                                            {
+                                              hit._source[
+                                                "persName.fullProseForm"
+                                              ]
+                                            }
+                                            {Boolean(date)
+                                              ? ", né le " +
+                                                date[0] +
+                                                " " +
+                                                this.months[date[1] - 1] +
+                                                " " +
+                                                date[2]
+                                              : " "}
+                                          </Typography>
+                                        )}
+                                      </li>
+                                    );
+                                  }
+                                )}
+                              </ul>
+                            </div>
                           ) : (
                             ""
                           )}
                           {Object.keys(this.state.residence_hits).length > 0 ? (
-                            <ExpansionPanel className={classes.panel}>
-                              <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="death_hits"
-                              >
-                                <Typography className={classes.text}>
-                                  Le lieu de résidence
-                                  {this.state.residence_hits["testators"]
-                                    .length > 1
-                                    ? " des poilus suivants :"
-                                    : " du poilus suivant :"}{" "}
-                                </Typography>
-                              </ExpansionPanelSummary>
-                              <ExpansionPanelDetails>
-                                <ul>
-                                  {this.state.residence_hits["testators"].map(
-                                    (hit, i) => {
-                                      const will = Boolean(
-                                        this.state.residence_hits["wills"]
-                                      )
-                                        ? this.state.residence_hits[
-                                            "wills"
-                                          ].find(
-                                            item =>
-                                              item._source["testator.ref"] ===
-                                              hit._id
-                                          )
-                                        : null;
-                                      return (
-                                        <li key={i} className={classes.text}>
-                                          {Boolean(will) ? (
-                                            <Link
-                                              href={
-                                                getParamConfig("web_url") +
-                                                "/testament/" +
-                                                will["_id"]
-                                              }
-                                              target="_blank"
-                                            >
-                                              {
-                                                hit._source[
-                                                  "persName.fullProseForm"
-                                                ]
-                                              }
-                                            </Link>
-                                          ) : (
-                                            <Typography>
-                                              {
-                                                hit._source[
-                                                  "persName.fullProseForm"
-                                                ]
-                                              }
-                                            </Typography>
-                                          )}
-                                        </li>
-                                      );
+                            <div className={classes.panel}>
+                              <Typography className={classes.text}>
+                                Le lieu de résidence
+                                {this.state.residence_hits["testators"].length >
+                                1
+                                  ? " des poilus suivants :"
+                                  : " du poilus suivant :"}{" "}
+                              </Typography>
+
+                              <ul>
+                                {this.state.residence_hits["testators"].map(
+                                  (hit, i) => {
+                                    const will = Boolean(
+                                      this.state.residence_hits["wills"]
+                                    )
+                                      ? this.state.residence_hits["wills"].find(
+                                          item =>
+                                            item._source["testator.ref"] ===
+                                            hit._id
+                                        )
+                                      : null;
+                                    return (
+                                      <li key={i} className={classes.text}>
+                                        {Boolean(will) ? (
+                                          <Link
+                                            href={
+                                              getParamConfig("web_url") +
+                                              "/testament/" +
+                                              will["_id"]
+                                            }
+                                            target="_blank"
+                                          >
+                                            {
+                                              hit._source[
+                                                "persName.fullProseForm"
+                                              ]
+                                            }
+                                          </Link>
+                                        ) : (
+                                          <Typography>
+                                            {
+                                              hit._source[
+                                                "persName.fullProseForm"
+                                              ]
+                                            }
+                                          </Typography>
+                                        )}
+                                      </li>
+                                    );
+                                  }
+                                )}
+                              </ul>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          {Object.keys(this.state.death_hits).length > 0 ? (
+                            <div className={classes.panel}>
+                              <Typography className={classes.text}>
+                                Le lieu de décès
+                                {this.state.death_hits["testators"].length > 1
+                                  ? " des poilus suivants :"
+                                  : " du poilus suivant :"}{" "}
+                              </Typography>
+
+                              <ul>
+                                {this.state.death_hits["testators"].map(
+                                  (hit, i) => {
+                                    let death_date = [];
+
+                                    if (Boolean(hit._source["death.date"])) {
+                                      if (
+                                        Array.isArray(hit._source["death.date"])
+                                      ) {
+                                        death_date = hit._source[
+                                          "death.date"
+                                        ].map(item => {
+                                          const date = new Date(item);
+                                          return date
+                                            .toLocaleDateString()
+                                            .split("/");
+                                        });
+                                      } else {
+                                        const date = new Date(
+                                          hit._source["death.date"]
+                                        );
+                                        death_date.push(
+                                          date.toLocaleDateString().split("/")
+                                        );
+                                      }
                                     }
-                                  )}
-                                </ul>
-                              </ExpansionPanelDetails>
-                            </ExpansionPanel>
+
+                                    const will = Boolean(
+                                      this.state.death_hits["wills"]
+                                    )
+                                      ? this.state.death_hits["wills"].find(
+                                          item =>
+                                            item._source["testator.ref"] ===
+                                            hit._id
+                                        )
+                                      : null;
+                                    return (
+                                      <li key={i} className={classes.text}>
+                                        {Boolean(will) ? (
+                                          <Link
+                                            href={
+                                              getParamConfig("web_url") +
+                                              "/testament/" +
+                                              will["_id"]
+                                            }
+                                            target="_blank"
+                                          >
+                                            {
+                                              hit._source[
+                                                "persName.fullProseForm"
+                                              ]
+                                            }
+                                            {death_date.length > 0
+                                              ? ", décédé le " +
+                                                death_date[0][0] +
+                                                " " +
+                                                this.months[
+                                                  death_date[0][1] - 1
+                                                ] +
+                                                " " +
+                                                death_date[0][2]
+                                              : ""}{" "}
+                                            {death_date.length === 2
+                                              ? " ou le " +
+                                                death_date[1][0] +
+                                                " " +
+                                                this.months[
+                                                  death_date[1][1] - 1
+                                                ] +
+                                                " " +
+                                                death_date[1][2]
+                                              : ""}
+                                          </Link>
+                                        ) : (
+                                          <Typography>
+                                            {
+                                              hit._source[
+                                                "persName.fullProseForm"
+                                              ]
+                                            }
+                                            {death_date.length > 0
+                                              ? ", décédé le " +
+                                                death_date[0][0] +
+                                                " " +
+                                                this.months[
+                                                  death_date[0][1] - 1
+                                                ] +
+                                                " " +
+                                                death_date[0][2]
+                                              : ""}{" "}
+                                            {death_date.length === 2
+                                              ? " ou le " +
+                                                death_date[1][0] +
+                                                " " +
+                                                this.months[
+                                                  death_date[1][1] - 1
+                                                ] +
+                                                " " +
+                                                death_date[1][2]
+                                              : ""}{" "}
+                                          </Typography>
+                                        )}
+                                      </li>
+                                    );
+                                  }
+                                )}
+                              </ul>
+                            </div>
                           ) : (
                             ""
                           )}

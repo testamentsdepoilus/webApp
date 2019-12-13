@@ -27,7 +27,8 @@ function App() {
     <BrowserRouter basename="/testaments-de-poilus">
       <div className="App">
         <Navbar />
-        <Route exact path="/" component={Search} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/accueil" component={Home} />
         <Route exact path="/recherche" component={Search} />
         <Route path="/news" component={News} />
         <Route path="/articles" component={Articles} />

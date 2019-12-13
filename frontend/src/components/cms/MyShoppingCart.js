@@ -503,7 +503,21 @@ export default class MyShoppingCart extends Component {
               </IconButton>
             </Tooltip>
           </Grid>
-        ) : null}
+        ) : (
+          <Grid item>
+            <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
+              <span>
+                <IconButton
+                  onClick={this.handleCompareWill}
+                  aria-label="compare"
+                  disabled
+                >
+                  <CompareIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </Grid>
+        )}
       </Grid>
     );
 

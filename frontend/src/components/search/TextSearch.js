@@ -145,12 +145,13 @@ class TextSearch extends React.Component {
             </Grid>
             <Grid item className={classes.dataSearch}>
               <DataSearch
-                componentId="mainSearch"
+                componentId="texte"
                 dataField={[this.state.value]}
                 queryFormat="or"
                 placeholder={"Que recherchez-vous dans " + page_name + " ?"}
                 iconPosition="right"
-                filterLabel="search"
+                showIcon={false}
+                filterLabel="recherche"
                 autosuggest={false}
                 customQuery={customQuery}
                 URLParams

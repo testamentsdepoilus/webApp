@@ -51,7 +51,7 @@ class Profile extends Component {
             <div className={classes.profile}>
               <Grid container direction="column" justify="center">
                 <Grid item>
-                  <Typography variant="h3"> PROFILE</Typography>
+                  <Typography variant="h4"> Mon profil :</Typography>
                 </Grid>
                 <Grid item>
                   <List>
@@ -62,13 +62,13 @@ class Profile extends Component {
                       </Typography>
                     </ListItem>
                     <ListItem>
-                      Prénom :
+                      Prénom :{" "}
                       <Typography variant="h5">
                         {this.state.last_name}
                       </Typography>
                     </ListItem>
                     <ListItem>
-                      Adresse mail :
+                      Adresse mail :{" "}
                       <Typography variant="h5">{this.state.email}</Typography>
                     </ListItem>
                   </List>

@@ -60,15 +60,15 @@ export function readXmlFile(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://patrimeph.ensea.fr/es700"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
+  config["es_host"] = "http://127.0.0.1:9200"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
   config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
   config["es_index_user"] = "tdp_users";
   config["es_index_testators"] = "tdp_testators";
   config["es_index_places"] = "tdp_places";
   config["es_index_units"] = "tdp_military_unit";
-  config["web_url"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
-  config["web_host"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
+  config["web_url"] = "http://127.0.0.1:3000"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
+  config["web_host"] = "http://127.0.0.1:3005"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -522,7 +522,7 @@ export function downloadZipFiles(urls, fileName) {
 }
 
 export function generatePDF(data) {
-  let doc = new jsPDF("p", "pt", "a4");
+  let doc = new jsPDF("p", "pt", "letter");
 
   const listMenu = {
     page: "Page",
@@ -530,7 +530,7 @@ export function generatePDF(data) {
     codicil: "Codicille"
   };
   let outputHtml =
-    '<div style="position: static; width: 596px;"> <h4 style=" text-align: center; margin-bottom: 10px; font-weight: bold;"> ' +
+    '<div style="position: absolute; width: 35em; padding: 20px"> <h4 style=" text-align: center; margin-bottom: 10px; font-weight: bold;"> ' +
     data["will_identifier.name"] +
     "</h4>";
 
@@ -578,6 +578,16 @@ export function generatePDF(data) {
   outputEdition += "</div>";
   outputHtml += outputEdition;
   outputHtml += "</div>";
+
+  let frag = document.createRange().createContextualFragment(outputHtml);
+
+  console.log("frag :", frag);
+  /*const fs = require("fs");
+  const conversion = require("phantom-html-to-pdf");
+  conversion({ html: outputHtml }, function(err, pdf) {
+    const output = fs.createWriteStream(data["will_id"] + ".pdf");
+    pdf.stream.pip(output);
+  });*/
 
   doc.html(outputHtml, {
     callback: function(doc) {

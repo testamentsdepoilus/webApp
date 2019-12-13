@@ -1,8 +1,8 @@
+.wills_menu {
+  margin: 1em 0 1em 2em;
+}
+
 .wills_order {
   position: static;
   float: right;
-}
-
-.wills_menu {
-  margin: 1em 0 1em 2em;
 }

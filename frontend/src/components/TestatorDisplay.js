@@ -165,13 +165,19 @@ export default class TestatorDisplay extends Component {
       const testator_uri =
         getParamConfig("web_url") + "/testateur/" + this.props.id;
 
-      let death_date = Boolean(this.props.data["death.date"])
-        ? new Date(this.props.data["death.date"])
-        : null;
+      let death_date = [];
 
-      death_date = Boolean(death_date)
-        ? death_date.toLocaleDateString().split("/")
-        : null;
+      if (Boolean(this.props.data["death.date"])) {
+        if (Array.isArray(this.props.data["death.date"])) {
+          death_date = this.props.data["death.date"].map(item => {
+            const date = new Date(item);
+            return date.toLocaleDateString().split("/");
+          });
+        } else {
+          const date = new Date(this.props.data["death.date"]);
+          death_date.push(date.toLocaleDateString().split("/"));
+        }
+      }
 
       let birth_date = Boolean(this.props.data["birth.date"])
         ? new Date(this.props.data["birth.date"])
@@ -213,7 +219,7 @@ export default class TestatorDisplay extends Component {
                       {this.props.data["persName.fullProseForm"]}
                       {" ("} {Boolean(birth_date) ? birth_date[2] : ""}
                       {"-"}
-                      {Boolean(death_date) ? death_date[2] : ""} {")"}
+                      {death_date.length > 0 ? death_date[0][2] : ""} {")"}
                     </Typography>
                     <Typography className={classes.text}>
                       {Boolean(this.props.data["residence.ref"]) ? (
@@ -243,7 +249,6 @@ export default class TestatorDisplay extends Component {
                             " " +
                             birth_date[2]
                           : ""}{" "}
-                        à{" "}
                         {Boolean(this.props.data["birth.place.name"]) ? (
                           <Link
                             href={
@@ -253,7 +258,7 @@ export default class TestatorDisplay extends Component {
                             }
                             target="_blank"
                           >
-                            {this.props.data["birth.place.name"]}
+                            à {this.props.data["birth.place.name"]}
                           </Link>
                         ) : (
                           ""
@@ -286,12 +291,20 @@ export default class TestatorDisplay extends Component {
                     )}
                     <Typography className={classes.text}>
                       Mort pour la France le{" "}
-                      {Boolean(death_date)
-                        ? death_date[0] +
+                      {death_date.length > 0
+                        ? death_date[0][0] +
                           " " +
-                          this.months[death_date[1] - 1] +
+                          this.months[death_date[0][1] - 1] +
                           " " +
-                          death_date[2]
+                          death_date[0][2]
+                        : ""}{" "}
+                      {death_date.length === 2
+                        ? " ou le " +
+                          death_date[1][0] +
+                          " " +
+                          this.months[death_date[1][1] - 1] +
+                          " " +
+                          death_date[1][2]
                         : ""}{" "}
                       {Boolean(this.props.data["death.place.name"]) ? (
                         <Link
@@ -319,9 +332,27 @@ export default class TestatorDisplay extends Component {
                     )}
 
                     {Boolean(this.props.data["note_history"]) ? (
-                      <Typography className={classes.text}>
-                        Biographie : {this.props.data["note_history"]}
-                      </Typography>
+                      <div>
+                        <Typography className={classes.text}>
+                          Biographie :
+                        </Typography>
+                        <ul>
+                          {this.props.data["note_history"]
+                            .split("*")
+                            .map((item, i) => {
+                              item = item.trim();
+                              if (item.length > 1) {
+                                return (
+                                  <li key={i}>
+                                    {item[0].toUpperCase() + item.slice(1)}
+                                  </li>
+                                );
+                              } else {
+                                return null;
+                              }
+                            })}
+                        </ul>
+                      </div>
                     ) : (
                       ""
                     )}

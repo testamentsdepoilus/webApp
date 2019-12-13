@@ -3,7 +3,6 @@ import "./../styles/App.css";
 import "./../styles/leftBar.css";
 import { ReactiveBase } from "@appbaseio/reactivesearch";
 import ContributorFilters from "./search/ContributorFilters";
-import InstitutionFilter from "./search/InstitutionFilter";
 import Results from "./search/Results";
 import DateFilter from "./search/DateFilter";
 import { Grid, Select, MenuItem, Paper } from "@material-ui/core";
@@ -116,9 +115,7 @@ class Search extends Component {
                 <Paper>
                   <CollectionFilter />
                 </Paper>
-                <Paper>
-                  <InstitutionFilter />
-                </Paper>
+
                 <Paper>
                   <ContributorFilters />
                 </Paper>

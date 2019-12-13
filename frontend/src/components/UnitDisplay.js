@@ -11,9 +11,6 @@ import {
   Paper,
   Typography,
   Link,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
   List,
   ListItem,
   ListItemText,
@@ -22,8 +19,6 @@ import {
 } from "@material-ui/core";
 
 import classNames from "classnames";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -55,6 +50,21 @@ export default class UnitDisplay extends Component {
     this.state = {
       testators: []
     };
+    this.months = [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ];
+
     this.handleExportClick = this.handleExportClick.bind(this);
   }
 
@@ -75,6 +85,7 @@ export default class UnitDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
+          size: 100,
           query: {
             term: {
               "affiliation.ref": this.props.id
@@ -101,6 +112,7 @@ export default class UnitDisplay extends Component {
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
+        size: 100,
         query: {
           term: {
             "affiliation.ref": this.props.id
@@ -251,38 +263,70 @@ export default class UnitDisplay extends Component {
                     </List>
 
                     {Object.keys(this.state.testators).length > 0 ? (
-                      <ExpansionPanel className={classes.panel}>
-                        <ExpansionPanelSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls="panel1a-content"
-                          id="testators"
-                        >
-                          <Typography className={classes.text}>
-                            Poilus membres de cette unité militaire :
-                          </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                          <ul>
-                            {this.state.testators.map((hit, i) => {
-                              const testator_uri =
-                                getParamConfig("web_url") +
-                                "/testateur/" +
-                                hit["_id"];
-                              return (
-                                <li key={i} className={classes.text}>
-                                  <Link
-                                    href={testator_uri}
-                                    target="_blank"
-                                    className={classNames(classes.urlUnit)}
-                                  >
-                                    {hit._source["persName.fullProseForm"]}
-                                  </Link>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </ExpansionPanelDetails>
-                      </ExpansionPanel>
+                      <span className={classes.panel}>
+                        <Typography className={classes.text}>
+                          Poilus membres de cette unité militaire :
+                        </Typography>
+
+                        <ul>
+                          {this.state.testators.map((hit, i) => {
+                            let death_date = [];
+
+                            if (Boolean(hit._source["death.date"])) {
+                              if (Array.isArray(hit._source["death.date"])) {
+                                death_date = hit._source["death.date"].map(
+                                  item => {
+                                    const date = new Date(item);
+                                    return date.toLocaleDateString().split("/");
+                                  }
+                                );
+                              } else {
+                                const date = new Date(
+                                  hit._source["death.date"]
+                                );
+                                death_date.push(
+                                  date.toLocaleDateString().split("/")
+                                );
+                              }
+                            }
+
+                            const testator_uri =
+                              getParamConfig("web_url") +
+                              "/testateur/" +
+                              hit["_id"];
+                            return (
+                              <li key={i} className={classes.text}>
+                                <Link
+                                  href={testator_uri}
+                                  target="_blank"
+                                  className={classNames(classes.urlUnit)}
+                                >
+                                  {hit._source["persName.fullProseForm"]}
+                                  {death_date.length > 0
+                                    ? ", décédé le " +
+                                      death_date[0][0] +
+                                      " " +
+                                      this.months[death_date[0][1] - 1] +
+                                      " " +
+                                      death_date[0][2]
+                                    : ""}{" "}
+                                  {death_date.length === 2
+                                    ? " ou le " +
+                                      death_date[1][0] +
+                                      " " +
+                                      this.months[death_date[1][1] - 1] +
+                                      " " +
+                                      death_date[1][2]
+                                    : ""}
+                                  {Boolean(hit._source["death.place.name"])
+                                    ? " à " + hit._source["death.place.name"]
+                                    : ""}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </span>
                     ) : (
                       ""
                     )}

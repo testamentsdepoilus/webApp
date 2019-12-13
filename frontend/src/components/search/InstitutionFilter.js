@@ -5,18 +5,17 @@ const InstitutionFilters = () => (
   <SingleList
     react={{
       and: [
-        "mainSearch",
-        "coteSearch",
-        "testatorSearch",
-        "date",
-        "contributors",
+        "texte",
+        "cote",
+        "nom_testateur",
+        "date_redaction",
+        "date_deces",
+        "contributeur",
         "collection",
-        "will_place",
-        "birth_place",
-        "death_place",
-        "provenance",
-        "occupation",
-        "affiliation"
+        "lieu",
+        "notoriale",
+        "profession",
+        "unite"
       ]
     }}
     componentId="institution"

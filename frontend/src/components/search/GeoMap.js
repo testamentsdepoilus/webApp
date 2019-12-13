@@ -18,7 +18,7 @@ const GeoMap = () => (
     stream={true}
     // 'react' defines when and how the map component should update
     react={{
-      and: ["mainSearch", "contributors", "date"]
+      and: ["texte", "contributeur", "date"]
     }}
     showMarkers={true}
   />

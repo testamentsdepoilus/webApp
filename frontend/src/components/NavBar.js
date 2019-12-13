@@ -225,9 +225,12 @@ class NavBar extends Component {
         {({ classes }) => (
           <div>
             <AppBar className={classNames(classes.nav_root)}>
-              <Typography className={classes.typography}>
-                Testaments de Poilus
-              </Typography>
+              <Link id="home" component={RouterLink} to="/accueil">
+                <Typography className={classes.typography}>
+                  Testaments de Poilus
+                </Typography>
+              </Link>
+
               <Grid container direction="row" spacing={2}>
                 <Grid item xs={8}>
                   <Breadcrumbs aria-label="Breadcrumb" className={classes.menu}>

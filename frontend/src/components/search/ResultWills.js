@@ -53,8 +53,11 @@ const Styled = createStyled(theme => ({
   typoName: {
     fontSize: 20,
     fontStyle: "oblique",
-    fontWeight: 600,
     color: "#424242"
+  },
+  typoSurname: {
+    fontWeight: 600,
+    fontVariantCaps: "small-caps"
   },
   typoText: {
     fontSize: 16,
@@ -340,13 +343,18 @@ export default class ResultWills extends React.Component {
           return a._source["page_type"]["id"] - b._source["page_type"]["id"];
         });
         descriptions = item.inner_hits.will_pages.hits.hits.map((hit, i) => {
+          let url_param = item["_id"];
+          url_param += hit._source["page_type"]
+            ? "/" +
+              hit._source["page_type"]["type"] +
+              "_" +
+              hit._source["page_type"]["id"]
+            : "";
           let div_id_page = (
             <React.Fragment>
               <Link
-                id="btMore"
-                onClick={this.displayMore(item, hit._source["page_type"])}
+                href={getParamConfig("web_url") + "/testament/" + url_param}
                 aria-label="More"
-                component="button"
                 style={{ color: "#424242", fontSize: 16 }}
               >
                 {listMenu[hit._source["page_type"]["type"]]}{" "}
@@ -392,6 +400,13 @@ export default class ResultWills extends React.Component {
       const isAdded = Boolean(this.userToken)
         ? this.state.myWills.findIndex(el => el === item["_id"])
         : -1;
+
+      let will_date = Boolean(item["will_contents.will_date"])
+        ? new Date(item["will_contents.will_date"])
+        : null;
+      will_date = Boolean(will_date) ? will_date.toLocaleDateString() : null;
+      let title_testator = "Testament de " + item["testator.name"];
+      title_testator += Boolean(will_date) ? " rédigé le " + will_date : "";
       return (
         <Styled key={j}>
           {({ classes }) => (
@@ -399,73 +414,103 @@ export default class ResultWills extends React.Component {
               <ListItem alignItems="flex-start" component="div">
                 <ListItemText
                   primary={
-                    <Grid container direction="row" spacing={1}>
-                      <Grid item xs={10}>
-                        <Link
-                          onClick={this.displayMore(item, null)}
-                          aria-label="More"
-                          className={classNames(
-                            classes.typoName,
-                            classes.typography
-                          )}
-                          component="button"
-                        >
-                          {item["will_identifier.name"].replace(
-                            "Testament de",
-                            ""
-                          )}
-                        </Link>
+                    <Grid
+                      container
+                      direction="row"
+                      justify="space-between"
+                      alignItems="center"
+                      spacing={1}
+                    >
+                      <Grid item xs="auto">
+                        <Tooltip title={title_testator}>
+                          <Link
+                            href={
+                              getParamConfig("web_url") +
+                              "/testament/" +
+                              item["_id"]
+                            }
+                            aria-label="More"
+                            className={classNames(
+                              classes.typoName,
+                              classes.typography
+                            )}
+                          >
+                            {item["testator.forename"] + " "}
+                            <span
+                              className={classNames(
+                                classes.typoName,
+                                classes.typography,
+                                classes.typoSurname
+                              )}
+                            >
+                              {item["testator.surname"]}
+                            </span>
+                          </Link>
+                        </Tooltip>
                       </Grid>
-                      <Grid item xs={2} value={item["_id"]}>
+                      <Grid item xs="auto" value={item["_id"]}>
                         <Grid container direction="row" spacing={1}>
-                          <Grid item>
+                          <Grid item onClick={this.handleClickWill(item)}>
                             <Tooltip
                               title="Ajouter à la comparaison"
                               style={{ cursor: "hand" }}
                               interactive
                             >
                               {Boolean(this.state.styleTitle[item["_id"]]) ? (
-                                <ListAddCheckIcon
-                                  onClick={this.handleClickWill(item)}
-                                  color="action"
-                                />
+                                <IconButton>
+                                  <ListAddCheckIcon color="action" />
+                                </IconButton>
                               ) : (
-                                <ListAddIcon
-                                  onClick={this.handleClickWill(item)}
-                                />
+                                <IconButton>
+                                  <ListAddIcon />
+                                </IconButton>
                               )}
                             </Tooltip>
                           </Grid>
-                          {Boolean(this.userToken) ? (
-                            <Grid item>
-                              {isAdded === -1 ? (
+                          <Grid item>
+                            {Boolean(this.userToken) ? (
+                              isAdded === -1 ? (
                                 <Tooltip
                                   title="Ajouter au panier"
                                   placement="bottom"
                                   style={{ cursor: "hand" }}
                                 >
-                                  <AddShoppingCartIcon
+                                  <IconButton
                                     onClick={this.handleAddShoppingWill(
                                       item["_id"]
                                     )}
-                                  />
+                                  >
+                                    <AddShoppingCartIcon />
+                                  </IconButton>
                                 </Tooltip>
                               ) : (
                                 <Tooltip
-                                  title="Supprimer de panier"
+                                  title="Supprimer du panier"
                                   placement="bottom"
                                   style={{ cursor: "hand" }}
                                 >
-                                  <RemoveShoppingCartIcon
-                                    color="action"
+                                  <IconButton
                                     onClick={this.handleremoveShoppingWill(
                                       item["_id"]
                                     )}
-                                  />
+                                  >
+                                    <RemoveShoppingCartIcon color="action" />
+                                  </IconButton>
                                 </Tooltip>
-                              )}
-                            </Grid>
-                          ) : null}
+                              )
+                            ) : (
+                              <Tooltip
+                                title="Connectez-vous pour ajouter ce testament au panier"
+                                arrow
+                              >
+                                <span>
+                                  <IconButton aria-label="addShop" disabled>
+                                    <AddShoppingCartIcon />
+                                  </IconButton>
+                                </span>
+                              </Tooltip>
+                            )}
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Grid>

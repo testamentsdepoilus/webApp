@@ -6,21 +6,20 @@ const ContributorFilters = () => (
     className="contributors"
     react={{
       and: [
-        "mainSearch",
+        "texte",
         "cote",
-        "date",
-        "testatorSearch",
+        "date_redaction",
+        "date_deces",
+        "nom_testateur",
         "institution",
         "collection",
-        "will_place",
-        "birth_place",
-        "death_place",
-        "provenance",
-        "occupation",
-        "affiliation"
+        "lieu",
+        "notoriale",
+        "profession",
+        "unite"
       ]
     }}
-    componentId="contributors"
+    componentId="contributeur"
     nestedField="contributions"
     dataField="contributions.persName.keyword"
     size={1000}

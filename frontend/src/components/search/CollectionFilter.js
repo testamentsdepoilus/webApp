@@ -5,18 +5,18 @@ const CollectionFilter = () => (
   <SingleList
     react={{
       and: [
-        "mainSearch",
+        "texte",
         "cote",
-        "testatorSearch",
+        "nom_testateur",
         "date",
-        "contributors",
+        "contributeur",
         "institution",
-        "will_place",
-        "birth_place",
-        "death_place",
-        "provenance",
-        "occupation",
-        "affiliation"
+        "lieu_redaction",
+        "lieu_naissance",
+        "lieu_deces",
+        "notoriale",
+        "profession",
+        "unite"
       ]
     }}
     componentId="collection"

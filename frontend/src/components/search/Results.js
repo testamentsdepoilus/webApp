@@ -124,6 +124,7 @@ class Results extends React.Component {
                   <IconButton
                     aria-describedby={id}
                     onClick={this.handleHelpOpen}
+                    style={{ cursor: "help" }}
                   >
                     <HelpIcon />
                   </IconButton>
@@ -168,20 +169,19 @@ class Results extends React.Component {
               <ReactiveList
                 react={{
                   and: [
-                    "mainSearch",
-                    "contributors",
+                    "texte",
+                    "contributeur",
                     "institution",
                     "collection",
-                    "death_date",
-                    "will_date",
+                    "date_naissance",
+                    "date_deces",
+                    "date_redaction",
                     "cote",
-                    "testatorSearch",
-                    "will_place",
-                    "birth_place",
-                    "death_place",
-                    "provenance",
-                    "occupation",
-                    "affiliation",
+                    "nom_testateur",
+                    "lieu",
+                    "notoriale",
+                    "profession",
+                    "unite",
                     "checkBox"
                   ]
                 }}
@@ -231,20 +231,19 @@ class Results extends React.Component {
                   componentId="mapSearch"
                   react={{
                     and: [
-                      "mainSearch",
-                      "contributors",
+                      "texte",
+                      "contributeur",
                       "institution",
                       "collection",
-                      "will_date",
-                      "death_date",
+                      "date_naissance",
+                      "date_redaction",
+                      "date_deces",
                       "cote",
-                      "will_place",
-                      "birth_place",
-                      "testatorSearch",
-                      "death_place",
-                      "provenance",
-                      "occupation",
-                      "affiliation"
+                      "lieu",
+                      "nom_testateur",
+                      "notoriale",
+                      "profession",
+                      "unite"
                     ]
                   }}
                   defaultQuery={() => ({
@@ -326,17 +325,17 @@ class Results extends React.Component {
                 queryFormat="or"
                 react={{
                   and: [
-                    "mainSearch",
-                    "contributors",
+                    "texte",
+                    "contributeur",
                     "institution",
                     "collection",
                     "date",
                     "cote",
-                    "will_place",
-                    "birth_place",
-                    "testatorSearch",
-                    "death_place",
-                    "provenance"
+                    "lieu_redaction",
+                    "lieu_naissance",
+                    "nom_testateur",
+                    "lieu_deces",
+                    "notoriale"
                   ]
                 }}
                 showFilter={true}
