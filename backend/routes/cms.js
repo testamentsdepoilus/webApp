@@ -3,11 +3,10 @@ const router = express.Router();
 const cors = require("cors");
 
 const { Client } = require("@elastic/elasticsearch");
-const client = new Client({ node: "http://127.0.0.1:9200" }); //http://patrimeph.ensea.fr/es700
-const es_index = "tdp_cms";
+const client = new Client({ node: process.env.host_es }); //http://patrimeph.ensea.fr/es700
+const es_index = process.env.index_cms;
 
 router.use(cors());
-process.env.SECRET_KEY = "secret";
 
 /* POST publish  */
 router.post("/publish", function(req, res, next) {

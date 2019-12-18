@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import { Link as RouterLink, withRouter } from "react-router-dom";
-import { Link, Breadcrumbs } from "@material-ui/core";
+import {
+  Link,
+  Breadcrumbs,
+  Button,
+  Menu as Menu_ui,
+  MenuItem
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-
 import {
   createStyled,
   getParamConfig,
@@ -42,15 +48,30 @@ class Menu extends Component {
     super();
     this.state = {
       selectedId: "profile",
-      myData: null
+      myData: null,
+      anchorElExplor: null
     };
     this.handleListItemClick = this.handleListItemClick.bind(this);
+    this.handleExplorClick = this.handleExplorClick.bind(this);
+    this.handleExplorClose = this.handleExplorClose.bind(this);
     this.tabLinks = ["profile", "panier", "cms"];
   }
 
   handleListItemClick(event) {
     this.setState({
       selectedId: event.target.id
+    });
+  }
+
+  handleExplorClick(event) {
+    this.setState({
+      anchorElExplor: event.currentTarget
+    });
+  }
+
+  handleExplorClose() {
+    this.setState({
+      anchorElExplor: null
     });
   }
 
@@ -85,7 +106,7 @@ class Menu extends Component {
               to="/espace/profile"
               onClick={this.handleListItemClick}
             >
-              Mon profile
+              Mon profil
             </Link>
 
             <Link
@@ -101,20 +122,64 @@ class Menu extends Component {
             >
               Mon panier
             </Link>
-            {this.state.myData.isRoot ? (
-              <Link
-                id="cms"
-                className={
-                  this.state.selectedId === "cms"
-                    ? classNames(classes.link, classes.activedLink)
-                    : classes.link
-                }
-                component={RouterLink}
-                to="/espace/cms"
-                onClick={this.handleListItemClick}
-              >
-                Gestion de contenu
-              </Link>
+            {this.state.myData.isAdmin ? (
+              <div>
+                <Button
+                  className={classNames(classes.link)}
+                  onClick={this.handleExplorClick}
+                >
+                  Administration
+                  <ExpandMoreIcon className={classNames(classes.icon)} />
+                </Button>
+                <Menu_ui
+                  id="simple-menu-explor"
+                  anchorEl={this.state.anchorElExplor}
+                  keepMounted
+                  open={Boolean(this.state.anchorElExplor)}
+                  onClose={this.handleExplorClose}
+                  elevation={0}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center"
+                  }}
+                >
+                  <MenuItem onClick={this.handleExplorClose}>
+                    <Link
+                      id="cms"
+                      className={
+                        this.state.selectedId === "cms"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/espace/cms"
+                      onClick={this.handleListItemClick}
+                    >
+                      Gestion de contenu
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={this.handleExplorClose}>
+                    <Link
+                      id="config"
+                      className={
+                        this.state.selectedId === "config"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/espace/config"
+                      onClick={this.handleListItemClick}
+                    >
+                      Configuration
+                    </Link>
+                  </MenuItem>
+                </Menu_ui>
+              </div>
             ) : null}
           </Breadcrumbs>
         )}

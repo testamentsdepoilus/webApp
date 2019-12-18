@@ -92,6 +92,9 @@ class Login extends Component {
           localStorage.setItem("usertoken", res.res);
           const myToken = getUserToken();
           localStorage.setItem("myWills", myToken.myWills);
+          localStorage.setItem("myTestators", myToken.myTestators);
+          localStorage.setItem("myPlaces", myToken.myPlaces);
+          localStorage.setItem("myUnits", myToken.myUnits);
           document.location.reload(true);
         } else {
           const err = res.error ? res.error : "Connexion au serveur a échoué !";

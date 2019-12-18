@@ -35,15 +35,15 @@ export default class GeoMap extends React.Component {
     this.handleCheckB = this.handleCheckB.bind(this);
     this.blueIcon = L.icon({
       iconUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png",
+        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-blue.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png"
+        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-shadow.png"
     });
     this.redIcon = L.icon({
       iconUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png",
+        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-red.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png"
+        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-shadow.png"
     });
   }
 
@@ -83,7 +83,7 @@ export default class GeoMap extends React.Component {
           <Grid item>
             <img
               alt="blue-icon"
-              src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png"
+              src="http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-blue.png"
             ></img>
           </Grid>
           <Grid item>
@@ -104,7 +104,7 @@ export default class GeoMap extends React.Component {
           <Grid item>
             <img
               alt="red-icon"
-              src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png"
+              src="http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-red.png"
             ></img>
           </Grid>
           <Grid item>
@@ -136,7 +136,17 @@ export default class GeoMap extends React.Component {
         let contents = [];
 
         contents.push(
-          <h4 key={0}>{point[0]["will_contents.birth_place_norm"]}</h4>
+          <Link
+            key={0}
+            href={
+              getParamConfig("web_url") +
+              "/place/" +
+              point[0]["will_contents.birth_place_ref"]
+            }
+            target="_blank"
+          >
+            <h4>{point[0]["will_contents.birth_place_norm"]}</h4>
+          </Link>
         );
         if (point.length === 1) {
           contents.push(
@@ -159,7 +169,10 @@ export default class GeoMap extends React.Component {
                 }
                 target="_blank"
               >
-                {item["testator.name"]}
+                {item["testator.forename"]}{" "}
+                <span style={{ fontVariantCaps: "small-caps" }}>
+                  {item["testator.surname"]}
+                </span>
               </Link>
             </li>
           );
@@ -184,7 +197,17 @@ export default class GeoMap extends React.Component {
         let contents = [];
 
         contents.push(
-          <h4 key={0}>{point[0]["will_contents.death_place_norm"]}</h4>
+          <Link
+            key={0}
+            href={
+              getParamConfig("web_url") +
+              "/place/" +
+              point[0]["will_contents.death_place_ref"]
+            }
+            target="_blank"
+          >
+            <h4>{point[0]["will_contents.death_place_norm"]}</h4>
+          </Link>
         );
         if (point.length === 1) {
           contents.push(<h4 key={1}>Lieu de décès du testateur suivant :</h4>);
@@ -205,7 +228,10 @@ export default class GeoMap extends React.Component {
                 }
                 target="_blank"
               >
-                {item["testator.name"]}
+                {item["testator.forename"]}{" "}
+                <span style={{ fontVariantCaps: "small-caps" }}>
+                  {item["testator.surname"]}
+                </span>
               </Link>
             </li>
           );
@@ -250,7 +276,18 @@ export default class GeoMap extends React.Component {
         });
         let contents = [];
 
-        contents.push(<h4>{point[0]["will_contents.birth_place_norm"]}</h4>);
+        contents.push(
+          <Link
+            href={
+              getParamConfig("web_url") +
+              "/place/" +
+              point[0]["will_contents.birth_place_ref"]
+            }
+            target="_blank"
+          >
+            <h4>{point[0]["will_contents.birth_place_norm"]}</h4>
+          </Link>
+        );
         if (point.length === 1) {
           contents.push(<h4>Lieu de naissance du testateur suivant :</h4>);
         } else if (point.length > 1) {
@@ -259,7 +296,14 @@ export default class GeoMap extends React.Component {
 
         let myList = [];
         point.forEach(item => {
-          myList.push(<li>{item["testator.name"]}</li>);
+          myList.push(
+            <li>
+              {item["testator.forename"]}{" "}
+              <span style={{ fontVariantCaps: "small-caps" }}>
+                {item["testator.surname"]}
+              </span>
+            </li>
+          );
         });
         if (myList.length > 1) {
           contents.push(<ul>{myList}</ul>);
@@ -281,7 +325,18 @@ export default class GeoMap extends React.Component {
         });
         let contents = [];
 
-        contents.push(<h4>{point[0]["will_contents.death_place_norm"]}</h4>);
+        contents.push(
+          <Link
+            href={
+              getParamConfig("web_url") +
+              "/place/" +
+              point[0]["will_contents.death_place_ref"]
+            }
+            target="_blank"
+          >
+            <h4>{point[0]["will_contents.death_place_norm"]}</h4>
+          </Link>
+        );
         if (point.length === 1) {
           contents.push(<h4>Lieu de décès du testateur suivant :</h4>);
         } else if (point.length > 1) {
@@ -299,7 +354,10 @@ export default class GeoMap extends React.Component {
                 }
                 target="_blank"
               >
-                {item["testator.name"]}
+                {item["testator.forename"]}{" "}
+                <span style={{ fontVariantCaps: "small-caps" }}>
+                  {item["testator.surname"]}
+                </span>
               </Link>
             </li>
           );

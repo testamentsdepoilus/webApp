@@ -21,10 +21,11 @@ import Testator from "./components/Testator";
 import Place from "./components/Place";
 import Unit from "./components/Unit";
 import Units from "./components/Units";
+import ConfigMail from "./components/cms/ConfigMail";
 
 function App() {
   return (
-    <BrowserRouter basename="/testaments-de-poilus">
+    <BrowserRouter basename="/testaments-de-Poilus">
       <div className="App">
         <Navbar />
         <Route exact path="/" component={Home} />
@@ -47,6 +48,7 @@ function App() {
         <Route exact path="/espace/profile" component={Profile} />
         <Route exact path="/espace/panier" component={MyShoppingCart} />
         <Route exact path="/espace/cms" component={Manage} />
+        <Route exact path="/espace/config" component={ConfigMail} />
         <Route path="/compare" component={Compare} />
       </div>
     </BrowserRouter>

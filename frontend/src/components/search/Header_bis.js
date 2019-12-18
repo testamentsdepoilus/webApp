@@ -78,7 +78,7 @@ let defaultQuery = function(props) {
 
 const Header = () => (
   <div className="navbar">
-    <div className="logo">Testaments poilus</div>
+    <div className="logo">Testaments Poilus</div>
     <DataSearch
       className="datasearch"
       componentId="mainSearch"

@@ -5,7 +5,9 @@ import {
   createStyled,
   getParamConfig,
   getHitsFromQuery,
-  downloadFile
+  downloadFile,
+  getUserToken,
+  updateMyListWills
 } from "../utils/functions";
 import {
   Paper,
@@ -15,10 +17,13 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  Grid
+  Grid,
+  Tooltip
 } from "@material-ui/core";
 
 import classNames from "classnames";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -48,7 +53,8 @@ export default class UnitDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      testators: []
+      testators: [],
+      myUnits: []
     };
     this.months = [
       "janvier",
@@ -64,8 +70,10 @@ export default class UnitDisplay extends Component {
       "novembre",
       "décembre"
     ];
-
+    this.userToken = getUserToken();
     this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
+    this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
   }
 
   handleExportClick() {
@@ -108,6 +116,61 @@ export default class UnitDisplay extends Component {
     }
   }
 
+  handleAddShoppingWill(id) {
+    return function(e) {
+      let myUnits_ =
+        localStorage.myUnits.length > 0 ? localStorage.myUnits.split(",") : [];
+
+      myUnits_.push(id);
+      const newItem = {
+        email: this.userToken.email,
+        myUnits: myUnits_
+      };
+
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myUnits: myUnits_
+          });
+          localStorage.setItem("myUnits", myUnits_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
+  }
+
+  handleremoveShoppingWill(id) {
+    return function(e) {
+      let myUnits_ = localStorage.myUnits
+        .split(",")
+        .filter(item => item !== id);
+      const newItem = {
+        email: this.userToken.email,
+        myUnits: myUnits_
+      };
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myUnits: myUnits_
+          });
+          localStorage.setItem("myUnits", myUnits_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
+  }
+
   componentDidMount() {
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
@@ -132,6 +195,13 @@ export default class UnitDisplay extends Component {
         }
       })
       .catch(err => console.log("erreur :", err));
+    if (localStorage.myUnits) {
+      let myUnits_ =
+        localStorage.myUnits.length > 0 ? localStorage.myUnits.split(",") : [];
+      this.setState({
+        myUnits: myUnits_
+      });
+    }
   }
 
   render() {
@@ -139,22 +209,77 @@ export default class UnitDisplay extends Component {
 
     if (this.props.data) {
       const unit_uri = getParamConfig("web_url") + "/armee/" + this.props.id;
-
+      const isAdded = Boolean(this.userToken)
+        ? this.state.myUnits.findIndex(el => el === this.props.id)
+        : -1;
       output = (
         <Styled>
           {({ classes }) => (
             <div>
               <Grid container direction="column" justify="flex-start">
                 <Grid key={3} item>
-                  <IconButton
-                    style={{ marginLeft: "90%" }}
-                    id="btExport"
-                    aria-label="Export"
-                    title="Exporter la notice des unités militaires en format TEI"
-                    onClick={this.handleExportClick}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="center"
+                    spacing={1}
                   >
-                    <ExportIcon fontSize="large" />
-                  </IconButton>
+                    <Grid item>
+                      <IconButton
+                        id="btExport"
+                        aria-label="Export"
+                        title="Exporter la notice des unités militaires en format TEI"
+                        onClick={this.handleExportClick}
+                      >
+                        <ExportIcon fontSize="large" />
+                      </IconButton>
+                    </Grid>
+                    <Grid item>
+                      {Boolean(this.userToken) ? (
+                        isAdded === -1 ? (
+                          <Tooltip
+                            title="Ajouter au panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleAddShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Supprimer du panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleremoveShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <RemoveShoppingCartIcon color="action" />
+                            </IconButton>
+                          </Tooltip>
+                        )
+                      ) : (
+                        <Tooltip
+                          title="Connectez-vous pour ajouter ce testament au panier"
+                          arrow="true"
+                        >
+                          <span>
+                            <IconButton aria-label="addShop" disabled>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid key={2} item>
                   <Paper className={classNames(classes.paper)}>
@@ -244,7 +369,7 @@ export default class UnitDisplay extends Component {
                           className={classes.item}
                           primary={
                             <Typography className={classes.item}>
-                              Lien web de cette unité militaire
+                              Permalien :
                             </Typography>
                           }
                         />
@@ -301,7 +426,22 @@ export default class UnitDisplay extends Component {
                                   target="_blank"
                                   className={classNames(classes.urlUnit)}
                                 >
-                                  {hit._source["persName.fullProseForm"]}
+                                  {hit._source[
+                                    "persName.fullIndexEntryForm.forename"
+                                  ]
+                                    .toString()
+                                    .replace(/,/g, " ") + " "}
+                                  <span
+                                    style={{
+                                      fontVariantCaps: "small-caps"
+                                    }}
+                                  >
+                                    {
+                                      hit._source[
+                                        "persName.fullIndexEntryForm.surname"
+                                      ]
+                                    }
+                                  </span>
                                   {death_date.length > 0
                                     ? ", décédé le " +
                                       death_date[0][0] +

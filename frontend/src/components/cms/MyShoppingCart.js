@@ -38,19 +38,17 @@ import {
   DialogContentText,
   DialogActions,
   Snackbar,
-  Grid
+  Grid,
+  NativeSelect
 } from "@material-ui/core";
 
-import NewPost from "./NewPost";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import EditPost from "./EditPost";
 import Menu from "./Menu";
 
 function desc(a, b, orderBy) {
-  if (b._source[orderBy] < a._source[orderBy]) {
+  if (b[orderBy] < a[orderBy]) {
     return -1;
   }
-  if (b._source[orderBy] > a._source[orderBy]) {
+  if (b[orderBy] > a[orderBy]) {
     return 1;
   }
   return 0;
@@ -74,10 +72,30 @@ function getSorting(order, orderBy) {
 
 const headCells = [
   {
-    id: "will_identifier.name",
-    numeric: false,
-    disablePadding: false,
-    label: "Nom de testateur"
+    wills: {
+      id: "value",
+      numeric: false,
+      disablePadding: false,
+      label: "Nom du testateur"
+    },
+    testators: {
+      id: "value",
+      numeric: false,
+      disablePadding: false,
+      label: "Nom"
+    },
+    places: {
+      id: "value",
+      numeric: false,
+      disablePadding: false,
+      label: "Lieu"
+    },
+    units: {
+      id: "value",
+      numeric: false,
+      disablePadding: false,
+      label: "Unité militaire"
+    }
   }
 ];
 
@@ -89,7 +107,8 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort
+    onRequestSort,
+    type
   } = props;
   const createSortHandler = property => event => {
     onRequestSort(event, property);
@@ -108,18 +127,18 @@ function EnhancedTableHead(props) {
         </TableCell>
         {headCells.map(headCell => (
           <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell.id ? order : false}
+            key={headCell[type].id}
+            align={headCell[type].numeric ? "right" : "left"}
+            padding={headCell[type].disablePadding ? "none" : "default"}
+            sortDirection={orderBy === headCell[type].id ? order : false}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
+              active={orderBy === headCell[type].id}
               direction={order}
-              onClick={createSortHandler(headCell.id)}
+              onClick={createSortHandler(headCell[type].id)}
             >
-              {headCell.label}
-              {orderBy === headCell.id ? (
+              {headCell[type].label}
+              {orderBy === headCell[type].id ? (
                 <span className={classes.visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>
@@ -139,7 +158,8 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 const Styled1 = createStyled(theme => ({
@@ -168,7 +188,7 @@ const Styled1 = createStyled(theme => ({
 }));
 
 const EnhancedTableToolbar = props => {
-  const { numSelected, actionButton } = props;
+  const { numSelected, actionButton, selectComponent } = props;
 
   return (
     <Styled1>
@@ -192,7 +212,7 @@ const EnhancedTableToolbar = props => {
             </Typography>
           )}
 
-          {numSelected > 0 ? actionButton : null}
+          {numSelected > 0 ? actionButton : selectComponent}
         </Toolbar>
       )}
     </Styled1>
@@ -201,7 +221,8 @@ const EnhancedTableToolbar = props => {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  actionButton: PropTypes.element.isRequired
+  actionButton: PropTypes.element.isRequired,
+  selectComponent: PropTypes.element.isRequired
 };
 const AlertMessage = props => {
   const { openAlert, handleClose, message } = props;
@@ -278,12 +299,11 @@ export default class MyShoppingCart extends Component {
       selected: [],
       page: 0,
       rowsPerPage: 5,
-      data: [],
-      choice: 2,
+      data: { wills: [], places: [], units: [], testators: [] },
       open: false,
       openAlert: false,
       mess: "",
-      editData: null
+      type: "wills"
     };
     this.userToken = getUserToken();
   }
@@ -299,7 +319,7 @@ export default class MyShoppingCart extends Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = this.state.data.map(n => n["_id"]);
+      const newSelecteds = this.state.data[this.state.type].map(n => n["_id"]);
       this.setState({
         selected: newSelecteds
       });
@@ -346,16 +366,6 @@ export default class MyShoppingCart extends Component {
     });
   };
 
-  handleAddNewPost = event => {
-    this.setState({
-      choice: 0
-    });
-  };
-
-  handleBackToManager = event => {
-    document.location.reload();
-  };
-
   handleRemoveWill = event => {
     this.setState({
       open: true
@@ -370,14 +380,33 @@ export default class MyShoppingCart extends Component {
 
   handleDialogConfirm = event => {
     event.preventDefault();
-    let myWills_ = localStorage.myWills
+    let myBackups = "myWills";
+    switch (this.state.type) {
+      case "wills":
+        myBackups = "myWills";
+        break;
+      case "places":
+        myBackups = "myPlaces";
+        break;
+      case "units":
+        myBackups = "myUnits";
+        break;
+      case "testators":
+        myBackups = "myTestators";
+        break;
+      default:
+        myBackups = "myWills";
+    }
+
+    const myBackups_ = localStorage[myBackups]
       .split(",")
       .filter(item => !this.state.selected.includes(item));
 
-    const newItem = {
-      email: this.userToken.email,
-      myWills: myWills_
+    let newItem = {
+      email: this.userToken.email
     };
+    newItem[myBackups] = myBackups_;
+
     updateMyListWills(newItem).then(res => {
       if (res.status === 200) {
         this.setState({
@@ -385,7 +414,7 @@ export default class MyShoppingCart extends Component {
           openAlert: true,
           mess: "Vos éléments sélectionnés ont été supprimés !"
         });
-        localStorage.setItem("myWills", myWills_);
+        localStorage.setItem(myBackups, myBackups_);
       } else {
         const err = res.err ? res.err : "Connexion au serveur a échoué !";
         this.setState({
@@ -402,8 +431,28 @@ export default class MyShoppingCart extends Component {
   };
 
   handleDisplayWill = id => {
+    let uri_component = "testament";
+    switch (this.state.type) {
+      case "wills":
+        uri_component = "testament";
+        break;
+      case "places":
+        uri_component = "place";
+        break;
+      case "units":
+        uri_component = "armee";
+        break;
+      case "testators":
+        uri_component = "testateur";
+        break;
+      default:
+        uri_component = "testament";
+    }
     return function(e) {
-      window.location.href = getParamConfig("web_url") + "/testament/" + id;
+      window.open(
+        getParamConfig("web_url") + "/" + uri_component + "/" + id,
+        "_blank"
+      );
     };
   };
 
@@ -431,6 +480,13 @@ export default class MyShoppingCart extends Component {
     }
   };
 
+  handleTypeChange = event => {
+    this.setState({
+      type: event.target.value,
+      selectData: this.state.data[event.target.value]
+    });
+  };
+
   componentDidMount() {
     if (localStorage.myWills.length > 0) {
       getHitsFromQuery(
@@ -444,8 +500,99 @@ export default class MyShoppingCart extends Component {
         })
       )
         .then(data => {
+          this.state.data["wills"] = data.map(item => {
+            const output = {
+              _id: item["_id"],
+              value: item._source["will_identifier.name"]
+            };
+            return output;
+          });
           this.setState({
-            data: data
+            data: this.state.data
+          });
+        })
+        .catch(error => {
+          console.log("error :", error);
+        });
+    }
+    if (localStorage.myTestators.length > 0) {
+      getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
+        JSON.stringify({
+          query: {
+            ids: {
+              values: localStorage.myTestators.split(",")
+            }
+          }
+        })
+      )
+        .then(data => {
+          this.state.data["testators"] = data.map(item => {
+            const output = {
+              _id: item["_id"],
+              value: item._source["persName.fullProseForm"]
+            };
+            return output;
+          });
+
+          this.setState({
+            data: this.state.data
+          });
+        })
+        .catch(error => {
+          console.log("error :", error);
+        });
+    }
+    if (localStorage.myPlaces.length > 0) {
+      getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_places"),
+        JSON.stringify({
+          query: {
+            ids: {
+              values: localStorage.myPlaces.split(",")
+            }
+          }
+        })
+      )
+        .then(data => {
+          this.state.data["places"] = data.map(item => {
+            const output = {
+              _id: item["_id"],
+              value: item._source["city"]
+            };
+            return output;
+          });
+
+          this.setState({
+            data: this.state.data
+          });
+        })
+        .catch(error => {
+          console.log("error :", error);
+        });
+    }
+    if (localStorage.myUnits.length > 0) {
+      getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_units"),
+        JSON.stringify({
+          query: {
+            ids: {
+              values: localStorage.myUnits.split(",")
+            }
+          }
+        })
+      )
+        .then(data => {
+          this.state.data["units"] = data.map(item => {
+            const output = {
+              _id: item["_id"],
+              value: item._source["unit"]
+            };
+            return output;
+          });
+
+          this.setState({
+            data: this.state.data
           });
         })
         .catch(error => {
@@ -459,22 +606,27 @@ export default class MyShoppingCart extends Component {
       this.state.rowsPerPage -
       Math.min(
         this.state.rowsPerPage,
-        this.state.data.length - this.state.page * this.state.rowsPerPage
+        this.state.data[this.state.type].length -
+          this.state.page * this.state.rowsPerPage
       );
 
-    const backButton = (
+    const selectComponent = (
       <Styled2>
         {({ classes }) => (
-          <Tooltip title="Retour dans gestion de contenu">
-            <Button
-              variant="contained"
-              onClick={this.handleBackToManager}
-              startIcon={<ArrowBackIcon />}
-              className={classes.backBt}
-            >
-              Gestion de contenu
-            </Button>
-          </Tooltip>
+          <NativeSelect
+            id="type"
+            className={classes.typeSelect}
+            variant="outlined"
+            value={this.state.type}
+            name="type"
+            onChange={this.handleTypeChange}
+          >
+            <option value="wills">Testaments</option>
+            <option value="testators">Testateurs</option>
+            <option value="places">Lieux</option>
+            <option value="units">Unités militaires</option>
+            <option value="searches">Mes recherches</option>
+          </NativeSelect>
         )}
       </Styled2>
     );
@@ -531,6 +683,7 @@ export default class MyShoppingCart extends Component {
               <EnhancedTableToolbar
                 numSelected={this.state.selected.length}
                 actionButton={actionButton}
+                selectComponent={selectComponent}
               />
               <div className={classes.tableWrapper}>
                 <Table
@@ -546,11 +699,12 @@ export default class MyShoppingCart extends Component {
                     orderBy={this.state.orderBy}
                     onSelectAllClick={this.handleSelectAllClick}
                     onRequestSort={this.handleRequestSort}
-                    rowCount={this.state.data.length}
+                    rowCount={this.state.data[this.state.type].length}
+                    type={this.state.type}
                   />
                   <TableBody>
                     {stableSort(
-                      this.state.data,
+                      this.state.data[this.state.type],
                       getSorting(this.state.order, this.state.orderBy)
                     )
                       .slice(
@@ -565,16 +719,18 @@ export default class MyShoppingCart extends Component {
                         return (
                           <TableRow
                             hover
-                            onClick={event =>
-                              this.handleClick(event, row["_id"])
-                            }
-                            role="checkbox"
                             aria-checked={isItemSelected}
                             tabIndex={-1}
                             key={row["_id"]}
                             selected={isItemSelected}
                           >
-                            <TableCell padding="checkbox">
+                            <TableCell
+                              onClick={event =>
+                                this.handleClick(event, row["_id"])
+                              }
+                              role="checkbox"
+                              padding="checkbox"
+                            >
                               <Checkbox
                                 checked={isItemSelected}
                                 inputProps={{ "aria-labelledby": labelId }}
@@ -586,10 +742,7 @@ export default class MyShoppingCart extends Component {
                               scope="row"
                               padding="none"
                             >
-                              {row._source["will_identifier.name"].replace(
-                                "Testament de",
-                                ""
-                              )}
+                              {row.value.replace("Testament de", "")}
                             </TableCell>
 
                             <TableCell align="center">
@@ -616,7 +769,7 @@ export default class MyShoppingCart extends Component {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={this.state.data.length}
+                count={this.state.data[this.state.type].length}
                 rowsPerPage={this.state.rowsPerPage}
                 page={this.state.page}
                 backIconButtonProps={{
@@ -670,28 +823,6 @@ export default class MyShoppingCart extends Component {
       </Styled2>
     );
 
-    switch (this.state.choice) {
-      case 0:
-        this.curView = (
-          <NewPost backButton={backButton} alertMessage={AlertMessage} />
-        );
-        break;
-      case 1:
-        this.curView = (
-          <EditPost
-            backButton={backButton}
-            alertMessage={AlertMessage}
-            data={this.state.editData}
-          />
-        );
-        break;
-      case 2:
-        this.curView = defaultView;
-        break;
-      default:
-        this.curView = defaultView;
-        break;
-    }
-    return this.curView;
+    return defaultView;
   }
 }

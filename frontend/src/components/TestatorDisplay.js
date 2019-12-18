@@ -3,13 +3,25 @@ import {
   createStyled,
   getParamConfig,
   getHitsFromQuery,
-  downloadFile
+  downloadFile,
+  getUserToken,
+  updateMyListWills
 } from "../utils/functions";
-import { Paper, Typography, Grid, Link, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Grid,
+  Link,
+  IconButton,
+  Tooltip,
+  Avatar
+} from "@material-ui/core";
 
 import "../styles/WillDisplay.css";
 import classNames from "classnames";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -25,6 +37,9 @@ const Styled = createStyled(theme => ({
     fontFamily: "-apple-system",
     marginTop: theme.spacing(1),
     fontWeight: 600
+  },
+  typoSurname: {
+    fontVariantCaps: "small-caps"
   },
   text: {
     fontFamily: "-apple-system",
@@ -74,7 +89,8 @@ export default class TestatorDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      wills: []
+      wills: [],
+      myTestators: []
     };
 
     this.months = [
@@ -91,8 +107,10 @@ export default class TestatorDisplay extends Component {
       "novembre",
       "décembre"
     ];
-
+    this.userToken = getUserToken();
     this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
+    this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
   }
 
   handleExportClick() {
@@ -157,6 +175,73 @@ export default class TestatorDisplay extends Component {
         }
       })
       .catch(err => console.log("Erreur :", err));
+
+    if (localStorage.myTestators) {
+      let myTestators_ =
+        localStorage.myTestators.length > 0
+          ? localStorage.myTestators.split(",")
+          : [];
+      this.setState({
+        myTestators: myTestators_
+      });
+    }
+  }
+
+  handleAddShoppingWill(id) {
+    return function(e) {
+      let myTestators_ =
+        localStorage.myTestators.length > 0
+          ? localStorage.myTestators.split(",")
+          : [];
+
+      myTestators_.push(id);
+      const newItem = {
+        email: this.userToken.email,
+        myTestators: myTestators_
+      };
+
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myTestators: myTestators_
+          });
+          localStorage.setItem("myTestators", myTestators_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
+  }
+
+  handleremoveShoppingWill(id) {
+    return function(e) {
+      let myTestators_ = localStorage.myTestators
+        .split(",")
+        .filter(item => item !== id);
+      const newItem = {
+        email: this.userToken.email,
+        myTestators: myTestators_
+      };
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myTestators: myTestators_
+          });
+          localStorage.setItem("myTestators", myTestators_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
   }
 
   render() {
@@ -197,26 +282,100 @@ export default class TestatorDisplay extends Component {
         return will_date;
       });
 
+      const isAdded = Boolean(this.userToken)
+        ? this.state.myTestators.findIndex(el => el === this.props.id)
+        : -1;
+
       output = (
         <Styled>
           {({ classes }) => (
             <div>
               <Grid container direction="column" justify="flex-start">
                 <Grid key={3} item>
-                  <IconButton
-                    style={{ marginLeft: "90%" }}
-                    id="btExport"
-                    aria-label="Export"
-                    title="Exporter la notice des testateurs en format TEI"
-                    onClick={this.handleExportClick}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="center"
+                    spacing={1}
                   >
-                    <ExportIcon fontSize="large" />
-                  </IconButton>
+                    <Grid item>
+                      <IconButton
+                        id="btExport"
+                        aria-label="Export"
+                        title="Exporter la notice des testateurs en format TEI"
+                        onClick={this.handleExportClick}
+                      >
+                        <ExportIcon fontSize="large" />
+                      </IconButton>
+                    </Grid>
+                    <Grid item>
+                      {Boolean(this.userToken) ? (
+                        isAdded === -1 ? (
+                          <Tooltip
+                            title="Ajouter au panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleAddShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Supprimer du panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleremoveShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <RemoveShoppingCartIcon color="action" />
+                            </IconButton>
+                          </Tooltip>
+                        )
+                      ) : (
+                        <Tooltip
+                          title="Connectez-vous pour ajouter ce testament au panier"
+                          arrow="true"
+                        >
+                          <span>
+                            <IconButton aria-label="addShop" disabled>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Grid>
+                  </Grid>
                 </Grid>
+                {Boolean(this.props.data["figure"]) ? (
+                  <Grid key={3} item>
+                    <Avatar
+                      alt="testator"
+                      src={this.props.data["figure"]}
+                      style={{
+                        width: "5em",
+                        height: "5em"
+                      }}
+                    />
+                  </Grid>
+                ) : null}
                 <Grid key={2} item>
                   <Paper className={classNames(classes.paper)}>
                     <Typography className={classes.name}>
-                      {this.props.data["persName.fullProseForm"]}
+                      {this.props.data["persName.fullIndexEntryForm.forename"]
+                        .toString()
+                        .replace(/,/g, " ") + " "}
+                      <span className={classNames(classes.typoSurname)}>
+                        {this.props.data["persName.fullIndexEntryForm.surname"]}
+                      </span>
                       {" ("} {Boolean(birth_date) ? birth_date[2] : ""}
                       {"-"}
                       {death_date.length > 0 ? death_date[0][2] : ""} {")"}
@@ -383,7 +542,7 @@ export default class TestatorDisplay extends Component {
                       spacing={1}
                     >
                       <Grid item>
-                        <Typography> Lien web du poilus : </Typography>
+                        <Typography> Permalien : </Typography>
                       </Grid>
                       <Grid item>
                         <Link
@@ -399,7 +558,7 @@ export default class TestatorDisplay extends Component {
                     {this.state.wills.length > 0 ? (
                       <div>
                         <Typography className={classes.text}>
-                          Ce poilus est l'auteur{" "}
+                          Ce Poilus est l'auteur{" "}
                           {this.state.wills.length > 1
                             ? " des testaments suivants :"
                             : " du testament suivant :"}{" "}
@@ -431,7 +590,7 @@ export default class TestatorDisplay extends Component {
                     ) : (
                       <Typography className={classes.text}>
                         {" "}
-                        Le testament de ce poilu sera accessible prochainement.
+                        Le testament de ce Poilu sera accessible prochainement.
                       </Typography>
                     )}
                   </Paper>

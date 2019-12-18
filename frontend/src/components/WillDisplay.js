@@ -6,7 +6,9 @@ import {
   createElementFromHTML,
   getParamConfig,
   downloadFile,
-  generatePDF
+  generatePDF,
+  getUserToken,
+  updateMyListWills
 } from "../utils/functions";
 import {
   Paper,
@@ -18,7 +20,8 @@ import {
   Link,
   Dialog,
   Menu,
-  MenuItem
+  MenuItem,
+  Tooltip
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
@@ -28,6 +31,8 @@ import "../styles/WillDisplay.css";
 import classNames from "classnames";
 import isEqual from "lodash/isEqual";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -42,6 +47,16 @@ const Styled = createStyled(theme => ({
     fontFamily: "-apple-system",
 
     fontWeight: 600
+  },
+  typoSurname: {
+    fontVariantCaps: "small-caps"
+  },
+  typoText: {
+    fontSize: 16,
+    fontWeight: 500,
+    marginTop: 15,
+    paddingLeft: 20,
+    display: "block"
   },
   title: {
     fontSize: 24,
@@ -116,7 +131,8 @@ export default class WillDisplay extends Component {
       copyLink: null,
       openModal: false,
       anchorEl: null,
-      anchorElMenu: null
+      anchorElMenu: null,
+      myWills: []
     };
 
     this.months = [
@@ -133,6 +149,7 @@ export default class WillDisplay extends Component {
       "novembre",
       "décembre"
     ];
+    this.userToken = getUserToken();
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleExportTEIClick = this.handleExportTEIClick.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
@@ -142,6 +159,8 @@ export default class WillDisplay extends Component {
     this.handleExportClick = this.handleExportClick.bind(this);
     this.handleExportClose = this.handleExportClose.bind(this);
     this.handleExportPDFClick = this.handleExportPDFClick.bind(this);
+    this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
+    this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
   }
 
   handleAlertClose = event => {
@@ -277,6 +296,13 @@ export default class WillDisplay extends Component {
         )
       );
     }
+    if (localStorage.myWills) {
+      let myWills_ =
+        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
+      this.setState({
+        myWills: myWills_
+      });
+    }
   }
 
   handleExportClick(event) {
@@ -289,6 +315,61 @@ export default class WillDisplay extends Component {
     this.setState({
       anchorElMenu: null
     });
+  }
+
+  handleAddShoppingWill(id) {
+    return function(e) {
+      let myWills_ =
+        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
+
+      myWills_.push(id);
+      const newItem = {
+        email: this.userToken.email,
+        myWills: myWills_
+      };
+
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myWills: myWills_
+          });
+          localStorage.setItem("myWills", myWills_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
+  }
+
+  handleremoveShoppingWill(id) {
+    return function(e) {
+      let myWills_ = localStorage.myWills
+        .split(",")
+        .filter(item => item !== id);
+      const newItem = {
+        email: this.userToken.email,
+        myWills: myWills_
+      };
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myWills: myWills_
+          });
+          localStorage.setItem("myWills", myWills_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
   }
 
   componentDidUpdate() {
@@ -390,49 +471,112 @@ export default class WillDisplay extends Component {
         ? will_date.toLocaleDateString().split("/")
         : null;
 
+      const isAdded = Boolean(this.userToken)
+        ? this.state.myWills.findIndex(el => el === this.props.id)
+        : -1;
+
       output = (
         <Styled>
           {({ classes }) => (
             <div>
               <Grid container direction="column" justify="flex-start">
                 <Grid key={3} item>
-                  <IconButton
-                    style={{ marginLeft: "90%" }}
-                    id="btExport"
-                    aria-label="Export"
-                    title="Exporter le testament en format TEI"
-                    onClick={this.handleExportClick}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="center"
+                    spacing={1}
                   >
-                    <ExportIcon fontSize="large" />
-                  </IconButton>
-                  <Menu
-                    id="simple-menu-explor"
-                    anchorEl={this.state.anchorElMenu}
-                    keepMounted
-                    open={Boolean(this.state.anchorElMenu)}
-                    onClose={this.handleExportClose}
-                    elevation={0}
-                    getContentAnchorEl={null}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center"
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center"
-                    }}
-                  >
-                    <MenuItem onClick={this.handleExplorClose}>
-                      <Button id="bt-tei" onClick={this.handleExportTEIClick}>
-                        TEI
-                      </Button>
-                    </MenuItem>
-                    <MenuItem onClick={this.handleExplorClose}>
-                      <Button id="bt-pdf" onClick={this.handleExportPDFClick}>
-                        PDF
-                      </Button>
-                    </MenuItem>
-                  </Menu>
+                    <Grid item>
+                      <IconButton
+                        id="btExport"
+                        aria-label="Export"
+                        title="Exporter le testament en format TEI"
+                        onClick={this.handleExportClick}
+                      >
+                        <ExportIcon />
+                      </IconButton>
+                      <Menu
+                        id="simple-menu-explor"
+                        anchorEl={this.state.anchorElMenu}
+                        keepMounted
+                        open={Boolean(this.state.anchorElMenu)}
+                        onClose={this.handleExportClose}
+                        elevation={0}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center"
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center"
+                        }}
+                      >
+                        <MenuItem onClick={this.handleExplorClose}>
+                          <Button
+                            id="bt-tei"
+                            onClick={this.handleExportTEIClick}
+                          >
+                            TEI
+                          </Button>
+                        </MenuItem>
+                        <MenuItem onClick={this.handleExplorClose}>
+                          <Button
+                            id="bt-pdf"
+                            onClick={this.handleExportPDFClick}
+                          >
+                            PDF
+                          </Button>
+                        </MenuItem>
+                      </Menu>
+                    </Grid>
+                    <Grid item>
+                      {Boolean(this.userToken) ? (
+                        isAdded === -1 ? (
+                          <Tooltip
+                            title="Ajouter au panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleAddShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Supprimer du panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleremoveShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <RemoveShoppingCartIcon color="action" />
+                            </IconButton>
+                          </Tooltip>
+                        )
+                      ) : (
+                        <Tooltip
+                          title="Connectez-vous pour ajouter ce testament au panier"
+                          arrow="true"
+                        >
+                          <span>
+                            <IconButton aria-label="addShop" disabled>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid key={2} item>
                   <Paper>
@@ -450,13 +594,14 @@ export default class WillDisplay extends Component {
                           <Link
                             href={
                               getParamConfig("web_url") +
-                              "/testateur/" +
+                              "/testament/" +
                               this.props.data["testator.ref"]
                             }
-                            target="_blank"
                           >
-                            {" "}
-                            {this.props.data["testator.name"]}{" "}
+                            {this.props.data["testator.forename"] + " "}
+                            <span className={classNames(classes.typoSurname)}>
+                              {this.props.data["testator.surname"]}
+                            </span>
                           </Link>
                         </Typography>
                         <Typography>
@@ -575,7 +720,7 @@ export default class WillDisplay extends Component {
                         </Typography>
                         <Grid container direction="row" spacing={1}>
                           <Grid item>
-                            <Typography> Lien de testament : </Typography>
+                            <Typography> Permalien : </Typography>
                           </Grid>
                           <Grid item>
                             <Link

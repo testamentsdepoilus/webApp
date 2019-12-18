@@ -14,6 +14,7 @@ import GeoMap from "./GeoMap_bis";
 import ResultWills from "./ResultWills";
 import TextSearch from "./TextSearch";
 import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
+import SaveIcon from "@material-ui/icons/SaveOutlined";
 
 // Style button
 const Styled = createStyled(theme => ({
@@ -69,7 +70,7 @@ class Results extends React.Component {
     super(props);
     this.state = {
       curField: "",
-      curOrder: "",
+      curOrder: "asc",
       anchorEl: null
     };
     this.topFunction = this.topFunction.bind(this);
@@ -116,11 +117,11 @@ class Results extends React.Component {
         <Grid container alignItems="baseline" justify="center" direction="row">
           <Grid item xs={6}>
             <div className="main-container">
-              <Grid container direction="row" alignItems="center" spacing={2}>
+              <Grid container direction="row" alignItems="center" spacing={1}>
                 <Grid item xs={8}>
                   <TextSearch />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={2}>
                   <IconButton
                     aria-describedby={id}
                     onClick={this.handleHelpOpen}
@@ -163,43 +164,88 @@ class Results extends React.Component {
                     )}
                   </Styled>
                 </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    aria-describedby="save"
+                    onClick={this.handleSaveSearch}
+                    style={{ cursor: "hand" }}
+                  >
+                    <SaveIcon />
+                  </IconButton>
+                </Grid>
               </Grid>
 
               <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
-              <ReactiveList
-                react={{
-                  and: [
-                    "texte",
-                    "contributeur",
-                    "institution",
-                    "collection",
-                    "date_naissance",
-                    "date_deces",
-                    "date_redaction",
-                    "cote",
-                    "nom_testateur",
-                    "lieu",
-                    "notoriale",
-                    "profession",
-                    "unite",
-                    "checkBox"
-                  ]
-                }}
-                dataField={this.state.curField}
-                sortBy={this.state.curOrder}
-                componentId="searchResult"
-                stream={true}
-                pagination={false}
-                size={15}
-                showResultStats={true}
-                infiniteScroll={true}
-                loader="Loading Results.."
-                renderResultStats={function(stats) {
-                  return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
-                }}
-              >
-                {({ data, error, loading }) => <ResultWills data={data} />}
-              </ReactiveList>
+              {this.state.curField === "" && this.state.curOrder === "" ? (
+                <ReactiveList
+                  react={{
+                    and: [
+                      "texte",
+                      "contributeur",
+                      "institution",
+                      "collection",
+                      "date_naissance",
+                      "date_deces",
+                      "date_redaction",
+                      "cote",
+                      "nom_testateur",
+                      "lieu",
+                      "notoriale",
+                      "profession",
+                      "unite",
+                      "checkBox"
+                    ]
+                  }}
+                  dataField=""
+                  componentId="searchResult"
+                  stream={true}
+                  pagination={false}
+                  size={15}
+                  showResultStats={true}
+                  infiniteScroll={true}
+                  loader="Loading Results.."
+                  renderResultStats={function(stats) {
+                    return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
+                  }}
+                >
+                  {({ data, error, loading }) => <ResultWills data={data} />}
+                </ReactiveList>
+              ) : (
+                <ReactiveList
+                  react={{
+                    and: [
+                      "texte",
+                      "contributeur",
+                      "institution",
+                      "collection",
+                      "date_naissance",
+                      "date_deces",
+                      "date_redaction",
+                      "cote",
+                      "nom_testateur",
+                      "lieu",
+                      "notoriale",
+                      "profession",
+                      "unite",
+                      "checkBox"
+                    ]
+                  }}
+                  dataField={this.state.curField}
+                  sortBy={this.state.curOrder}
+                  componentId="searchResult"
+                  stream={true}
+                  pagination={false}
+                  size={15}
+                  showResultStats={true}
+                  infiniteScroll={true}
+                  loader="Loading Results.."
+                  renderResultStats={function(stats) {
+                    return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
+                  }}
+                >
+                  {({ data, error, loading }) => <ResultWills data={data} />}
+                </ReactiveList>
+              )}
             </div>
           </Grid>
           <Grid item xs={4}>
@@ -249,7 +295,8 @@ class Results extends React.Component {
                   defaultQuery={() => ({
                     _source: [
                       "will_contents.birth_place",
-                      "testator.name",
+                      "testator.forename",
+                      "testator.surname",
                       "testator.ref",
                       "will_contents.death_place",
                       "will_contents.death_date",

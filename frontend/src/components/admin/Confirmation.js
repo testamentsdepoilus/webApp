@@ -3,9 +3,7 @@ import React, { Component } from "react";
 class Confirmation extends Component {
   constructor() {
     super();
-    this.state = {
-      mess: "Un mail de confirmation vous a été envoyé !"
-    };
+    this.state = {};
   }
   componentDidMount() {
     /* const token = localStorage.usertoken;
@@ -21,8 +19,15 @@ class Confirmation extends Component {
   render() {
     return (
       <div>
-        <h1>Confirmation</h1>
-        <h5>{this.state.mess}</h5>
+        <h1>L'e-mail de confirmation a été expédié !</h1>
+        <p>
+          Un mail de confirmation vous a été adressé à{" "}
+          <span style={{ fontWeight: 600 }}>{this.props.email}</span>
+        </p>
+        <p>
+          Vous trouverez dans votre boîte mail un lien cliquable pour activer
+          votre inscription
+        </p>
       </div>
     );
   }

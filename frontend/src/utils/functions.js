@@ -60,15 +60,15 @@ export function readXmlFile(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://127.0.0.1:9200"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
+  config["es_host"] = "http://patrimeph.ensea.fr/es700"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
   config["es_index_wills"] = "tdp_wills";
   config["es_index_cms"] = "tdp_cms";
   config["es_index_user"] = "tdp_users";
   config["es_index_testators"] = "tdp_testators";
   config["es_index_places"] = "tdp_places";
   config["es_index_units"] = "tdp_military_unit";
-  config["web_url"] = "http://127.0.0.1:3000"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-poilus
-  config["web_host"] = "http://127.0.0.1:3005"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
+  config["web_url"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-Poilus
+  config["web_host"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -408,9 +408,20 @@ export const updatePost = async item => {
 export const updateMyListWills = async item => {
   try {
     const host = getParamConfig("web_host");
-    const res = await axios.post(host + "/users/updateMyListWills", {
+    const res = await axios.post(host + "/users/updateMyListWills", item);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const updateConfigMail = async item => {
+  try {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/users/updateConfigMail", {
+      email_root: item.email_root,
       email: item.email,
-      myWills: item.myWills
+      password: item.password
     });
     return res.data;
   } catch (err) {

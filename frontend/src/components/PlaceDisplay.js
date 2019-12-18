@@ -4,13 +4,24 @@ import {
   createStyled,
   getParamConfig,
   getHitsFromQuery,
-  downloadFile
+  downloadFile,
+  getUserToken,
+  updateMyListWills
 } from "../utils/functions";
-import { Paper, Typography, Grid, Link, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Grid,
+  Link,
+  IconButton,
+  Tooltip
+} from "@material-ui/core";
 
 import classNames from "classnames";
 import GeoMap from "../utils/GeoMap";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -83,7 +94,8 @@ export default class PlaceDisplay extends Component {
       birth_hits: {},
       death_hits: {},
       residence_hits: {},
-      place_id: this.props.id
+      place_id: this.props.id,
+      myPlaces: []
     };
 
     this.months = [
@@ -100,7 +112,10 @@ export default class PlaceDisplay extends Component {
       "novembre",
       "décembre"
     ];
+    this.userToken = getUserToken();
     this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
+    this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
   }
 
   handleExportClick() {
@@ -109,6 +124,63 @@ export default class PlaceDisplay extends Component {
         "/files/contextualEntity_place_2019-11-06_03-28-52.xml",
       "notice_place.xml"
     );
+  }
+
+  handleAddShoppingWill(id) {
+    return function(e) {
+      let myPlaces_ =
+        localStorage.myPlaces.length > 0
+          ? localStorage.myPlaces.split(",")
+          : [];
+
+      myPlaces_.push(id);
+      const newItem = {
+        email: this.userToken.email,
+        myPlaces: myPlaces_
+      };
+
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myPlaces: myPlaces_
+          });
+          localStorage.setItem("myPlaces", myPlaces_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
+  }
+
+  handleremoveShoppingWill(id) {
+    return function(e) {
+      let myPlaces_ = localStorage.myPlaces
+        .split(",")
+        .filter(item => item !== id);
+      const newItem = {
+        email: this.userToken.email,
+        myPlaces: myPlaces_
+      };
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            message: res.mess,
+            myPlaces: myPlaces_
+          });
+          localStorage.setItem("myPlaces", myPlaces_);
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          this.setState({
+            message: err
+          });
+        }
+      });
+    }.bind(this);
   }
 
   componentDidUpdate() {
@@ -375,27 +447,93 @@ export default class PlaceDisplay extends Component {
         }
       })
       .catch(err => console.log("erreur :", err));
+
+    if (localStorage.myPlaces) {
+      let myPlaces_ =
+        localStorage.myPlaces.length > 0
+          ? localStorage.myPlaces.split(",")
+          : [];
+      this.setState({
+        myPlaces: myPlaces_
+      });
+    }
   }
 
   render() {
     let output = null;
     if (this.props.data) {
       const place_uri = getParamConfig("web_url") + "/place/" + this.props.id;
+      const isAdded = Boolean(this.userToken)
+        ? this.state.myPlaces.findIndex(el => el === this.props.id)
+        : -1;
       output = (
         <Styled>
           {({ classes }) => (
             <div>
               <Grid container direction="column" justify="flex-start">
                 <Grid key={3} item>
-                  <IconButton
-                    style={{ marginLeft: "90%" }}
-                    id="btExport"
-                    aria-label="Export"
-                    title="Exporter la notice des lieux en format TEI"
-                    onClick={this.handleExportClick}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="center"
+                    spacing={1}
                   >
-                    <ExportIcon fontSize="large" />
-                  </IconButton>
+                    <Grid item>
+                      <IconButton
+                        id="btExport"
+                        aria-label="Export"
+                        title="Exporter la notice des lieux en format TEI"
+                        onClick={this.handleExportClick}
+                      >
+                        <ExportIcon fontSize="large" />
+                      </IconButton>
+                    </Grid>
+                    <Grid item>
+                      {Boolean(this.userToken) ? (
+                        isAdded === -1 ? (
+                          <Tooltip
+                            title="Ajouter au panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleAddShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Supprimer du panier"
+                            placement="bottom"
+                            style={{ cursor: "hand" }}
+                          >
+                            <IconButton
+                              onClick={this.handleremoveShoppingWill(
+                                this.props.id
+                              )}
+                            >
+                              <RemoveShoppingCartIcon color="action" />
+                            </IconButton>
+                          </Tooltip>
+                        )
+                      ) : (
+                        <Tooltip
+                          title="Connectez-vous pour ajouter ce testament au panier"
+                          arrow="true"
+                        >
+                          <span>
+                            <IconButton aria-label="addShop" disabled>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid key={2} item>
                   <div className={classes.root}>
@@ -437,7 +575,7 @@ export default class PlaceDisplay extends Component {
                             spacing={1}
                           >
                             <Grid item>
-                              <Typography> Lien web du lieu : </Typography>
+                              <Typography> Permalien : </Typography>
                             </Grid>
                             <Grid item>
                               <Link
@@ -455,8 +593,8 @@ export default class PlaceDisplay extends Component {
                               <Typography className={classes.text}>
                                 Le lieu de naissance
                                 {this.state.birth_hits["testators"].length > 1
-                                  ? " des poilus suivants :"
-                                  : " du poilus suivant :"}{" "}
+                                  ? " des Poilus suivants :"
+                                  : " du Poilu suivant :"}{" "}
                               </Typography>
                               <ul>
                                 {this.state.birth_hits["testators"].map(
@@ -471,7 +609,7 @@ export default class PlaceDisplay extends Component {
                                       ? date.toLocaleDateString().split("/")
                                       : null;
 
-                                    const will = Boolean(
+                                    /*const will = Boolean(
                                       this.state.birth_hits["wills"]
                                     )
                                       ? this.state.birth_hits["wills"].find(
@@ -479,49 +617,43 @@ export default class PlaceDisplay extends Component {
                                             item._source["testator.ref"] ===
                                             hit._id
                                         )
-                                      : null;
+                                      : null;*/
                                     return (
                                       <li key={i} className={classes.text}>
-                                        {Boolean(will) ? (
-                                          <Link
-                                            href={
-                                              getParamConfig("web_url") +
-                                              "/testament/" +
-                                              will["_id"]
-                                            }
-                                            target="_blank"
+                                        <Link
+                                          href={
+                                            getParamConfig("web_url") +
+                                            "/testateur/" +
+                                            hit._id
+                                          }
+                                          target="_blank"
+                                        >
+                                          {hit._source[
+                                            "persName.fullIndexEntryForm.forename"
+                                          ]
+                                            .toString()
+                                            .replace(/,/g, " ") + " "}
+                                          <span
+                                            style={{
+                                              fontVariantCaps: "small-caps"
+                                            }}
                                           >
                                             {
                                               hit._source[
-                                                "persName.fullProseForm"
+                                                "persName.fullIndexEntryForm.surname"
                                               ]
                                             }
-                                            {Boolean(date)
-                                              ? ", né le " +
-                                                date[0] +
-                                                " " +
-                                                this.months[date[1] - 1] +
-                                                " " +
-                                                date[2]
-                                              : " "}
-                                          </Link>
-                                        ) : (
-                                          <Typography>
-                                            {
-                                              hit._source[
-                                                "persName.fullProseForm"
-                                              ]
-                                            }
-                                            {Boolean(date)
-                                              ? ", né le " +
-                                                date[0] +
-                                                " " +
-                                                this.months[date[1] - 1] +
-                                                " " +
-                                                date[2]
-                                              : " "}
-                                          </Typography>
-                                        )}
+                                          </span>
+
+                                          {Boolean(date)
+                                            ? ", né le " +
+                                              date[0] +
+                                              " " +
+                                              this.months[date[1] - 1] +
+                                              " " +
+                                              date[2]
+                                            : " "}
+                                        </Link>
                                       </li>
                                     );
                                   }
@@ -537,14 +669,14 @@ export default class PlaceDisplay extends Component {
                                 Le lieu de résidence
                                 {this.state.residence_hits["testators"].length >
                                 1
-                                  ? " des poilus suivants :"
-                                  : " du poilus suivant :"}{" "}
+                                  ? " des Poilus suivants :"
+                                  : " du Poilu suivant :"}{" "}
                               </Typography>
 
                               <ul>
                                 {this.state.residence_hits["testators"].map(
                                   (hit, i) => {
-                                    const will = Boolean(
+                                    /*const will = Boolean(
                                       this.state.residence_hits["wills"]
                                     )
                                       ? this.state.residence_hits["wills"].find(
@@ -552,33 +684,34 @@ export default class PlaceDisplay extends Component {
                                             item._source["testator.ref"] ===
                                             hit._id
                                         )
-                                      : null;
+                                      : null;*/
                                     return (
                                       <li key={i} className={classes.text}>
-                                        {Boolean(will) ? (
-                                          <Link
-                                            href={
-                                              getParamConfig("web_url") +
-                                              "/testament/" +
-                                              will["_id"]
-                                            }
-                                            target="_blank"
+                                        <Link
+                                          href={
+                                            getParamConfig("web_url") +
+                                            "/testateur/" +
+                                            hit["_id"]
+                                          }
+                                          target="_blank"
+                                        >
+                                          {hit._source[
+                                            "persName.fullIndexEntryForm.forename"
+                                          ]
+                                            .toString()
+                                            .replace(/,/g, " ") + " "}
+                                          <span
+                                            style={{
+                                              fontVariantCaps: "small-caps"
+                                            }}
                                           >
                                             {
                                               hit._source[
-                                                "persName.fullProseForm"
+                                                "persName.fullIndexEntryForm.surname"
                                               ]
                                             }
-                                          </Link>
-                                        ) : (
-                                          <Typography>
-                                            {
-                                              hit._source[
-                                                "persName.fullProseForm"
-                                              ]
-                                            }
-                                          </Typography>
-                                        )}
+                                          </span>
+                                        </Link>
                                       </li>
                                     );
                                   }
@@ -593,8 +726,8 @@ export default class PlaceDisplay extends Component {
                               <Typography className={classes.text}>
                                 Le lieu de décès
                                 {this.state.death_hits["testators"].length > 1
-                                  ? " des poilus suivants :"
-                                  : " du poilus suivant :"}{" "}
+                                  ? " des Poilus suivants :"
+                                  : " du Poilu suivant :"}{" "}
                               </Typography>
 
                               <ul>
@@ -624,7 +757,7 @@ export default class PlaceDisplay extends Component {
                                       }
                                     }
 
-                                    const will = Boolean(
+                                    /*const will = Boolean(
                                       this.state.death_hits["wills"]
                                     )
                                       ? this.state.death_hits["wills"].find(
@@ -632,73 +765,54 @@ export default class PlaceDisplay extends Component {
                                             item._source["testator.ref"] ===
                                             hit._id
                                         )
-                                      : null;
+                                      : null;*/
                                     return (
                                       <li key={i} className={classes.text}>
-                                        {Boolean(will) ? (
-                                          <Link
-                                            href={
-                                              getParamConfig("web_url") +
-                                              "/testament/" +
-                                              will["_id"]
-                                            }
-                                            target="_blank"
+                                        <Link
+                                          href={
+                                            getParamConfig("web_url") +
+                                            "/testateur/" +
+                                            hit["_id"]
+                                          }
+                                          target="_blank"
+                                        >
+                                          {hit._source[
+                                            "persName.fullIndexEntryForm.forename"
+                                          ]
+                                            .toString()
+                                            .replace(/,/g, " ") + " "}
+                                          <span
+                                            style={{
+                                              fontVariantCaps: "small-caps"
+                                            }}
                                           >
                                             {
                                               hit._source[
-                                                "persName.fullProseForm"
+                                                "persName.fullIndexEntryForm.surname"
                                               ]
                                             }
-                                            {death_date.length > 0
-                                              ? ", décédé le " +
-                                                death_date[0][0] +
-                                                " " +
-                                                this.months[
-                                                  death_date[0][1] - 1
-                                                ] +
-                                                " " +
-                                                death_date[0][2]
-                                              : ""}{" "}
-                                            {death_date.length === 2
-                                              ? " ou le " +
-                                                death_date[1][0] +
-                                                " " +
-                                                this.months[
-                                                  death_date[1][1] - 1
-                                                ] +
-                                                " " +
-                                                death_date[1][2]
-                                              : ""}
-                                          </Link>
-                                        ) : (
-                                          <Typography>
-                                            {
-                                              hit._source[
-                                                "persName.fullProseForm"
-                                              ]
-                                            }
-                                            {death_date.length > 0
-                                              ? ", décédé le " +
-                                                death_date[0][0] +
-                                                " " +
-                                                this.months[
-                                                  death_date[0][1] - 1
-                                                ] +
-                                                " " +
-                                                death_date[0][2]
-                                              : ""}{" "}
-                                            {death_date.length === 2
-                                              ? " ou le " +
-                                                death_date[1][0] +
-                                                " " +
-                                                this.months[
-                                                  death_date[1][1] - 1
-                                                ] +
-                                                " " +
-                                                death_date[1][2]
-                                              : ""}{" "}
-                                          </Typography>
-                                        )}
+                                          </span>
+                                          {death_date.length > 0
+                                            ? ", décédé le " +
+                                              death_date[0][0] +
+                                              " " +
+                                              this.months[
+                                                death_date[0][1] - 1
+                                              ] +
+                                              " " +
+                                              death_date[0][2]
+                                            : ""}{" "}
+                                          {death_date.length === 2
+                                            ? " ou le " +
+                                              death_date[1][0] +
+                                              " " +
+                                              this.months[
+                                                death_date[1][1] - 1
+                                              ] +
+                                              " " +
+                                              death_date[1][2]
+                                            : ""}
+                                        </Link>
                                       </li>
                                     );
                                   }

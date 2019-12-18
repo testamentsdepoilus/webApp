@@ -164,7 +164,10 @@ export default class ResultWills extends React.Component {
     return function(e) {
       let myWills_ =
         localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
+
+      console.log("myWills_ :", myWills_);
       myWills_.push(id);
+      console.log("myWills_ :", myWills_);
       const newItem = {
         email: this.userToken.email,
         myWills: myWills_
@@ -321,9 +324,10 @@ export default class ResultWills extends React.Component {
 
   componentDidMount() {
     if (localStorage.myWills) {
+      let myWills_ =
+        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
       this.setState({
-        myWills:
-          localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : []
+        myWills: myWills_
       });
     }
   }
@@ -405,8 +409,19 @@ export default class ResultWills extends React.Component {
         ? new Date(item["will_contents.will_date"])
         : null;
       will_date = Boolean(will_date) ? will_date.toLocaleDateString() : null;
-      let title_testator = "Testament de " + item["testator.name"];
-      title_testator += Boolean(will_date) ? " rédigé le " + will_date : "";
+      let title_testator = (
+        <p>
+          Testament de {" " + item["testator.forename"]}{" "}
+          <span style={{ fontVariantCaps: "small-caps" }}>
+            {item["testator.surname"]}
+          </span>
+          <span> {Boolean(will_date) ? " rédigé le " + will_date : ""} </span>
+        </p>
+      );
+
+      /* title_testator += (
+        <span> Boolean(will_date) ? " rédigé le " + will_date : ""; </span>
+      );*/
       return (
         <Styled key={j}>
           {({ classes }) => (
@@ -501,7 +516,7 @@ export default class ResultWills extends React.Component {
                             ) : (
                               <Tooltip
                                 title="Connectez-vous pour ajouter ce testament au panier"
-                                arrow
+                                arrow="true"
                               >
                                 <span>
                                   <IconButton aria-label="addShop" disabled>

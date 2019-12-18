@@ -11,24 +11,42 @@ import {
   DialogTitle,
   DialogContent
 } from "@material-ui/core";
-import { createStyled, register, getParamConfig } from "../../utils/functions";
+import {
+  createStyled,
+  register,
+  getParamConfig,
+  getUserToken,
+  updateConfigMail
+} from "../../utils/functions";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
-import Confirmation from "./Confirmation";
+import Menu from "./Menu";
 
 const Styled = createStyled(theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing(2)
+  },
   paper: {
     marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
+  header: {
+    display: "flex",
+    color: "#0d47a1",
+    fontSize: 24,
+    fontWeight: 600,
+    fontFamily: "-apple-system",
+    margin: theme.spacing(2, 0, 3)
+  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "33%", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
   },
   textField: {
@@ -58,17 +76,16 @@ const Styled = createStyled(theme => ({
   }
 }));
 
-class Register extends Component {
+class ConfigMail extends Component {
   constructor() {
     super();
     this.state = {
-      user_name: "",
       email: "",
       password: "",
       passConfirme: "",
       showPassword: false,
       error: "",
-      isError: [false, false, false, false],
+      isError: [false, false, false],
       open: false
     };
     this.onChange = this.onChange.bind(this);
@@ -91,31 +108,33 @@ class Register extends Component {
   };
 
   handleClose() {
-    window.location.replace(getParamConfig("web_url") + "/login");
+    this.setState({
+      open: false
+    });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    if (this.state.user_name && this.state.email) {
+    if (this.state.email) {
       if (!this.state.password) {
         this.setState({
           error: "Saisissez votre mot de passe !",
-          isError: [false, false, true, true]
+          isError: [false, true, true]
         });
       } else if (this.state.password !== this.state.passConfirme) {
         this.setState({
           error: "Les mots de passe saisies ne sont pas identiques",
-          isError: [false, false, true, true]
+          isError: [false, true, true]
         });
       } else {
-        const user = {
-          user_name: this.state.user_name,
+        const myToken = getUserToken();
+        const auth = {
+          email_root: myToken.email,
           email: this.state.email,
           password: this.state.password
         };
-        register(user).then(res => {
+        updateConfigMail(auth).then(res => {
           if (res.status === 200) {
-            //document.location.reload(true);
             this.setState({
               open: true
             });
@@ -127,20 +146,10 @@ class Register extends Component {
           }
         });
       }
-    } else if (!this.state.user_name && !this.state.email) {
-      this.setState({
-        error: "Saisissez votre pseudo et votre adresse e-mail !",
-        isError: [true, true, false, false]
-      });
-    } else if (!this.state.user_name) {
-      this.setState({
-        error: "Saisissez votre pseudo !",
-        isError: [true, false, false, false]
-      });
-    } else {
+    } else if (!this.state.email) {
       this.setState({
         error: "Saisissez votre adresse e-mail !",
-        isError: [false, true, false, false]
+        isError: [true, false, false]
       });
     }
   }
@@ -149,27 +158,18 @@ class Register extends Component {
     return (
       <Styled>
         {({ classes }) => (
-          <Container component="main" maxWidth="xs">
+          <div className={classes.root}>
+            <Menu />
             <div className={classes.paper}>
+              <Typography className={classes.header} id="postTitle">
+                Configurer le serveur d'envoie du mail aux utilisateurs
+              </Typography>
               <form
                 className={classes.form}
                 noValidate
                 onSubmit={this.onSubmit}
                 autoComplete="off"
               >
-                <TextField
-                  id="standard-userName-input"
-                  variant="outlined"
-                  className={classes.textField}
-                  required
-                  fullWidth
-                  autoFocus
-                  label="Mon pseudo"
-                  name="user_name"
-                  onChange={this.onChange}
-                  value={this.state.user_name}
-                  error={this.state.isError[0]}
-                />
                 <TextField
                   id="standard-email-input"
                   variant="outlined"
@@ -243,7 +243,7 @@ class Register extends Component {
                   className={classes.submit}
                   type="submit"
                 >
-                  S'inscrire
+                  Mettre à jour
                 </Button>
               </form>
               {this.state.error ? (
@@ -270,15 +270,15 @@ class Register extends Component {
                 </DialogTitle>
 
                 <DialogContent>
-                  <Confirmation email={this.state.email} />
+                  <h5> Votre configuration a été bien mis à jour !</h5>
                 </DialogContent>
               </Dialog>
             </div>
-          </Container>
+          </div>
         )}
       </Styled>
     );
   }
 }
 
-export default Register;
+export default ConfigMail;
