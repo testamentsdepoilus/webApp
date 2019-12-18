@@ -25,7 +25,7 @@ import ConfigMail from "./components/cms/ConfigMail";
 
 function App() {
   return (
-    <BrowserRouter basename="/testaments-de-Poilus">
+    <BrowserRouter basename="/testaments-de-poilus">
       <div className="App">
         <Navbar />
         <Route exact path="/" component={Home} />

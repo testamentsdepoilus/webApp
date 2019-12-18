@@ -23,13 +23,10 @@ router.use(morgan("combined"));
 
 const simpleCrypto = new SimpleCrypto(process.env.SECRET_KEY);
 const { Client } = require("@elastic/elasticsearch");
-const client = new Client({ node: process.env.host_es }); //http://patrimeph.ensea.fr/es700
+const client = new Client({ node: process.env.host_es });
 const indexES = process.env.index_users;
 
-let auth = {
-  email: "elmahdi.sadouni@ensea.fr",
-  password: simpleCrypto.encrypt("Mehdi@2008")
-};
+let auth = {};
 client.search(
   {
     index: indexES,
