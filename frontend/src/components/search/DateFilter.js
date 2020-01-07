@@ -55,7 +55,7 @@ class DateFilter extends React.Component {
     const open = Boolean(this.state.anchorEl);
     const id = open ? "transitions-popper" : undefined;
     return (
-      <ExpansionPanel>
+      <ExpansionPanel defaultExpanded>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"

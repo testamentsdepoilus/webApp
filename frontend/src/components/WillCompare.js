@@ -90,7 +90,7 @@ function createPageMenu(pages, idx, handleClick) {
             color="inherit"
             onClick={handleClick}
             className={
-              parseInt(idx) === i
+              parseInt(idx, 10) === i
                 ? classNames(classes.typography, classes.selectedLink)
                 : classNames(classes.linkPage, classes.typography)
             }

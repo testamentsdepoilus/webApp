@@ -4,7 +4,7 @@ import {
   Link,
   Breadcrumbs,
   Button,
-  Menu as Menu_ui,
+  Menu as MenuUi,
   MenuItem
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -131,7 +131,7 @@ class Menu extends Component {
                   Administration
                   <ExpandMoreIcon className={classNames(classes.icon)} />
                 </Button>
-                <Menu_ui
+                <MenuUi
                   id="simple-menu-explor"
                   anchorEl={this.state.anchorElExplor}
                   keepMounted
@@ -178,7 +178,7 @@ class Menu extends Component {
                       Configuration
                     </Link>
                   </MenuItem>
-                </Menu_ui>
+                </MenuUi>
               </div>
             ) : null}
           </Breadcrumbs>

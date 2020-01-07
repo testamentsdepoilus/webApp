@@ -46,7 +46,6 @@ client.search(
           hit._source["isAdmin"] === true && Boolean(hit._source["auth_config"])
         );
       });
-
       if (admin.length > 0) {
         auth = admin[0]._source["auth_config"];
       }
@@ -64,15 +63,16 @@ router.post("/register", function(req, res, next) {
     email: req.body.email,
     password: req.body.password,
     created: today,
-    confirmed: true,
-    isAdmin: true,
-    myWills: [],
-    myTestators: [],
-    myPlaces: [],
-    myUnits: [],
-    mySearch: []
+    confirmed: false,
+    isAdmin: false,
+    myBackups: {
+      myWills: [],
+      myTestators: [],
+      myPlaces: [],
+      myUnits: [],
+      mySearches: []
+    }
   };
-
   client.search(
     {
       index: indexES,
@@ -100,7 +100,7 @@ router.post("/register", function(req, res, next) {
               let emailToken = jwt.sign(userData, process.env.SECRET_KEY, {
                 expiresIn: "1d"
               });
-
+              console.log("auth :", auth);
               if (typeof auth === "object" && Object.keys(auth).length > 0) {
                 let transporter = nodemailer.createTransport(
                   smtpTransport({
@@ -273,8 +273,8 @@ router.get("/confirmation/:token", async (req, res) => {
           res.json({ status: 400, error: "Connexion au serveur a échoué !" });
         } else {
           hits = result.body.hits.hits;
-
           if (hits.length === 1) {
+            let isFailed = false;
             client.update({
               index: indexES,
               id: hits[0]._id,
@@ -284,18 +284,20 @@ router.get("/confirmation/:token", async (req, res) => {
                 }
               }
             }),
-              (err, result) => {
+              err => {
                 if (err) {
-                  console.log();
-                  res.send({
-                    status: 400,
-                    err: "ES Connexion au serveur a échoué !" + err
-                  });
-                } else {
-                  console.log(process.env.web_host + "/testaments-de-poilus");
-                  res.redirect(process.env.web_host + "/testaments-de-poilus");
+                  isFailed = true;
                 }
               };
+            if (isFailed) {
+              res.send({
+                status: 400,
+                err: "ES Connexion au serveur a échoué !" + err
+              });
+            } else {
+              console.log(" redirect ok");
+              res.redirect("http://patrimeph.ensea.fr/testaments-de-poilus");
+            }
           }
         }
       }
@@ -308,7 +310,6 @@ router.get("/confirmation/:token", async (req, res) => {
 /* POST update  */
 router.post("/updateMyListWills", function(req, res, next) {
   let data = {};
-  console.log("Object.keys(req.body)[1] :", Object.keys(req.body)[1]);
   switch (Object.keys(req.body)[1]) {
     case "myWills":
       data = { myWills: req.body.myWills };
@@ -322,11 +323,16 @@ router.post("/updateMyListWills", function(req, res, next) {
     case "myUnits":
       data = { myUnits: req.body.myUnits };
       break;
+    case "mySearches":
+      data = { mySearches: req.body.mySearches };
+      break;
+    case "myBackups":
+      data = { myBackups: req.body.myBackups };
+      break;
     default:
       break;
   }
 
-  console.log("data :", data);
   client.search(
     {
       index: indexES,
@@ -347,7 +353,6 @@ router.post("/updateMyListWills", function(req, res, next) {
       } else {
         hits = result.body.hits.hits;
 
-        console.log("hits :", hits);
         if (hits.length > 0) {
           let isFailed = false;
           client.update({

@@ -128,30 +128,21 @@ export default class PlaceDisplay extends Component {
 
   handleAddShoppingWill(id) {
     return function(e) {
-      let myPlaces_ =
-        localStorage.myPlaces.length > 0
-          ? localStorage.myPlaces.split(",")
-          : [];
-
+      let myPlaces_ = this.state.myPlaces;
       myPlaces_.push(id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myPlaces"] = myPlaces_;
       const newItem = {
         email: this.userToken.email,
-        myPlaces: myPlaces_
+        myBackups: myBackups_
       };
 
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myPlaces: myPlaces_
           });
-          localStorage.setItem("myPlaces", myPlaces_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -159,25 +150,19 @@ export default class PlaceDisplay extends Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let myPlaces_ = localStorage.myPlaces
-        .split(",")
-        .filter(item => item !== id);
+      let myPlaces_ = this.state.myPlaces.filter(item => item !== id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myPlaces"] = myPlaces_;
       const newItem = {
         email: this.userToken.email,
-        myPlaces: myPlaces_
+        myBackups: myBackups_
       };
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myPlaces: myPlaces_
           });
-          localStorage.setItem("myPlaces", myPlaces_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -448,11 +433,11 @@ export default class PlaceDisplay extends Component {
       })
       .catch(err => console.log("erreur :", err));
 
-    if (localStorage.myPlaces) {
-      let myPlaces_ =
-        localStorage.myPlaces.length > 0
-          ? localStorage.myPlaces.split(",")
-          : [];
+    if (localStorage.myBackups) {
+      const myBackups_ = JSON.parse(localStorage.myBackups);
+      let myPlaces_ = Boolean(myBackups_["myPlaces"])
+        ? myBackups_["myPlaces"]
+        : [];
       this.setState({
         myPlaces: myPlaces_
       });

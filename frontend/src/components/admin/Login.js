@@ -9,7 +9,13 @@ import {
   IconButton
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { createStyled, login, getUserToken } from "../../utils/functions";
+import {
+  createStyled,
+  login,
+  getUserToken,
+  getHitsFromQuery,
+  getParamConfig
+} from "../../utils/functions";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -91,11 +97,30 @@ class Login extends Component {
         if (res.status === 200) {
           localStorage.setItem("usertoken", res.res);
           const myToken = getUserToken();
-          localStorage.setItem("myWills", myToken.myWills);
-          localStorage.setItem("myTestators", myToken.myTestators);
-          localStorage.setItem("myPlaces", myToken.myPlaces);
-          localStorage.setItem("myUnits", myToken.myUnits);
-          document.location.reload(true);
+          console.log("myToken :", myToken.email);
+          getHitsFromQuery(
+            getParamConfig("es_host") + "/" + getParamConfig("es_index_user"),
+            JSON.stringify({
+              query: {
+                match: {
+                  email: {
+                    query: myToken.email,
+                    operator: "and"
+                  }
+                }
+              }
+            })
+          )
+            .then(data => {
+              localStorage.setItem(
+                "myBackups",
+                JSON.stringify(data[0]._source["myBackups"])
+              );
+              document.location.reload(true);
+            })
+            .catch(error => {
+              console.log("error :", error);
+            });
         } else {
           const err = res.error ? res.error : "Connexion au serveur a échoué !";
 

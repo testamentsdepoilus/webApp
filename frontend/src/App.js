@@ -47,7 +47,7 @@ function App() {
         <Route exact path="/espace" component={MySpace} />
         <Route exact path="/espace/profile" component={Profile} />
         <Route exact path="/espace/panier" component={MyShoppingCart} />
-        <Route exact path="/espace/cms" component={Manage} />
+        <Route path="/espace/cms" component={Manage} />
         <Route exact path="/espace/config" component={ConfigMail} />
         <Route path="/compare" component={Compare} />
       </div>

@@ -296,9 +296,11 @@ export default class WillDisplay extends Component {
         )
       );
     }
-    if (localStorage.myWills) {
-      let myWills_ =
-        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
+    if (localStorage.myBackups) {
+      const myBackups_ = JSON.parse(localStorage.myBackups);
+      let myWills_ = Boolean(myBackups_["myWills"])
+        ? myBackups_["myWills"]
+        : [];
       this.setState({
         myWills: myWills_
       });
@@ -319,28 +321,21 @@ export default class WillDisplay extends Component {
 
   handleAddShoppingWill(id) {
     return function(e) {
-      let myWills_ =
-        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
-
+      let myWills_ = this.state.myWills;
       myWills_.push(id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myWills: myWills_
+        myBackups: myBackups_
       };
 
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myWills: myWills_
           });
-          localStorage.setItem("myWills", myWills_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -348,25 +343,19 @@ export default class WillDisplay extends Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let myWills_ = localStorage.myWills
-        .split(",")
-        .filter(item => item !== id);
+      let myWills_ = this.state.myWills.filter(item => item !== id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myWills: myWills_
+        myBackups: myBackups_
       };
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myWills: myWills_
           });
-          localStorage.setItem("myWills", myWills_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -594,7 +583,7 @@ export default class WillDisplay extends Component {
                           <Link
                             href={
                               getParamConfig("web_url") +
-                              "/testament/" +
+                              "/testateur/" +
                               this.props.data["testator.ref"]
                             }
                           >
@@ -843,7 +832,7 @@ export default class WillDisplay extends Component {
                     spacing={1}
                   >
                     <Grid item>
-                      <Typography> Lien de testament : </Typography>
+                      <Typography> Permalien : </Typography>
                     </Grid>
                     <Grid item xs>
                       <TextField

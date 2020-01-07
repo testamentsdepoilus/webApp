@@ -176,11 +176,11 @@ export default class TestatorDisplay extends Component {
       })
       .catch(err => console.log("Erreur :", err));
 
-    if (localStorage.myTestators) {
-      let myTestators_ =
-        localStorage.myTestators.length > 0
-          ? localStorage.myTestators.split(",")
-          : [];
+    if (localStorage.myBackups) {
+      const myBackups_ = JSON.parse(localStorage.myBackups);
+      let myTestators_ = Boolean(myBackups_["myTestators"])
+        ? myBackups_["myTestators"]
+        : [];
       this.setState({
         myTestators: myTestators_
       });
@@ -189,30 +189,21 @@ export default class TestatorDisplay extends Component {
 
   handleAddShoppingWill(id) {
     return function(e) {
-      let myTestators_ =
-        localStorage.myTestators.length > 0
-          ? localStorage.myTestators.split(",")
-          : [];
-
+      let myTestators_ = this.state.myTestators;
       myTestators_.push(id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myTestators"] = myTestators_;
       const newItem = {
         email: this.userToken.email,
-        myTestators: myTestators_
+        myBackups: myBackups_
       };
 
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myTestators: myTestators_
           });
-          localStorage.setItem("myTestators", myTestators_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -220,25 +211,19 @@ export default class TestatorDisplay extends Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let myTestators_ = localStorage.myTestators
-        .split(",")
-        .filter(item => item !== id);
+      let myTestators_ = this.state.myTestators.filter(item => item !== id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myTestators"] = myTestators_;
       const newItem = {
         email: this.userToken.email,
-        myTestators: myTestators_
+        myBackups: myBackups_
       };
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myTestators: myTestators_
           });
-          localStorage.setItem("myTestators", myTestators_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);

@@ -111,7 +111,7 @@ export default class NewPost extends Component {
       label: null,
       in_image: null,
       url_image: "",
-      type: 1,
+      type: props.type,
       author: "",
       message: "",
       openAlert: false,
@@ -188,8 +188,10 @@ export default class NewPost extends Component {
         title: this.state.title,
         summary: Boolean(found_resume) ? draftToHtml(resume_raw) : "",
         detail: Boolean(found_detail) ? draftToHtml(detail_raw) : "",
-        type: this.state.type,
-        author: this.state.author
+        type: parseInt(this.state.type, 10),
+        author: this.state.author,
+        selected: false,
+        created: new Date()
       };
 
       publish(item).then(res => {

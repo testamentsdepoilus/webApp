@@ -152,13 +152,13 @@ export default class CustumerDataSearch extends Component {
                 dataField="testator.occupation.keyword"
                 size={1000}
                 sortBy="asc"
-                showCount={false}
+                showCount={true}
                 autosuggest={true}
                 placeholder="Profession"
                 URLParams={true}
                 loader="En chargement ..."
                 showSearch={true}
-                searchPlaceholder="Taper le cote ici"
+                searchPlaceholder="Taper la profession ici"
                 innerClass={{
                   list: "list"
                 }}
@@ -193,7 +193,7 @@ export default class CustumerDataSearch extends Component {
                 URLParams={true}
                 loader="En chargement ..."
                 showSearch={true}
-                searchPlaceholder="Taper le cote ici"
+                searchPlaceholder="Taper l'unité ici"
                 innerClass={{
                   list: "list"
                 }}
@@ -228,7 +228,7 @@ export default class CustumerDataSearch extends Component {
                 URLParams={true}
                 loader="En chargement ..."
                 showSearch={true}
-                searchPlaceholder="Taper votre recherche ici"
+                searchPlaceholder="Taper l'institution ici"
               />
             </Grid>
             <Grid item>
@@ -254,7 +254,7 @@ export default class CustumerDataSearch extends Component {
                 dataField="will_identifier.cote.keyword"
                 size={1000}
                 sortBy="asc"
-                showCount={true}
+                showCount={false}
                 autosuggest={true}
                 placeholder="Cote du testament"
                 URLParams={true}
@@ -296,7 +296,7 @@ export default class CustumerDataSearch extends Component {
                 URLParams={true}
                 loader="En chargement ..."
                 showSearch={true}
-                searchPlaceholder="Taper le cote ici"
+                searchPlaceholder="Taper ici"
                 innerClass={{
                   list: "list"
                 }}

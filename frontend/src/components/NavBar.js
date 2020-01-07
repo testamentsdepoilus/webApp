@@ -153,7 +153,7 @@ class NavBar extends Component {
   }
 
   handleLogoutClick(event) {
-    localStorage.removeItem("usertoken");
+    localStorage.clear();
     document.location.reload();
   }
   handleClose() {

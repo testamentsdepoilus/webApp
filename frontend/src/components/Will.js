@@ -85,7 +85,7 @@ function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
                 }
                 onClick={handleClick}
                 className={
-                  parseInt(idx) === i
+                  parseInt(idx, 10) === i
                     ? classNames(classes.typography, classes.selectedLink)
                     : classNames(classes.linkPage, classes.typography)
                 }
@@ -172,7 +172,7 @@ class Will extends Component {
               url_query.length > 1
                 ? {
                     type: url_query[1].split("_")[0],
-                    id: parseInt(url_query[1].split("_")[1])
+                    id: parseInt(url_query[1].split("_")[1], 10)
                   }
                 : {}
           });

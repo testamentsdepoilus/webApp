@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Container,
   TextField,
   Typography,
   Button,
@@ -13,8 +12,6 @@ import {
 } from "@material-ui/core";
 import {
   createStyled,
-  register,
-  getParamConfig,
   getUserToken,
   updateConfigMail
 } from "../../utils/functions";

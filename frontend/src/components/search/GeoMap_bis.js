@@ -5,20 +5,6 @@ import ReactDOM from "react-dom";
 import ReactDOMServer from "react-dom/server";
 import { Checkbox, Grid, Link } from "@material-ui/core";
 import { getParamConfig } from "../../utils/functions";
-//import { OpenStreetMapProvider } from "leaflet-geosearch";
-
-/*
-// setup
-const provider = new OpenStreetMapProvider();
-
-// search
-const results = provider.search({ query: "bordeaux" });
-let suggestions = [];
-results.then(function(result) {
-  result.forEach(adress => {
-    suggestions.push(adress["label"]);
-  });
-});*/
 
 export default class GeoMap extends React.Component {
   map = null;
@@ -28,22 +14,22 @@ export default class GeoMap extends React.Component {
     this.state = {
       birth_data: [],
       death_data: [],
-      checkedA: true,
+      checkedA: false,
       checkedB: true
     };
     this.handleCheckA = this.handleCheckA.bind(this);
     this.handleCheckB = this.handleCheckB.bind(this);
     this.blueIcon = L.icon({
       iconUrl:
-        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-blue.png",
+        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-shadow.png"
+        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png"
     });
     this.redIcon = L.icon({
       iconUrl:
-        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-red.png",
+        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-shadow.png"
+        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png"
     });
   }
 
@@ -83,7 +69,7 @@ export default class GeoMap extends React.Component {
           <Grid item>
             <img
               alt="blue-icon"
-              src="http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-blue.png"
+              src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png"
             ></img>
           </Grid>
           <Grid item>
@@ -104,7 +90,7 @@ export default class GeoMap extends React.Component {
           <Grid item>
             <img
               alt="red-icon"
-              src="http://patrimeph.ensea.fr/testaments-de-Poilus/images/marker-icon-red.png"
+              src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png"
             ></img>
           </Grid>
           <Grid item>

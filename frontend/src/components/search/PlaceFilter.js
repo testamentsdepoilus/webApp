@@ -1,11 +1,8 @@
 import React from "react";
-import { DataSearch, SingleDropdownList } from "@appbaseio/reactivesearch";
+import { SingleDropdownList } from "@appbaseio/reactivesearch";
 import "../../styles/leftBar.css";
 import {
   Grid,
-  Typography,
-  MenuItem,
-  Select,
   List,
   Checkbox,
   ListItemIcon,
@@ -14,8 +11,7 @@ import {
   Snackbar
 } from "@material-ui/core";
 import { createStyled } from "../../utils/functions";
-import classNames from "classnames";
-import { func } from "prop-types";
+
 // Style button
 const Styled = createStyled(theme => ({
   root: {

@@ -203,13 +203,15 @@ export default class EditPost extends Component {
     });
 
     if (this.state.title) {
+      const today = new Date();
       const item = {
         id: this.props.data["_id"],
         title: this.state.title,
         summary: Boolean(found_resume) ? draftToHtml(resume_raw) : "",
         detail: Boolean(found_detail) ? draftToHtml(detail_raw) : "",
-        type: this.state.type,
-        author: this.state.author
+        type: parseInt(this.state.type, 10),
+        author: this.state.author,
+        created: today
       };
 
       updatePost(item).then(res => {

@@ -20,12 +20,29 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import "../styles/Testator.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { getParamConfig } from "../utils/functions";
+import {
+  getParamConfig,
+  getHitsFromQuery,
+  equalsArray,
+  createStyled
+} from "../utils/functions";
 import TestatorDisplay from "./TestatorDisplay";
 import { ExplorMenu } from "./Wills";
 import ClearIcon from "@material-ui/icons/Clear";
 
-const { ResultListWrapper } = ReactiveList;
+const Styled = createStyled(theme => ({
+  ul: {
+    listStyleType: "none",
+    marginTop: theme.spacing(1)
+  },
+  li: {
+    marginTop: theme.spacing(1),
+    fontSize: "0.9em"
+  },
+  typoSurname: {
+    fontVariantCaps: "small-caps"
+  }
+}));
 
 class Testators extends Component {
   constructor(props) {
@@ -34,7 +51,8 @@ class Testators extends Component {
       field: "persName.norm.keyword",
       order: "asc",
       value: 1,
-      testator_name: ""
+      testator_name: "",
+      cur_list: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClear = this.handleClear.bind(this);
@@ -212,28 +230,75 @@ class Testators extends Component {
               return `${stats.numberOfResults} testateurs trouvés.`;
             }}
             URLParams={false}
-          >
-            {({ data, error, loading }) => {
-              return (
-                <ResultListWrapper>
-                  {data.map((item, j) => {
-                    window.history.replaceState(
-                      getParamConfig("web_url"),
-                      "testator",
-                      getParamConfig("web_url") + "/testateur/" + item["_id"]
-                    );
-                    return (
-                      <div className="root" key={j}>
-                        <Paper>
-                          <TestatorDisplay id={item["_id"]} data={item} />
-                        </Paper>
-                      </div>
-                    );
-                  })}
-                </ResultListWrapper>
-              );
-            }}
-          </ReactiveList>
+            render={function(res) {
+              return res.data.map((item, j) => {
+                window.history.replaceState(
+                  getParamConfig("web_url"),
+                  "testator",
+                  getParamConfig("web_url") + "/testateur/" + item["_id"]
+                );
+                const curPage_ =
+                  Math.floor(res.resultStats.currentPage / 10) * 10;
+                let sort_ = {};
+                sort_[this.state.field] = { order: this.state.order };
+                getHitsFromQuery(
+                  getParamConfig("es_host") +
+                    "/" +
+                    getParamConfig("es_index_testators"),
+                  JSON.stringify({
+                    from: curPage_,
+                    size: 10,
+                    sort: [sort_]
+                  })
+                )
+                  .then(data => {
+                    if (!equalsArray(data, this.state.cur_list)) {
+                      this.setState({
+                        cur_list: data
+                      });
+                    }
+                  })
+                  .catch(error => {
+                    console.log("error :", error);
+                  });
+                return (
+                  <div key={j}>
+                    <Grid container direction="row" spacing={1}>
+                      <Grid item xs={2}>
+                        <Styled>
+                          {({ classes }) => (
+                            <ul className={classes.ul}>
+                              {this.state.cur_list.map((item, i) => (
+                                <li key={item["_id"]} className={classes.li}>
+                                  {curPage_ + i + 1}
+                                  {". "}
+                                  {item._source[
+                                    "persName.fullIndexEntryForm.forename"
+                                  ]
+                                    .toString()
+                                    .replace(/,/g, " ") + " "}
+                                  <span className={classes.typoSurname}>
+                                    {
+                                      item._source[
+                                        "persName.fullIndexEntryForm.surname"
+                                      ]
+                                    }
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </Styled>
+                      </Grid>
+                      <Grid item xs={10}>
+                        <TestatorDisplay id={item["_id"]} data={item} />
+                      </Grid>
+                    </Grid>
+                  </div>
+                );
+              });
+            }.bind(this)}
+          ></ReactiveList>
         </div>
       </ReactiveBase>
     );

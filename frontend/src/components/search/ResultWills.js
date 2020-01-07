@@ -1,16 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import WillDisplay from "../WillDisplay";
 import CloseIcon from "@material-ui/icons/Close";
 import {
   ListItemText,
   Typography,
   Grid,
-  Dialog,
-  DialogTitle,
-  DialogActions,
   IconButton,
-  DialogContent,
   Chip,
   Snackbar,
   SnackbarContent,
@@ -26,7 +21,6 @@ import {
   getUserToken,
   updateMyListWills
 } from "../../utils/functions";
-import WillCompare from "../WillCompare";
 import InfoIcon from "@material-ui/icons/Info";
 
 import ListAddIcon from "@material-ui/icons/PlaylistAddOutlined";
@@ -162,30 +156,21 @@ export default class ResultWills extends React.Component {
 
   handleAddShoppingWill(id) {
     return function(e) {
-      let myWills_ =
-        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
-
-      console.log("myWills_ :", myWills_);
+      let myWills_ = this.state.myWills;
       myWills_.push(id);
-      console.log("myWills_ :", myWills_);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myWills: myWills_
+        myBackups: myBackups_
       };
 
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myWills: myWills_
           });
-          localStorage.setItem("myWills", myWills_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -193,25 +178,19 @@ export default class ResultWills extends React.Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let myWills_ = localStorage.myWills
-        .split(",")
-        .filter(item => item !== id);
+      let myWills_ = this.state.myWills.filter(item => item !== id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myWills: myWills_
+        myBackups: myBackups_
       };
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myWills: myWills_
           });
-          localStorage.setItem("myWills", myWills_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -323,9 +302,11 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.myWills) {
-      let myWills_ =
-        localStorage.myWills.length > 0 ? localStorage.myWills.split(",") : [];
+    if (localStorage.myBackups) {
+      const myBackups_ = JSON.parse(localStorage.myBackups);
+      let myWills_ = Boolean(myBackups_["myWills"])
+        ? myBackups_["myWills"]
+        : [];
       this.setState({
         myWills: myWills_
       });
@@ -437,7 +418,7 @@ export default class ResultWills extends React.Component {
                       spacing={1}
                     >
                       <Grid item xs="auto">
-                        <Tooltip title={title_testator}>
+                        <Tooltip title={title_testator} arrow={true}>
                           <Link
                             href={
                               getParamConfig("web_url") +
@@ -470,6 +451,7 @@ export default class ResultWills extends React.Component {
                               title="Ajouter à la comparaison"
                               style={{ cursor: "hand" }}
                               interactive
+                              arrow={true}
                             >
                               {Boolean(this.state.styleTitle[item["_id"]]) ? (
                                 <IconButton>
@@ -489,6 +471,7 @@ export default class ResultWills extends React.Component {
                                   title="Ajouter au panier"
                                   placement="bottom"
                                   style={{ cursor: "hand" }}
+                                  arrow={true}
                                 >
                                   <IconButton
                                     onClick={this.handleAddShoppingWill(
@@ -503,6 +486,7 @@ export default class ResultWills extends React.Component {
                                   title="Supprimer du panier"
                                   placement="bottom"
                                   style={{ cursor: "hand" }}
+                                  arrow={true}
                                 >
                                   <IconButton
                                     onClick={this.handleremoveShoppingWill(
@@ -516,7 +500,7 @@ export default class ResultWills extends React.Component {
                             ) : (
                               <Tooltip
                                 title="Connectez-vous pour ajouter ce testament au panier"
-                                arrow="true"
+                                arrow={true}
                               >
                                 <span>
                                   <IconButton aria-label="addShop" disabled>
@@ -541,49 +525,6 @@ export default class ResultWills extends React.Component {
     });
 
     results.push(
-      <Dialog
-        key={1000}
-        fullWidth={true}
-        maxWidth="xl"
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="max-width-dialog-title"
-      >
-        <Grid container direction="row" spacing={4}>
-          <Grid item xs={10}>
-            <DialogTitle id="max-width-dialog-title">{""}</DialogTitle>
-          </Grid>
-          <Grid item xs={2}>
-            <DialogActions>
-              <IconButton
-                id="btClose"
-                onClick={this.handleClose}
-                aria-label="Close"
-              >
-                <CloseIcon
-                  fontSize="large"
-                  style={{
-                    color: "#b71c1c"
-                  }}
-                />
-              </IconButton>
-            </DialogActions>
-          </Grid>
-        </Grid>
-
-        <DialogContent>
-          {this.state.displayType === "More" ? (
-            <WillDisplay
-              data={this.state.willPage}
-              cur_page={this.state.cur_page}
-            />
-          ) : (
-            <WillCompare data={this.state.chipData} />
-          )}
-        </DialogContent>
-      </Dialog>
-    );
-    results.push(
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         key="topCenter"
@@ -593,11 +534,6 @@ export default class ResultWills extends React.Component {
         ContentProps={{
           "aria-describedby": "message-id"
         }}
-        message={
-          <span id="message-id">
-            Le nombre maximum de testaments à comparer est atteint.
-          </span>
-        }
       >
         <Styled>
           {({ classes }) => (

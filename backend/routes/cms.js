@@ -3,7 +3,7 @@ const router = express.Router();
 const cors = require("cors");
 
 const { Client } = require("@elastic/elasticsearch");
-const client = new Client({ node: process.env.host_es }); //http://patrimeph.ensea.fr/es700
+const client = new Client({ node: process.env.host_es });
 const es_index = process.env.index_cms;
 
 router.use(cors());
@@ -11,26 +11,27 @@ router.use(cors());
 /* POST publish  */
 router.post("/publish", function(req, res, next) {
   const today = new Date();
-  const data = {
+  /*const data = {
     user_id: req.body.user_id,
     title: req.body.title,
     author: req.body.author,
     summary: req.body.summary,
     detail: req.body.detail,
     type: req.body.type,
+    selected: false,
     created: today
-  };
+  };*/
 
   client.index(
     {
       index: es_index,
-      body: data
+      body: req.body
     },
     (err, result) => {
       if (err) {
         res.send({
           status: 400,
-          err: "ES Connexion au serveur a échoué !"
+          err: "ES Connexion au serveur a échoué !" + err
         });
       } else {
         res.send({
@@ -78,9 +79,10 @@ router.post("/removePost", function(req, res, next) {
 
 /* POST update  */
 router.post("/updatePost", function(req, res, next) {
-  const today = new Date();
   const id = req.body.id;
-  const data = {
+  delete req.body.id;
+  {
+    /*const data = {
     user_id: req.body.user_id,
     title: req.body.title,
     author: req.body.author,
@@ -88,14 +90,15 @@ router.post("/updatePost", function(req, res, next) {
     detail: req.body.detail,
     type: req.body.type,
     created: today
-  };
+  };*/
+  }
 
   let isFailed = false;
   client.update({
     index: es_index,
     id: id,
     body: {
-      doc: data
+      doc: req.body
     }
   }),
     err => {

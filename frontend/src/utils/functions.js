@@ -7,6 +7,7 @@ import JSZip from "jszip";
 import FileSaver from "file-saver";
 import * as jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import isEqual from "lodash/isEqual";
 
 // Global declaration for jsPDF (needed before call html())
 window.html2canvas = html2canvas;
@@ -60,15 +61,15 @@ export function readXmlFile(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = "http://patrimeph.ensea.fr/es700"; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
-  config["es_index_wills"] = "tdp_wills";
-  config["es_index_cms"] = "tdp_cms";
-  config["es_index_user"] = "tdp_users";
-  config["es_index_testators"] = "tdp_testators";
-  config["es_index_places"] = "tdp_places";
-  config["es_index_units"] = "tdp_military_unit";
-  config["web_url"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-Poilus
-  config["web_host"] = "http://patrimeph.ensea.fr/testaments-de-poilus"; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
+  config["es_host"] = process.env.REACT_APP_ES_HOST; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
+  config["es_index_wills"] = process.env.REACT_APP_ES_INDEX_WILLS;
+  config["es_index_cms"] = process.env.REACT_APP_ES_INDEX_CMS;
+  config["es_index_user"] = process.env.REACT_APP_ES_INDEX_USERS;
+  config["es_index_testators"] = process.env.REACT_APP_ES_INDEX_TESTATORS;
+  config["es_index_places"] = process.env.REACT_APP_ES_INDEX_PLACES;
+  config["es_index_units"] = process.env.REACT_APP_ES_INDEX_MILITARY_UNIT;
+  config["web_url"] = process.env.REACT_APP_WEB_URL; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-Poilus
+  config["web_host"] = process.env.REACT_APP_WEB_HOST; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
   return config[param];
 }
 // Simple query search to send to elasticsearch
@@ -360,20 +361,14 @@ export const login = async user => {
 export const publish = async item => {
   try {
     const host = getParamConfig("web_host");
-    const res = await axios.post(host + "/cms/publish", {
-      title: item.title,
-      summary: item.summary,
-      detail: item.detail,
-      type: item.type,
-      author: item.author
-    });
+    const res = await axios.post(host + "/cms/publish", item);
     return res.data;
   } catch (err) {
     return err;
   }
 };
 
-// publish post function
+// remove post function
 export const removePost = async item => {
   try {
     const host = getParamConfig("web_host");
@@ -390,14 +385,7 @@ export const removePost = async item => {
 export const updatePost = async item => {
   try {
     const host = getParamConfig("web_host");
-    const res = await axios.post(host + "/cms/updatePost", {
-      id: item.id,
-      title: item.title,
-      summary: item.summary,
-      detail: item.detail,
-      type: item.type,
-      author: item.author
-    });
+    const res = await axios.post(host + "/cms/updatePost", item);
     return res.data;
   } catch (err) {
     return err;
@@ -480,6 +468,8 @@ export const equalsArray = (array1, array2) => {
     if (array1[i] instanceof Array && array2[i] instanceof Array) {
       // recurse into the nested arrays
       if (!array1[i].equals(array2[i])) return false;
+    } else if (array1[i] instanceof Object && array2[i] instanceof Object) {
+      if (!isEqual(array1[i], array2[i])) return false;
     } else if (array1[i] !== array2[i]) {
       // Warning - two different object instances will never be equal: {x:20} != {x:20}
       return false;

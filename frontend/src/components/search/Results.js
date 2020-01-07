@@ -5,8 +5,24 @@ import {
   ReactiveComponent
 } from "@appbaseio/reactivesearch";
 
-import { Fab, Grid, Tooltip, IconButton, Popper } from "@material-ui/core";
-import { createStyled } from "../../utils/functions";
+import {
+  Fab,
+  Grid,
+  Tooltip,
+  IconButton,
+  Popper,
+  CircularProgress,
+  TextField,
+  Container,
+  Button
+} from "@material-ui/core";
+import {
+  createStyled,
+  getTotalHits,
+  getParamConfig,
+  updateMyListWills,
+  getUserToken
+} from "../../utils/functions";
 import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 import CompareIcon from "@material-ui/icons/CompareOutlined";
 import classNames from "classnames";
@@ -71,11 +87,20 @@ class Results extends React.Component {
     this.state = {
       curField: "",
       curOrder: "asc",
-      anchorEl: null
+      anchorEl: null,
+      totalHits: null,
+      anchorElSearch: null,
+      label: ""
     };
+    this.userToken = getUserToken();
     this.topFunction = this.topFunction.bind(this);
     this.handleHelpOpen = this.handleHelpOpen.bind(this);
     this.handleHelpClose = this.handleHelpClose.bind(this);
+    this.handleSearchOpen = this.handleSearchOpen.bind(this);
+    this.handleSearchClose = this.handleSearchClose.bind(this);
+    this.renderResultStats = this.renderResultStats.bind(this);
+    this.handleSearchSave = this.handleSearchSave.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   topFunction = function() {
@@ -85,13 +110,27 @@ class Results extends React.Component {
 
   handleHelpOpen(event) {
     this.setState({
-      anchorEl: this.state.anchorEl ? null : event.currentTarget
+      anchorEl: this.state.anchorEl ? null : event.currentTarget,
+      anchorElSearch: null
     });
   }
 
   handleHelpClose(event) {
     this.setState({
       anchorEl: null
+    });
+  }
+
+  handleSearchOpen(event) {
+    this.setState({
+      anchorElSearch: this.state.anchorElSearch ? null : event.currentTarget,
+      anchorEl: null
+    });
+  }
+
+  handleSearchClose(event) {
+    this.setState({
+      anchorElSearch: null
     });
   }
 
@@ -108,10 +147,81 @@ class Results extends React.Component {
     return null;
   }
 
+  renderResultStats(stats) {
+    if (Boolean(this.state.totalHits)) {
+      return `${stats.numberOfResults} testaments sur ${this.state.totalHits} correspondent à votre recherche`;
+    } else {
+      return ` ${stats.numberOfResults} testaments correspondent à votre recherche`;
+    }
+  }
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  handleSearchSave(e) {
+    const myBackups_ = JSON.parse(localStorage.myBackups);
+    let mySearches_ = Boolean(myBackups_.mySearches)
+      ? myBackups_.mySearches
+      : [];
+
+    const idx = mySearches_.findIndex(item => {
+      const label = item["label"];
+      const url = item["url"];
+      return label === this.state.label || url === document.location.href;
+    });
+    if (idx === -1) {
+      mySearches_.push({
+        label: this.state.label,
+        url: document.location.href
+      });
+      myBackups_["mySearches"] = mySearches_;
+      const newItem = {
+        email: this.userToken.email,
+        myBackups: myBackups_
+      };
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
+          this.setState({
+            anchorElSearch: null,
+            label: ""
+          });
+        }
+      });
+    } else {
+      this.setState({
+        anchorElSearch: null,
+        label: ""
+      });
+    }
+  }
+
+  componentDidMount() {
+    getTotalHits(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_wills")
+    )
+      .then(res => {
+        const totalHits = res;
+        const total =
+          typeof totalHits === "object" ? totalHits.value : totalHits;
+
+        this.setState({
+          totalHits: total
+        });
+      })
+      .catch(e => {
+        console.error("error :", e);
+      });
+  }
+
   // Render
   render() {
     const open = Boolean(this.state.anchorEl);
     const id = open ? "transitions-popper" : undefined;
+    const open_search = Boolean(this.state.anchorElSearch);
+    const id_search = open_search ? "transitions-popper" : undefined;
     return (
       <div key={0}>
         <Grid container alignItems="baseline" justify="center" direction="row">
@@ -122,13 +232,15 @@ class Results extends React.Component {
                   <TextSearch />
                 </Grid>
                 <Grid item xs={2}>
-                  <IconButton
-                    aria-describedby={id}
-                    onClick={this.handleHelpOpen}
-                    style={{ cursor: "help" }}
-                  >
-                    <HelpIcon />
-                  </IconButton>
+                  <Tooltip title="Aide à la recherche" interactive>
+                    <IconButton
+                      aria-describedby={id}
+                      onClick={this.handleHelpOpen}
+                      style={{ cursor: "help" }}
+                    >
+                      <HelpIcon />
+                    </IconButton>
+                  </Tooltip>
                   <Styled>
                     {({ classes }) => (
                       <Popper
@@ -165,13 +277,77 @@ class Results extends React.Component {
                   </Styled>
                 </Grid>
                 <Grid item xs={2}>
-                  <IconButton
-                    aria-describedby="save"
-                    onClick={this.handleSaveSearch}
-                    style={{ cursor: "hand" }}
-                  >
-                    <SaveIcon />
-                  </IconButton>
+                  {Boolean(this.userToken) ? (
+                    <Tooltip
+                      title="Sauvegarder ma recherche"
+                      interactive
+                      arrow={true}
+                    >
+                      <IconButton
+                        aria-describedby="save"
+                        onClick={this.handleSearchOpen}
+                        style={{ cursor: "hand" }}
+                      >
+                        <SaveIcon />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      title="Connectez-vous pour sauvegarder votre recherche !"
+                      arrow={true}
+                    >
+                      <span>
+                        <IconButton aria-describedby="save" disabled>
+                          <SaveIcon />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  )}
+                  <Styled>
+                    {({ classes }) => (
+                      <Popper
+                        id={id_search}
+                        open={open_search}
+                        anchorEl={this.state.anchorElSearch}
+                        placement="bottom-end"
+                      >
+                        <Container className={classes.popper}>
+                          <p className={classes.popperTitle}>
+                            Sauvegarder votre recherche :
+                          </p>
+                          <Grid
+                            container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
+                            spacing={1}
+                          >
+                            <Grid item>
+                              <TextField
+                                id="input_search"
+                                variant="outlined"
+                                required
+                                label="Label"
+                                name="label"
+                                onChange={this.onChange}
+                                value={this.state.label}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <Button
+                                id="btSave"
+                                variant="contained"
+                                color="primary"
+                                onClick={this.handleSearchSave}
+                              >
+                                Sauvegarder
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </Container>
+                      </Popper>
+                    )}
+                  </Styled>
                 </Grid>
               </Grid>
 
@@ -198,15 +374,13 @@ class Results extends React.Component {
                   }}
                   dataField=""
                   componentId="searchResult"
-                  stream={true}
+                  stream={false}
                   pagination={false}
                   size={15}
                   showResultStats={true}
                   infiniteScroll={true}
-                  loader="Loading Results.."
-                  renderResultStats={function(stats) {
-                    return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
-                  }}
+                  loader={<CircularProgress />}
+                  renderResultStats={this.renderResultStats}
                 >
                   {({ data, error, loading }) => <ResultWills data={data} />}
                 </ReactiveList>
@@ -233,12 +407,12 @@ class Results extends React.Component {
                   dataField={this.state.curField}
                   sortBy={this.state.curOrder}
                   componentId="searchResult"
-                  stream={true}
+                  stream={false}
                   pagination={false}
                   size={15}
                   showResultStats={true}
                   infiniteScroll={true}
-                  loader="Loading Results.."
+                  loader={<CircularProgress />}
                   renderResultStats={function(stats) {
                     return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
                   }}

@@ -13,9 +13,6 @@ import {
   Paper,
   Typography,
   Link,
-  List,
-  ListItem,
-  ListItemText,
   IconButton,
   Grid,
   Tooltip
@@ -36,12 +33,14 @@ const Styled = createStyled(theme => ({
   panel: {
     margin: theme.spacing(2, 0, 2, 0)
   },
-  list: {
+  typo1: {
     fontFamily: "-apple-system",
-    fontSize: "1rem"
+    fontSize: "1.1rem"
   },
-  item: {
-    fontWeight: 600
+  typo2: {
+    fontFamily: "-apple-system",
+    fontSize: "1rem",
+    margin: theme.spacing(0, 0, 1, 0)
   },
   urlUnit: {
     color: "#0091EA",
@@ -118,28 +117,21 @@ export default class UnitDisplay extends Component {
 
   handleAddShoppingWill(id) {
     return function(e) {
-      let myUnits_ =
-        localStorage.myUnits.length > 0 ? localStorage.myUnits.split(",") : [];
-
+      let myUnits_ = this.state.myUnits;
       myUnits_.push(id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myUnits"] = myUnits_;
       const newItem = {
         email: this.userToken.email,
-        myUnits: myUnits_
+        myBackups: myBackups_
       };
 
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myUnits: myUnits_
           });
-          localStorage.setItem("myUnits", myUnits_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -147,25 +139,19 @@ export default class UnitDisplay extends Component {
 
   handleremoveShoppingWill(id) {
     return function(e) {
-      let myUnits_ = localStorage.myUnits
-        .split(",")
-        .filter(item => item !== id);
+      let myUnits_ = this.state.myUnits.filter(item => item !== id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myUnits"] = myUnits_;
       const newItem = {
         email: this.userToken.email,
-        myUnits: myUnits_
+        myBackups: myBackups_
       };
       updateMyListWills(newItem).then(res => {
         if (res.status === 200) {
           this.setState({
-            message: res.mess,
             myUnits: myUnits_
           });
-          localStorage.setItem("myUnits", myUnits_);
-        } else {
-          const err = res.err ? res.err : "Connexion au serveur a échoué !";
-          this.setState({
-            message: err
-          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
       });
     }.bind(this);
@@ -195,9 +181,12 @@ export default class UnitDisplay extends Component {
         }
       })
       .catch(err => console.log("erreur :", err));
-    if (localStorage.myUnits) {
-      let myUnits_ =
-        localStorage.myUnits.length > 0 ? localStorage.myUnits.split(",") : [];
+
+    if (localStorage.myBackups) {
+      const myBackups_ = JSON.parse(localStorage.myBackups);
+      let myUnits_ = Boolean(myBackups_["myUnits"])
+        ? myBackups_["myUnits"]
+        : [];
       this.setState({
         myUnits: myUnits_
       });
@@ -283,110 +272,25 @@ export default class UnitDisplay extends Component {
                 </Grid>
                 <Grid key={2} item>
                   <Paper className={classNames(classes.paper)}>
-                    <List className={classes.list}>
-                      {Boolean(this.props.data["country"]) ? (
-                        <ListItem alignItems="flex-start">
-                          <ListItemText
-                            className={classes.item}
-                            primary={
-                              <Typography className={classes.item}>
-                                Pays
-                              </Typography>
-                            }
-                          />
-                          <ListItemText
-                            primary={
-                              <Typography>
-                                {this.props.data["country"]}
-                              </Typography>
-                            }
-                          />
-                        </ListItem>
-                      ) : (
-                        " "
-                      )}
-                      {Boolean(this.props.data["corps"]) ? (
-                        <ListItem alignItems="flex-start">
-                          <ListItemText
-                            primary={
-                              <Typography className={classes.item}>
-                                Corps d'armée
-                              </Typography>
-                            }
-                          />
-                          <ListItemText
-                            primary={
-                              <Typography>
-                                {this.props.data["corps"]}
-                              </Typography>
-                            }
-                          />
-                        </ListItem>
-                      ) : (
-                        " "
-                      )}
-                      {Boolean(this.props.data["composante"]) ? (
-                        <ListItem alignItems="flex-start">
-                          <ListItemText
-                            primary={
-                              <Typography className={classes.item}>
-                                Composante d'armée
-                              </Typography>
-                            }
-                          />
-                          <ListItemText
-                            primary={
-                              <Typography>
-                                {this.props.data["composante"]}
-                              </Typography>
-                            }
-                          />
-                        </ListItem>
-                      ) : (
-                        " "
-                      )}
-                      {Boolean(this.props.data["unit"]) ? (
-                        <ListItem alignItems="flex-start">
-                          <ListItemText
-                            className={classes.item}
-                            primary={
-                              <Typography className={classes.item}>
-                                Unité d'armée
-                              </Typography>
-                            }
-                          />
-                          <ListItemText
-                            primary={
-                              <Typography>{this.props.data["unit"]}</Typography>
-                            }
-                          />
-                        </ListItem>
-                      ) : (
-                        " "
-                      )}
-                      <ListItem alignItems="flex-start">
-                        <ListItemText
-                          className={classes.item}
-                          primary={
-                            <Typography className={classes.item}>
-                              Permalien :
-                            </Typography>
-                          }
-                        />
-                        <ListItemText
-                          primary={
-                            <Link
-                              href={unit_uri}
-                              target="_blank"
-                              className={classNames(classes.urlUnit)}
-                            >
-                              {unit_uri}
-                            </Link>
-                          }
-                        />
-                      </ListItem>
-                    </List>
-
+                    <Typography className={classes.typo1}>
+                      {" "}
+                      {this.props.data["country"]}.{" "}
+                      {this.props.data["composante"]}.{" "}
+                      {this.props.data["corps"]}
+                    </Typography>
+                    <Typography className={classes.typo2}>
+                      Permalien dans l'édition numérique :{" "}
+                      <Link
+                        href={unit_uri}
+                        target="_blank"
+                        className={classNames(classes.urlUnit)}
+                      >
+                        {unit_uri}
+                      </Link>
+                    </Typography>
+                    <Typography className={classes.typo2}>
+                      Autre forme du nom : {this.props.data["unit"]}
+                    </Typography>
                     {Object.keys(this.state.testators).length > 0 ? (
                       <span className={classes.panel}>
                         <Typography className={classes.text}>

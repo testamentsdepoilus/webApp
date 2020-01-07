@@ -4,7 +4,8 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   createStyled,
   getParamConfig,
-  getHitsFromQuery
+  getHitsFromQuery,
+  getTotalHits
 } from "../utils/functions";
 import {
   Breadcrumbs,
@@ -28,7 +29,6 @@ const Styled = createStyled(theme => ({
     margin: theme.spacing(1, 0, 0, 2)
   },
   list: {
-    width: "60%",
     border: "1px solid #dadce0",
     margin: "auto",
     marginTop: theme.spacing(4)
@@ -142,43 +142,58 @@ class Articles extends Component {
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("articles/");
-
-    getHitsFromQuery(
-      getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
-      JSON.stringify({
-        size: 5,
-        query: {
-          term: {
-            type: 1
-          }
-        },
-        sort: [{ created: { order: "desc" } }]
-      })
+    getTotalHits(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
     )
-      .then(data => {
-        if (idx !== -1) {
-          const id_query = url.substring(idx + 9).split("/");
-          getHitsFromQuery(
-            getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
-            JSON.stringify({
-              query: {
-                term: {
-                  _id: id_query[0]
-                }
+      .then(res => {
+        const total = typeof res === "object" ? res.value : res;
+        getHitsFromQuery(
+          getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
+          JSON.stringify({
+            size: total,
+            query: {
+              term: {
+                type: 1
               }
-            })
-          )
-            .then(hits => {
+            },
+            sort: [{ created: { order: "desc" } }]
+          })
+        )
+          .then(data => {
+            if (idx !== -1) {
+              const id_query = url.substring(idx + 9).split("/");
+              getHitsFromQuery(
+                getParamConfig("es_host") +
+                  "/" +
+                  getParamConfig("es_index_cms"),
+                JSON.stringify({
+                  query: {
+                    term: {
+                      _id: id_query[0]
+                    }
+                  }
+                })
+              )
+                .then(hits => {
+                  this.setState({
+                    lastArticles: data,
+                    selectedId:
+                      hits.length > 0 ? hits[0]["_id"] : data[0]["_id"],
+                    item: hits.length > 0 ? hits[0]._source : null
+                  });
+                })
+                .catch(error => {
+                  console.log("error: ", error);
+                });
+            } else {
               this.setState({
-                lastArticles: data,
-                selectedId: hits.length > 0 ? hits[0]["_id"] : data[0]["_id"],
-                item: hits.length > 0 ? hits[0]._source : null
+                lastArticles: data
               });
-            })
-            .catch(error => {
-              console.log("error: ", error);
-            });
-        }
+            }
+          })
+          .catch(error => {
+            console.log("error: ", error);
+          });
       })
       .catch(error => {
         console.log("error: ", error);
@@ -242,7 +257,7 @@ class Articles extends Component {
       <Styled>
         {({ classes }) => (
           <Paper className={classes.menu}>
-            <Typography>Les dernières articles :</Typography>
+            <Typography>List des articles :</Typography>
             <MenuList>
               {this.state.lastArticles.map((item, i) => (
                 <MenuItem key={i}>
@@ -327,72 +342,79 @@ class Articles extends Component {
             >
               <div id="root" className={classes.root}>
                 {navLink}
-                <div className={classes.list}>
-                  <ReactiveList
-                    dataField="created"
-                    componentId="articles_id"
-                    stream={true}
-                    pagination={false}
-                    paginationAt="bottom"
-                    size={5}
-                    pages={10}
-                    sortBy="desc"
-                    showEndPage={false}
-                    renderResultStats={function(stats) {
-                      return <h6>{stats.numberOfResults} articles</h6>;
-                    }}
-                    URLParams={false}
-                    defaultQuery={this.defaultQuery}
-                  >
-                    {({ data, error, loading }) => (
-                      <ResultListWrapper>
-                        {data.map((item, j) => {
-                          const date = new Date(item["created"]);
-                          return (
-                            <Paper className={classes.item} key={j}>
-                              <Typography className={classes.title}>
-                                {" "}
-                                {item["title"]}{" "}
-                              </Typography>
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html:
-                                    item["summary"] !== ""
-                                      ? item["summary"]
-                                      : item["detail"]
-                                }}
-                              ></div>
-                              <Paper className={classes.foot}>
-                                <Grid
-                                  container
-                                  direction="row"
-                                  justify="space-between"
-                                  alignItems="center"
-                                >
-                                  <Grid item>{item["author"]}</Grid>
-                                  <Grid item>
-                                    {"Mise à jour le "}
-                                    {date.toLocaleDateString()}
-                                    {" à "}
-                                    {date.toLocaleTimeString()}
-                                  </Grid>
-                                  <Grid item>
-                                    <IconButton
-                                      aria-label="More"
-                                      onClick={this.handleMoreClick(item)}
+                <Grid container direction="row" spacing={2}>
+                  <Grid item xs={4}>
+                    {menuArticles}
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={classes.list}>
+                      <ReactiveList
+                        dataField="created"
+                        componentId="articles_id"
+                        stream={true}
+                        pagination={false}
+                        paginationAt="bottom"
+                        size={5}
+                        pages={10}
+                        sortBy="desc"
+                        showEndPage={false}
+                        renderResultStats={function(stats) {
+                          return <h6>{stats.numberOfResults} articles</h6>;
+                        }}
+                        URLParams={false}
+                        defaultQuery={this.defaultQuery}
+                      >
+                        {({ data, error, loading }) => (
+                          <ResultListWrapper>
+                            {data.map((item, j) => {
+                              const date = new Date(item["created"]);
+                              return (
+                                <Paper className={classes.item} key={j}>
+                                  <Typography className={classes.title}>
+                                    {" "}
+                                    {item["title"]}{" "}
+                                  </Typography>
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html:
+                                        item["summary"] !== ""
+                                          ? item["summary"]
+                                          : item["detail"]
+                                    }}
+                                  ></div>
+                                  <Paper className={classes.foot}>
+                                    <Grid
+                                      container
+                                      direction="row"
+                                      justify="space-between"
+                                      alignItems="center"
                                     >
-                                      <MoreIcon />
-                                    </IconButton>
-                                  </Grid>
-                                </Grid>
-                              </Paper>
-                            </Paper>
-                          );
-                        })}
-                      </ResultListWrapper>
-                    )}
-                  </ReactiveList>
-                </div>
+                                      <Grid item>{item["author"]}</Grid>
+                                      <Grid item>
+                                        {"Mise à jour le "}
+                                        {date.toLocaleDateString()}
+                                        {" à "}
+                                        {date.toLocaleTimeString()}
+                                      </Grid>
+                                      <Grid item>
+                                        <IconButton
+                                          aria-label="More"
+                                          onClick={this.handleMoreClick(item)}
+                                        >
+                                          <MoreIcon />
+                                        </IconButton>
+                                      </Grid>
+                                    </Grid>
+                                  </Paper>
+                                </Paper>
+                              );
+                            })}
+                          </ResultListWrapper>
+                        )}
+                      </ReactiveList>
+                    </div>
+                  </Grid>
+                </Grid>
               </div>
             </ReactiveBase>
           )

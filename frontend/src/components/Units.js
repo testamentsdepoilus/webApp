@@ -8,16 +8,31 @@ import {
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography
+  Typography,
+  Grid
 } from "@material-ui/core";
 import "../styles/Unit.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { getParamConfig } from "../utils/functions";
+import {
+  getParamConfig,
+  createStyled,
+  getHitsFromQuery,
+  equalsArray
+} from "../utils/functions";
 import { ExplorMenu } from "./Wills";
 
 import UnitDisplay from "./UnitDisplay";
 
-const { ResultListWrapper } = ReactiveList;
+const Styled = createStyled(theme => ({
+  ul: {
+    listStyleType: "none",
+    marginTop: theme.spacing(1)
+  },
+  li: {
+    marginTop: theme.spacing(1),
+    fontSize: "0.9em"
+  }
+}));
 
 class Units extends Component {
   constructor(props) {
@@ -25,7 +40,8 @@ class Units extends Component {
     this.state = {
       field: "corps.keyword",
       order: "asc",
-      value: 1
+      value: 1,
+      cur_list: []
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -108,26 +124,64 @@ class Units extends Component {
               return `${stats.numberOfResults} unités militaires trouvés.`;
             }}
             URLParams={false}
-          >
-            {({ data, error, loading }) => (
-              <ResultListWrapper>
-                {data.map((item, j) => {
-                  window.history.replaceState(
-                    getParamConfig("web_url"),
-                    "armee",
-                    getParamConfig("web_url") + "/armee/" + item["_id"]
-                  );
-                  return (
-                    <div key={j}>
-                      <Paper>
+            render={function(res) {
+              return res.data.map((item, j) => {
+                window.history.replaceState(
+                  getParamConfig("web_url"),
+                  "armee",
+                  getParamConfig("web_url") + "/armee/" + item["_id"]
+                );
+                const curPage_ =
+                  Math.floor(res.resultStats.currentPage / 10) * 10;
+                let sort_ = {};
+                sort_[this.state.field] = { order: this.state.order };
+                getHitsFromQuery(
+                  getParamConfig("es_host") +
+                    "/" +
+                    getParamConfig("es_index_units"),
+                  JSON.stringify({
+                    from: curPage_,
+                    size: 10,
+                    sort: [sort_]
+                  })
+                )
+                  .then(data => {
+                    if (!equalsArray(data, this.state.cur_list)) {
+                      this.setState({
+                        cur_list: data
+                      });
+                    }
+                  })
+                  .catch(error => {
+                    console.log("error :", error);
+                  });
+                return (
+                  <div key={j}>
+                    <Grid container direction="row" spacing={1}>
+                      <Grid item xs={2}>
+                        <Styled>
+                          {({ classes }) => (
+                            <ul className={classes.ul}>
+                              {this.state.cur_list.map((item, i) => (
+                                <li key={item["_id"]} className={classes.li}>
+                                  {curPage_ + i + 1}
+                                  {". "}
+                                  {item._source["unit"]}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </Styled>
+                      </Grid>
+                      <Grid item xs={10}>
                         <UnitDisplay id={item["_id"]} data={item} />
-                      </Paper>
-                    </div>
-                  );
-                })}
-              </ResultListWrapper>
-            )}
-          </ReactiveList>
+                      </Grid>
+                    </Grid>
+                  </div>
+                );
+              });
+            }.bind(this)}
+          ></ReactiveList>
         </div>
       </ReactiveBase>
     );

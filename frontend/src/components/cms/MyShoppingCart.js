@@ -6,7 +6,6 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -17,7 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 import VisibilityIcon from "@material-ui/icons/VisibilityOutlined";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import CompareIcon from "@material-ui/icons/CompareOutlined";
@@ -39,10 +38,32 @@ import {
   DialogActions,
   Snackbar,
   Grid,
-  NativeSelect
+  MenuList,
+  MenuItem,
+  TableContainer,
+  Fab
 } from "@material-ui/core";
-
+import classNames from "classnames";
 import Menu from "./Menu";
+
+// Up to top page click
+
+window.onscroll = function() {
+  scrollFunction();
+};
+
+function scrollFunction() {
+  if (Boolean(document.getElementById("btTop"))) {
+    if (
+      document.body.scrollTop > 100 ||
+      document.documentElement.scrollTop > 100
+    ) {
+      document.getElementById("btTop").style.display = "block";
+    } else {
+      document.getElementById("btTop").style.display = "none";
+    }
+  }
+}
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -71,32 +92,7 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  {
-    wills: {
-      id: "value",
-      numeric: false,
-      disablePadding: false,
-      label: "Nom du testateur"
-    },
-    testators: {
-      id: "value",
-      numeric: false,
-      disablePadding: false,
-      label: "Nom"
-    },
-    places: {
-      id: "value",
-      numeric: false,
-      disablePadding: false,
-      label: "Lieu"
-    },
-    units: {
-      id: "value",
-      numeric: false,
-      disablePadding: false,
-      label: "Unité militaire"
-    }
-  }
+  { id: "title", numeric: false, disablePadding: false, label: "Titre" }
 ];
 
 function EnhancedTableHead(props) {
@@ -107,8 +103,7 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
-    type
+    onRequestSort
   } = props;
   const createSortHandler = property => event => {
     onRequestSort(event, property);
@@ -116,29 +111,31 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
-          />
-        </TableCell>
+      <TableRow className={classes.head}>
+        <Tooltip title="Sélectionner tous les éléments">
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all desserts" }}
+            />
+          </TableCell>
+        </Tooltip>
         {headCells.map(headCell => (
           <TableCell
-            key={headCell[type].id}
-            align={headCell[type].numeric ? "right" : "left"}
-            padding={headCell[type].disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell[type].id ? order : false}
+            key={headCell.id}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "default"}
+            sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              active={orderBy === headCell[type].id}
+              active={orderBy === headCell.id}
               direction={order}
-              onClick={createSortHandler(headCell[type].id)}
+              onClick={createSortHandler(headCell.id)}
             >
-              {headCell[type].label}
-              {orderBy === headCell[type].id ? (
+              {headCell.label}
+              {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>
@@ -146,6 +143,7 @@ function EnhancedTableHead(props) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -158,8 +156,7 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired
+  rowCount: PropTypes.number.isRequired
 };
 
 const Styled1 = createStyled(theme => ({
@@ -188,8 +185,14 @@ const Styled1 = createStyled(theme => ({
 }));
 
 const EnhancedTableToolbar = props => {
-  const { numSelected, actionButton, selectComponent } = props;
-
+  const { numSelected, actionButton, title } = props;
+  const title_ = {
+    myWills: "Les testaments",
+    myTestators: "Les testateurs",
+    myPlaces: "Les lieux",
+    myUnits: "Les unités militaires",
+    mySearches: "Mes recherches"
+  };
   return (
     <Styled1>
       {({ classes }) => (
@@ -197,6 +200,7 @@ const EnhancedTableToolbar = props => {
           className={clsx(classes.root, {
             [classes.highlight]: numSelected > 0
           })}
+          id={title}
         >
           {numSelected > 0 ? (
             <Typography
@@ -208,11 +212,11 @@ const EnhancedTableToolbar = props => {
             </Typography>
           ) : (
             <Typography className={classes.title} variant="h6" id="tableTitle">
-              Mes testaments
+              {title_[title]}
             </Typography>
           )}
 
-          {numSelected > 0 ? actionButton : selectComponent}
+          {numSelected > 0 ? actionButton : null}
         </Toolbar>
       )}
     </Styled1>
@@ -222,7 +226,7 @@ const EnhancedTableToolbar = props => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   actionButton: PropTypes.element.isRequired,
-  selectComponent: PropTypes.element.isRequired
+  title: PropTypes.string.isRequired
 };
 const AlertMessage = props => {
   const { openAlert, handleClose, message } = props;
@@ -250,19 +254,23 @@ AlertMessage.propTypes = {
 
 const Styled2 = createStyled(theme => ({
   root: {
-    width: "100%",
+    flexWrap: "wrap",
+    width: "90%",
+    marginTop: theme.spacing(1, 0, 0, 2)
+  },
+  menu: {
     marginTop: theme.spacing(2)
+  },
+  link: {
+    fontSize: 14,
+    textAlign: "justify",
+    textDecoration: "none"
   },
   paper: {
-    width: "60%",
+    width: "100%",
+    height: 450,
     margin: "auto",
     marginTop: theme.spacing(2)
-  },
-  table: {
-    minWidth: 750
-  },
-  tableWrapper: {
-    overflowX: "auto"
   },
   visuallyHidden: {
     border: 0,
@@ -274,6 +282,9 @@ const Styled2 = createStyled(theme => ({
     position: "absolute",
     top: 20,
     width: 1
+  },
+  head: {
+    backgroundColor: "#e3f2fd"
   },
   backBt: {
     color: "#fff",
@@ -287,6 +298,23 @@ const Styled2 = createStyled(theme => ({
     display: "flex",
     width: "10em",
     margin: theme.spacing(3, 0, 3)
+  },
+  margin: {
+    margin: theme.spacing(12)
+  },
+  bootstrapRoot: {
+    display: "none",
+    position: "fixed",
+    bottom: 10,
+    right: 10,
+    boxShadow: "none",
+    fontSize: 16,
+    border: "1px solid",
+
+    "&:hover": {
+      backgroundColor: "#bcaaa4",
+      borderColor: "#bcaaa4"
+    }
   }
 }));
 
@@ -294,75 +322,94 @@ export default class MyShoppingCart extends Component {
   constructor(props) {
     super();
     this.state = {
-      order: "asc",
+      order: {
+        myWills: "asc",
+        myTestators: "asc",
+        myPlaces: "asc",
+        myUnits: "asc",
+        mySearches: "asc"
+      },
       orderBy: "title",
-      selected: [],
-      page: 0,
-      rowsPerPage: 5,
-      data: { wills: [], places: [], units: [], testators: [] },
+      selected: {
+        myWills: [],
+        myTestators: [],
+        myPlaces: [],
+        myUnits: [],
+        mySearches: []
+      },
+      data: {
+        myWills: [],
+        myTestators: [],
+        myPlaces: [],
+        myUnits: [],
+        mySearches: []
+      },
       open: false,
       openAlert: false,
       mess: "",
-      type: "wills"
+      type: null
     };
     this.userToken = getUserToken();
   }
 
-  handleRequestSort = (event, property) => {
-    const isDesc =
-      this.state.orderBy === property && this.state.order === "desc";
-    this.setState({
-      order: isDesc ? "asc" : "desc",
-      orderBy: property
-    });
-  };
-
-  handleSelectAllClick = event => {
-    if (event.target.checked) {
-      const newSelecteds = this.state.data[this.state.type].map(n => n["_id"]);
+  handleRequestSort = title => {
+    return function(event, property) {
+      const isDesc =
+        this.state.orderBy === property && this.state.order[title] === "desc";
+      let order_ = this.state.order;
+      order_[title] = isDesc ? "asc" : "desc";
       this.setState({
-        selected: newSelecteds
+        order: order_,
+        orderBy: property
       });
-
-      return;
-    }
-    this.setState({
-      selected: []
-    });
+    }.bind(this);
   };
 
-  handleClick = (event, name) => {
-    const selectedIndex = this.state.selected.indexOf(name);
+  handleSelectAllClick = (data, title) => {
+    return function(event) {
+      let selected_ = this.state.selected;
+      if (event.target.checked) {
+        selected_[title] =
+          title === "mySearches"
+            ? data.map(n => n["label"])
+            : data.map(n => n["_id"]);
+
+        this.setState({
+          selected: selected_,
+          type: title
+        });
+
+        return;
+      } else {
+        selected_[title] = [];
+        this.setState({
+          selected: selected_
+        });
+      }
+    }.bind(this);
+  };
+
+  handleClick = (event, name, title) => {
+    const selectedIndex = this.state.selected[title].indexOf(name);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(this.state.selected, name);
+      newSelected = newSelected.concat(this.state.selected[title], name);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(this.state.selected.slice(1));
-    } else if (selectedIndex === this.state.selected.length - 1) {
-      newSelected = newSelected.concat(this.state.selected.slice(0, -1));
+      newSelected = newSelected.concat(this.state.selected[title].slice(1));
+    } else if (selectedIndex === this.state.selected[title].length - 1) {
+      newSelected = newSelected.concat(this.state.selected[title].slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
-        this.state.selected.slice(0, selectedIndex),
-        this.state.selected.slice(selectedIndex + 1)
+        this.state.selected[title].slice(0, selectedIndex),
+        this.state.selected[title].slice(selectedIndex + 1)
       );
     }
-
+    let selected_ = this.state.selected;
+    selected_[title] = newSelected;
     this.setState({
-      selected: newSelected
-    });
-  };
-
-  handleChangePage = (event, newPage) => {
-    this.setState({
-      page: newPage
-    });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({
-      rowsPerPage: parseInt(event.target.value, 10),
-      page: 0
+      selected: selected_,
+      type: title
     });
   };
 
@@ -379,33 +426,20 @@ export default class MyShoppingCart extends Component {
   };
 
   handleDialogConfirm = event => {
-    event.preventDefault();
-    let myBackups = "myWills";
-    switch (this.state.type) {
-      case "wills":
-        myBackups = "myWills";
-        break;
-      case "places":
-        myBackups = "myPlaces";
-        break;
-      case "units":
-        myBackups = "myUnits";
-        break;
-      case "testators":
-        myBackups = "myTestators";
-        break;
-      default:
-        myBackups = "myWills";
-    }
-
-    const myBackups_ = localStorage[myBackups]
-      .split(",")
-      .filter(item => !this.state.selected.includes(item));
+    let myBackups_ = JSON.parse(localStorage.myBackups);
+    myBackups_[this.state.type] =
+      this.state.type === "mySearches"
+        ? myBackups_[this.state.type].filter(
+            item => !this.state.selected[this.state.type].includes(item.label)
+          )
+        : myBackups_[this.state.type].filter(
+            item => !this.state.selected[this.state.type].includes(item)
+          );
 
     let newItem = {
-      email: this.userToken.email
+      email: this.userToken.email,
+      myBackups: myBackups_
     };
-    newItem[myBackups] = myBackups_;
 
     updateMyListWills(newItem).then(res => {
       if (res.status === 200) {
@@ -414,7 +448,7 @@ export default class MyShoppingCart extends Component {
           openAlert: true,
           mess: "Vos éléments sélectionnés ont été supprimés !"
         });
-        localStorage.setItem(myBackups, myBackups_);
+        localStorage.setItem("myBackups", JSON.stringify(myBackups_));
       } else {
         const err = res.err ? res.err : "Connexion au serveur a échoué !";
         this.setState({
@@ -430,41 +464,61 @@ export default class MyShoppingCart extends Component {
     document.location.reload();
   };
 
-  handleDisplayWill = id => {
-    let uri_component = "testament";
-    switch (this.state.type) {
-      case "wills":
-        uri_component = "testament";
-        break;
-      case "places":
-        uri_component = "place";
-        break;
-      case "units":
-        uri_component = "armee";
-        break;
-      case "testators":
-        uri_component = "testateur";
-        break;
-      default:
-        uri_component = "testament";
-    }
+  handleDisplayWill = (row, title) => {
     return function(e) {
-      window.open(
-        getParamConfig("web_url") + "/" + uri_component + "/" + id,
-        "_blank"
-      );
+      let uri_component = "testament";
+      switch (title) {
+        case "myWills":
+          uri_component = "testament";
+          window.open(
+            getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
+            "_blank"
+          );
+          break;
+        case "myPlaces":
+          uri_component = "place";
+          window.open(
+            getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
+            "_blank"
+          );
+          break;
+        case "myUnits":
+          uri_component = "armee";
+          window.open(
+            getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
+            "_blank"
+          );
+          break;
+        case "myTestators":
+          uri_component = "testateur";
+          window.open(
+            getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
+            "_blank"
+          );
+          break;
+        case "mySearches":
+          window.open(row.url, "_blank");
+          break;
+        default:
+          break;
+      }
     };
   };
 
-  handleCompareWill = event => {
-    window.location.href =
-      getParamConfig("web_url") + "/compare/" + this.state.selected.join("+");
+  handleCompareWill = (event, title) => {
+    window.open(
+      getParamConfig("web_url") +
+        "/compare/" +
+        this.state.selected[title].join("+"),
+      "_blank"
+    );
   };
 
   handleExportWill = event => {
-    const myWills_ = localStorage.myWills
-      .split(",")
-      .filter(item => this.state.selected.includes(item));
+    const myBackups_ = JSON.parse(localStorage.myBackups);
+    const myWills_ = myBackups_.myWills.filter(item =>
+      this.state.selected[this.state.type].includes(item)
+    );
 
     if (myWills_.length === 1) {
       downloadFile(
@@ -480,153 +534,284 @@ export default class MyShoppingCart extends Component {
     }
   };
 
-  handleTypeChange = event => {
-    this.setState({
-      type: event.target.value,
-      selectData: this.state.data[event.target.value]
-    });
-  };
+  setDefaultView(data, title, actionButton) {
+    const isSelected = name => this.state.selected[title].indexOf(name) !== -1;
+    return (
+      <Styled2>
+        {({ classes }) => (
+          <TableContainer component={Paper} className={classes.paper}>
+            <EnhancedTableToolbar
+              numSelected={this.state.selected[title].length}
+              actionButton={actionButton}
+              title={title}
+            />
+
+            <Table
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size={"medium"}
+              aria-label="enhanced table"
+            >
+              <EnhancedTableHead
+                classes={classes}
+                numSelected={this.state.selected[title].length}
+                order={this.state.order[title]}
+                orderBy={this.state.orderBy}
+                onSelectAllClick={this.handleSelectAllClick(data, title)}
+                onRequestSort={this.handleRequestSort(title)}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {stableSort(
+                  data,
+                  getSorting(this.state.order[title], this.state.orderBy)
+                ).map((row, index) => {
+                  const isItemSelected =
+                    title === "mySearches"
+                      ? isSelected(row.label)
+                      : isSelected(row["_id"]);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={index}
+                      selected={isItemSelected}
+                    >
+                      {title === "mySearches" ? (
+                        <TableCell
+                          onClick={event =>
+                            this.handleClick(event, row.label, title)
+                          }
+                          role="checkbox"
+                          padding="checkbox"
+                        >
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                          />
+                        </TableCell>
+                      ) : (
+                        <TableCell
+                          onClick={event =>
+                            this.handleClick(event, row["_id"], title)
+                          }
+                          role="checkbox"
+                          padding="checkbox"
+                        >
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                          />
+                        </TableCell>
+                      )}
+                      {title === "mySearches" ? (
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.label}
+                        </TableCell>
+                      ) : (
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.title.replace("Testament de", "")}
+                        </TableCell>
+                      )}
+                      <TableCell align="center">
+                        <Tooltip title="Afficher le lien">
+                          <IconButton
+                            onClick={this.handleDisplayWill(row, title)}
+                            aria-label="display"
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </Styled2>
+    );
+  }
 
   componentDidMount() {
-    if (localStorage.myWills.length > 0) {
+    let data_ = this.state.data;
+    const myBackups_ = Boolean(localStorage.myBackups)
+      ? JSON.parse(localStorage.myBackups)
+      : {};
+    if (Boolean(myBackups_.myWills)) {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
         JSON.stringify({
           query: {
             ids: {
-              values: localStorage.myWills.split(",")
+              values: myBackups_.myWills
             }
           }
         })
       )
         .then(data => {
-          this.state.data["wills"] = data.map(item => {
+          data_["myWills"] = data.map(item => {
             const output = {
               _id: item["_id"],
-              value: item._source["will_identifier.name"]
+              title: item._source["will_identifier.name"]
             };
             return output;
           });
           this.setState({
-            data: this.state.data
+            data: data_
           });
         })
         .catch(error => {
           console.log("error :", error);
         });
     }
-    if (localStorage.myTestators.length > 0) {
+    if (Boolean(myBackups_.myTestators)) {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
           query: {
             ids: {
-              values: localStorage.myTestators.split(",")
+              values: myBackups_.myTestators
             }
           }
         })
       )
         .then(data => {
-          this.state.data["testators"] = data.map(item => {
+          data_["myTestators"] = data.map(item => {
             const output = {
               _id: item["_id"],
-              value: item._source["persName.fullProseForm"]
+              title: item._source["persName.fullProseForm"]
             };
             return output;
           });
 
           this.setState({
-            data: this.state.data
+            data: data_
           });
         })
         .catch(error => {
           console.log("error :", error);
         });
     }
-    if (localStorage.myPlaces.length > 0) {
+    if (Boolean(myBackups_.myPlaces)) {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_places"),
         JSON.stringify({
           query: {
             ids: {
-              values: localStorage.myPlaces.split(",")
+              values: myBackups_.myPlaces
             }
           }
         })
       )
         .then(data => {
-          this.state.data["places"] = data.map(item => {
+          data_["myPlaces"] = data.map(item => {
             const output = {
               _id: item["_id"],
-              value: item._source["city"]
+              title: item._source["city"]
             };
             return output;
           });
 
           this.setState({
-            data: this.state.data
+            data: data_
           });
         })
         .catch(error => {
           console.log("error :", error);
         });
     }
-    if (localStorage.myUnits.length > 0) {
+    if (Boolean(myBackups_.myUnits)) {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_units"),
         JSON.stringify({
           query: {
             ids: {
-              values: localStorage.myUnits.split(",")
+              values: myBackups_.myUnits
             }
           }
         })
       )
         .then(data => {
-          this.state.data["units"] = data.map(item => {
+          data_["myUnits"] = data.map(item => {
             const output = {
               _id: item["_id"],
-              value: item._source["unit"]
+              title: item._source["unit"]
             };
             return output;
           });
 
           this.setState({
-            data: this.state.data
+            data: data_
           });
         })
         .catch(error => {
           console.log("error :", error);
         });
     }
+    if (Boolean(myBackups_.mySearches)) {
+      data_["mySearches"] = Boolean(myBackups_.mySearches)
+        ? myBackups_.mySearches
+        : [];
+      this.setState({
+        data: data_
+      });
+    }
   }
-  render() {
-    const isSelected = name => this.state.selected.indexOf(name) !== -1;
-    const emptyRows =
-      this.state.rowsPerPage -
-      Math.min(
-        this.state.rowsPerPage,
-        this.state.data[this.state.type].length -
-          this.state.page * this.state.rowsPerPage
-      );
 
-    const selectComponent = (
+  topFunction = function() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
+
+  render() {
+    const menu = (
       <Styled2>
         {({ classes }) => (
-          <NativeSelect
-            id="type"
-            className={classes.typeSelect}
-            variant="outlined"
-            value={this.state.type}
-            name="type"
-            onChange={this.handleTypeChange}
-          >
-            <option value="wills">Testaments</option>
-            <option value="testators">Testateurs</option>
-            <option value="places">Lieux</option>
-            <option value="units">Unités militaires</option>
-            <option value="searches">Mes recherches</option>
-          </NativeSelect>
+          <Paper className={classes.menu}>
+            <MenuList>
+              <MenuItem key={1}>
+                <a href="#wills_div" className={classes.link}>
+                  Testaments
+                </a>
+              </MenuItem>
+              <MenuItem key={2}>
+                {" "}
+                <a href="#testators_div" className={classes.link}>
+                  Testateurs
+                </a>
+              </MenuItem>
+              <MenuItem key={3}>
+                <a href="#places_div" className={classes.link}>
+                  Lieux
+                </a>
+              </MenuItem>
+              <MenuItem key={4}>
+                <a href="#units_div" className={classes.link}>
+                  Unités militaires
+                </a>
+              </MenuItem>
+              <MenuItem key={5}>
+                <a href="#searches_div" className={classes.link}>
+                  Mes recherches
+                </a>
+              </MenuItem>
+            </MenuList>
+          </Paper>
         )}
       </Styled2>
     );
@@ -634,42 +819,50 @@ export default class MyShoppingCart extends Component {
     const actionButton = (
       <Grid container direction="row" justify="flex-end" alignItems="center">
         <Grid item>
-          <Tooltip title="Suppression de stestaments">
+          <Tooltip title="Suppression des éléments sélectionnés">
             <IconButton onClick={this.handleRemoveWill} aria-label="delete">
               <DeleteIcon />
             </IconButton>
           </Tooltip>
         </Grid>
-        <Grid item>
-          <Tooltip title="Export des testament">
-            <IconButton onClick={this.handleExportWill} aria-label="export">
-              <ExportIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-        {this.state.selected.length < 4 ? (
+        {this.state.type !== "mySearches" ? (
           <Grid item>
-            <Tooltip title="Comparer des testaments">
-              <IconButton onClick={this.handleCompareWill} aria-label="compare">
-                <CompareIcon />
+            <Tooltip title="Export des testament">
+              <IconButton onClick={this.handleExportWill} aria-label="export">
+                <ExportIcon />
               </IconButton>
             </Tooltip>
           </Grid>
-        ) : (
-          <Grid item>
-            <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
-              <span>
+        ) : null}
+        {this.state.type === "myWills" ? (
+          Boolean(this.state.selected[this.state.type]) &&
+          this.state.selected[this.state.type].length < 4 ? (
+            <Grid item>
+              <Tooltip title="Comparer des testaments">
                 <IconButton
-                  onClick={this.handleCompareWill}
+                  onClick={event => this.handleCompareWill(event, "myWills")}
                   aria-label="compare"
-                  disabled
                 >
                   <CompareIcon />
                 </IconButton>
-              </span>
-            </Tooltip>
-          </Grid>
-        )}
+              </Tooltip>
+            </Grid>
+          ) : (
+            <Grid item>
+              <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
+                <span>
+                  <IconButton
+                    onClick={this.handleCompareWill}
+                    aria-label="compare"
+                    disabled
+                  >
+                    <CompareIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Grid>
+          )
+        ) : null}
       </Grid>
     );
 
@@ -678,126 +871,66 @@ export default class MyShoppingCart extends Component {
         {({ classes }) => (
           <div className={classes.root}>
             <Menu />
-
-            <Paper className={classes.paper}>
-              <EnhancedTableToolbar
-                numSelected={this.state.selected.length}
-                actionButton={actionButton}
-                selectComponent={selectComponent}
-              />
-              <div className={classes.tableWrapper}>
-                <Table
-                  className={classes.table}
-                  aria-labelledby="tableTitle"
-                  size={"medium"}
-                  aria-label="enhanced table"
-                >
-                  <EnhancedTableHead
-                    classes={classes}
-                    numSelected={this.state.selected.length}
-                    order={this.state.order}
-                    orderBy={this.state.orderBy}
-                    onSelectAllClick={this.handleSelectAllClick}
-                    onRequestSort={this.handleRequestSort}
-                    rowCount={this.state.data[this.state.type].length}
-                    type={this.state.type}
-                  />
-                  <TableBody>
-                    {stableSort(
-                      this.state.data[this.state.type],
-                      getSorting(this.state.order, this.state.orderBy)
-                    )
-                      .slice(
-                        this.state.page * this.state.rowsPerPage,
-                        this.state.page * this.state.rowsPerPage +
-                          this.state.rowsPerPage
-                      )
-                      .map((row, index) => {
-                        const isItemSelected = isSelected(row["_id"]);
-                        const labelId = `enhanced-table-checkbox-${index}`;
-
-                        return (
-                          <TableRow
-                            hover
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={row["_id"]}
-                            selected={isItemSelected}
-                          >
-                            <TableCell
-                              onClick={event =>
-                                this.handleClick(event, row["_id"])
-                              }
-                              role="checkbox"
-                              padding="checkbox"
-                            >
-                              <Checkbox
-                                checked={isItemSelected}
-                                inputProps={{ "aria-labelledby": labelId }}
-                              />
-                            </TableCell>
-                            <TableCell
-                              component="th"
-                              id={labelId}
-                              scope="row"
-                              padding="none"
-                            >
-                              {row.value.replace("Testament de", "")}
-                            </TableCell>
-
-                            <TableCell align="center">
-                              <Tooltip title="Afficher le testatement">
-                                <IconButton
-                                  onClick={this.handleDisplayWill(row["_id"])}
-                                  aria-label="display"
-                                >
-                                  <VisibilityIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={this.state.data[this.state.type].length}
-                rowsPerPage={this.state.rowsPerPage}
-                page={this.state.page}
-                backIconButtonProps={{
-                  "aria-label": "previous page"
-                }}
-                nextIconButtonProps={{
-                  "aria-label": "next page"
-                }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                labelRowsPerPage="Lignes par page :"
-              />
-            </Paper>
+            <Grid container direction="row" justify="center" spacing={2}>
+              <Grid item xs={4}>
+                {menu}
+              </Grid>
+              <Grid item xs={8}>
+                <section id="wills_div">
+                  {this.setDefaultView(
+                    this.state.data["myWills"],
+                    "myWills",
+                    actionButton
+                  )}
+                </section>
+                <section id="testators_div">
+                  {this.setDefaultView(
+                    this.state.data["myTestators"],
+                    "myTestators",
+                    actionButton
+                  )}
+                </section>
+                <section id="places_div">
+                  {this.setDefaultView(
+                    this.state.data["myPlaces"],
+                    "myPlaces",
+                    actionButton
+                  )}
+                </section>
+                <section id="units_div">
+                  {this.setDefaultView(
+                    this.state.data["myUnits"],
+                    "myUnits",
+                    actionButton
+                  )}
+                </section>
+                <section id="searches_div">
+                  {this.setDefaultView(
+                    this.state.data["mySearches"],
+                    "mySearches",
+                    actionButton
+                  )}
+                </section>
+              </Grid>
+            </Grid>
             <Dialog
               open={this.state.open}
               onClose={this.handleDialogClose}
-              aria-labelledby="draggable-dialog-title"
+              aria-labelledby={"draggable-dialog-title"}
             >
               <DialogTitle
                 style={{ cursor: "move" }}
-                id="draggable-dialog-title"
+                id={"draggable-dialog-title"}
               >
                 Confirmation
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
                   Souhaitez-vous vraiment supprimer les{" "}
-                  {this.state.selected.length} éléments sélectionnés ?
+                  {Boolean(this.state.selected[this.state.type])
+                    ? this.state.selected[this.state.type].length
+                    : 0}{" "}
+                  éléments sélectionnés ?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -818,6 +951,18 @@ export default class MyShoppingCart extends Component {
               openAlert={this.state.openAlert}
               handleClose={this.handleAlertClose}
             />
+
+            <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
+              <Fab
+                id="btTop"
+                onClick={this.topFunction}
+                aria-label="Top"
+                className={classNames(classes.margin, classes.bootstrapRoot)}
+                size="medium"
+              >
+                <ArrowUpIcon />
+              </Fab>
+            </Tooltip>
           </div>
         )}
       </Styled2>
