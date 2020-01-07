@@ -273,10 +273,14 @@ export default class UnitDisplay extends Component {
                 <Grid key={2} item>
                   <Paper className={classNames(classes.paper)}>
                     <Typography className={classes.typo1}>
-                      {" "}
-                      {this.props.data["country"]}.{" "}
-                      {this.props.data["composante"]}.{" "}
-                      {this.props.data["corps"]}
+                      {this.props.data["country"] +
+                        " " +
+                        this.props.data["composante"] +
+                        " " +
+                        this.props.data["corps"] +
+                        " (" +
+                        this.props.data["number"] +
+                        ")"}
                     </Typography>
                     <Typography className={classes.typo2}>
                       Permalien dans l'édition numérique :{" "}
