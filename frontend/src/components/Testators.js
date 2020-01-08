@@ -134,6 +134,7 @@ class Testators extends Component {
         type="_doc"
       >
         <ExplorMenu selectedId="testators" />
+
         <div className="testator_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -141,19 +142,19 @@ class Testators extends Component {
               aria-label="Breadcrumb"
             >
               <Link
-                id="search"
+                id="home"
                 key={0}
                 color="inherit"
                 component={RouterLink}
-                to="/recherche"
+                to="/accueil"
               >
-                {" "}
-                Recherche{" "}
+                Accueil
               </Link>
               <Typography color="textPrimary">Les testateurs</Typography>
             </Breadcrumbs>
           </Paper>
         </div>
+
         <div className="wills_order">
           <Grid
             container
@@ -180,6 +181,7 @@ class Testators extends Component {
                   input: "input_testator"
                 }}
                 onChange={this.handleValueChange}
+                URLParams={true}
               />
             </Grid>
             <Grid item>

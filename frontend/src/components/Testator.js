@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
-import { Paper, Breadcrumbs, Link, Typography } from "@material-ui/core";
+import {
+  Paper,
+  Breadcrumbs,
+  Link,
+  Typography,
+  Grid,
+  Tooltip,
+  IconButton
+} from "@material-ui/core";
 
 import "../styles/Testator.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
-
+import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 import TestatorDisplay from "./TestatorDisplay";
 
 class Testator extends Component {
@@ -40,6 +48,10 @@ class Testator extends Component {
     }
   }
 
+  handleBackUp(e) {
+    document.location.href = document.referrer;
+  }
+
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("testateur/");
@@ -68,9 +80,10 @@ class Testator extends Component {
   }
 
   render() {
-    const prevLink = localStorage.uriSearch
+    /*const prevLink = localStorage.uriSearch
       ? "/recherche?" + localStorage.uriSearch.split("?")[1]
       : "/recherche";
+    */
 
     const testator_link =
       this.state.data.length > 0 ? (
@@ -81,25 +94,46 @@ class Testator extends Component {
 
     return (
       <div>
-        <div className="testator_menu">
-          <Paper elevation={0}>
-            <Breadcrumbs
-              separator={<NavigateNextIcon fontSize="small" />}
-              aria-label="Breadcrumb"
-            >
-              <Link
-                id="search"
-                color="inherit"
-                key={0}
-                component={RouterLink}
-                to={prevLink}
-              >
-                {localStorage.uriSearch ? "Modifier ma recherche" : "Recheche"}
-              </Link>
-              {testator_link}
-            </Breadcrumbs>
-          </Paper>
-        </div>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item>
+            {document.referrer.length > 0 &&
+            document.referrer !== document.location.href ? (
+              <Tooltip title="Revenir en arrière">
+                <IconButton onClick={this.handleBackUp} aria-label="back up">
+                  <ArrowBackIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+          </Grid>
+
+          <Grid item>
+            <div className="testator_menu">
+              <Paper elevation={0}>
+                <Breadcrumbs
+                  separator={<NavigateNextIcon fontSize="small" />}
+                  aria-label="Breadcrumb"
+                >
+                  <Link
+                    id="search"
+                    color="inherit"
+                    key={0}
+                    component={RouterLink}
+                    to="/accueil"
+                  >
+                    Accueil
+                  </Link>
+                  {testator_link}
+                </Breadcrumbs>
+              </Paper>
+            </div>
+          </Grid>
+        </Grid>
 
         <div>{this.renderFunc()}</div>
       </div>

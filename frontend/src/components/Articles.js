@@ -26,7 +26,7 @@ const { ResultListWrapper } = ReactiveList;
 const Styled = createStyled(theme => ({
   root: {
     flexWrap: "wrap",
-    margin: theme.spacing(1, 0, 0, 2)
+    margin: theme.spacing(2, 0, 0, 2)
   },
   list: {
     border: "1px solid #dadce0",
@@ -201,9 +201,9 @@ class Articles extends Component {
   }
 
   render() {
-    const prevLink = document.referrer.includes("recherche?")
+    /*const prevLink = document.referrer.includes("recherche?")
       ? "/recherche?" + document.referrer.split("?")[1]
-      : "/recherche";
+      : "/recherche";*/
     const currLink = !Boolean(this.state.item) ? (
       <Link
         id="articles"
@@ -239,14 +239,12 @@ class Articles extends Component {
           aria-label="Breadcrumb"
         >
           <Link
-            id="search"
+            id="home"
             key={0}
             color="inherit"
-            component={RouterLink}
-            to={prevLink}
+            href={getParamConfig("web_url") + "/accueil"}
           >
-            {" "}
-            Recherche{" "}
+            Accueil
           </Link>
           {currLink}
         </Breadcrumbs>

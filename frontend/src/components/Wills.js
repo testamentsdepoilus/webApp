@@ -268,6 +268,10 @@ class Wills extends Component {
     return `${stats.numberOfResults} testaments trouvés.`;
   }
 
+  handleBackUp(e) {
+    document.location.href = document.referrer;
+  }
+
   render() {
     return (
       <ReactiveBase
@@ -276,6 +280,7 @@ class Wills extends Component {
         type="_doc"
       >
         <ExplorMenu selectedId="wills" />
+
         <div className="wills_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -283,19 +288,19 @@ class Wills extends Component {
               aria-label="Breadcrumb"
             >
               <Link
-                id="search"
+                id="home"
                 key={0}
                 color="inherit"
                 component={RouterLink}
-                to="/recherche"
+                to="/accueil"
               >
-                {" "}
-                Recherche{" "}
+                Accueil
               </Link>
               <Typography color="textPrimary">Les testaments</Typography>
             </Breadcrumbs>
           </Paper>
         </div>
+
         <div className="wills_order">
           Trier par :
           <Select value={this.state.value} onChange={this.handleChange}>
@@ -391,31 +396,7 @@ class Wills extends Component {
                 );
               });
             }.bind(this)}
-          >
-            {/*
-            {({ data, error, loading }) => (
-              <ResultListWrapper>
-                {data.map((item, j) => {
-                  window.history.replaceState(
-                    getParamConfig("web_url"),
-                    "will",
-                    getParamConfig("web_url") + "/testament/" + item["_id"]
-                  );
-                  return (
-                    <div className="root" key={j}>
-                      <Paper>
-                        <WillDisplay
-                          id={item["_id"]}
-                          data={item}
-                          createPageMenu={createPageMenu}
-                        />
-                      </Paper>
-                    </div>
-                  );
-                })}
-              </ResultListWrapper>*/}
-            )}
-          </ReactiveList>
+          ></ReactiveList>
         </div>
       </ReactiveBase>
     );

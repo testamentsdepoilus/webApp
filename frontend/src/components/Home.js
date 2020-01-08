@@ -396,6 +396,224 @@ class Home extends Component {
                   >
                     <Grid container direction="row" spacing={1}>
                       <Grid item xs={6}>
+                        {" "}
+                        <div className={classes.result}>
+                          <Paper>
+                            <ReactiveList
+                              react={{
+                                and: [
+                                  "date_naissance",
+                                  "date_deces",
+                                  "date_redaction",
+                                  "nom_testateur",
+                                  "lieu_deces"
+                                ]
+                              }}
+                              dataField=""
+                              componentId="searchResult"
+                              stream={true}
+                              pagination={true}
+                              size={10}
+                              showResultStats={true}
+                              infiniteScroll={false}
+                              loader="Recherche en cours ..."
+                              renderResultStats={this.renderResultStats}
+                              renderItem={function(res) {
+                                let will_date = Boolean(
+                                  res["will_contents.will_date"]
+                                )
+                                  ? new Date(res["will_contents.will_date"])
+                                  : null;
+                                will_date = Boolean(will_date)
+                                  ? will_date.toLocaleDateString()
+                                  : null;
+                                let title_testator = (
+                                  <p>
+                                    Testament de{" "}
+                                    {" " + res["testator.forename"]}{" "}
+                                    <span
+                                      style={{ fontVariantCaps: "small-caps" }}
+                                    >
+                                      {res["testator.surname"]}
+                                    </span>
+                                    <span>
+                                      {" "}
+                                      {Boolean(will_date)
+                                        ? " rédigé le " + will_date
+                                        : ""}{" "}
+                                    </span>
+                                  </p>
+                                );
+                                return (
+                                  <Styled key={res["_id"]}>
+                                    {({ classes }) => (
+                                      <div>
+                                        <ListItem
+                                          alignItems="flex-start"
+                                          component="div"
+                                        >
+                                          <ListItemText
+                                            primary={
+                                              <Tooltip title={title_testator}>
+                                                <Link
+                                                  href={
+                                                    getParamConfig("web_url") +
+                                                    "/testament/" +
+                                                    res["_id"]
+                                                  }
+                                                  aria-label="More"
+                                                  className={classNames(
+                                                    classes.typoName,
+                                                    classes.typography
+                                                  )}
+                                                >
+                                                  {res["testator.forename"] +
+                                                    " "}
+                                                  <span
+                                                    className={classNames(
+                                                      classes.typoName,
+                                                      classes.typography,
+                                                      classes.typoSurname
+                                                    )}
+                                                  >
+                                                    {res["testator.surname"]}
+                                                  </span>
+                                                </Link>
+                                              </Tooltip>
+                                            }
+                                          />
+                                        </ListItem>
+                                        <Divider variant="inset" />
+                                      </div>
+                                    )}
+                                  </Styled>
+                                );
+                              }}
+                            />
+                          </Paper>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div>
+                          <Paper className={classes.menuFilter}>
+                            <Grid
+                              container
+                              direction="column"
+                              justify="center"
+                              alignItems="center"
+                              spacing={2}
+                            >
+                              <Grid item>
+                                <Typography> Rechercher :</Typography>
+                              </Grid>
+                              <Grid item container direction="row" spacing={1}>
+                                <Grid item xs={10}>
+                                  <SingleDropdownList
+                                    className="datasearch"
+                                    react={{
+                                      and: [
+                                        "date_redaction",
+                                        "date_naissance",
+                                        "lieu_deces"
+                                      ]
+                                    }}
+                                    componentId="nom_testateur"
+                                    dataField="testator.name.keyword"
+                                    value={this.state.testator_name}
+                                    size={1000}
+                                    sortBy="asc"
+                                    showCount={false}
+                                    autosuggest={true}
+                                    placeholder="Nom du testateur"
+                                    URLParams={true}
+                                    loader="En chargement ..."
+                                    showSearch={true}
+                                    searchPlaceholder="Taper le nom ici"
+                                    innerClass={{
+                                      list: "list"
+                                    }}
+                                    onChange={this.handleNameChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={2}>
+                                  <IconButton
+                                    id="testator_name"
+                                    value="testator_name"
+                                    onClick={this.handleClear("testator_name")}
+                                    title="Supprimer le filtre"
+                                  >
+                                    <ClearIcon style={{ color: "red" }} />
+                                  </IconButton>
+                                </Grid>
+                              </Grid>
+                              <Grid
+                                item
+                                container
+                                direction="row"
+                                alignItems="center"
+                                spacing={1}
+                              >
+                                <Grid item xs={10}>
+                                  <SingleDropdownList
+                                    className="datasearch"
+                                    react={{
+                                      and: [
+                                        "date_naissance",
+                                        "date_deces",
+                                        "date_redaction",
+                                        "nom_testateur"
+                                      ]
+                                    }}
+                                    componentId="lieu_deces"
+                                    dataField="will_contents.death_place_norm.keyword"
+                                    value={this.state.place}
+                                    size={1000}
+                                    sortBy="asc"
+                                    showCount={false}
+                                    autosuggest={true}
+                                    placeholder="Lieu de décès"
+                                    URLParams={true}
+                                    loader="En chargement ..."
+                                    showSearch={true}
+                                    searchPlaceholder="Taper le cote ici"
+                                    innerClass={{
+                                      list: "list"
+                                    }}
+                                    onChange={this.handlePlaceChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={2}>
+                                  <IconButton
+                                    id="place"
+                                    value="place"
+                                    onClick={this.handleClear("place")}
+                                    title="Supprimer le filtre"
+                                  >
+                                    <ClearIcon style={{ color: "red" }} />
+                                  </IconButton>
+                                </Grid>
+                              </Grid>
+                              <Grid item>
+                                <DateFilter />
+                              </Grid>
+                              <Grid item>
+                                <Link
+                                  href={
+                                    getParamConfig("web_url") + "/recherche"
+                                  }
+                                  className={classes.bt_plus}
+                                >
+                                  {" "}
+                                  Plus de critères
+                                </Link>
+                              </Grid>
+                            </Grid>
+                          </Paper>
+                        </div>
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row">
+                      <Grid item xs={6}>
                         <ReactiveComponent
                           componentId="mapSearch"
                           react={{
@@ -485,223 +703,6 @@ class Home extends Component {
                             );
                           }}
                         />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <div>
-                          <Paper className={classes.menuFilter}>
-                            <Grid
-                              container
-                              direction="column"
-                              justify="center"
-                              alignItems="center"
-                              spacing={2}
-                            >
-                              <Grid item>
-                                <Typography> Rechercher :</Typography>
-                              </Grid>
-                              <Grid item container direction="row" spacing={1}>
-                                <Grid item xs={10}>
-                                  <SingleDropdownList
-                                    className="datasearch"
-                                    react={{
-                                      and: [
-                                        "date_redaction",
-                                        "date_naissance",
-                                        "lieu_deces"
-                                      ]
-                                    }}
-                                    componentId="nom_testateur"
-                                    dataField="testator.name.keyword"
-                                    value={this.state.testator_name}
-                                    size={1000}
-                                    sortBy="asc"
-                                    showCount={false}
-                                    autosuggest={true}
-                                    placeholder="Nom du testateur"
-                                    URLParams={false}
-                                    loader="En chargement ..."
-                                    showSearch={true}
-                                    searchPlaceholder="Taper le nom ici"
-                                    innerClass={{
-                                      list: "list"
-                                    }}
-                                    onChange={this.handleNameChange}
-                                  />
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <IconButton
-                                    id="testator_name"
-                                    value="testator_name"
-                                    onClick={this.handleClear("testator_name")}
-                                    title="Supprimer le filtre"
-                                  >
-                                    <ClearIcon style={{ color: "red" }} />
-                                  </IconButton>
-                                </Grid>
-                              </Grid>
-                              <Grid
-                                item
-                                container
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                              >
-                                <Grid item xs={10}>
-                                  <SingleDropdownList
-                                    className="datasearch"
-                                    react={{
-                                      and: [
-                                        "date_naissance",
-                                        "date_deces",
-                                        "date_redaction",
-                                        "nom_testateur"
-                                      ]
-                                    }}
-                                    componentId="lieu_deces"
-                                    dataField="will_contents.death_place_norm.keyword"
-                                    value={this.state.place}
-                                    size={1000}
-                                    sortBy="asc"
-                                    showCount={false}
-                                    autosuggest={true}
-                                    placeholder="Lieu de décès"
-                                    URLParams={false}
-                                    loader="En chargement ..."
-                                    showSearch={true}
-                                    searchPlaceholder="Taper le cote ici"
-                                    innerClass={{
-                                      list: "list"
-                                    }}
-                                    onChange={this.handlePlaceChange}
-                                  />
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <IconButton
-                                    id="place"
-                                    value="place"
-                                    onClick={this.handleClear("place")}
-                                    title="Supprimer le filtre"
-                                  >
-                                    <ClearIcon style={{ color: "red" }} />
-                                  </IconButton>
-                                </Grid>
-                              </Grid>
-                              <Grid item>
-                                <DateFilter />
-                              </Grid>
-                              <Grid item>
-                                <Link
-                                  href={
-                                    getParamConfig("web_url") + "/recherche"
-                                  }
-                                  className={classes.bt_plus}
-                                >
-                                  {" "}
-                                  Plus de critères
-                                </Link>
-                              </Grid>
-                            </Grid>
-                          </Paper>
-                        </div>
-                      </Grid>
-                    </Grid>
-                    <Grid container direction="row">
-                      <Grid item xs={6}>
-                        <div className={classes.result}>
-                          <Paper>
-                            <ReactiveList
-                              react={{
-                                and: [
-                                  "date_naissance",
-                                  "date_deces",
-                                  "date_redaction",
-                                  "nom_testateur",
-                                  "lieu_deces"
-                                ]
-                              }}
-                              dataField=""
-                              componentId="searchResult"
-                              stream={true}
-                              pagination={true}
-                              size={10}
-                              showResultStats={true}
-                              infiniteScroll={false}
-                              loader="Loading Results.."
-                              renderResultStats={this.renderResultStats}
-                              renderItem={function(res) {
-                                let will_date = Boolean(
-                                  res["will_contents.will_date"]
-                                )
-                                  ? new Date(res["will_contents.will_date"])
-                                  : null;
-                                will_date = Boolean(will_date)
-                                  ? will_date.toLocaleDateString()
-                                  : null;
-                                let title_testator = (
-                                  <p>
-                                    Testament de{" "}
-                                    {" " + res["testator.forename"]}{" "}
-                                    <span
-                                      style={{ fontVariantCaps: "small-caps" }}
-                                    >
-                                      {res["testator.surname"]}
-                                    </span>
-                                    <span>
-                                      {" "}
-                                      {Boolean(will_date)
-                                        ? " rédigé le " + will_date
-                                        : ""}{" "}
-                                    </span>
-                                  </p>
-                                );
-                                return (
-                                  <Styled key={res["_id"]}>
-                                    {({ classes }) => (
-                                      <div>
-                                        <ListItem
-                                          alignItems="flex-start"
-                                          component="div"
-                                        >
-                                          <ListItemText
-                                            primary={
-                                              <Tooltip title={title_testator}>
-                                                <Link
-                                                  href={
-                                                    getParamConfig("web_url") +
-                                                    "/testament/" +
-                                                    res["_id"]
-                                                  }
-                                                  aria-label="More"
-                                                  className={classNames(
-                                                    classes.typoName,
-                                                    classes.typography
-                                                  )}
-                                                >
-                                                  {res["testator.forename"] +
-                                                    " "}
-                                                  <span
-                                                    className={classNames(
-                                                      classes.typoName,
-                                                      classes.typography,
-                                                      classes.typoSurname
-                                                    )}
-                                                  >
-                                                    {res["testator.surname"]}
-                                                  </span>
-                                                </Link>
-                                              </Tooltip>
-                                            }
-                                          />
-                                        </ListItem>
-                                        <Divider variant="inset" />
-                                      </div>
-                                    )}
-                                  </Styled>
-                                );
-                              }}
-                            />
-                          </Paper>
-                        </div>
                       </Grid>
                       <Grid item xs={6}>
                         <div id="chart" className={classes.chart}></div>

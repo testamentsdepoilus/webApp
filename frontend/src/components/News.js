@@ -185,9 +185,9 @@ class News extends Component {
   }
 
   render() {
-    const prevLink = document.referrer.includes("recherche?")
+    /*const prevLink = document.referrer.includes("recherche?")
       ? "/recherche?" + document.referrer.split("?")[1]
-      : "/recherche";
+      : "/recherche";*/
     const currLink = !Boolean(this.state.item) ? (
       <Link
         id="news"
@@ -223,14 +223,12 @@ class News extends Component {
           aria-label="Breadcrumb"
         >
           <Link
-            id="search"
+            id="home"
             key={0}
             color="inherit"
-            component={RouterLink}
-            to={prevLink}
+            href={getParamConfig("web_url") + "/accueil"}
           >
-            {" "}
-            Recherche{" "}
+            Accueil
           </Link>
           {currLink}
         </Breadcrumbs>

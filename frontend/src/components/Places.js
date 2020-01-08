@@ -99,6 +99,10 @@ class Places extends Component {
     }
   }
 
+  handleBackUp(e) {
+    document.location.href = document.referrer;
+  }
+
   render() {
     return (
       <ReactiveBase
@@ -107,6 +111,7 @@ class Places extends Component {
         type="_doc"
       >
         <ExplorMenu selectedId="places" />
+
         <div className="wills_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -114,19 +119,19 @@ class Places extends Component {
               aria-label="Breadcrumb"
             >
               <Link
-                id="search"
+                id="home"
                 key={0}
                 color="inherit"
                 component={RouterLink}
-                to="/recherche"
+                to="/accueil"
               >
-                {" "}
-                Recherche{" "}
+                Accueil
               </Link>
               <Typography color="textPrimary">Les lieux</Typography>
             </Breadcrumbs>
           </Paper>
         </div>
+
         <div className="wills_order">
           Trier par :
           <Select value={this.state.value} onChange={this.handleChange}>

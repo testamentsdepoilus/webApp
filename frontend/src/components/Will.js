@@ -7,7 +7,8 @@ import {
   Link,
   Typography,
   Grid,
-  IconButton
+  IconButton,
+  Tooltip
 } from "@material-ui/core";
 import "../styles/Wills.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
@@ -18,6 +19,7 @@ import {
 } from "../utils/functions";
 import classNames from "classnames";
 import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
+import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 
 const Styled = createStyled(theme => ({
   link: {
@@ -149,6 +151,10 @@ class Will extends Component {
     }
   }
 
+  handleBackUp(e) {
+    document.location.href = document.referrer;
+  }
+
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("testament/");
@@ -184,9 +190,13 @@ class Will extends Component {
   }
 
   render() {
-    const prevLink = localStorage.uriSearch
+    /*const prevLink = localStorage.uriSearch
       ? "/recherche?" + localStorage.uriSearch.split("?")[1]
-      : "/recherche";
+      : "/recherche";*/
+
+    /*{
+      localStorage.uriSearch ? "Modifier ma recherche" : "Recheche";
+    }*/
 
     const will_link =
       this.state.data.length > 0 ? (
@@ -197,25 +207,46 @@ class Will extends Component {
 
     return (
       <div>
-        <div className="wills_menu">
-          <Paper elevation={0}>
-            <Breadcrumbs
-              separator={<NavigateNextIcon fontSize="small" />}
-              aria-label="Breadcrumb"
-            >
-              <Link
-                id="search"
-                color="inherit"
-                key={0}
-                component={RouterLink}
-                to={prevLink}
-              >
-                {localStorage.uriSearch ? "Modifier ma recherche" : "Recheche"}
-              </Link>
-              {will_link}
-            </Breadcrumbs>
-          </Paper>
-        </div>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item>
+            {document.referrer.length > 0 &&
+            document.referrer !== document.location.href ? (
+              <Tooltip title="Revenir en arrière">
+                <IconButton onClick={this.handleBackUp} aria-label="back up">
+                  <ArrowBackIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+          </Grid>
+
+          <Grid item>
+            <div className="wills_menu">
+              <Paper elevation={0}>
+                <Breadcrumbs
+                  separator={<NavigateNextIcon fontSize="small" />}
+                  aria-label="Breadcrumb"
+                >
+                  <Link
+                    id="search"
+                    color="inherit"
+                    key={0}
+                    component={RouterLink}
+                    to="/accueil"
+                  >
+                    Accueil
+                  </Link>
+                  {will_link}
+                </Breadcrumbs>
+              </Paper>
+            </div>
+          </Grid>
+        </Grid>
 
         <div>{this.renderFunc()}</div>
       </div>

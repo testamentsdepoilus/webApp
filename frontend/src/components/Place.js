@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Breadcrumbs, Link, Typography } from "@material-ui/core";
+import {
+  Breadcrumbs,
+  Link,
+  Typography,
+  Grid,
+  Tooltip,
+  IconButton
+} from "@material-ui/core";
 import "../styles/Place.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import PlaceDisplay from "./PlaceDisplay";
+import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 
 class Place extends Component {
   constructor(props) {
@@ -35,6 +43,11 @@ class Place extends Component {
     }
   }
 
+  handleBackUp(e) {
+    console.log(document.referrer);
+    document.location.href = document.referrer;
+  }
+
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("place/");
@@ -63,9 +76,9 @@ class Place extends Component {
   }
 
   render() {
-    const prevLink = localStorage.uriSearch
+    /*} const prevLink = localStorage.uriSearch
       ? "/recherche?" + localStorage.uriSearch.split("?")[1]
-      : "/recherche";
+  : "/recherche";*/
 
     const place_link =
       this.state.data.length > 0 ? (
@@ -76,24 +89,44 @@ class Place extends Component {
 
     return (
       <div>
-        <div className="place_menu">
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="Breadcrumb"
-          >
-            <Link
-              id="search"
-              color="inherit"
-              key={0}
-              component={RouterLink}
-              to={prevLink}
-            >
-              {localStorage.uriSearch ? "Modifier ma recherche" : "Recheche"}
-            </Link>
-            {place_link}
-          </Breadcrumbs>
-        </div>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item>
+            {document.referrer.length > 0 &&
+            document.referrer !== document.location.href ? (
+              <Tooltip title="Revenir en arrière">
+                <IconButton onClick={this.handleBackUp} aria-label="back up">
+                  <ArrowBackIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+          </Grid>
 
+          <Grid item>
+            <div className="place_menu">
+              <Breadcrumbs
+                separator={<NavigateNextIcon fontSize="small" />}
+                aria-label="Breadcrumb"
+              >
+                <Link
+                  id="search"
+                  color="inherit"
+                  key={0}
+                  component={RouterLink}
+                  to="/accueil"
+                >
+                  Accueil
+                </Link>
+                {place_link}
+              </Breadcrumbs>
+            </div>
+          </Grid>
+        </Grid>
         <div>{this.renderFunc()}</div>
       </div>
     );

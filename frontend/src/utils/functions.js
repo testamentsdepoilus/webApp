@@ -61,15 +61,15 @@ export function readXmlFile(file) {
 // Get param config
 export function getParamConfig(param) {
   let config = {};
-  config["es_host"] = process.env.REACT_APP_ES_HOST; //http://patrimeph.ensea.fr/es700 // http://127.0.0.1:9200
+  config["es_host"] = process.env.REACT_APP_ES_HOST;
   config["es_index_wills"] = process.env.REACT_APP_ES_INDEX_WILLS;
   config["es_index_cms"] = process.env.REACT_APP_ES_INDEX_CMS;
   config["es_index_user"] = process.env.REACT_APP_ES_INDEX_USERS;
   config["es_index_testators"] = process.env.REACT_APP_ES_INDEX_TESTATORS;
   config["es_index_places"] = process.env.REACT_APP_ES_INDEX_PLACES;
   config["es_index_units"] = process.env.REACT_APP_ES_INDEX_MILITARY_UNIT;
-  config["web_url"] = process.env.REACT_APP_WEB_URL; //"http://patrimeph.ensea.fr/testaments-de-poilus" // http://127.0.0.1:3000/testaments-de-Poilus
-  config["web_host"] = process.env.REACT_APP_WEB_HOST; // http://patrimeph.ensea.fr/testaments-de-poilus // http://127.0.0.1:3005
+  config["web_url"] = process.env.REACT_APP_WEB_URL;
+  config["web_host"] = process.env.REACT_APP_WEB_HOST;
   return config[param];
 }
 // Simple query search to send to elasticsearch

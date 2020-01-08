@@ -20,7 +20,6 @@ import {
   equalsArray
 } from "../utils/functions";
 import { ExplorMenu } from "./Wills";
-
 import UnitDisplay from "./UnitDisplay";
 
 const Styled = createStyled(theme => ({
@@ -73,6 +72,10 @@ class Units extends Component {
     }
   }
 
+  handleBackUp(e) {
+    document.location.href = document.referrer;
+  }
+
   render() {
     return (
       <ReactiveBase
@@ -81,6 +84,7 @@ class Units extends Component {
         type="_doc"
       >
         <ExplorMenu selectedId="units" />
+
         <div className="unit_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -88,19 +92,19 @@ class Units extends Component {
               aria-label="Breadcrumb"
             >
               <Link
-                id="search"
+                id="home"
                 key={0}
                 color="inherit"
                 component={RouterLink}
-                to="/recherche"
+                to="/accueil"
               >
-                {" "}
-                Recherche{" "}
+                Accueil
               </Link>
               <Typography color="textPrimary">Les unités militaires</Typography>
             </Breadcrumbs>
           </Paper>
         </div>
+
         <div className="unit_order">
           Trier par :
           <Select value={this.state.value} onChange={this.handleChange}>

@@ -508,7 +508,7 @@ export default class PlaceDisplay extends Component {
                       ) : (
                         <Tooltip
                           title="Connectez-vous pour ajouter ce testament au panier"
-                          arrow="true"
+                          arrow={true}
                         >
                           <span>
                             <IconButton aria-label="addShop" disabled>
