@@ -131,7 +131,7 @@ class DateFilter extends React.Component {
             <Grid item>
               <DateRange
                 componentId="date_redaction"
-                dataField="will_contents.will_date"
+                dataField="will_contents.will_date_range"
                 title="Date de rédaction"
                 placeholder={{
                   start: "Début: JJ/MM/YYYY ",

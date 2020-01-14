@@ -452,13 +452,23 @@ export default class WillDisplay extends Component {
       death_date = Boolean(death_date)
         ? death_date.toLocaleDateString().split("/")
         : null;
-      let will_date = Boolean(this.props.data["will_contents.will_date"])
-        ? new Date(this.props.data["will_contents.will_date"])
-        : null;
 
-      will_date = Boolean(will_date)
-        ? will_date.toLocaleDateString().split("/")
-        : null;
+      let will_date = [];
+      if (Boolean(this.props.data["will_contents.will_date_range"])) {
+        let date_ = new Date(
+          this.props.data["will_contents.will_date_range"]["gte"]
+        );
+        will_date.push(date_.toLocaleDateString().split("/"));
+        if (
+          this.props.data["will_contents.will_date_range"]["gte"] !==
+          this.props.data["will_contents.will_date_range"]["lte"]
+        ) {
+          date_ = new Date(
+            this.props.data["will_contents.will_date_range"]["lte"]
+          );
+          will_date.push(date_.toLocaleDateString().split("/"));
+        }
+      }
 
       const isAdded = Boolean(this.userToken)
         ? this.state.myWills.findIndex(el => el === this.props.id)
@@ -638,18 +648,31 @@ export default class WillDisplay extends Component {
                             ""
                           )}
                         </Typography>
-                        {Boolean(will_date) ||
+                        {will_date.length > 0 ||
                         Boolean(
                           this.props.data["will_contents.will_place_norm"]
                         ) ? (
                           <Typography>
-                            {Boolean(will_date)
+                            {will_date.length === 1
                               ? " Testament rédigé le " +
-                                will_date[0] +
+                                will_date[0][0] +
                                 " " +
-                                this.months[will_date[1] - 1] +
+                                this.months[will_date[0][1] - 1] +
                                 " " +
-                                will_date[2]
+                                will_date[0][2]
+                              : will_date.length === 2
+                              ? "Date de rédaction : " +
+                                will_date[0][0] +
+                                " " +
+                                this.months[will_date[0][1] - 1] +
+                                " " +
+                                will_date[0][2] +
+                                " et " +
+                                will_date[1][0] +
+                                " " +
+                                this.months[will_date[1][1] - 1] +
+                                " " +
+                                will_date[1][2]
                               : ""}{" "}
                             {Boolean(
                               this.props.data["will_contents.will_place_norm"]

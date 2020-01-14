@@ -368,8 +368,7 @@ class Results extends React.Component {
                       "lieu",
                       "notoriale",
                       "profession",
-                      "unite",
-                      "checkBox"
+                      "unite"
                     ]
                   }}
                   dataField=""
@@ -400,8 +399,7 @@ class Results extends React.Component {
                       "lieu",
                       "notoriale",
                       "profession",
-                      "unite",
-                      "checkBox"
+                      "unite"
                     ]
                   }}
                   dataField={this.state.curField}

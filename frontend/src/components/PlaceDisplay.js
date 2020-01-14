@@ -4,9 +4,10 @@ import {
   createStyled,
   getParamConfig,
   getHitsFromQuery,
-  downloadFile,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
+  imageLoader,
+  toDataUrl
 } from "../utils/functions";
 import {
   Paper,
@@ -22,6 +23,7 @@ import GeoMap from "../utils/GeoMap";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
+import html2pdf from "html2pdf.js";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -119,11 +121,69 @@ export default class PlaceDisplay extends Component {
   }
 
   handleExportClick() {
-    downloadFile(
-      getParamConfig("web_url") +
-        "/files/contextualEntity_place_2019-11-06_03-28-52.xml",
-      "notice_place.xml"
-    );
+    let lieu_div = document.getElementById("lieu_notice");
+    let footer =
+      "<footer><div><p>Page <span class='pageCounter'></span>/<span class='totalPages'></span></p></div> </footer>";
+
+    const opt = {
+      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      margin: 1,
+      filename: "lieu_" + this.props.id + ".pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+    };
+    /* var totalPages = pdf.internal.getNumberOfPages();
+
+     for (i = 1; i <= totalPages; i++) {
+       pdf.setPage(i);
+       pdf.setFontSize(10);
+       pdf.setTextColor(150);
+       pdf.text(
+         "Page " + i + " of " + totalPages,
+         pdf.internal.pageSize.getWidth() - 100,
+         pdf.internal.pageSize.getHeight() - 30
+       );
+    } */
+
+    /* toDataUrl("http://127.0.0.1:3000/images/default-testator.png", function(
+      base64Img
+    ) {
+      html2pdf()
+        .set(opt)
+        .from(testator_div)
+        .toPdf()
+        .get("pdf")
+        .then(function(pdf) {
+          // Your code to alter the pdf object.
+          var totalPages = pdf.internal.getNumberOfPages();
+         // console.log("totalPages :", totalPages);
+          for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.addImage(
+              base64Img,
+              "JPEG",
+              pdf.internal.pageSize.getWidth() / 2,
+              pdf.internal.pageSize.getHeight() - 0.3,
+              0.5,
+              0.3
+            );
+            pdf.text(
+              "Page " + i,
+              pdf.internal.pageSize.getWidth() / 2,
+              pdf.internal.pageSize.getHeight() - 0.6
+            );
+          }
+        })
+        .save();
+    });*/
+
+    html2pdf()
+      .set(opt)
+      .from(lieu_div)
+      .save();
   }
 
   handleAddShoppingWill(id) {
@@ -529,7 +589,10 @@ export default class PlaceDisplay extends Component {
                       spacing={2}
                     >
                       <Grid item xs={6}>
-                        <Paper className={classNames(classes.paper)}>
+                        <Paper
+                          id="lieu_notice"
+                          className={classNames(classes.paper)}
+                        >
                           <Typography className={classes.name}>
                             {this.props.data["city"]}
                             {" ("}
@@ -540,38 +603,16 @@ export default class PlaceDisplay extends Component {
                               ? this.props.data["country"] + ")"
                               : ""}
                           </Typography>
-                          {Boolean(this.props.data["geo_ref"]) ? (
-                            <Typography className={classes.text}>
-                              Dans la base Geonames :{" "}
-                              <Link
-                                href={this.props.data["geo_ref"]}
-                                target="_blank"
-                              >
-                                {this.props.data["geo_ref"]}
-                              </Link>
-                            </Typography>
-                          ) : (
-                            ""
-                          )}
-                          <Grid
-                            className={classes.text}
-                            container
-                            direction="row"
-                            spacing={1}
-                          >
-                            <Grid item>
-                              <Typography> Permalien : </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Link
-                                href={place_uri}
-                                target="_blank"
-                                className={classNames(classes.urlPlace)}
-                              >
-                                {place_uri}
-                              </Link>
-                            </Grid>
-                          </Grid>
+                          <Typography className={classes.text}>
+                            Permalien dans l'édition numérique :{" "}
+                            <Link
+                              href={place_uri}
+                              target="_blank"
+                              className={classNames(classes.urlPlace)}
+                            >
+                              {place_uri}
+                            </Link>
+                          </Typography>
 
                           {Object.keys(this.state.birth_hits).length > 0 ? (
                             <div className={classes.panel}>
@@ -804,6 +845,19 @@ export default class PlaceDisplay extends Component {
                                 )}
                               </ul>
                             </div>
+                          ) : (
+                            ""
+                          )}
+                          {Boolean(this.props.data["geo_ref"]) ? (
+                            <Typography className={classes.text}>
+                              Voir ce lieu dans la base GeoNames :{" "}
+                              <Link
+                                href={this.props.data["geo_ref"]}
+                                target="_blank"
+                              >
+                                {this.props.data["geo_ref"]}
+                              </Link>
+                            </Typography>
                           ) : (
                             ""
                           )}

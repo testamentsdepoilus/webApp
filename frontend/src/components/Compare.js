@@ -1,10 +1,19 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Paper, Breadcrumbs, Link, Typography } from "@material-ui/core";
+import {
+  Paper,
+  Breadcrumbs,
+  Link,
+  Typography,
+  Grid,
+  Tooltip,
+  IconButton
+} from "@material-ui/core";
 import "../styles/Wills.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import WillCompare from "./WillCompare";
+import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 
 class Compare extends Component {
   constructor(props) {
@@ -14,7 +23,9 @@ class Compare extends Component {
       ids_term: ""
     };
   }
-
+  handleBackUp(e) {
+    document.location.href = document.referrer;
+  }
   componentDidMount() {
     const url = document.location.href;
     const idx = url.lastIndexOf("compare/");
@@ -54,35 +65,54 @@ class Compare extends Component {
   }
 
   render() {
-    const prevLink = document.referrer.includes("recherche?")
+    /*const prevLink = document.referrer.includes("recherche?")
       ? "/recherche?" + document.referrer.split("?")[1]
-      : "/recherche";
+      : "/recherche";*/
 
     return (
       <div>
-        <div className="wills_menu">
-          <Paper elevation={0}>
-            <Breadcrumbs
-              separator={<NavigateNextIcon fontSize="small" />}
-              aria-label="Breadcrumb"
-            >
-              <Link
-                id="search"
-                key={0}
-                color="inherit"
-                component={RouterLink}
-                to={prevLink}
-              >
-                {" "}
-                Recherche{" "}
-              </Link>
-              <Typography color="textPrimary" key={2}>
-                Comparaison des testaments
-              </Typography>
-            </Breadcrumbs>
-          </Paper>
-        </div>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item>
+            {document.referrer.length > 0 &&
+            document.referrer !== document.location.href ? (
+              <Tooltip title="Revenir en arrière">
+                <IconButton onClick={this.handleBackUp} aria-label="back up">
+                  <ArrowBackIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+          </Grid>
 
+          <Grid item>
+            <div className="wills_menu">
+              <Paper elevation={0}>
+                <Breadcrumbs
+                  separator={<NavigateNextIcon fontSize="small" />}
+                  aria-label="Breadcrumb"
+                >
+                  <Link
+                    id="search"
+                    color="inherit"
+                    key={0}
+                    component={RouterLink}
+                    to="/accueil"
+                  >
+                    Accueil
+                  </Link>
+                  <Typography color="textPrimary" key={2}>
+                    Comparaison des testaments
+                  </Typography>
+                </Breadcrumbs>
+              </Paper>
+            </div>
+          </Grid>
+        </Grid>
         <div>
           {this.state.data.length > 0 ? (
             <WillCompare data={this.state.data} />

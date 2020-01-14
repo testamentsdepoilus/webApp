@@ -714,52 +714,6 @@ class Home extends Component {
               <Grid item xs={4}>
                 <Grid container direction="column" spacing={2}>
                   <Grid item>
-                    {Boolean(this.state.selectedNews) ? (
-                      <Paper className={classes.item}>
-                        <Typography className={classes.title}>
-                          {" "}
-                          {this.state.selectedNews._source["title"]}{" "}
-                        </Typography>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              this.state.selectedNews._source["summary"] !== ""
-                                ? this.state.selectedNews._source["summary"]
-                                : this.state.selectedNews._source["detail"]
-                          }}
-                        ></div>
-                        <Paper className={classes.foot}>
-                          <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                          >
-                            <Grid item>
-                              {this.state.selectedNews._source["author"]}
-                            </Grid>
-                            <Grid item>
-                              {"Mise à jour le "}
-                              {date_news.toLocaleDateString()}
-                              {" à "}
-                              {date_news.toLocaleTimeString()}
-                            </Grid>
-                            <Grid item>
-                              <IconButton
-                                aria-label="More"
-                                onClick={this.handleMoreNewClick}
-                              >
-                                <MoreIcon className={classes.icon} />
-                              </IconButton>
-                            </Grid>
-                          </Grid>
-                        </Paper>
-                      </Paper>
-                    ) : (
-                      ""
-                    )}
-                  </Grid>
-                  <Grid item>
                     {Boolean(this.state.selectedArticle) ? (
                       <Paper className={classes.item}>
                         <Typography className={classes.title}>
@@ -795,6 +749,52 @@ class Home extends Component {
                               <IconButton
                                 aria-label="More"
                                 onClick={this.handleMoreArticleClick}
+                              >
+                                <MoreIcon className={classes.icon} />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+                        </Paper>
+                      </Paper>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+                  <Grid item>
+                    {Boolean(this.state.selectedNews) ? (
+                      <Paper className={classes.item}>
+                        <Typography className={classes.title}>
+                          {" "}
+                          {this.state.selectedNews._source["title"]}{" "}
+                        </Typography>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              this.state.selectedNews._source["summary"] !== ""
+                                ? this.state.selectedNews._source["summary"]
+                                : this.state.selectedNews._source["detail"]
+                          }}
+                        ></div>
+                        <Paper className={classes.foot}>
+                          <Grid
+                            container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center"
+                          >
+                            <Grid item>
+                              {this.state.selectedNews._source["author"]}
+                            </Grid>
+                            <Grid item>
+                              {"Mise à jour le "}
+                              {date_news.toLocaleDateString()}
+                              {" à "}
+                              {date_news.toLocaleTimeString()}
+                            </Grid>
+                            <Grid item>
+                              <IconButton
+                                aria-label="More"
+                                onClick={this.handleMoreNewClick}
                               >
                                 <MoreIcon className={classes.icon} />
                               </IconButton>

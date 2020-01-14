@@ -149,17 +149,12 @@ class TextSearch extends React.Component {
                 dataField={[this.state.value]}
                 queryFormat="or"
                 placeholder={"Que recherchez-vous dans " + page_name + " ?"}
-                iconPosition="right"
-                showIcon={false}
                 filterLabel="recherche"
-                autosuggest={false}
+                autosuggest={true}
+                showIcon={false}
                 customQuery={customQuery}
-                URLParams
-                onValueChange={function(value) {}}
-                onValueSelected={function(value, cause, source) {}}
-                onQueryChange={function(prevQuery, nextQuery) {}}
+                URLParams={true}
                 searchOperators={true}
-                fuzziness={"AUTO"}
                 innerClass={{
                   input: classes.inputSearch
                 }}

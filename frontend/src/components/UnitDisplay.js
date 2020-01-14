@@ -5,7 +5,6 @@ import {
   createStyled,
   getParamConfig,
   getHitsFromQuery,
-  downloadFile,
   getUserToken,
   updateMyListWills
 } from "../utils/functions";
@@ -21,6 +20,7 @@ import {
 import classNames from "classnames";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
+import html2pdf from "html2pdf.js";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -35,7 +35,8 @@ const Styled = createStyled(theme => ({
   },
   typo1: {
     fontFamily: "-apple-system",
-    fontSize: "1.1rem"
+    fontSize: "1.1rem",
+    margin: theme.spacing(0, 0, 1, 0)
   },
   typo2: {
     fontFamily: "-apple-system",
@@ -47,6 +48,20 @@ const Styled = createStyled(theme => ({
     fontSize: 14
   }
 }));
+
+function pdfCallback(pdfObject) {
+  var number_of_pages = pdfObject.putTotalPages().internal.getNumberOfPages();
+  console.log("number_of_pages :", number_of_pages);
+  var pdf_pages = pdfObject.internal.pages;
+  var myFooter = "Footer info";
+  for (var i = 1; i < pdf_pages.length; i++) {
+    // We are telling our pdfObject that we are now working on this page
+    pdfObject.setPage(i);
+    // The 10,200 value is only for A4 landscape. You need to define your own for other page sizes
+    pdfObject.text(myFooter, 0.1, 0.2);
+    pdfObject.text("my header text", 0.1, 0.1);
+  }
+}
 
 export default class UnitDisplay extends Component {
   constructor(props) {
@@ -76,11 +91,37 @@ export default class UnitDisplay extends Component {
   }
 
   handleExportClick() {
-    downloadFile(
-      getParamConfig("web_url") +
-        "/files/contextualEntity_militaryUnit_2019-11-06_10-29-32.xml",
-      "notice_militaryUnit.xml"
-    );
+    const unit_div = document.getElementById("unit_notice");
+    const opt = {
+      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      margin: 1,
+      filename: "unite_militaire_" + this.props.id + ".pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      pdfCallback: pdfCallback
+    };
+    html2pdf()
+      .set(opt)
+      .from(unit_div)
+      .save();
+    /*
+    .toPdf()
+      .get("pdf")
+      .then(function(pdf) {
+        const totalPages = pdf.internal.getNumberOfPages();
+        console.log("totalPages :", totalPages);
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(10);
+          pdf.setTextColor(150);
+          pdf.text(
+            pdf.internal.pageSize.width - 100,
+            pdf.internal.pageSize.height - 30,
+            "Page " + i + " of " + totalPages
+          );
+        }
+      })*/
   }
 
   componentDidUpdate() {
@@ -271,12 +312,12 @@ export default class UnitDisplay extends Component {
                   </Grid>
                 </Grid>
                 <Grid key={2} item>
-                  <Paper className={classNames(classes.paper)}>
+                  <Paper id="unit_notice" className={classNames(classes.paper)}>
                     <Typography className={classes.typo1}>
                       {this.props.data["country"] +
-                        " " +
+                        ". " +
                         this.props.data["composante"] +
-                        " " +
+                        ". " +
                         this.props.data["corps"] +
                         " (" +
                         this.props.data["number"] +

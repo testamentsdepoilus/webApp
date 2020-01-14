@@ -254,7 +254,8 @@ export default class ResultWills extends React.Component {
 
   handleCompareClick() {
     const url_ids = this.state.chipData.map(item => item["id"]);
-
+    localStorage.setItem("willCompare", JSON.stringify(this.state.styleTitle));
+    localStorage.setItem("chipData", JSON.stringify(this.state.chipData));
     window.location.href =
       getParamConfig("web_url") + "/compare/" + url_ids.join("+");
   }
@@ -295,10 +296,6 @@ export default class ResultWills extends React.Component {
         );
       }
     }
-
-    document
-      .getElementById("btCompare")
-      .addEventListener("click", this.handleCompareClick, true);
   }
 
   componentDidMount() {
@@ -311,6 +308,22 @@ export default class ResultWills extends React.Component {
         myWills: myWills_
       });
     }
+
+    if (localStorage.willCompare && localStorage.chipData) {
+      const willCompare_ = JSON.parse(localStorage.willCompare);
+      const chipData_ = JSON.parse(localStorage.chipData);
+      localStorage.removeItem("willCompare");
+      localStorage.removeItem("chipData");
+      this.setState({
+        styleTitle: willCompare_,
+        count: chipData_.length,
+        chipData: chipData_
+      });
+    }
+
+    document
+      .getElementById("btCompare")
+      .addEventListener("click", this.handleCompareClick, true);
   }
 
   render() {
@@ -447,22 +460,29 @@ export default class ResultWills extends React.Component {
                       <Grid item xs="auto" value={item["_id"]}>
                         <Grid container direction="row" spacing={1}>
                           <Grid item onClick={this.handleClickWill(item)}>
-                            <Tooltip
-                              title="Ajouter à la comparaison"
-                              style={{ cursor: "hand" }}
-                              interactive
-                              arrow={true}
-                            >
-                              {Boolean(this.state.styleTitle[item["_id"]]) ? (
+                            {Boolean(this.state.styleTitle[item["_id"]]) ? (
+                              <Tooltip
+                                title="Supprimer de la liste de comparaison"
+                                style={{ cursor: "hand" }}
+                                interactive
+                                arrow={true}
+                              >
                                 <IconButton>
                                   <ListAddCheckIcon color="action" />
                                 </IconButton>
-                              ) : (
+                              </Tooltip>
+                            ) : (
+                              <Tooltip
+                                title="Ajouter à la comparaison"
+                                style={{ cursor: "hand" }}
+                                interactive
+                                arrow={true}
+                              >
                                 <IconButton>
                                   <ListAddIcon />
                                 </IconButton>
-                              )}
-                            </Tooltip>
+                              </Tooltip>
+                            )}
                           </Grid>
                           <Grid item>
                             {Boolean(this.userToken) ? (

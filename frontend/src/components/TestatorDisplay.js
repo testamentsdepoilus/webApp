@@ -3,7 +3,6 @@ import {
   createStyled,
   getParamConfig,
   getHitsFromQuery,
-  downloadFile,
   getUserToken,
   updateMyListWills
 } from "../utils/functions";
@@ -16,19 +15,18 @@ import {
   Tooltip,
   Avatar
 } from "@material-ui/core";
-
 import "../styles/WillDisplay.css";
 import classNames from "classnames";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
+import html2pdf from "html2pdf.js";
 
 const Styled = createStyled(theme => ({
   paper: {
     marginTop: theme.spacing(3),
     padding: theme.spacing(2),
-    color: "#212121",
-    backgroundColor: "#FAFAFA",
+
     textAlign: "justify",
     fontSize: 18,
     margin: "auto"
@@ -114,11 +112,19 @@ export default class TestatorDisplay extends Component {
   }
 
   handleExportClick() {
-    downloadFile(
-      getParamConfig("web_url") +
-        "/files/contextualEntity_person_2019-11-06_04-04-43.xml",
-      "notice_person.xml"
-    );
+    const testator_div = document.getElementById("testator_notice");
+    const opt = {
+      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      margin: 1,
+      filename: "testateur" + this.props.id + ".pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+    };
+    html2pdf()
+      .set(opt)
+      .from(testator_div)
+      .save();
   }
 
   componentDidUpdate() {
@@ -159,7 +165,7 @@ export default class TestatorDisplay extends Component {
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
       JSON.stringify({
-        _source: ["_id", "will_contents.will_date", "testator.ref"],
+        _source: ["_id", "will_contents.will_date_range", "testator.ref"],
         query: {
           term: {
             "testator.ref": this.props.id
@@ -258,12 +264,22 @@ export default class TestatorDisplay extends Component {
         : null;
 
       const will_dates = this.state.wills.map(item => {
-        let will_date = Boolean(item._source["will_contents.will_date"])
-          ? new Date(item._source["will_contents.will_date"])
-          : null;
-        will_date = Boolean(will_date)
-          ? will_date.toLocaleDateString().split("/")
-          : null;
+        let will_date = [];
+        if (Boolean(item._source["will_contents.will_date_range"])) {
+          let date_ = new Date(
+            item._source["will_contents.will_date_range"]["gte"]
+          );
+          will_date.push(date_.toLocaleDateString().split("/"));
+          if (
+            item._source["will_contents.will_date_range"]["gte"] !==
+            item._source["will_contents.will_date_range"]["lte"]
+          ) {
+            date_ = new Date(
+              item._source["will_contents.will_date_range"]["lte"]
+            );
+            will_date.push(date_.toLocaleDateString().split("/"));
+          }
+        }
         return will_date;
       });
 
@@ -288,7 +304,7 @@ export default class TestatorDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter la notice des testateurs en format TEI"
+                        title="Exporter la notice du testateur en format PDF"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon fontSize="large" />
@@ -353,7 +369,10 @@ export default class TestatorDisplay extends Component {
                   </Grid>
                 ) : null}
                 <Grid key={2} item>
-                  <Paper className={classNames(classes.paper)}>
+                  <Paper
+                    id="testator_notice"
+                    className={classNames(classes.paper)}
+                  >
                     <Typography className={classes.name}>
                       {this.props.data["persName.fullIndexEntryForm.forename"]
                         .toString()
@@ -364,6 +383,18 @@ export default class TestatorDisplay extends Component {
                       {" ("} {Boolean(birth_date) ? birth_date[2] : ""}
                       {"-"}
                       {death_date.length > 0 ? death_date[0][2] : ""} {")"}
+                    </Typography>
+                    <Typography className={classes.text}>
+                      {" "}
+                      Permalien dans l'édition numérique :{" "}
+                      <Link
+                        href={testator_uri}
+                        target="_blank"
+                        className={classNames(classes.urlTestator)}
+                      >
+                        {" "}
+                        {testator_uri}{" "}
+                      </Link>
                     </Typography>
                     <Typography className={classes.text}>
                       {Boolean(this.props.data["residence.ref"]) ? (
@@ -520,26 +551,7 @@ export default class TestatorDisplay extends Component {
                     ) : (
                       ""
                     )}
-                    <Grid
-                      className={classes.text}
-                      container
-                      direction="row"
-                      spacing={1}
-                    >
-                      <Grid item>
-                        <Typography> Permalien : </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Link
-                          href={testator_uri}
-                          target="_blank"
-                          className={classNames(classes.urlTestator)}
-                        >
-                          {" "}
-                          {testator_uri}{" "}
-                        </Link>
-                      </Grid>
-                    </Grid>
+
                     {this.state.wills.length > 0 ? (
                       <div>
                         <Typography className={classes.text}>
@@ -557,15 +569,23 @@ export default class TestatorDisplay extends Component {
                             return (
                               <li key={i}>
                                 <Link href={will_uri} target="_blank">
-                                  Testament
-                                  {Boolean(will_dates[i])
-                                    ? " du " +
-                                      will_dates[i][0] +
+                                  Testament {" " + parseInt(i + 1, 10)}
+                                  {will_dates[i].length > 0
+                                    ? ", rédigé le " +
+                                      will_dates[i][0][0] +
                                       " " +
-                                      this.months[will_dates[i][1] - 1] +
+                                      this.months[will_dates[i][0][1] - 1] +
                                       " " +
-                                      will_dates[i][2]
-                                    : " " + parseInt(i + 1, 10)}
+                                      will_dates[i][0][2]
+                                    : ""}
+                                  {will_dates[i].length === 2
+                                    ? " et le " +
+                                      will_dates[i][1][0] +
+                                      " " +
+                                      this.months[will_dates[i][1][1] - 1] +
+                                      " " +
+                                      will_dates[i][1][2]
+                                    : ""}
                                 </Link>
                               </li>
                             );

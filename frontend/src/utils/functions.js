@@ -582,7 +582,6 @@ export function generatePDF(data) {
 
   let frag = document.createRange().createContextualFragment(outputHtml);
 
-  console.log("frag :", frag);
   /*const fs = require("fs");
   const conversion = require("phantom-html-to-pdf");
   conversion({ html: outputHtml }, function(err, pdf) {
@@ -594,5 +593,62 @@ export function generatePDF(data) {
     callback: function(doc) {
       doc.save(data["will_id"] + ".pdf");
     }
+  });
+}
+
+export function toDataUrl(src, callback, outputFormat) {
+  // Create an Image object
+  var img = new Image();
+  // Add CORS approval to prevent a tainted canvas
+  //img.crossOrigin = "Anonymous";
+  img.setAttribute("crossOrigin", "anonymous");
+  img.setAttribute("Access-Control-Allow-Origin", "*");
+
+  img.onload = function() {
+    // Create an html canvas element
+    var canvas = document.createElement("canvas");
+    // Create a 2d context
+    var ctx = canvas.getContext("2d");
+    var dataURL;
+    // Resize the canavas to the image dimensions
+    canvas.height = this.height;
+    canvas.width = this.width;
+    // Draw the image to a canvas
+    ctx.drawImage(this, 0, 0);
+    // Convert the canvas to a data url
+    dataURL = canvas.toDataURL(outputFormat);
+    // Return the data url via callback
+    callback(dataURL);
+    // Mark the canvas to be ready for garbage
+    // collection
+    canvas = null;
+  };
+  // Load the image
+  img.src = src;
+  // make sure the load event fires for cached images too
+  if (img.complete || img.complete === undefined) {
+    // Flush cache
+    img.src =
+      "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+    // Try again
+    img.src = src;
+  }
+}
+
+export function imageLoader(url) {
+  return new Promise((resolve, reject) => {
+    let blob = null;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.send();
+    xhr.addEventListener("load", () => {
+      blob = xhr.response;
+      let file = new File([blob], this.state.url_image);
+      resolve(file);
+    });
+    xhr.addEventListener("error", () => {
+      reject(xhr);
+    });
   });
 }
