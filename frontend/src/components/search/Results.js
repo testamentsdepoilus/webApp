@@ -483,52 +483,58 @@ class Results extends React.Component {
                       match_all: {}
                     }
                   })}
-                  render={({ data }) => {
-                    let birth_data = {};
-                    let death_data = {};
+                  render={({ loading, error, data }) => {
+                    if (data.length > 0) {
+                      let birth_data = {};
+                      let death_data = {};
 
-                    data.forEach(item => {
-                      if (Boolean(item["will_contents.birth_place_ref"])) {
-                        if (
-                          Boolean(
-                            birth_data[item["will_contents.birth_place_ref"]]
-                          )
-                        ) {
-                          birth_data[
-                            item["will_contents.birth_place_ref"]
-                          ].push(item);
-                        } else {
-                          birth_data[
-                            item["will_contents.birth_place_ref"]
-                          ] = [];
-                          birth_data[
-                            item["will_contents.birth_place_ref"]
-                          ].push(item);
+                      data.forEach(item => {
+                        if (Boolean(item["will_contents.birth_place_ref"])) {
+                          if (
+                            Boolean(
+                              birth_data[item["will_contents.birth_place_ref"]]
+                            )
+                          ) {
+                            birth_data[
+                              item["will_contents.birth_place_ref"]
+                            ].push(item);
+                          } else {
+                            birth_data[
+                              item["will_contents.birth_place_ref"]
+                            ] = [];
+                            birth_data[
+                              item["will_contents.birth_place_ref"]
+                            ].push(item);
+                          }
                         }
-                      }
-                      if (Boolean(item["will_contents.death_place_ref"])) {
-                        if (
-                          Boolean(
-                            death_data[item["will_contents.death_place_ref"]]
-                          )
-                        ) {
-                          death_data[
-                            item["will_contents.death_place_ref"]
-                          ].push(item);
-                        } else {
-                          death_data[
-                            item["will_contents.death_place_ref"]
-                          ] = [];
-                          death_data[
-                            item["will_contents.death_place_ref"]
-                          ].push(item);
+                        if (Boolean(item["will_contents.death_place_ref"])) {
+                          if (
+                            Boolean(
+                              death_data[item["will_contents.death_place_ref"]]
+                            )
+                          ) {
+                            death_data[
+                              item["will_contents.death_place_ref"]
+                            ].push(item);
+                          } else {
+                            death_data[
+                              item["will_contents.death_place_ref"]
+                            ] = [];
+                            death_data[
+                              item["will_contents.death_place_ref"]
+                            ].push(item);
+                          }
                         }
-                      }
-                    });
-
-                    return (
-                      <GeoMap birth_data={birth_data} death_data={death_data} />
-                    );
+                      });
+                      return (
+                        <GeoMap
+                          birth_data={birth_data}
+                          death_data={death_data}
+                        />
+                      );
+                    } else {
+                      return null;
+                    }
                   }}
                 />
               </Grid>

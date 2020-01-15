@@ -68,7 +68,6 @@ export default class CustumerDataSearch extends Component {
                   autosuggest={true}
                   placeholder="Nom du testateur"
                   URLParams={true}
-                  loader="En chargement ..."
                   showSearch={true}
                   searchPlaceholder="Taper le nom ici"
                   innerClass={{
@@ -79,39 +78,6 @@ export default class CustumerDataSearch extends Component {
 
               <Grid item>
                 <PlaceFilter />
-                {/*<SingleDropdownList
-                  className="datasearch"
-                  react={{
-                    and: [
-                      "texte",
-                      "date_redaction",
-                      "institution",
-                      "contributeur",
-                      "nom_testateur",
-                      "collection",
-                      "lieu_redaction",
-                      "lieu_deces",
-                      "notoriale",
-                      "profession",
-                      "unite",
-                      "cote"
-                    ]
-                  }}
-                  componentId="lieu_naissance"
-                  dataField="will_contents.birth_place_norm.keyword"
-                  size={1000}
-                  sortBy="asc"
-                  showCount={false}
-                  autosuggest={true}
-                  placeholder="Lieu de naissance"
-                  URLParams={true}
-                  loader="En chargement ..."
-                  showSearch={true}
-                  searchPlaceholder="Taper le cote ici"
-                  innerClass={{
-                    list: "list"
-                  }}
-                />*/}
               </Grid>
             </Grid>
 
@@ -156,7 +122,6 @@ export default class CustumerDataSearch extends Component {
                 autosuggest={true}
                 placeholder="Profession"
                 URLParams={true}
-                loader="En chargement ..."
                 showSearch={true}
                 searchPlaceholder="Taper la profession ici"
                 innerClass={{
@@ -191,7 +156,6 @@ export default class CustumerDataSearch extends Component {
                 autosuggest={true}
                 placeholder="Unité militaire"
                 URLParams={true}
-                loader="En chargement ..."
                 showSearch={true}
                 searchPlaceholder="Taper l'unité ici"
                 innerClass={{
@@ -226,7 +190,6 @@ export default class CustumerDataSearch extends Component {
                 autosuggest={true}
                 placeholder="Institution de conservation"
                 URLParams={true}
-                loader="En chargement ..."
                 showSearch={true}
                 searchPlaceholder="Taper l'institution ici"
               />
@@ -258,7 +221,6 @@ export default class CustumerDataSearch extends Component {
                 autosuggest={true}
                 placeholder="Cote du testament"
                 URLParams={true}
-                loader="En chargement ..."
                 showSearch={true}
                 searchPlaceholder="Taper le cote ici"
                 innerClass={{
@@ -294,7 +256,6 @@ export default class CustumerDataSearch extends Component {
                 autosuggest={true}
                 placeholder="Étude notariale"
                 URLParams={true}
-                loader="En chargement ..."
                 showSearch={true}
                 searchPlaceholder="Taper ici"
                 innerClass={{

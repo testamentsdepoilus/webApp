@@ -15,7 +15,8 @@ export default class GeoMap extends React.Component {
       birth_data: [],
       death_data: [],
       checkedA: false,
-      checkedB: true
+      checkedB: true,
+      count: 0
     };
     this.handleCheckA = this.handleCheckA.bind(this);
     this.handleCheckB = this.handleCheckB.bind(this);
@@ -44,195 +45,200 @@ export default class GeoMap extends React.Component {
     });
   }
 
-  /*
-    addMarkers(){
-        var markers = L.markerClusterGroup();
-        markers.addLayer(L.marker(getRandomLatLng(map)));
-        ... Add more layers ...
-        map.addLayer(markers);
-    }*/
-
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (Boolean(nextProps.birth_data) && Boolean(nextProps.death_data)) {
+    if (
+      JSON.stringify(nextProps.birth_data) !==
+        JSON.stringify(prevState.birth_data) ||
+      JSON.stringify(nextProps.death_data) !==
+        JSON.stringify(prevState.death_data)
+    ) {
       return {
         birth_data: nextProps.birth_data,
-        death_data: nextProps.death_data
+        death_data: nextProps.death_data,
+        count: 0
       };
     }
     return null;
   }
 
   componentDidUpdate() {
-    let element = (
-      <Grid container direction="column" justify="center" alignItems="center">
-        <Grid item container direction="row">
-          <Grid item>
-            <img
-              alt="blue-icon"
-              src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png"
-            ></img>
+    if (this.state.count === 0) {
+      let element = (
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Grid item container direction="row">
+            <Grid item>
+              <img
+                alt="blue-icon"
+                src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png"
+              ></img>
+            </Grid>
+            <Grid item>
+              <span>Lieu de naissance</span>
+            </Grid>
+            <Grid item>
+              <Checkbox
+                checked={this.state.checkedA}
+                onChange={this.handleCheckA}
+                value="checked"
+                inputProps={{
+                  "aria-label": "primary checkbox"
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <span>Lieu de naissance</span>
-          </Grid>
-          <Grid item>
+          <Grid item container direction="row">
+            <Grid item>
+              <img
+                alt="red-icon"
+                src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png"
+              ></img>
+            </Grid>
+            <Grid item>
+              <span>Lieu de décès</span>
+            </Grid>
+            <Grid item></Grid>
             <Checkbox
-              checked={this.state.checkedA}
-              onChange={this.handleCheckA}
-              value="checked"
+              checked={this.state.checkedB}
+              onChange={this.handleCheckB}
+              value="checkedB"
               inputProps={{
                 "aria-label": "primary checkbox"
               }}
             />
           </Grid>
         </Grid>
-        <Grid item container direction="row">
-          <Grid item>
-            <img
-              alt="red-icon"
-              src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png"
-            ></img>
-          </Grid>
-          <Grid item>
-            <span>Lieu de décès</span>
-          </Grid>
-          <Grid item></Grid>
-          <Checkbox
-            checked={this.state.checkedB}
-            onChange={this.handleCheckB}
-            value="checkedB"
-            inputProps={{
-              "aria-label": "primary checkbox"
-            }}
-          />
-        </Grid>
-      </Grid>
-    );
+      );
 
-    ReactDOM.render(element, document.getElementById("legend"));
-    this.markers.clearLayers();
-    Object.values(this.state.birth_data).forEach((point, i) => {
-      if (
-        Boolean(point[0]["will_contents.birth_place"]) &&
-        this.state.checkedA
-      ) {
-        let marker = L.marker(point[0]["will_contents.birth_place"], {
-          icon: this.blueIcon
-        });
-        let contents = [];
+      ReactDOM.render(element, document.getElementById("legend"));
+      this.markers.clearLayers();
+      Object.values(this.state.birth_data).forEach((point, i) => {
+        if (
+          Boolean(point[0]["will_contents.birth_place"]) &&
+          this.state.checkedA
+        ) {
+          let marker = L.marker(point[0]["will_contents.birth_place"], {
+            icon: this.blueIcon
+          });
+          let contents = [];
 
-        contents.push(
-          <Link
-            key={0}
-            href={
-              getParamConfig("web_url") +
-              "/place/" +
-              point[0]["will_contents.birth_place_ref"]
-            }
-            target="_blank"
-          >
-            <h4>{point[0]["will_contents.birth_place_norm"]}</h4>
-          </Link>
-        );
-        if (point.length === 1) {
           contents.push(
-            <h4 key={1}>Lieu de naissance du testateur suivant :</h4>
+            <Link
+              key={0}
+              href={
+                getParamConfig("web_url") +
+                "/place/" +
+                point[0]["will_contents.birth_place_ref"]
+              }
+              target="_blank"
+            >
+              <h4>{point[0]["will_contents.birth_place_norm"]}</h4>
+            </Link>
           );
-        } else if (point.length > 1) {
+          if (point.length === 1) {
+            contents.push(
+              <h4 key={1}>Lieu de naissance du testateur suivant :</h4>
+            );
+          } else if (point.length > 1) {
+            contents.push(
+              <h4 key={1}>Lieu de naissance des testateurs suivants :</h4>
+            );
+          }
+          let myList = [];
+          point.forEach((item, i) => {
+            myList.push(
+              <li key={i}>
+                <Link
+                  href={
+                    getParamConfig("web_url") +
+                    "/testateur/" +
+                    item["testator.ref"]
+                  }
+                  target="_blank"
+                >
+                  {item["testator.forename"]}{" "}
+                  <span style={{ fontVariantCaps: "small-caps" }}>
+                    {item["testator.surname"]}
+                  </span>
+                </Link>
+              </li>
+            );
+          });
+          if (myList.length > 0) {
+            contents.push(<ul key={i * 10}>{myList}</ul>);
+          }
+
+          const popupContent = <div className="map-popup">{contents}</div>;
+          marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+          this.markers.addLayer(marker);
+        }
+      });
+      Object.values(this.state.death_data).forEach((point, i) => {
+        if (
+          Boolean(point[0]["will_contents.death_place"]) &&
+          this.state.checkedB
+        ) {
+          let marker = L.marker(point[0]["will_contents.death_place"], {
+            icon: this.redIcon
+          });
+          let contents = [];
+
           contents.push(
-            <h4 key={1}>Lieu de naissance des testateurs suivants :</h4>
+            <Link
+              key={0}
+              href={
+                getParamConfig("web_url") +
+                "/place/" +
+                point[0]["will_contents.death_place_ref"]
+              }
+              target="_blank"
+            >
+              <h4>{point[0]["will_contents.death_place_norm"]}</h4>
+            </Link>
           );
-        }
-        let myList = [];
-        point.forEach((item, i) => {
-          myList.push(
-            <li key={i}>
-              <Link
-                href={
-                  getParamConfig("web_url") +
-                  "/testateur/" +
-                  item["testator.ref"]
-                }
-                target="_blank"
-              >
-                {item["testator.forename"]}{" "}
-                <span style={{ fontVariantCaps: "small-caps" }}>
-                  {item["testator.surname"]}
-                </span>
-              </Link>
-            </li>
-          );
-        });
-        if (myList.length > 0) {
-          contents.push(<ul key={i * 10}>{myList}</ul>);
-        }
+          if (point.length === 1) {
+            contents.push(
+              <h4 key={1}>Lieu de décès du testateur suivant :</h4>
+            );
+          } else if (point.length > 1) {
+            contents.push(
+              <h4 key={1}>Lieu de décès des testateurs suivants :</h4>
+            );
+          }
+          let myList = [];
+          point.forEach((item, i) => {
+            myList.push(
+              <li key={i}>
+                <Link
+                  href={
+                    getParamConfig("web_url") +
+                    "/testateur/" +
+                    item["testator.ref"]
+                  }
+                  target="_blank"
+                >
+                  {item["testator.forename"]}{" "}
+                  <span style={{ fontVariantCaps: "small-caps" }}>
+                    {item["testator.surname"]}
+                  </span>
+                </Link>
+              </li>
+            );
+          });
+          if (myList.length > 0) {
+            contents.push(<ul key={i * 10}>{myList}</ul>);
+          }
 
-        const popupContent = <div className="map-popup">{contents}</div>;
-        marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
-        this.markers.addLayer(marker);
-      }
-    });
-    Object.values(this.state.death_data).forEach((point, i) => {
-      if (
-        Boolean(point[0]["will_contents.death_place"]) &&
-        this.state.checkedB
-      ) {
-        let marker = L.marker(point[0]["will_contents.death_place"], {
-          icon: this.redIcon
-        });
-        let contents = [];
-
-        contents.push(
-          <Link
-            key={0}
-            href={
-              getParamConfig("web_url") +
-              "/place/" +
-              point[0]["will_contents.death_place_ref"]
-            }
-            target="_blank"
-          >
-            <h4>{point[0]["will_contents.death_place_norm"]}</h4>
-          </Link>
-        );
-        if (point.length === 1) {
-          contents.push(<h4 key={1}>Lieu de décès du testateur suivant :</h4>);
-        } else if (point.length > 1) {
-          contents.push(
-            <h4 key={1}>Lieu de décès des testateurs suivants :</h4>
-          );
+          const popupContent = <div className="map-popup">{contents}</div>;
+          marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+          this.markers.addLayer(marker);
         }
-        let myList = [];
-        point.forEach((item, i) => {
-          myList.push(
-            <li key={i}>
-              <Link
-                href={
-                  getParamConfig("web_url") +
-                  "/testateur/" +
-                  item["testator.ref"]
-                }
-                target="_blank"
-              >
-                {item["testator.forename"]}{" "}
-                <span style={{ fontVariantCaps: "small-caps" }}>
-                  {item["testator.surname"]}
-                </span>
-              </Link>
-            </li>
-          );
-        });
-        if (myList.length > 0) {
-          contents.push(<ul key={i * 10}>{myList}</ul>);
-        }
+      });
 
-        const popupContent = <div className="map-popup">{contents}</div>;
-        marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
-        this.markers.addLayer(marker);
-      }
-    });
-
-    this.map.addLayer(this.markers);
+      this.map.addLayer(this.markers);
+      this.setState({
+        count: this.state.count + 1
+      });
+    }
   }
   componentDidMount() {
     this.map = L.map(ReactDOM.findDOMNode(this)).setView(
@@ -313,6 +319,7 @@ export default class GeoMap extends React.Component {
 
         contents.push(
           <Link
+            key={i}
             href={
               getParamConfig("web_url") +
               "/place/" +
@@ -324,14 +331,16 @@ export default class GeoMap extends React.Component {
           </Link>
         );
         if (point.length === 1) {
-          contents.push(<h4>Lieu de décès du testateur suivant :</h4>);
+          contents.push(<h4 key={i}>Lieu de décès du testateur suivant :</h4>);
         } else if (point.length > 1) {
-          contents.push(<h4>Lieu de décès des testateurs suivants :</h4>);
+          contents.push(
+            <h4 key={i}>Lieu de décès des testateurs suivants :</h4>
+          );
         }
         let myList = [];
-        point.forEach(item => {
+        point.forEach((item, j) => {
           myList.push(
-            <li>
+            <li key={j}>
               <Link
                 href={
                   getParamConfig("web_url") +
@@ -349,7 +358,7 @@ export default class GeoMap extends React.Component {
           );
         });
         if (myList.length > 0) {
-          contents.push(<ul>{myList}</ul>);
+          contents.push(<ul key={i}>{myList}</ul>);
         }
 
         const popupContent = <div className="map-popup">{contents}</div>;

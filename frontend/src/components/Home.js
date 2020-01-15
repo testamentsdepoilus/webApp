@@ -211,8 +211,22 @@ class Home extends Component {
 
       var options = {
         chart: {
-          type: "pie"
+          type: "pie",
+          width: 380
         },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: "bottom"
+              }
+            }
+          }
+        ],
         series: series,
         labels: labels
       };

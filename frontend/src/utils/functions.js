@@ -580,7 +580,7 @@ export function generatePDF(data) {
   outputHtml += outputEdition;
   outputHtml += "</div>";
 
-  let frag = document.createRange().createContextualFragment(outputHtml);
+  //let frag = document.createRange().createContextualFragment(outputHtml);
 
   /*const fs = require("fs");
   const conversion = require("phantom-html-to-pdf");

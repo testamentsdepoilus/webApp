@@ -5,9 +5,7 @@ import {
   getParamConfig,
   getHitsFromQuery,
   getUserToken,
-  updateMyListWills,
-  imageLoader,
-  toDataUrl
+  updateMyListWills
 } from "../utils/functions";
 import {
   Paper,
@@ -122,9 +120,9 @@ export default class PlaceDisplay extends Component {
 
   handleExportClick() {
     let lieu_div = document.getElementById("lieu_notice");
-    let footer =
+    /*let footer =
       "<footer><div><p>Page <span class='pageCounter'></span>/<span class='totalPages'></span></p></div> </footer>";
-
+*/
     const opt = {
       pagebreak: { mode: ["avoid-all", "css", "legacy"] },
       margin: 1,
