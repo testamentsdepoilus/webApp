@@ -5,7 +5,8 @@ import {
   getParamConfig,
   getHitsFromQuery,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
+  generatePDF
 } from "../utils/functions";
 import {
   Paper,
@@ -13,7 +14,8 @@ import {
   Grid,
   Link,
   IconButton,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from "@material-ui/core";
 
 import classNames from "classnames";
@@ -21,7 +23,7 @@ import GeoMap from "../utils/GeoMap";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-import html2pdf from "html2pdf.js";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -39,19 +41,15 @@ const Styled = createStyled(theme => ({
     margin: theme.spacing(2, 0, 2, 0)
   },
   name: {
+    fontSize: "1.2rem",
     fontFamily: "-apple-system",
     marginTop: theme.spacing(1),
     fontWeight: 600
   },
   text: {
+    fontSize: "1rem",
     fontFamily: "-apple-system",
     marginTop: theme.spacing(1)
-  },
-  title: {
-    fontSize: 24,
-    fontStyle: "oblique",
-    textAlign: "center",
-    fontWeight: 600
   },
   linkPage: {
     color: "#212121",
@@ -91,11 +89,13 @@ export default class PlaceDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      birth_hits: {},
-      death_hits: {},
-      residence_hits: {},
+      birth_hits: [],
+      death_hits: [],
+      residence_hits: [],
+      redaction_hits: [],
       place_id: this.props.id,
-      myPlaces: []
+      myPlaces: [],
+      isLoading: false
     };
 
     this.months = [
@@ -119,69 +119,22 @@ export default class PlaceDisplay extends Component {
   }
 
   handleExportClick() {
-    let lieu_div = document.getElementById("lieu_notice");
-    /*let footer =
-      "<footer><div><p>Page <span class='pageCounter'></span>/<span class='totalPages'></span></p></div> </footer>";
-*/
-    const opt = {
-      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-      margin: 1,
-      filename: "lieu_" + this.props.id + ".pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-    };
-    /* var totalPages = pdf.internal.getNumberOfPages();
-
-     for (i = 1; i <= totalPages; i++) {
-       pdf.setPage(i);
-       pdf.setFontSize(10);
-       pdf.setTextColor(150);
-       pdf.text(
-         "Page " + i + " of " + totalPages,
-         pdf.internal.pageSize.getWidth() - 100,
-         pdf.internal.pageSize.getHeight() - 30
-       );
-    } */
-
-    /* toDataUrl("http://127.0.0.1:3000/images/default-testator.png", function(
-      base64Img
-    ) {
-      html2pdf()
-        .set(opt)
-        .from(testator_div)
-        .toPdf()
-        .get("pdf")
-        .then(function(pdf) {
-          // Your code to alter the pdf object.
-          var totalPages = pdf.internal.getNumberOfPages();
-         // console.log("totalPages :", totalPages);
-          for (let i = 1; i <= totalPages; i++) {
-            pdf.setPage(i);
-            pdf.setFontSize(10);
-            pdf.setTextColor(150);
-            pdf.addImage(
-              base64Img,
-              "JPEG",
-              pdf.internal.pageSize.getWidth() / 2,
-              pdf.internal.pageSize.getHeight() - 0.3,
-              0.5,
-              0.3
-            );
-            pdf.text(
-              "Page " + i,
-              pdf.internal.pageSize.getWidth() / 2,
-              pdf.internal.pageSize.getHeight() - 0.6
-            );
-          }
-        })
-        .save();
-    });*/
-
-    html2pdf()
-      .set(opt)
-      .from(lieu_div)
-      .save();
+    let lieu_div = document.getElementById("lieu_notice").innerHTML;
+    this.setState({
+      isLoading: true
+    });
+    generatePDF(lieu_div, "lieu_" + this.props.id)
+      .then(res => {
+        this.setState({
+          isLoading: false
+        });
+      })
+      .catch(e => {
+        this.setState({
+          isLoading: false
+        });
+        console.log(e);
+      });
   }
 
   handleAddShoppingWill(id) {
@@ -227,32 +180,31 @@ export default class PlaceDisplay extends Component {
   }
 
   componentDidUpdate() {
-    let new_birth_hits = {};
-    let new_death_hits = {};
-    let new_residence_hits = {};
     let cur_id =
-      Object.keys(this.state.birth_hits).length > 0 &&
-      Boolean(this.state.birth_hits["testators"])
-        ? this.state.birth_hits["testators"][0]._source["birth.place.ref"]
+      this.state.birth_hits.length > 0
+        ? this.state.birth_hits[0]._source["birth.place.ref"]
         : null;
     cur_id = Boolean(cur_id)
       ? cur_id
-      : Object.keys(this.state.death_hits).length > 0 &&
-        Boolean(this.state.death_hits["testators"])
-      ? this.state.death_hits["testators"][0]._source["death.place.ref"]
+      : this.state.death_hits.length > 0
+      ? this.state.death_hits[0]._source["death.place.ref"]
       : null;
     cur_id = Boolean(cur_id)
       ? cur_id
-      : Object.keys(this.state.residence_hits).length > 0 &&
-        Boolean(this.state.residence_hits["testators"])
-      ? this.state.residence_hits["testators"][0]._source["residence.ref"]
+      : this.state.residence_hits.length > 0
+      ? this.state.residence_hits[0]._source["residence.ref"]
+      : null;
+    cur_id = Boolean(cur_id)
+      ? cur_id
+      : this.state.redaction_hits.length > 0
+      ? this.state.redaction_hits[0]._source["will_place_ref"]
       : null;
 
     if (cur_id !== this.props.id) {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
-          size: 100,
+          size: 1000,
           query: {
             term: {
               "birth.place.ref": this.props.id
@@ -261,30 +213,13 @@ export default class PlaceDisplay extends Component {
         })
       ).then(hits => {
         if (hits.length > 0) {
-          new_birth_hits["testators"] = hits;
-          const ids = hits.map(item => item._id);
-          getHitsFromQuery(
-            getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-            JSON.stringify({
-              _source: ["_id", "testator.ref"],
-              query: {
-                terms: {
-                  "testator.ref": ids
-                }
-              }
-            })
-          )
-            .then(wills => {
-              new_birth_hits["wills"] = wills;
-              this.setState({
-                birth_hits: new_birth_hits
-              });
-            })
-            .catch(err => console.log("erreur :", err));
+          this.setState({
+            birth_hits: hits
+          });
         } else {
-          if (Object.keys(this.state.birth_hits).length > 0) {
+          if (this.state.birth_hits.length > 0) {
             this.setState({
-              birth_hits: {}
+              birth_hits: []
             });
           }
         }
@@ -292,7 +227,7 @@ export default class PlaceDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
-          size: 100,
+          size: 1000,
           query: {
             term: {
               "death.place.ref": this.props.id
@@ -302,32 +237,13 @@ export default class PlaceDisplay extends Component {
       )
         .then(hits => {
           if (hits.length > 0) {
-            new_death_hits["testators"] = hits;
-            const ids = hits.map(item => item._id);
-            getHitsFromQuery(
-              getParamConfig("es_host") +
-                "/" +
-                getParamConfig("es_index_wills"),
-              JSON.stringify({
-                _source: ["_id", "testator.ref"],
-                query: {
-                  terms: {
-                    "testator.ref": ids
-                  }
-                }
-              })
-            )
-              .then(wills => {
-                new_death_hits["wills"] = wills;
-                this.setState({
-                  death_hits: new_death_hits
-                });
-              })
-              .catch(err => console.log("erreur :", err));
+            this.setState({
+              death_hits: hits
+            });
           } else {
-            if (Object.keys(this.state.death_hits).length > 0) {
+            if (this.state.death_hits.length > 0) {
               this.setState({
-                death_hits: {}
+                death_hits: []
               });
             }
           }
@@ -336,7 +252,7 @@ export default class PlaceDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
         JSON.stringify({
-          size: 100,
+          size: 1000,
           query: {
             term: {
               "residence.ref": this.props.id
@@ -346,32 +262,38 @@ export default class PlaceDisplay extends Component {
       )
         .then(hits => {
           if (hits.length > 0) {
-            new_residence_hits["testators"] = hits;
-            const ids = hits.map(item => item._id);
-            getHitsFromQuery(
-              getParamConfig("es_host") +
-                "/" +
-                getParamConfig("es_index_wills"),
-              JSON.stringify({
-                _source: ["_id", "testator.ref"],
-                query: {
-                  terms: {
-                    "testator.ref": ids
-                  }
-                }
-              })
-            )
-              .then(wills => {
-                new_residence_hits["wills"] = wills;
-                this.setState({
-                  residence_hits: new_residence_hits
-                });
-              })
-              .catch(err => console.log("erreur :", err));
+            this.setState({
+              residence_hits: hits
+            });
           } else {
-            if (Object.keys(this.state.residence_hits).length > 0) {
+            if (this.state.residence_hits.length > 0) {
               this.setState({
-                residence_hits: {}
+                residence_hits: []
+              });
+            }
+          }
+        })
+        .catch(err => console.log("erreur :", err));
+      getHitsFromQuery(
+        getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+        JSON.stringify({
+          size: 1000,
+          query: {
+            term: {
+              "will_contents.will_place_ref": this.props.id
+            }
+          }
+        })
+      )
+        .then(hits => {
+          if (hits.length > 0) {
+            this.setState({
+              redaction_hits: hits
+            });
+          } else {
+            if (this.state.redaction_hits.length > 0) {
+              this.setState({
+                redaction_hits: []
               });
             }
           }
@@ -381,47 +303,29 @@ export default class PlaceDisplay extends Component {
   }
 
   componentDidMount() {
-    let new_birth_hits = {};
-    let new_death_hits = {};
-    let new_residence_hits = {};
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
-        size: 100,
+        size: 1000,
         query: {
           term: {
             "birth.place.ref": this.props.id
           }
         }
       })
-    ).then(hits => {
-      if (hits.length > 0) {
-        new_birth_hits["testators"] = hits;
-        const ids = hits.map(item => item._id);
-        getHitsFromQuery(
-          getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-          JSON.stringify({
-            _source: ["_id", "testator.ref"],
-            query: {
-              terms: {
-                "testator.ref": ids
-              }
-            }
-          })
-        )
-          .then(wills => {
-            new_birth_hits["wills"] = wills;
-            this.setState({
-              birth_hits: new_birth_hits
-            });
-          })
-          .catch(err => console.log("erreur :", err));
-      }
-    });
+    )
+      .then(hits => {
+        if (hits.length > 0) {
+          this.setState({
+            birth_hits: hits
+          });
+        }
+      })
+      .catch(err => console.log("erreur :", err));
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
-        size: 100,
+        size: 1000,
         query: {
           term: {
             "death.place.ref": this.props.id
@@ -431,33 +335,16 @@ export default class PlaceDisplay extends Component {
     )
       .then(hits => {
         if (hits.length > 0) {
-          new_death_hits["testators"] = hits;
-          const ids = hits.map(item => item._id);
-          getHitsFromQuery(
-            getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-            JSON.stringify({
-              _source: ["_id", "testator.ref"],
-              query: {
-                terms: {
-                  "testator.ref": ids
-                }
-              }
-            })
-          )
-            .then(wills => {
-              new_death_hits["wills"] = wills;
-              this.setState({
-                death_hits: new_death_hits
-              });
-            })
-            .catch(err => console.log("erreur :", err));
+          this.setState({
+            death_hits: hits
+          });
         }
       })
       .catch(err => console.log("erreur :", err));
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
-        size: 100,
+        size: 1000,
         query: {
           term: {
             "residence.ref": this.props.id
@@ -467,26 +354,29 @@ export default class PlaceDisplay extends Component {
     )
       .then(hits => {
         if (hits.length > 0) {
-          new_residence_hits["testators"] = hits;
-          const ids = hits.map(item => item._id);
-          getHitsFromQuery(
-            getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-            JSON.stringify({
-              _source: ["_id", "testator.ref"],
-              query: {
-                terms: {
-                  "testator.ref": ids
-                }
-              }
-            })
-          )
-            .then(wills => {
-              new_residence_hits["wills"] = wills;
-              this.setState({
-                residence_hits: new_residence_hits
-              });
-            })
-            .catch(err => console.log("erreur :", err));
+          this.setState({
+            residence_hits: hits
+          });
+        }
+      })
+      .catch(err => console.log("erreur :", err));
+
+    getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+      JSON.stringify({
+        size: 1000,
+        query: {
+          term: {
+            "will_contents.will_place_ref": this.props.id
+          }
+        }
+      })
+    )
+      .then(hits => {
+        if (hits.length > 0) {
+          this.setState({
+            redaction_hits: hits
+          });
         }
       })
       .catch(err => console.log("erreur :", err));
@@ -526,11 +416,16 @@ export default class PlaceDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter la notice des lieux en format TEI"
+                        title="Exporter la notice des lieux en format PDF"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon fontSize="large" />
                       </IconButton>
+                      {Boolean(this.state.isLoading) ? (
+                        <CircularProgress />
+                      ) : (
+                        ""
+                      )}
                     </Grid>
                     <Grid item>
                       {Boolean(this.userToken) ? (
@@ -611,241 +506,6 @@ export default class PlaceDisplay extends Component {
                               {place_uri}
                             </Link>
                           </Typography>
-
-                          {Object.keys(this.state.birth_hits).length > 0 ? (
-                            <div className={classes.panel}>
-                              <Typography className={classes.text}>
-                                Le lieu de naissance
-                                {this.state.birth_hits["testators"].length > 1
-                                  ? " des Poilus suivants :"
-                                  : " du Poilu suivant :"}{" "}
-                              </Typography>
-                              <ul>
-                                {this.state.birth_hits["testators"].map(
-                                  (hit, i) => {
-                                    let date = Boolean(
-                                      hit._source["birth.date"]
-                                    )
-                                      ? new Date(hit._source["birth.date"])
-                                      : null;
-
-                                    date = Boolean(date)
-                                      ? date.toLocaleDateString().split("/")
-                                      : null;
-
-                                    /*const will = Boolean(
-                                      this.state.birth_hits["wills"]
-                                    )
-                                      ? this.state.birth_hits["wills"].find(
-                                          item =>
-                                            item._source["testator.ref"] ===
-                                            hit._id
-                                        )
-                                      : null;*/
-                                    return (
-                                      <li key={i} className={classes.text}>
-                                        <Link
-                                          href={
-                                            getParamConfig("web_url") +
-                                            "/testateur/" +
-                                            hit._id
-                                          }
-                                          target="_blank"
-                                        >
-                                          {hit._source[
-                                            "persName.fullIndexEntryForm.forename"
-                                          ]
-                                            .toString()
-                                            .replace(/,/g, " ") + " "}
-                                          <span
-                                            style={{
-                                              fontVariantCaps: "small-caps"
-                                            }}
-                                          >
-                                            {
-                                              hit._source[
-                                                "persName.fullIndexEntryForm.surname"
-                                              ]
-                                            }
-                                          </span>
-
-                                          {Boolean(date)
-                                            ? ", né le " +
-                                              date[0] +
-                                              " " +
-                                              this.months[date[1] - 1] +
-                                              " " +
-                                              date[2]
-                                            : " "}
-                                        </Link>
-                                      </li>
-                                    );
-                                  }
-                                )}
-                              </ul>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                          {Object.keys(this.state.residence_hits).length > 0 ? (
-                            <div className={classes.panel}>
-                              <Typography className={classes.text}>
-                                Le lieu de résidence
-                                {this.state.residence_hits["testators"].length >
-                                1
-                                  ? " des Poilus suivants :"
-                                  : " du Poilu suivant :"}{" "}
-                              </Typography>
-
-                              <ul>
-                                {this.state.residence_hits["testators"].map(
-                                  (hit, i) => {
-                                    /*const will = Boolean(
-                                      this.state.residence_hits["wills"]
-                                    )
-                                      ? this.state.residence_hits["wills"].find(
-                                          item =>
-                                            item._source["testator.ref"] ===
-                                            hit._id
-                                        )
-                                      : null;*/
-                                    return (
-                                      <li key={i} className={classes.text}>
-                                        <Link
-                                          href={
-                                            getParamConfig("web_url") +
-                                            "/testateur/" +
-                                            hit["_id"]
-                                          }
-                                          target="_blank"
-                                        >
-                                          {hit._source[
-                                            "persName.fullIndexEntryForm.forename"
-                                          ]
-                                            .toString()
-                                            .replace(/,/g, " ") + " "}
-                                          <span
-                                            style={{
-                                              fontVariantCaps: "small-caps"
-                                            }}
-                                          >
-                                            {
-                                              hit._source[
-                                                "persName.fullIndexEntryForm.surname"
-                                              ]
-                                            }
-                                          </span>
-                                        </Link>
-                                      </li>
-                                    );
-                                  }
-                                )}
-                              </ul>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                          {Object.keys(this.state.death_hits).length > 0 ? (
-                            <div className={classes.panel}>
-                              <Typography className={classes.text}>
-                                Le lieu de décès
-                                {this.state.death_hits["testators"].length > 1
-                                  ? " des Poilus suivants :"
-                                  : " du Poilu suivant :"}{" "}
-                              </Typography>
-
-                              <ul>
-                                {this.state.death_hits["testators"].map(
-                                  (hit, i) => {
-                                    let death_date = [];
-
-                                    if (Boolean(hit._source["death.date"])) {
-                                      if (
-                                        Array.isArray(hit._source["death.date"])
-                                      ) {
-                                        death_date = hit._source[
-                                          "death.date"
-                                        ].map(item => {
-                                          const date = new Date(item);
-                                          return date
-                                            .toLocaleDateString()
-                                            .split("/");
-                                        });
-                                      } else {
-                                        const date = new Date(
-                                          hit._source["death.date"]
-                                        );
-                                        death_date.push(
-                                          date.toLocaleDateString().split("/")
-                                        );
-                                      }
-                                    }
-
-                                    /*const will = Boolean(
-                                      this.state.death_hits["wills"]
-                                    )
-                                      ? this.state.death_hits["wills"].find(
-                                          item =>
-                                            item._source["testator.ref"] ===
-                                            hit._id
-                                        )
-                                      : null;*/
-                                    return (
-                                      <li key={i} className={classes.text}>
-                                        <Link
-                                          href={
-                                            getParamConfig("web_url") +
-                                            "/testateur/" +
-                                            hit["_id"]
-                                          }
-                                          target="_blank"
-                                        >
-                                          {hit._source[
-                                            "persName.fullIndexEntryForm.forename"
-                                          ]
-                                            .toString()
-                                            .replace(/,/g, " ") + " "}
-                                          <span
-                                            style={{
-                                              fontVariantCaps: "small-caps"
-                                            }}
-                                          >
-                                            {
-                                              hit._source[
-                                                "persName.fullIndexEntryForm.surname"
-                                              ]
-                                            }
-                                          </span>
-                                          {death_date.length > 0
-                                            ? ", décédé le " +
-                                              death_date[0][0] +
-                                              " " +
-                                              this.months[
-                                                death_date[0][1] - 1
-                                              ] +
-                                              " " +
-                                              death_date[0][2]
-                                            : ""}{" "}
-                                          {death_date.length === 2
-                                            ? " ou le " +
-                                              death_date[1][0] +
-                                              " " +
-                                              this.months[
-                                                death_date[1][1] - 1
-                                              ] +
-                                              " " +
-                                              death_date[1][2]
-                                            : ""}
-                                        </Link>
-                                      </li>
-                                    );
-                                  }
-                                )}
-                              </ul>
-                            </div>
-                          ) : (
-                            ""
-                          )}
                           {Boolean(this.props.data["geo_ref"]) ? (
                             <Typography className={classes.text}>
                               Voir ce lieu dans la base GeoNames :{" "}
@@ -856,6 +516,299 @@ export default class PlaceDisplay extends Component {
                                 {this.props.data["geo_ref"]}
                               </Link>
                             </Typography>
+                          ) : (
+                            ""
+                          )}
+                          {this.state.birth_hits.length > 0 ? (
+                            <div>
+                              <Typography className={classes.text}>
+                                Le lieu de naissance
+                                {this.state.birth_hits.length > 1
+                                  ? " des Poilus suivants :"
+                                  : " du Poilu suivant :"}{" "}
+                              </Typography>
+                              <ul>
+                                {this.state.birth_hits.map((hit, i) => {
+                                  let date = Boolean(hit._source["birth.date"])
+                                    ? new Date(hit._source["birth.date"])
+                                    : null;
+
+                                  date = Boolean(date)
+                                    ? date.toLocaleDateString().split("/")
+                                    : null;
+
+                                  return (
+                                    <li key={i} className={classes.text}>
+                                      <Link
+                                        href={
+                                          getParamConfig("web_url") +
+                                          "/testateur/" +
+                                          hit._id
+                                        }
+                                        target="_blank"
+                                      >
+                                        {hit._source[
+                                          "persName.fullIndexEntryForm.forename"
+                                        ]
+                                          .toString()
+                                          .replace(/,/g, " ") + " "}
+                                        <span
+                                          style={{
+                                            fontVariantCaps: "small-caps"
+                                          }}
+                                        >
+                                          {
+                                            hit._source[
+                                              "persName.fullIndexEntryForm.surname"
+                                            ]
+                                          }
+                                        </span>
+
+                                        {Boolean(date)
+                                          ? ", né le " +
+                                            date[0] +
+                                            " " +
+                                            this.months[date[1] - 1] +
+                                            " " +
+                                            date[2]
+                                          : " "}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          {this.state.residence_hits.length > 0 ? (
+                            <div>
+                              <Typography className={classes.text}>
+                                Le lieu de résidence
+                                {this.state.residence_hits.length > 1
+                                  ? " des Poilus suivants :"
+                                  : " du Poilu suivant :"}{" "}
+                              </Typography>
+
+                              <ul>
+                                {this.state.residence_hits.map((hit, i) => {
+                                  return (
+                                    <li key={i} className={classes.text}>
+                                      <Link
+                                        href={
+                                          getParamConfig("web_url") +
+                                          "/testateur/" +
+                                          hit["_id"]
+                                        }
+                                        target="_blank"
+                                      >
+                                        {hit._source[
+                                          "persName.fullIndexEntryForm.forename"
+                                        ]
+                                          .toString()
+                                          .replace(/,/g, " ") + " "}
+                                        <span
+                                          style={{
+                                            fontVariantCaps: "small-caps"
+                                          }}
+                                        >
+                                          {
+                                            hit._source[
+                                              "persName.fullIndexEntryForm.surname"
+                                            ]
+                                          }
+                                        </span>
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          {this.state.redaction_hits.length > 0 ? (
+                            <div>
+                              <Typography className={classes.text}>
+                                Le lieu de rédaction
+                                {this.state.redaction_hits.length > 1
+                                  ? " des testaments suivants :"
+                                  : " du testament suivant :"}{" "}
+                              </Typography>
+
+                              <ul>
+                                {this.state.redaction_hits.map((hit, i) => {
+                                  let will_date = [];
+                                  if (
+                                    Boolean(
+                                      hit["will_contents.will_date_range"]
+                                    )
+                                  ) {
+                                    let date_ = new Date(
+                                      hit["will_contents.will_date_range"][
+                                        "gte"
+                                      ]
+                                    );
+                                    will_date.push(
+                                      date_.toLocaleDateString().split("/")
+                                    );
+                                    if (
+                                      hit["will_contents.will_date_range"][
+                                        "gte"
+                                      ] !==
+                                      hit["will_contents.will_date_range"][
+                                        "lte"
+                                      ]
+                                    ) {
+                                      date_ = new Date(
+                                        hit["will_contents.will_date_range"][
+                                          "lte"
+                                        ]
+                                      );
+                                      will_date.push(
+                                        date_.toLocaleDateString().split("/")
+                                      );
+                                    }
+                                  }
+                                  console.log(will_date);
+                                  return (
+                                    <li key={i} className={classes.text}>
+                                      <Link
+                                        href={
+                                          getParamConfig("web_url") +
+                                          "/testament/" +
+                                          hit["_id"]
+                                        }
+                                        target="_blank"
+                                      >
+                                        {" "}
+                                        Testament de
+                                        {" " +
+                                          hit._source["testator.forename"]
+                                            .toString()
+                                            .replace(/,/g, " ") +
+                                          " "}
+                                        <span
+                                          style={{
+                                            fontVariantCaps: "small-caps"
+                                          }}
+                                        >
+                                          {hit._source["testator.surname"]}
+                                        </span>
+                                        {will_date.length === 1
+                                          ? ", rédigé le " +
+                                            will_date[0][0] +
+                                            " " +
+                                            this.months[will_date[0][1] - 1] +
+                                            " " +
+                                            will_date[0][2]
+                                          : will_date.length === 2
+                                          ? ", rédigé le " +
+                                            will_date[0][0] +
+                                            " " +
+                                            this.months[will_date[0][1] - 1] +
+                                            " " +
+                                            will_date[0][2] +
+                                            " et " +
+                                            will_date[1][0] +
+                                            " " +
+                                            this.months[will_date[1][1] - 1] +
+                                            " " +
+                                            will_date[1][2]
+                                          : ""}{" "}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+
+                          {this.state.death_hits.length > 0 ? (
+                            <div>
+                              <Typography className={classes.text}>
+                                Le lieu de décès
+                                {this.state.death_hits.length > 1
+                                  ? " des Poilus suivants :"
+                                  : " du Poilu suivant :"}{" "}
+                              </Typography>
+
+                              <ul>
+                                {this.state.death_hits.map((hit, i) => {
+                                  let death_date = [];
+
+                                  if (Boolean(hit._source["death.date"])) {
+                                    if (
+                                      Array.isArray(hit._source["death.date"])
+                                    ) {
+                                      death_date = hit._source[
+                                        "death.date"
+                                      ].map(item => {
+                                        const date = new Date(item);
+                                        return date
+                                          .toLocaleDateString()
+                                          .split("/");
+                                      });
+                                    } else {
+                                      const date = new Date(
+                                        hit._source["death.date"]
+                                      );
+                                      death_date.push(
+                                        date.toLocaleDateString().split("/")
+                                      );
+                                    }
+                                  }
+
+                                  return (
+                                    <li key={i} className={classes.text}>
+                                      <Link
+                                        href={
+                                          getParamConfig("web_url") +
+                                          "/testateur/" +
+                                          hit["_id"]
+                                        }
+                                        target="_blank"
+                                      >
+                                        {hit._source[
+                                          "persName.fullIndexEntryForm.forename"
+                                        ]
+                                          .toString()
+                                          .replace(/,/g, " ") + " "}
+                                        <span
+                                          style={{
+                                            fontVariantCaps: "small-caps"
+                                          }}
+                                        >
+                                          {
+                                            hit._source[
+                                              "persName.fullIndexEntryForm.surname"
+                                            ]
+                                          }
+                                        </span>
+                                        {death_date.length > 0
+                                          ? ", décédé le " +
+                                            death_date[0][0] +
+                                            " " +
+                                            this.months[death_date[0][1] - 1] +
+                                            " " +
+                                            death_date[0][2]
+                                          : ""}{" "}
+                                        {death_date.length === 2
+                                          ? " ou le " +
+                                            death_date[1][0] +
+                                            " " +
+                                            this.months[death_date[1][1] - 1] +
+                                            " " +
+                                            death_date[1][2]
+                                          : ""}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
                           ) : (
                             ""
                           )}
@@ -874,6 +827,6 @@ export default class PlaceDisplay extends Component {
       );
     }
 
-    return output;
+    return [output, <Footer />];
   }
 }

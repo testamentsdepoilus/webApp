@@ -22,7 +22,7 @@ import Place from "./components/Place";
 import Unit from "./components/Unit";
 import Units from "./components/Units";
 import ConfigMail from "./components/cms/ConfigMail";
-
+import Explore from "./components/Explore";
 function App() {
   return (
     <BrowserRouter basename="/testaments-de-poilus">
@@ -50,6 +50,7 @@ function App() {
         <Route path="/espace/cms" component={Manage} />
         <Route exact path="/espace/config" component={ConfigMail} />
         <Route path="/compare" component={Compare} />
+        <Route exact path="/explore" component={Explore} />
       </div>
     </BrowserRouter>
   );

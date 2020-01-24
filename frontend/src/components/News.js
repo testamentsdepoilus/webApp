@@ -19,6 +19,7 @@ import {
 import MoreIcon from "@material-ui/icons/More";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 import classNames from "classnames";
+import Footer from "./Footer";
 
 const { ResultListWrapper } = ReactiveList;
 
@@ -268,7 +269,7 @@ class News extends Component {
       ? new Date(this.state.item["created"])
       : null;
 
-    return (
+    return [
       <Styled>
         {({ classes }) =>
           Boolean(this.state.item) ? (
@@ -395,8 +396,9 @@ class News extends Component {
             </ReactiveBase>
           )
         }
-      </Styled>
-    );
+      </Styled>,
+      <Footer />
+    ];
   }
 }
 

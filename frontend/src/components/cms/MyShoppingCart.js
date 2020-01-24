@@ -27,7 +27,10 @@ import {
   getHitsFromQuery,
   getUserToken,
   downloadFile,
-  downloadZipFiles
+  downloadZipFiles,
+  generatePDF,
+  generateZipPDF,
+  generateTestatorHTML
 } from "../../utils/functions";
 import {
   Button,
@@ -41,13 +44,14 @@ import {
   MenuList,
   MenuItem,
   TableContainer,
-  Fab
+  Fab,
+  CircularProgress,
+  FormControlLabel
 } from "@material-ui/core";
 import classNames from "classnames";
 import Menu from "./Menu";
 
 // Up to top page click
-
 window.onscroll = function() {
   scrollFunction();
 };
@@ -103,22 +107,45 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort
+    onRequestSort,
+    title
   } = props;
   const createSortHandler = property => event => {
     onRequestSort(event, property);
   };
 
+  const title_ = {
+    myWills: "Testament",
+    myTestators: "Testateur",
+    myPlaces: "Lieu",
+    myUnits: "Unité militaire",
+    mySearches: "Recherche"
+  };
   return (
     <TableHead>
       <TableRow className={classes.head}>
         <Tooltip title="Sélectionner tous les éléments">
           <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{ "aria-label": "select all desserts" }}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  indeterminate={numSelected > 0 && numSelected < rowCount}
+                  checked={numSelected === rowCount}
+                  onChange={onSelectAllClick}
+                  inputProps={{ "aria-label": "select all elements" }}
+                />
+              }
+              label={
+                numSelected === rowCount ? (
+                  <Typography className={classes.labelCheckBox}>
+                    Désélectionner tout
+                  </Typography>
+                ) : (
+                  <Typography className={classes.labelCheckBox}>
+                    Séléctionner tout
+                  </Typography>
+                )
+              }
             />
           </TableCell>
         </Tooltip>
@@ -134,7 +161,9 @@ function EnhancedTableHead(props) {
               direction={order}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              <Typography className={classes.labelTitle}>
+                {title_[title]}
+              </Typography>
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
@@ -156,7 +185,8 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 const Styled1 = createStyled(theme => ({
@@ -315,6 +345,14 @@ const Styled2 = createStyled(theme => ({
       backgroundColor: "#bcaaa4",
       borderColor: "#bcaaa4"
     }
+  },
+  labelCheckBox: {
+    fontSize: "0.8rem"
+  },
+  labelTitle: {
+    fontSize: "1rem",
+    fontWeight: 600,
+    marginLeft: theme.spacing(2)
   }
 }));
 
@@ -347,9 +385,11 @@ export default class MyShoppingCart extends Component {
       open: false,
       openAlert: false,
       mess: "",
-      type: null
+      type: null,
+      isLoading: false
     };
     this.userToken = getUserToken();
+    this.handleExportTestator = this.handleExportTestator.bind(this);
   }
 
   handleRequestSort = title => {
@@ -374,6 +414,7 @@ export default class MyShoppingCart extends Component {
             ? data.map(n => n["label"])
             : data.map(n => n["_id"]);
 
+        //localStorage.setItem("favorisItems", selected_);
         this.setState({
           selected: selected_,
           type: title
@@ -382,6 +423,7 @@ export default class MyShoppingCart extends Component {
         return;
       } else {
         selected_[title] = [];
+        //localStorage.setItem("favorisItems", selected_);
         this.setState({
           selected: selected_
         });
@@ -407,6 +449,7 @@ export default class MyShoppingCart extends Component {
     }
     let selected_ = this.state.selected;
     selected_[title] = newSelected;
+    //localStorage.setItem("favorisItems", selected_);
     this.setState({
       selected: selected_,
       type: title
@@ -534,8 +577,57 @@ export default class MyShoppingCart extends Component {
     }
   };
 
+  handleExportTestator() {
+    this.setState({
+      isLoading: true
+    });
+    const myBackups_ = JSON.parse(localStorage.myBackups);
+    const myTestators_ = myBackups_.myTestators.filter(item =>
+      this.state.selected[this.state.type].includes(item)
+    );
+    let output_filename = myTestators_.map(id => "testateur_" + id);
+    generateTestatorHTML(myTestators_)
+      .then(outputHTML => {
+        if (outputHTML.length === 1) {
+          generatePDF(outputHTML[0], output_filename[0])
+            .then(res => {
+              this.setState({
+                isLoading: false
+              });
+            })
+            .catch(e => {
+              this.setState({
+                isLoading: false
+              });
+              console.log(e);
+            });
+        } else if (outputHTML.length > 1) {
+          generateZipPDF(outputHTML, output_filename, "testateurs.zip")
+            .then(res => {
+              this.setState({
+                isLoading: false
+              });
+            })
+            .catch(e => {
+              this.setState({
+                isLoading: false
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch(e => console.log("error :" + e));
+  }
+
   setDefaultView(data, title, actionButton) {
     const isSelected = name => this.state.selected[title].indexOf(name) !== -1;
+    const title_norm = {
+      myWills: "testament",
+      myTestators: "testateur",
+      myPlaces: "lieu",
+      myUnits: "unités militaires",
+      mySearches: "recherches"
+    };
     return (
       <Styled2>
         {({ classes }) => (
@@ -560,6 +652,7 @@ export default class MyShoppingCart extends Component {
                 onSelectAllClick={this.handleSelectAllClick(data, title)}
                 onRequestSort={this.handleRequestSort(title)}
                 rowCount={data.length}
+                title={title}
               />
               <TableBody>
                 {stableSort(
@@ -627,7 +720,13 @@ export default class MyShoppingCart extends Component {
                         </TableCell>
                       )}
                       <TableCell align="center">
-                        <Tooltip title="Afficher le lien">
+                        <Tooltip
+                          title={
+                            title === "myUnits"
+                              ? "Accéder aux " + title_norm[title]
+                              : "Accéder au " + title_norm[title]
+                          }
+                        >
                           <IconButton
                             onClick={this.handleDisplayWill(row, title)}
                             aria-label="display"
@@ -649,6 +748,9 @@ export default class MyShoppingCart extends Component {
 
   componentDidMount() {
     let data_ = this.state.data;
+    /*const favorisItems_ = Boolean(localStorage.favorisItems)
+      ? JSON.parse(localStorage.myBackups)
+      : {};*/
     const myBackups_ = Boolean(localStorage.myBackups)
       ? JSON.parse(localStorage.myBackups)
       : {};
@@ -771,11 +873,76 @@ export default class MyShoppingCart extends Component {
         data: data_
       });
     }
+    /*if (Object.keys(favorisItems_).length > 0) {
+      this.setState({
+        selected: favorisItems_
+      });
+    }*/
   }
 
   topFunction = function() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+  };
+
+  exportRender = function(title) {
+    let output = null;
+    switch (title) {
+      case "myWills":
+        output = (
+          <Grid item>
+            <Tooltip title="Export des testament">
+              <IconButton onClick={this.handleExportWill} aria-label="export">
+                <ExportIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        );
+        break;
+      case "myPlaces":
+        output = (
+          <Grid item>
+            <Tooltip title="Export des lieux">
+              <IconButton onClick={this.handleExportPlace} aria-label="export">
+                <ExportIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        );
+        break;
+      case "myUnits":
+        output = (
+          <Grid item>
+            <Tooltip title="Export des unités militaires">
+              <IconButton onClick={this.handleExportUnit} aria-label="export">
+                <ExportIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        );
+        break;
+      case "myTestators":
+        output = (
+          <Grid item>
+            <Tooltip title="Export des testateurs">
+              <IconButton
+                onClick={this.handleExportTestator}
+                aria-label="export"
+              >
+                <ExportIcon />
+              </IconButton>
+            </Tooltip>
+            {Boolean(this.state.isLoading) ? <CircularProgress /> : ""}
+          </Grid>
+        );
+        break;
+      case "mySearches":
+        output = null;
+        break;
+      default:
+        break;
+    }
+    return output;
   };
 
   render() {
@@ -825,15 +992,7 @@ export default class MyShoppingCart extends Component {
             </IconButton>
           </Tooltip>
         </Grid>
-        {this.state.type !== "mySearches" ? (
-          <Grid item>
-            <Tooltip title="Export des testament">
-              <IconButton onClick={this.handleExportWill} aria-label="export">
-                <ExportIcon />
-              </IconButton>
-            </Tooltip>
-          </Grid>
-        ) : null}
+        {this.exportRender(this.state.type)}
         {this.state.type === "myWills" ? (
           Boolean(this.state.selected[this.state.type]) &&
           this.state.selected[this.state.type].length < 4 ? (
@@ -871,6 +1030,7 @@ export default class MyShoppingCart extends Component {
         {({ classes }) => (
           <div className={classes.root}>
             <Menu />
+            <div id="testator_none" style={{ display: "none" }}></div>
             <Grid container direction="row" justify="center" spacing={2}>
               <Grid item xs={4}>
                 {menu}

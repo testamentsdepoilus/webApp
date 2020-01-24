@@ -131,7 +131,7 @@ class Will extends Component {
   renderFunc() {
     if (this.state.data.length > 0) {
       return (
-        <div className="root">
+        <div className="root" key={100}>
           <Paper>
             <WillDisplay
               id={this.state.data[0]["_id"]}

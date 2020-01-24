@@ -6,9 +6,10 @@ import {
   createElementFromHTML,
   getParamConfig,
   downloadFile,
-  generatePDF,
+  generateWillPDF,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
+  getHitsFromQuery
 } from "../utils/functions";
 import {
   Paper,
@@ -21,7 +22,8 @@ import {
   Dialog,
   Menu,
   MenuItem,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
@@ -33,6 +35,9 @@ import isEqual from "lodash/isEqual";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
+import TestatorDisplay from "./TestatorDisplay";
+import ReactDOM from "react-dom";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -132,7 +137,10 @@ export default class WillDisplay extends Component {
       openModal: false,
       anchorEl: null,
       anchorElMenu: null,
-      myWills: []
+      myWills: [],
+      testator_notice: null,
+      will_notice: null,
+      isLoading: false
     };
 
     this.months = [
@@ -230,7 +238,18 @@ export default class WillDisplay extends Component {
   }
 
   handleExportPDFClick() {
-    generatePDF(this.props.data);
+    this.setState({
+      isLoading: true
+    });
+    generateWillPDF(this.props.data, this.state.testator_notice)
+      .then(res => {
+        this.setState({
+          isLoading: false
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   handleNextPage(event) {
@@ -238,73 +257,6 @@ export default class WillDisplay extends Component {
     this.setState({
       idx: parseInt(this.state.idx, 10) + 1
     });
-  }
-  componentDidMount() {
-    const cur_idx = this.props.data["will_pages"].findIndex(item => {
-      return isEqual(item["page_type"], this.props.cur_page);
-    });
-
-    if (cur_idx !== -1) {
-      this.setState({
-        idx: cur_idx
-      });
-    }
-    let lbCollection = document.getElementsByClassName("lb");
-    for (let item of lbCollection) {
-      item.before(
-        createElementFromHTML(
-          ReactDOMServer.renderToStaticMarkup(
-            <NewLine
-              titleAccess="changement de ligne"
-              color="primary"
-              style={{ cursor: "help" }}
-              id="newLine_lb"
-            />
-          )
-        )
-      );
-    }
-    let spaceVerCollection = document.getElementsByClassName("space_vertical");
-    for (let item of spaceVerCollection) {
-      item.append(
-        createElementFromHTML(
-          ReactDOMServer.renderToStaticMarkup(
-            <SpaceLineIcon
-              titleAccess="Marque un espace vertical"
-              color="primary"
-              style={{ cursor: "help" }}
-              id="spaceLine_vertical"
-            />
-          )
-        )
-      );
-    }
-    let spaceHorCollection = document.getElementsByClassName(
-      "space_horizontal"
-    );
-    for (let item of spaceHorCollection) {
-      item.append(
-        createElementFromHTML(
-          ReactDOMServer.renderToStaticMarkup(
-            <SpaceBarIcon
-              titleAccess="Marque un espace horizontal"
-              color="primary"
-              style={{ cursor: "help" }}
-              id="spaceLine_horizontal"
-            />
-          )
-        )
-      );
-    }
-    if (localStorage.myBackups) {
-      const myBackups_ = JSON.parse(localStorage.myBackups);
-      let myWills_ = Boolean(myBackups_["myWills"])
-        ? myBackups_["myWills"]
-        : [];
-      this.setState({
-        myWills: myWills_
-      });
-    }
   }
 
   handleExportClick(event) {
@@ -417,12 +369,166 @@ export default class WillDisplay extends Component {
         );
       }
     }
+    getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
+      JSON.stringify({
+        query: {
+          term: {
+            _id: this.props.data["testator.ref"]
+          }
+        }
+      })
+    )
+      .then(data => {
+        getHitsFromQuery(
+          getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+          JSON.stringify({
+            _source: ["_id", "will_contents.will_date_range", "testator.ref"],
+            query: {
+              term: {
+                "testator.ref": data[0]._id
+              }
+            }
+          })
+        )
+          .then(hits => {
+            ReactDOM.render(
+              <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
+              document.getElementById("testator_none")
+            );
+            if (
+              this.state.testator_notice !==
+              document.getElementById("testator_notice").innerHTML
+            ) {
+              this.setState({
+                testator_notice: document.getElementById("testator_notice")
+                  .innerHTML
+              });
+            }
+          })
+          .catch(err => {
+            console.log("Erreur :", err);
+          });
+      })
+      .catch(error => {
+        console.log("error :", error);
+      });
+  }
+
+  componentDidMount() {
+    const cur_idx = this.props.data["will_pages"].findIndex(item => {
+      return isEqual(item["page_type"], this.props.cur_page);
+    });
+
+    if (cur_idx !== -1) {
+      this.setState({
+        idx: cur_idx
+      });
+    }
+    let lbCollection = document.getElementsByClassName("lb");
+    for (let item of lbCollection) {
+      item.before(
+        createElementFromHTML(
+          ReactDOMServer.renderToStaticMarkup(
+            <NewLine
+              titleAccess="changement de ligne"
+              color="primary"
+              style={{ cursor: "help" }}
+              id="newLine_lb"
+            />
+          )
+        )
+      );
+    }
+    let spaceVerCollection = document.getElementsByClassName("space_vertical");
+    for (let item of spaceVerCollection) {
+      item.append(
+        createElementFromHTML(
+          ReactDOMServer.renderToStaticMarkup(
+            <SpaceLineIcon
+              titleAccess="Marque un espace vertical"
+              color="primary"
+              style={{ cursor: "help" }}
+              id="spaceLine_vertical"
+            />
+          )
+        )
+      );
+    }
+    let spaceHorCollection = document.getElementsByClassName(
+      "space_horizontal"
+    );
+    for (let item of spaceHorCollection) {
+      item.append(
+        createElementFromHTML(
+          ReactDOMServer.renderToStaticMarkup(
+            <SpaceBarIcon
+              titleAccess="Marque un espace horizontal"
+              color="primary"
+              style={{ cursor: "help" }}
+              id="spaceLine_horizontal"
+            />
+          )
+        )
+      );
+    }
+    if (localStorage.myBackups) {
+      const myBackups_ = JSON.parse(localStorage.myBackups);
+      let myWills_ = Boolean(myBackups_["myWills"])
+        ? myBackups_["myWills"]
+        : [];
+      this.setState({
+        myWills: myWills_
+      });
+    }
+
+    getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
+      JSON.stringify({
+        query: {
+          term: {
+            _id: this.props.data["testator.ref"]
+          }
+        }
+      })
+    )
+      .then(data => {
+        getHitsFromQuery(
+          getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+          JSON.stringify({
+            _source: ["_id", "will_contents.will_date_range", "testator.ref"],
+            query: {
+              term: {
+                "testator.ref": data[0]._id
+              }
+            }
+          })
+        )
+          .then(hits => {
+            ReactDOM.render(
+              <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
+              document.getElementById("testator_none")
+            );
+            if (
+              this.state.testator_notice !==
+              document.getElementById("testator_notice").innerHTML
+            ) {
+              this.setState({
+                testator_notice: document.getElementById("testator_notice")
+                  .innerHTML
+              });
+            }
+          })
+          .catch(err => {
+            console.log("Erreur :", err);
+          });
+      })
+      .catch(error => {
+        console.log("error :", error);
+      });
   }
 
   render() {
-    /* const popper_open = Boolean(this.state.anchorEl);
-    const popper_id = popper_open ? "transitions-popper" : undefined;*/
-
     const nextPage = (
       <Styled>
         {({ classes }) => (
@@ -491,7 +597,7 @@ export default class WillDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter le testament en format TEI"
+                        title="Exporter le testament en format TEI/PDF"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon />
@@ -528,6 +634,11 @@ export default class WillDisplay extends Component {
                           >
                             PDF
                           </Button>
+                          {Boolean(this.state.isLoading) ? (
+                            <CircularProgress />
+                          ) : (
+                            ""
+                          )}
                         </MenuItem>
                       </Menu>
                     </Grid>
@@ -732,7 +843,10 @@ export default class WillDisplay extends Component {
                         </Typography>
                         <Grid container direction="row" spacing={1}>
                           <Grid item>
-                            <Typography> Permalien : </Typography>
+                            <Typography>
+                              {" "}
+                              Permalien dans l’édition numérique :{" "}
+                            </Typography>
                           </Grid>
                           <Grid item>
                             <Link
@@ -910,12 +1024,13 @@ export default class WillDisplay extends Component {
                   </Fade>
                 )}
                           </Popper>*/}
+              <div id="testator_none" style={{ display: "none" }}></div>
             </div>
           )}
         </Styled>
       );
     }
 
-    return output;
+    return [output, <Footer />];
   }
 }

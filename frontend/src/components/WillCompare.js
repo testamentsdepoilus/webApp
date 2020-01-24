@@ -8,6 +8,7 @@ import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
 import ImageIIF from "../utils/ImageIIIF";
 import { createPage } from "../components/WillDisplay";
 import classNames from "classnames";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -74,6 +75,9 @@ const Styled = createStyled(theme => ({
       '"Segoe UI Symbol"'
     ].join(","),
     fontWeight: 600
+  },
+  typoSurname: {
+    fontVariantCaps: "small-caps"
   }
 }));
 
@@ -346,7 +350,10 @@ class WillCompare extends Component {
                       >
                         <Grid key={1} item>
                           <Typography className={classes.title}>
-                            {hit["name"]}
+                            {hit["forename"] + " "}
+                            <span className={classNames(classes.typoSurname)}>
+                              {hit["surname"]}
+                            </span>
                           </Typography>
                         </Grid>
                         <Grid key={2} item>
@@ -391,7 +398,7 @@ class WillCompare extends Component {
       </Styled>
     );
 
-    return output;
+    return [output, <Footer />];
   }
 }
 

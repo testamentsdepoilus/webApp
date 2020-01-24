@@ -6,7 +6,8 @@ import {
   getParamConfig,
   getHitsFromQuery,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
+  generatePDF
 } from "../utils/functions";
 import {
   Paper,
@@ -14,15 +15,19 @@ import {
   Link,
   IconButton,
   Grid,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from "@material-ui/core";
 
 import classNames from "classnames";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-import html2pdf from "html2pdf.js";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
+  root: {
+    display: "flex"
+  },
   paper: {
     padding: theme.spacing(2),
     color: "#212121",
@@ -30,45 +35,30 @@ const Styled = createStyled(theme => ({
     maxWidth: "55em",
     margin: "auto"
   },
-  panel: {
-    margin: theme.spacing(2, 0, 2, 0)
-  },
   typo1: {
     fontFamily: "-apple-system",
-    fontSize: "1.1rem",
-    margin: theme.spacing(0, 0, 1, 0)
+    fontSize: "1.2rem",
+    marginTop: theme.spacing(1),
+    fontWeight: 600
   },
   typo2: {
     fontFamily: "-apple-system",
     fontSize: "1rem",
-    margin: theme.spacing(0, 0, 1, 0)
+    marginTop: theme.spacing(1)
   },
   urlUnit: {
     color: "#0091EA",
-    fontSize: 14
+    fontSize: "1rem"
   }
 }));
-
-function pdfCallback(pdfObject) {
-  var number_of_pages = pdfObject.putTotalPages().internal.getNumberOfPages();
-  console.log("number_of_pages :", number_of_pages);
-  var pdf_pages = pdfObject.internal.pages;
-  var myFooter = "Footer info";
-  for (var i = 1; i < pdf_pages.length; i++) {
-    // We are telling our pdfObject that we are now working on this page
-    pdfObject.setPage(i);
-    // The 10,200 value is only for A4 landscape. You need to define your own for other page sizes
-    pdfObject.text(myFooter, 0.1, 0.2);
-    pdfObject.text("my header text", 0.1, 0.1);
-  }
-}
 
 export default class UnitDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
       testators: [],
-      myUnits: []
+      myUnits: [],
+      isLoading: false
     };
     this.months = [
       "janvier",
@@ -91,37 +81,22 @@ export default class UnitDisplay extends Component {
   }
 
   handleExportClick() {
-    const unit_div = document.getElementById("unit_notice");
-    const opt = {
-      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-      margin: 1,
-      filename: "unite_militaire_" + this.props.id + ".pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-      pdfCallback: pdfCallback
-    };
-    html2pdf()
-      .set(opt)
-      .from(unit_div)
-      .save();
-    /*
-    .toPdf()
-      .get("pdf")
-      .then(function(pdf) {
-        const totalPages = pdf.internal.getNumberOfPages();
-        console.log("totalPages :", totalPages);
-        for (let i = 1; i <= totalPages; i++) {
-          pdf.setPage(i);
-          pdf.setFontSize(10);
-          pdf.setTextColor(150);
-          pdf.text(
-            pdf.internal.pageSize.width - 100,
-            pdf.internal.pageSize.height - 30,
-            "Page " + i + " of " + totalPages
-          );
-        }
-      })*/
+    const unit_div = document.getElementById("unit_notice").innerHTML;
+    this.setState({
+      isLoading: true
+    });
+    generatePDF(unit_div, "unite_militaire_" + this.props.id)
+      .then(res => {
+        this.setState({
+          isLoading: false
+        });
+      })
+      .catch(e => {
+        this.setState({
+          isLoading: false
+        });
+        console.log(e);
+      });
   }
 
   componentDidUpdate() {
@@ -245,7 +220,7 @@ export default class UnitDisplay extends Component {
       output = (
         <Styled>
           {({ classes }) => (
-            <div>
+            <div className={classes.root}>
               <Grid container direction="column" justify="flex-start">
                 <Grid key={3} item>
                   <Grid
@@ -259,11 +234,16 @@ export default class UnitDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter la notice des unités militaires en format TEI"
+                        title="Exporter la notice des unités militaires en format PDF"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon fontSize="large" />
                       </IconButton>
+                      {Boolean(this.state.isLoading) ? (
+                        <CircularProgress />
+                      ) : (
+                        ""
+                      )}
                     </Grid>
                     <Grid item>
                       {Boolean(this.userToken) ? (
@@ -337,12 +317,12 @@ export default class UnitDisplay extends Component {
                       Autre forme du nom : {this.props.data["unit"]}
                     </Typography>
                     {Object.keys(this.state.testators).length > 0 ? (
-                      <span className={classes.panel}>
-                        <Typography className={classes.text}>
+                      <span>
+                        <Typography className={classes.typo2}>
                           Poilus membres de cette unité militaire :
                         </Typography>
 
-                        <ul>
+                        <ul className={classes.typo2}>
                           {this.state.testators.map((hit, i) => {
                             let death_date = [];
 
@@ -428,6 +408,6 @@ export default class UnitDisplay extends Component {
       );
     }
 
-    return output;
+    return [output, <Footer />];
   }
 }

@@ -13,15 +13,12 @@ import {
   Link,
   Typography,
   Grid,
-  IconButton,
   MenuList,
   MenuItem
 } from "@material-ui/core";
-import MoreIcon from "@material-ui/icons/More";
-import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
-import classNames from "classnames";
 
-const { ResultListWrapper } = ReactiveList;
+import classNames from "classnames";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -92,9 +89,8 @@ class Articles extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastArticles: [],
-      selectedId: "",
-      item: null
+      data: [],
+      selectedId: ""
     };
     this.handleMoreClick = this.handleMoreClick.bind(this);
     this.defaultQuery = this.defaultQuery.bind(this);
@@ -102,7 +98,7 @@ class Articles extends Component {
   }
 
   handleListItemClick(event) {
-    const itemFind = this.state.lastArticles.find(function(item) {
+    const itemFind = this.state.data.find(function(item) {
       return item["_id"] === event.target.id;
     });
 
@@ -176,10 +172,9 @@ class Articles extends Component {
               )
                 .then(hits => {
                   this.setState({
-                    lastArticles: data,
+                    data: data,
                     selectedId:
-                      hits.length > 0 ? hits[0]["_id"] : data[0]["_id"],
-                    item: hits.length > 0 ? hits[0]._source : null
+                      hits.length > 0 ? hits[0]["_id"] : data[0]["_id"]
                   });
                 })
                 .catch(error => {
@@ -187,7 +182,8 @@ class Articles extends Component {
                 });
             } else {
               this.setState({
-                lastArticles: data
+                data: data,
+                selectedId: data.length > 0 ? data[0]["_id"] : ""
               });
             }
           })
@@ -201,9 +197,15 @@ class Articles extends Component {
   }
 
   render() {
-    /*const prevLink = document.referrer.includes("recherche?")
-      ? "/recherche?" + document.referrer.split("?")[1]
-      : "/recherche";*/
+    const curItem =
+      this.state.selectedId === ""
+        ? this.state.data[0]
+        : this.state.data.find(
+            function(item) {
+              return item["_id"] === this.state.selectedId;
+            }.bind(this)
+          );
+
     const currLink = !Boolean(this.state.item) ? (
       <Link
         id="articles"
@@ -217,16 +219,10 @@ class Articles extends Component {
       </Link>
     ) : (
       [
-        <Link
-          id="articles"
-          key={1}
-          color="inherit"
-          component={RouterLink}
-          to="/articles"
-        >
+        <Typography key={2} color="textPrimary">
           {" "}
           L'état de la recherche{" "}
-        </Link>,
+        </Typography>,
         <Typography key={2} color="textPrimary">
           {this.state.item["title"]}
         </Typography>
@@ -257,7 +253,7 @@ class Articles extends Component {
           <Paper className={classes.menu}>
             <Typography>List des articles :</Typography>
             <MenuList>
-              {this.state.lastArticles.map((item, i) => (
+              {this.state.data.map((item, i) => (
                 <MenuItem key={i}>
                   <Link
                     id={item["_id"]}
@@ -280,13 +276,11 @@ class Articles extends Component {
       </Styled>
     );
 
-    const date = Boolean(this.state.item)
-      ? new Date(this.state.item["created"])
-      : null;
-    return (
+    const date = Boolean(curItem) ? new Date(curItem._source["created"]) : null;
+    return [
       <Styled>
         {({ classes }) =>
-          Boolean(this.state.item) ? (
+          Boolean(curItem) ? (
             <div id="root" className={classes.root}>
               {navLink}
 
@@ -299,7 +293,7 @@ class Articles extends Component {
                     <Paper className={classes.item} key={0}>
                       <Typography className={classes.title}>
                         {" "}
-                        {this.state.item["title"]}{" "}
+                        {curItem._source["title"]}{" "}
                       </Typography>
                       <Paper className={classes.head}>
                         <Grid
@@ -308,7 +302,7 @@ class Articles extends Component {
                           justify="space-between"
                           alignItems="center"
                         >
-                          <Grid item>{this.state.item["author"]}</Grid>
+                          <Grid item>{curItem._source["author"]}</Grid>
                           <Grid item>
                             {Boolean(date)
                               ? "Mise à jour le " +
@@ -322,9 +316,9 @@ class Articles extends Component {
                       <div
                         dangerouslySetInnerHTML={{
                           __html:
-                            this.state.item["detail"] !== ""
-                              ? this.state.item["detail"]
-                              : this.state.item["summary"]
+                            curItem._source["detail"] !== ""
+                              ? curItem._source["detail"]
+                              : curItem._source["summary"]
                         }}
                       ></div>
                     </Paper>
@@ -333,92 +327,12 @@ class Articles extends Component {
               </Grid>
             </div>
           ) : (
-            <ReactiveBase
-              app={getParamConfig("es_index_cms")}
-              url={getParamConfig("es_host")}
-              type="_doc"
-            >
-              <div id="root" className={classes.root}>
-                {navLink}
-                <Grid container direction="row" spacing={2}>
-                  <Grid item xs={4}>
-                    {menuArticles}
-                  </Grid>
-                  <Grid item xs={8}>
-                    <div className={classes.list}>
-                      <ReactiveList
-                        dataField="created"
-                        componentId="articles_id"
-                        stream={true}
-                        pagination={false}
-                        paginationAt="bottom"
-                        size={5}
-                        pages={10}
-                        sortBy="desc"
-                        showEndPage={false}
-                        renderResultStats={function(stats) {
-                          return <h6>{stats.numberOfResults} articles</h6>;
-                        }}
-                        URLParams={false}
-                        defaultQuery={this.defaultQuery}
-                      >
-                        {({ data, error, loading }) => (
-                          <ResultListWrapper>
-                            {data.map((item, j) => {
-                              const date = new Date(item["created"]);
-                              return (
-                                <Paper className={classes.item} key={j}>
-                                  <Typography className={classes.title}>
-                                    {" "}
-                                    {item["title"]}{" "}
-                                  </Typography>
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html:
-                                        item["summary"] !== ""
-                                          ? item["summary"]
-                                          : item["detail"]
-                                    }}
-                                  ></div>
-                                  <Paper className={classes.foot}>
-                                    <Grid
-                                      container
-                                      direction="row"
-                                      justify="space-between"
-                                      alignItems="center"
-                                    >
-                                      <Grid item>{item["author"]}</Grid>
-                                      <Grid item>
-                                        {"Mise à jour le "}
-                                        {date.toLocaleDateString()}
-                                        {" à "}
-                                        {date.toLocaleTimeString()}
-                                      </Grid>
-                                      <Grid item>
-                                        <IconButton
-                                          aria-label="More"
-                                          onClick={this.handleMoreClick(item)}
-                                        >
-                                          <MoreIcon />
-                                        </IconButton>
-                                      </Grid>
-                                    </Grid>
-                                  </Paper>
-                                </Paper>
-                              );
-                            })}
-                          </ResultListWrapper>
-                        )}
-                      </ReactiveList>
-                    </div>
-                  </Grid>
-                </Grid>
-              </div>
-            </ReactiveBase>
+            <Typography variant="h4">Articles introuvables !</Typography>
           )
         }
-      </Styled>
-    );
+      </Styled>,
+      <Footer />
+    ];
   }
 }
 

@@ -48,7 +48,8 @@ class Compare extends Component {
               return {
                 will: will._source["will_pages"],
                 id: will["_id"],
-                name: will._source["testator.name"]
+                forename: will._source["testator.forename"],
+                surname: will._source["testator.surname"]
               };
             });
 

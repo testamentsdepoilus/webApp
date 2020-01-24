@@ -24,7 +24,7 @@ const Styled = createStyled(theme => ({
     textTransform: "none",
     paddingLeft: 15,
     color: "#212121",
-    fontSize: 18,
+    fontSize: "1rem",
     fontWeight: 500,
     fontFamily: "-apple-system",
     "&:hover, &:focus": {
@@ -120,7 +120,7 @@ class Menu extends Component {
               to="/espace/panier"
               onClick={this.handleListItemClick}
             >
-              Mon panier
+              Mes favoris
             </Link>
             {this.state.myData.isAdmin ? (
               <div>

@@ -223,7 +223,7 @@ class PlaceFilter extends React.Component {
               }}
               message={
                 <span id="message-id">
-                  Au moins une case doit être cocher !
+                  Au moins une case doit être cochée !
                 </span>
               }
             />

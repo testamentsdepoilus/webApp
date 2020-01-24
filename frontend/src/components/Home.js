@@ -32,6 +32,7 @@ import {
 import DateFilter from "./search/DateFilter";
 import MoreIcon from "@material-ui/icons/More";
 import ApexCharts from "apexcharts";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -858,6 +859,7 @@ class Home extends Component {
                 </Grid>
               </Grid>
             </Grid>
+            <Footer />
           </div>
         )}
       </Styled>

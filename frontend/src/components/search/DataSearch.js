@@ -116,8 +116,7 @@ export default class CustumerDataSearch extends Component {
                 }}
                 componentId="profession"
                 dataField="testator.occupation.keyword"
-                size={1000}
-                sortBy="asc"
+                sortBy={"asc"}
                 showCount={true}
                 autosuggest={true}
                 placeholder="Profession"

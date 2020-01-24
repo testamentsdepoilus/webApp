@@ -27,7 +27,7 @@ class Place extends Component {
   renderFunc() {
     if (this.state.data.length > 0) {
       return (
-        <div className="place_detail">
+        <div key={1} className="place_detail">
           <PlaceDisplay
             id={this.state.data[0]["_id"]}
             data={this.state.data[0]._source}
@@ -36,7 +36,7 @@ class Place extends Component {
       );
     } else {
       return (
-        <div>
+        <div key={0}>
           <h3>Pas de résultat</h3>
         </div>
       );

@@ -19,7 +19,7 @@ import {
   equalsArray,
   getHitsFromQuery
 } from "../utils/functions";
-import { ExplorMenu } from "./Wills";
+
 import PlaceDisplay from "./PlaceDisplay";
 
 const Styled = createStyled(theme => ({
@@ -28,8 +28,14 @@ const Styled = createStyled(theme => ({
     marginTop: theme.spacing(1)
   },
   li: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
     fontSize: "0.9em"
+  },
+  li_active: {
+    marginTop: theme.spacing(2),
+    fontSize: "0.9em",
+    color: "#0091EA",
+    fontWeight: 600
   }
 }));
 
@@ -110,8 +116,6 @@ class Places extends Component {
         url={getParamConfig("es_host")}
         type="_doc"
       >
-        <ExplorMenu selectedId="places" />
-
         <div className="wills_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -144,7 +148,7 @@ class Places extends Component {
           </Select>
         </div>
 
-        <div>
+        <div className="wills_result">
           <ReactiveList
             dataField={this.state.field}
             componentId="place"
@@ -152,7 +156,7 @@ class Places extends Component {
             pagination={true}
             paginationAt="top"
             size={1}
-            pages={10}
+            pages={5}
             sortBy={this.state.order}
             showEndPage={false}
             renderResultStats={function(stats) {
@@ -167,7 +171,7 @@ class Places extends Component {
                   getParamConfig("web_url") + "/place/" + item["_id"]
                 );
                 const curPage_ =
-                  Math.floor(res.resultStats.currentPage / 10) * 10;
+                  Math.floor(res.resultStats.currentPage / 5) * 5;
                 let sort_ = {};
                 sort_[this.state.field] = { order: this.state.order };
                 getHitsFromQuery(
@@ -176,7 +180,7 @@ class Places extends Component {
                     getParamConfig("es_index_places"),
                   JSON.stringify({
                     from: curPage_,
-                    size: 10,
+                    size: 5,
                     sort: [sort_]
                   })
                 )
@@ -197,13 +201,26 @@ class Places extends Component {
                         <Styled>
                           {({ classes }) => (
                             <ul className={classes.ul}>
-                              {this.state.cur_list.map((item, i) => (
-                                <li key={item["_id"]} className={classes.li}>
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["city"]}
-                                </li>
-                              ))}
+                              {this.state.cur_list.map((item, i) =>
+                                Boolean(
+                                  res.resultStats.currentPage === curPage_ + i
+                                ) ? (
+                                  <li
+                                    key={item["_id"]}
+                                    className={classes.li_active}
+                                  >
+                                    {curPage_ + i + 1}
+                                    {". "}
+                                    {item._source["city"]}
+                                  </li>
+                                ) : (
+                                  <li key={item["_id"]} className={classes.li}>
+                                    {curPage_ + i + 1}
+                                    {". "}
+                                    {item._source["city"]}
+                                  </li>
+                                )
+                              )}
                             </ul>
                           )}
                         </Styled>

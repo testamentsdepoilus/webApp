@@ -171,9 +171,17 @@ class Results extends React.Component {
       const url = item["url"];
       return label === this.state.label || url === document.location.href;
     });
-    if (idx === -1) {
+    let label_ = this.state.label;
+    if (
+      this.state.label.length === 0 &&
+      document.location.href.split("?").length === 2
+    ) {
+      const date = new Date();
+      label_ = document.location.href.split("?")[1] + date;
+    }
+    if (idx === -1 && label_.length > 0) {
       mySearches_.push({
-        label: this.state.label,
+        label: label_,
         url: document.location.href
       });
       myBackups_["mySearches"] = mySearches_;

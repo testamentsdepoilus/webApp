@@ -18,6 +18,7 @@ import {
 } from "@material-ui/core";
 
 import classNames from "classnames";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -170,10 +171,6 @@ class About extends Component {
             }.bind(this)
           );
 
-    /*const prevLink = document.referrer.includes("recherche?")
-      ? "/recherche?" + document.referrer.split("?")[1]
-          : "/recherche";*/
-
     const currLink = [
       <Link
         id="about"
@@ -239,7 +236,7 @@ class About extends Component {
 
     const date = Boolean(curItem) ? new Date(curItem._source["created"]) : null;
 
-    return (
+    return [
       <Styled>
         {({ classes }) =>
           Boolean(curItem) ? (
@@ -292,8 +289,9 @@ class About extends Component {
             <Typography variant="h4">A props</Typography>
           )
         }
-      </Styled>
-    );
+      </Styled>,
+      <Footer />
+    ];
   }
 }
 

@@ -45,7 +45,7 @@ const Styled = createStyled(theme => ({
     ].join(",")
   },
   typoName: {
-    fontSize: 20,
+    fontSize: "1.2rem",
     fontStyle: "oblique",
     color: "#424242"
   },
@@ -60,6 +60,10 @@ const Styled = createStyled(theme => ({
     paddingLeft: 20,
     display: "block"
   },
+  typoSubTitle: {
+    fontSize: "0.85rem"
+  },
+
   margin: {
     margin: theme.spacing(12)
   },
@@ -456,6 +460,18 @@ export default class ResultWills extends React.Component {
                             </span>
                           </Link>
                         </Tooltip>
+                        {Boolean(will_date) ? (
+                          <Typography
+                            className={classNames(
+                              classes.typography,
+                              classes.typoSubTitle
+                            )}
+                          >
+                            Testament rédigé le {will_date}
+                          </Typography>
+                        ) : (
+                          ""
+                        )}
                       </Grid>
                       <Grid item xs="auto" value={item["_id"]}>
                         <Grid container direction="row" spacing={1}>

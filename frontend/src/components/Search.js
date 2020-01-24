@@ -77,7 +77,7 @@ class Search extends Component {
   }
 
   render() {
-    return (
+    return [
       <ReactiveBase
         app={getParamConfig("es_index_wills")}
         url={getParamConfig("es_host")}
@@ -127,7 +127,7 @@ class Search extends Component {
           </Grid>
         </div>
       </ReactiveBase>
-    );
+    ];
   }
 }
 

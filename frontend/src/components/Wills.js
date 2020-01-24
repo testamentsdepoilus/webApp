@@ -26,9 +26,6 @@ import classNames from "classnames";
 import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
 
 const Styled = createStyled(theme => ({
-  explorMenu: {
-    margin: theme.spacing(2, 0, 1, 2)
-  },
   menu: {
     display: "flex"
   },
@@ -72,8 +69,14 @@ const Styled = createStyled(theme => ({
     marginTop: theme.spacing(1)
   },
   li: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
     fontSize: "0.9em"
+  },
+  li_active: {
+    marginTop: theme.spacing(2),
+    fontSize: "0.9em",
+    color: "#0091EA",
+    fontWeight: 600
   },
   typoSurname: {
     fontVariantCaps: "small-caps"
@@ -279,8 +282,6 @@ class Wills extends Component {
         url={getParamConfig("es_host")}
         type="_doc"
       >
-        <ExplorMenu selectedId="wills" />
-
         <div className="wills_menu">
           <Paper elevation={0}>
             <Breadcrumbs
@@ -317,7 +318,7 @@ class Wills extends Component {
           </Select>
         </div>
 
-        <div>
+        <div className="wills_result">
           <ReactiveList
             dataField={this.state.field}
             componentId="will"
@@ -325,7 +326,7 @@ class Wills extends Component {
             pagination={true}
             paginationAt="top"
             size={1}
-            pages={10}
+            pages={5}
             sortBy={this.state.order}
             showEndPage={false}
             renderResultStats={this.handleRenderStats}
@@ -339,7 +340,7 @@ class Wills extends Component {
                 );
 
                 const curPage_ =
-                  Math.floor(res.resultStats.currentPage / 10) * 10;
+                  Math.floor(res.resultStats.currentPage / 5) * 5;
                 let sort_ = {};
                 sort_[this.state.field] = { order: this.state.order };
                 getHitsFromQuery(
@@ -348,7 +349,7 @@ class Wills extends Component {
                     getParamConfig("es_index_wills"),
                   JSON.stringify({
                     from: curPage_,
-                    size: 10,
+                    size: 5,
                     sort: [sort_]
                   })
                 )
@@ -364,22 +365,38 @@ class Wills extends Component {
                   });
 
                 return (
-                  <div key={j}>
+                  <div>
                     <Grid container direction="row" spacing={1}>
                       <Grid item xs={2}>
                         <Styled>
                           {({ classes }) => (
                             <ul className={classes.ul}>
-                              {this.state.cur_list.map((item, i) => (
-                                <li key={item["_id"]} className={classes.li}>
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["testator.forename"] + " "}
-                                  <span className={classes.typoSurname}>
-                                    {item._source["testator.surname"]}
-                                  </span>
-                                </li>
-                              ))}
+                              {this.state.cur_list.map((item, i) =>
+                                Boolean(
+                                  res.resultStats.currentPage === curPage_ + i
+                                ) ? (
+                                  <li
+                                    key={item["_id"]}
+                                    className={classes.li_active}
+                                  >
+                                    {curPage_ + i + 1}
+                                    {". "}
+                                    {item._source["testator.forename"] + " "}
+                                    <span className={classes.typoSurname}>
+                                      {item._source["testator.surname"]}
+                                    </span>
+                                  </li>
+                                ) : (
+                                  <li key={item["_id"]} className={classes.li}>
+                                    {curPage_ + i + 1}
+                                    {". "}
+                                    {item._source["testator.forename"] + " "}
+                                    <span className={classes.typoSurname}>
+                                      {item._source["testator.surname"]}
+                                    </span>
+                                  </li>
+                                )
+                              )}
                             </ul>
                           )}
                         </Styled>

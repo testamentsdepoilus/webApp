@@ -10,18 +10,6 @@ router.use(cors());
 
 /* POST publish  */
 router.post("/publish", function(req, res, next) {
-  const today = new Date();
-  /*const data = {
-    user_id: req.body.user_id,
-    title: req.body.title,
-    author: req.body.author,
-    summary: req.body.summary,
-    detail: req.body.detail,
-    type: req.body.type,
-    selected: false,
-    created: today
-  };*/
-
   client.index(
     {
       index: es_index,

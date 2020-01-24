@@ -10,9 +10,6 @@ import {
   DialogContent,
   IconButton,
   DialogTitle,
-  Button,
-  Menu,
-  MenuItem,
   Grid
 } from "@material-ui/core";
 import { createStyled } from "../utils/functions";
@@ -20,7 +17,6 @@ import classNames from "classnames";
 import AccountIcon from "@material-ui/icons/AccountCircleOutlined";
 import CloseIcon from "@material-ui/icons/Close";
 import LogRegister from "./admin/LogRegister";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const Styled = createStyled(theme => ({
   nav_root: {
@@ -63,7 +59,7 @@ const Styled = createStyled(theme => ({
     fontWeight: 600
   },
   menu: {
-    padding: theme.spacing(4, 0, 2, 2)
+    padding: theme.spacing(6, 0, 2, 2)
   },
   typography: {
     color: "#fff",
@@ -90,7 +86,7 @@ const Styled = createStyled(theme => ({
   },
   logTitle: {
     color: "#1769aa",
-    fontSize: 16,
+    fontSize: "1rem",
     fontWeight: 600,
     fontFamily: [
       "-apple-system",
@@ -108,7 +104,6 @@ const Styled = createStyled(theme => ({
   closeButton: {
     position: "absolute",
     right: theme.spacing(1),
-    top: theme.spacing(1),
     color: theme.palette.grey[500]
   }
 }));
@@ -231,9 +226,15 @@ class NavBar extends Component {
                 </Typography>
               </Link>
 
-              <Grid container direction="row" spacing={2}>
-                <Grid item xs={8}>
-                  <Breadcrumbs aria-label="Breadcrumb" className={classes.menu}>
+              <Grid container direction="row" spacing={1}>
+                <Grid item xs={10}>
+                  <Breadcrumbs
+                    maxItems={10}
+                    itemsAfterCollapse={3}
+                    itemsBeforeCollapse={3}
+                    aria-label="Breadcrumb"
+                    className={classes.menu}
+                  >
                     <Link
                       id="search"
                       className={
@@ -247,95 +248,70 @@ class NavBar extends Component {
                       {" "}
                       Recherche{" "}
                     </Link>
-                    <div>
-                      <Button
-                        className={classNames(classes.link)}
-                        onClick={this.handleExplorClick}
-                      >
-                        Explorer
-                        <ExpandMoreIcon className={classNames(classes.icon)} />
-                      </Button>
-                      <Menu
-                        id="simple-menu-explor"
-                        anchorEl={this.state.anchorElExplor}
-                        keepMounted
-                        open={Boolean(this.state.anchorElExplor)}
-                        onClose={this.handleExplorClose}
-                        elevation={0}
-                        getContentAnchorEl={null}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "center"
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "center"
-                        }}
-                      >
-                        <MenuItem onClick={this.handleExplorClose}>
-                          {" "}
-                          <Link
-                            id="wills"
-                            className={
-                              this.state.selectedId === "wills"
-                                ? classNames(classes.link, classes.activedLink)
-                                : classes.link
-                            }
-                            component={RouterLink}
-                            to="/testaments"
-                            onClick={this.handleListItemClick}
-                          >
-                            Les testaments
-                          </Link>
-                        </MenuItem>
-                        <MenuItem onClick={this.handleExplorClose}>
-                          <Link
-                            id="testators"
-                            className={
-                              this.state.selectedId === "testators"
-                                ? classNames(classes.link, classes.activedLink)
-                                : classes.link
-                            }
-                            component={RouterLink}
-                            to="/testateurs"
-                            onClick={this.handleListItemClick}
-                          >
-                            Les testateurs
-                          </Link>
-                        </MenuItem>
-                        <MenuItem onClick={this.handleExplorClose}>
-                          <Link
-                            id="places"
-                            className={
-                              this.state.selectedId === "places"
-                                ? classNames(classes.link, classes.activedLink)
-                                : classes.link
-                            }
-                            component={RouterLink}
-                            to="/places"
-                            onClick={this.handleListItemClick}
-                          >
-                            Les lieux
-                          </Link>
-                        </MenuItem>
-                        <MenuItem onClick={this.handleExplorClose}>
-                          <Link
-                            id="units"
-                            className={
-                              this.state.selectedId === "units"
-                                ? classNames(classes.link, classes.activedLink)
-                                : classes.link
-                            }
-                            component={RouterLink}
-                            to="/armees"
-                            onClick={this.handleListItemClick}
-                          >
-                            Les unités militaires
-                          </Link>
-                        </MenuItem>
-                      </Menu>
-                    </div>
-
+                    <Link
+                      id="explore"
+                      className={
+                        this.state.selectedId === "explore"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/explore"
+                    >
+                      Explorer
+                    </Link>
+                    <Link
+                      id="wills"
+                      className={
+                        this.state.selectedId === "wills"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/testaments"
+                      onClick={this.handleListItemClick}
+                    >
+                      Les testaments
+                    </Link>
+                    <Link
+                      id="testators"
+                      className={
+                        this.state.selectedId === "testators"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/testateurs"
+                      onClick={this.handleListItemClick}
+                    >
+                      Les testateurs
+                    </Link>
+                    <Link
+                      id="places"
+                      className={
+                        this.state.selectedId === "places"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/places"
+                      onClick={this.handleListItemClick}
+                    >
+                      Les lieux
+                    </Link>
+                    <Link
+                      id="units"
+                      className={
+                        this.state.selectedId === "units"
+                          ? classNames(classes.link, classes.activedLink)
+                          : classes.link
+                      }
+                      component={RouterLink}
+                      to="/armees"
+                      onClick={this.handleListItemClick}
+                    >
+                      Les unités militaires
+                    </Link>
                     <Link
                       id="news"
                       className={
@@ -392,7 +368,7 @@ class NavBar extends Component {
                     ) : null}
                   </Breadcrumbs>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={2}>
                   <div className={classes.logIn}>
                     {localStorage.usertoken ? userLogout : userLogin}
                   </div>

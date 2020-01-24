@@ -21,8 +21,7 @@ import Menu from "./Menu";
 
 const Styled = createStyled(theme => ({
   root: {
-    width: "100%",
-    marginTop: theme.spacing(2)
+    width: "100%"
   },
   paper: {
     marginTop: theme.spacing(2),

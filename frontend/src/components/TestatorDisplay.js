@@ -4,7 +4,8 @@ import {
   getParamConfig,
   getHitsFromQuery,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
+  generatePDF
 } from "../utils/functions";
 import {
   Paper,
@@ -13,25 +14,25 @@ import {
   Link,
   IconButton,
   Tooltip,
-  Avatar
+  Avatar,
+  CircularProgress
 } from "@material-ui/core";
 import "../styles/WillDisplay.css";
 import classNames from "classnames";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-import html2pdf from "html2pdf.js";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   paper: {
     marginTop: theme.spacing(3),
     padding: theme.spacing(2),
-
     textAlign: "justify",
-    fontSize: 18,
     margin: "auto"
   },
   name: {
+    fontSize: "1.2rem",
     fontFamily: "-apple-system",
     marginTop: theme.spacing(1),
     fontWeight: 600
@@ -40,35 +41,13 @@ const Styled = createStyled(theme => ({
     fontVariantCaps: "small-caps"
   },
   text: {
+    fontSize: "1rem",
     fontFamily: "-apple-system",
     marginTop: theme.spacing(1)
   },
-  title: {
-    fontSize: 24,
-    fontStyle: "oblique",
-    textAlign: "center",
-    fontWeight: 600
-  },
-  linkPage: {
-    color: "#212121",
-    fontSize: 18,
-    fontWeight: 400,
-    "&:hover": {
-      color: "#0091EA"
-    }
-  },
-  selectedLink: {
-    fontWeight: 600,
-    color: "#0091EA",
-    fontSize: 18
-  },
-  nextPage: {
-    display: "block",
-    marginLeft: "90%"
-  },
   urlTestator: {
     color: "#0091EA",
-    fontSize: 14
+    fontSize: "1rem"
   },
   modal: {
     display: "flex",
@@ -83,14 +62,93 @@ const Styled = createStyled(theme => ({
   }
 }));
 
+export function ListWills(props) {
+  const will_dates = props.data.map(item => {
+    let will_date = [];
+    if (Boolean(item._source["will_contents.will_date_range"])) {
+      let date_ = new Date(
+        item._source["will_contents.will_date_range"]["gte"]
+      );
+      will_date.push(date_.toLocaleDateString().split("/"));
+      if (
+        item._source["will_contents.will_date_range"]["gte"] !==
+        item._source["will_contents.will_date_range"]["lte"]
+      ) {
+        date_ = new Date(item._source["will_contents.will_date_range"]["lte"]);
+        will_date.push(date_.toLocaleDateString().split("/"));
+      }
+    }
+    return will_date;
+  });
+
+  if (props.data.length > 0) {
+    return (
+      <Styled>
+        {({ classes }) => (
+          <div id="listWills">
+            <Typography className={classes.text}>
+              Ce Poilus est l'auteur{" "}
+              {props.data.length > 1
+                ? " des testaments suivants :"
+                : " du testament suivant :"}{" "}
+            </Typography>
+            <ul>
+              {props.data.map((will, i) => {
+                const will_uri =
+                  getParamConfig("web_url") + "/testament/" + will["_id"];
+                return (
+                  <li key={i}>
+                    <Link href={will_uri} target="_blank">
+                      Testament
+                      {will_dates[i].length > 0
+                        ? " rédigé le " +
+                          will_dates[i][0][0] +
+                          " " +
+                          props.months[will_dates[i][0][1] - 1] +
+                          " " +
+                          will_dates[i][0][2]
+                        : ""}
+                      {will_dates[i].length === 2
+                        ? " et le " +
+                          will_dates[i][1][0] +
+                          " " +
+                          props.months[will_dates[i][1][1] - 1] +
+                          " " +
+                          will_dates[i][1][2]
+                        : ""}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </Styled>
+    );
+  } else {
+    return (
+      <Styled>
+        {({ classes }) => (
+          <div id="listWills">
+            <Typography className={classes.text}>
+              {" "}
+              Le testament de ce Poilu sera accessible prochainement.
+            </Typography>
+          </div>
+        )}
+      </Styled>
+    );
+  }
+}
 export default class TestatorDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
       wills: [],
-      myTestators: []
+      myTestators: [],
+      isLoading: false
     };
-
+    this.myRef = React.createRef();
     this.months = [
       "janvier",
       "février",
@@ -112,19 +170,64 @@ export default class TestatorDisplay extends Component {
   }
 
   handleExportClick() {
-    const testator_div = document.getElementById("testator_notice");
-    const opt = {
-      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-      margin: 1,
-      filename: "testateur" + this.props.id + ".pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-    };
-    html2pdf()
-      .set(opt)
-      .from(testator_div)
-      .save();
+    const testator_div = document.getElementById("testator_notice").innerHTML;
+    this.setState({
+      isLoading: true
+    });
+    generatePDF(testator_div, "testateur_" + this.props.id)
+      .then(res => {
+        this.setState({
+          isLoading: false
+        });
+      })
+      .catch(e => {
+        this.setState({
+          isLoading: false
+        });
+        console.log(e);
+      });
+  }
+
+  handleAddShoppingWill(id) {
+    return function(e) {
+      let myTestators_ = this.state.myTestators;
+      myTestators_.push(id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myTestators"] = myTestators_;
+      const newItem = {
+        email: this.userToken.email,
+        myBackups: myBackups_
+      };
+
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            myTestators: myTestators_
+          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
+        }
+      });
+    }.bind(this);
+  }
+
+  handleremoveShoppingWill(id) {
+    return function(e) {
+      let myTestators_ = this.state.myTestators.filter(item => item !== id);
+      let myBackups_ = JSON.parse(localStorage.myBackups);
+      myBackups_["myTestators"] = myTestators_;
+      const newItem = {
+        email: this.userToken.email,
+        myBackups: myBackups_
+      };
+      updateMyListWills(newItem).then(res => {
+        if (res.status === 200) {
+          this.setState({
+            myTestators: myTestators_
+          });
+          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
+        }
+      });
+    }.bind(this);
   }
 
   componentDidUpdate() {
@@ -136,7 +239,7 @@ export default class TestatorDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
         JSON.stringify({
-          _source: ["_id", "will_contents.will_date", "testator.ref"],
+          _source: ["_id", "will_contents.will_date_range", "testator.ref"],
           query: {
             term: {
               "testator.ref": this.props.id
@@ -193,48 +296,6 @@ export default class TestatorDisplay extends Component {
     }
   }
 
-  handleAddShoppingWill(id) {
-    return function(e) {
-      let myTestators_ = this.state.myTestators;
-      myTestators_.push(id);
-      let myBackups_ = JSON.parse(localStorage.myBackups);
-      myBackups_["myTestators"] = myTestators_;
-      const newItem = {
-        email: this.userToken.email,
-        myBackups: myBackups_
-      };
-
-      updateMyListWills(newItem).then(res => {
-        if (res.status === 200) {
-          this.setState({
-            myTestators: myTestators_
-          });
-          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
-        }
-      });
-    }.bind(this);
-  }
-
-  handleremoveShoppingWill(id) {
-    return function(e) {
-      let myTestators_ = this.state.myTestators.filter(item => item !== id);
-      let myBackups_ = JSON.parse(localStorage.myBackups);
-      myBackups_["myTestators"] = myTestators_;
-      const newItem = {
-        email: this.userToken.email,
-        myBackups: myBackups_
-      };
-      updateMyListWills(newItem).then(res => {
-        if (res.status === 200) {
-          this.setState({
-            myTestators: myTestators_
-          });
-          localStorage.setItem("myBackups", JSON.stringify(myBackups_));
-        }
-      });
-    }.bind(this);
-  }
-
   render() {
     let output = null;
     if (this.props.data) {
@@ -263,26 +324,6 @@ export default class TestatorDisplay extends Component {
         ? birth_date.toLocaleDateString().split("/")
         : null;
 
-      const will_dates = this.state.wills.map(item => {
-        let will_date = [];
-        if (Boolean(item._source["will_contents.will_date_range"])) {
-          let date_ = new Date(
-            item._source["will_contents.will_date_range"]["gte"]
-          );
-          will_date.push(date_.toLocaleDateString().split("/"));
-          if (
-            item._source["will_contents.will_date_range"]["gte"] !==
-            item._source["will_contents.will_date_range"]["lte"]
-          ) {
-            date_ = new Date(
-              item._source["will_contents.will_date_range"]["lte"]
-            );
-            will_date.push(date_.toLocaleDateString().split("/"));
-          }
-        }
-        return will_date;
-      });
-
       const isAdded = Boolean(this.userToken)
         ? this.state.myTestators.findIndex(el => el === this.props.id)
         : -1;
@@ -309,6 +350,11 @@ export default class TestatorDisplay extends Component {
                       >
                         <ExportIcon fontSize="large" />
                       </IconButton>
+                      {Boolean(this.state.isLoading) ? (
+                        <CircularProgress />
+                      ) : (
+                        ""
+                      )}
                     </Grid>
                     <Grid item>
                       {Boolean(this.userToken) ? (
@@ -370,234 +416,198 @@ export default class TestatorDisplay extends Component {
                 ) : null}
                 <Grid key={2} item>
                   <Paper
+                    ref={this.myRef}
                     id="testator_notice"
                     className={classNames(classes.paper)}
                   >
-                    <Typography className={classes.name}>
-                      {this.props.data["persName.fullIndexEntryForm.forename"]
-                        .toString()
-                        .replace(/,/g, " ") + " "}
-                      <span className={classNames(classes.typoSurname)}>
-                        {this.props.data["persName.fullIndexEntryForm.surname"]}
-                      </span>
-                      {" ("} {Boolean(birth_date) ? birth_date[2] : ""}
-                      {"-"}
-                      {death_date.length > 0 ? death_date[0][2] : ""} {")"}
-                    </Typography>
-                    <Typography className={classes.text}>
-                      {" "}
-                      Permalien dans l'édition numérique :{" "}
-                      <Link
-                        href={testator_uri}
-                        target="_blank"
-                        className={classNames(classes.urlTestator)}
-                      >
-                        {" "}
-                        {testator_uri}{" "}
-                      </Link>
-                    </Typography>
-                    <Typography className={classes.text}>
-                      {Boolean(this.props.data["residence.ref"]) ? (
-                        <Link
-                          href={
-                            getParamConfig("web_url") +
-                            "/place/" +
-                            this.props.data["residence.ref"]
+                    <div id="testator_info">
+                      <Typography className={classes.name}>
+                        {this.props.data["persName.fullIndexEntryForm.forename"]
+                          .toString()
+                          .replace(/,/g, " ") + " "}
+                        <span className={classNames(classes.typoSurname)}>
+                          {
+                            this.props.data[
+                              "persName.fullIndexEntryForm.surname"
+                            ]
                           }
-                          target="_blank"
-                        >
-                          {this.props.data["residence.name"]}
-                        </Link>
-                      ) : (
-                        this.props.data["residence.name"]
-                      )}
-                    </Typography>
-                    {Boolean(birth_date) ||
-                    Boolean(this.props.data["birth.place.name"]) ? (
+                        </span>
+                        {" ("} {Boolean(birth_date) ? birth_date[2] : ""}
+                        {"-"}
+                        {death_date.length > 0 ? death_date[0][2] : ""} {")"}
+                      </Typography>
                       <Typography className={classes.text}>
-                        Né
-                        {Boolean(birth_date)
-                          ? " le " +
-                            birth_date[0] +
-                            " " +
-                            this.months[birth_date[1] - 1] +
-                            " " +
-                            birth_date[2]
-                          : ""}{" "}
-                        {Boolean(this.props.data["birth.place.name"]) ? (
+                        {" "}
+                        Permalien dans l'édition numérique :{" "}
+                        <Link
+                          href={testator_uri}
+                          target="_blank"
+                          className={classNames(classes.urlTestator)}
+                        >
+                          {" "}
+                          {testator_uri}{" "}
+                        </Link>
+                      </Typography>
+                      <Typography className={classes.text}>
+                        {Boolean(this.props.data["residence.ref"]) ? (
                           <Link
                             href={
                               getParamConfig("web_url") +
                               "/place/" +
-                              this.props.data["birth.place.ref"]
+                              this.props.data["residence.ref"]
                             }
                             target="_blank"
                           >
-                            à {this.props.data["birth.place.name"]}
+                            {this.props.data["residence.name"]}
+                          </Link>
+                        ) : (
+                          this.props.data["residence.name"]
+                        )}
+                      </Typography>
+                      {Boolean(birth_date) ||
+                      Boolean(this.props.data["birth.place.name"]) ? (
+                        <Typography className={classes.text}>
+                          Né
+                          {Boolean(birth_date)
+                            ? " le " +
+                              birth_date[0] +
+                              " " +
+                              this.months[birth_date[1] - 1] +
+                              " " +
+                              birth_date[2]
+                            : ""}{" "}
+                          {Boolean(this.props.data["birth.place.name"]) ? (
+                            <Link
+                              href={
+                                getParamConfig("web_url") +
+                                "/place/" +
+                                this.props.data["birth.place.ref"]
+                              }
+                              target="_blank"
+                            >
+                              à {this.props.data["birth.place.name"]}
+                            </Link>
+                          ) : (
+                            ""
+                          )}
+                        </Typography>
+                      ) : (
+                        ""
+                      )}
+                      {Boolean(this.props.data["affiliation.orgName"]) ? (
+                        <Typography className={classes.text}>
+                          {this.props.data[
+                            "affiliation.name"
+                          ][0].toUpperCase() +
+                            this.props.data["affiliation.name"].slice(1)}
+                          {Boolean(this.props.data["affiliation.ref"]) ? (
+                            <Link
+                              href={
+                                getParamConfig("web_url") +
+                                "/armee/" +
+                                this.props.data["affiliation.ref"]
+                              }
+                              target="_blank"
+                            >
+                              {this.props.data["affiliation.orgName"]}
+                            </Link>
+                          ) : (
+                            this.props.data["affiliation.orgName"]
+                          )}
+                        </Typography>
+                      ) : (
+                        ""
+                      )}
+                      <Typography className={classes.text}>
+                        Mort pour la France le{" "}
+                        {death_date.length > 0
+                          ? death_date[0][0] +
+                            " " +
+                            this.months[death_date[0][1] - 1] +
+                            " " +
+                            death_date[0][2]
+                          : ""}{" "}
+                        {death_date.length === 2
+                          ? " ou le " +
+                            death_date[1][0] +
+                            " " +
+                            this.months[death_date[1][1] - 1] +
+                            " " +
+                            death_date[1][2]
+                          : ""}{" "}
+                        {Boolean(this.props.data["death.place.name"]) ? (
+                          <Link
+                            href={
+                              Boolean(this.props.data["death.place.ref"])
+                                ? getParamConfig("web_url") +
+                                  "/place/" +
+                                  this.props.data["death.place.ref"]
+                                : ""
+                            }
+                            target="_blank"
+                          >
+                            à {this.props.data["death.place.name"]}
                           </Link>
                         ) : (
                           ""
                         )}
                       </Typography>
-                    ) : (
-                      ""
-                    )}
-                    {Boolean(this.props.data["affiliation.orgName"]) ? (
-                      <Typography className={classes.text}>
-                        {this.props.data["affiliation.name"][0].toUpperCase() +
-                          this.props.data["affiliation.name"].slice(1)}
-                        {Boolean(this.props.data["affiliation.ref"]) ? (
-                          <Link
-                            href={
-                              getParamConfig("web_url") +
-                              "/armee/" +
-                              this.props.data["affiliation.ref"]
-                            }
-                            target="_blank"
-                          >
-                            {this.props.data["affiliation.orgName"]}
-                          </Link>
-                        ) : (
-                          this.props.data["affiliation.orgName"]
-                        )}
-                      </Typography>
-                    ) : (
-                      ""
-                    )}
-                    <Typography className={classes.text}>
-                      Mort pour la France le{" "}
-                      {death_date.length > 0
-                        ? death_date[0][0] +
-                          " " +
-                          this.months[death_date[0][1] - 1] +
-                          " " +
-                          death_date[0][2]
-                        : ""}{" "}
-                      {death_date.length === 2
-                        ? " ou le " +
-                          death_date[1][0] +
-                          " " +
-                          this.months[death_date[1][1] - 1] +
-                          " " +
-                          death_date[1][2]
-                        : ""}{" "}
-                      {Boolean(this.props.data["death.place.name"]) ? (
-                        <Link
-                          href={
-                            Boolean(this.props.data["death.place.ref"])
-                              ? getParamConfig("web_url") +
-                                "/place/" +
-                                this.props.data["death.place.ref"]
-                              : ""
-                          }
-                          target="_blank"
-                        >
-                          à {this.props.data["death.place.name"]}
-                        </Link>
+                      {Boolean(this.props.data["occupation"]) ? (
+                        <Typography className={classes.text}>
+                          Profession : {this.props.data["occupation"]}
+                        </Typography>
                       ) : (
                         ""
                       )}
-                    </Typography>
-                    {Boolean(this.props.data["occupation"]) ? (
-                      <Typography className={classes.text}>
-                        Profession : {this.props.data["occupation"]}
-                      </Typography>
-                    ) : (
-                      ""
-                    )}
 
-                    {Boolean(this.props.data["note_history"]) ? (
-                      <div>
-                        <Typography className={classes.text}>
-                          Biographie :
-                        </Typography>
-                        <ul>
-                          {this.props.data["note_history"]
-                            .split("*")
-                            .map((item, i) => {
-                              item = item.trim();
-                              if (item.length > 1) {
-                                return (
-                                  <li key={i}>
-                                    {item[0].toUpperCase() + item.slice(1)}
-                                  </li>
-                                );
-                              } else {
-                                return null;
-                              }
-                            })}
-                        </ul>
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                      {Boolean(this.props.data["note_history"]) ? (
+                        <div>
+                          <Typography className={classes.text}>
+                            Biographie :
+                          </Typography>
+                          <ul className={classes.text}>
+                            {this.props.data["note_history"]
+                              .split("*")
+                              .map((item, i) => {
+                                item = item.trim();
+                                if (item.length > 1) {
+                                  return (
+                                    <li key={i}>
+                                      {item[0].toUpperCase() + item.slice(1)}
+                                    </li>
+                                  );
+                                } else {
+                                  return null;
+                                }
+                              })}
+                          </ul>
+                        </div>
+                      ) : (
+                        ""
+                      )}
 
-                    {Boolean(this.props.data["bibl.author"]) ? (
-                      <div>
-                        <Typography className={classes.text}>
-                          {" "}
-                          Références bibliographiques:{" "}
-                        </Typography>
-                        <Typography className={classes.text}>
-                          {"-"} {this.props.data["bibl.author"]}.{" "}
-                          <Link
-                            href={this.props.data["bibl.uri"]}
-                            target="_blank"
-                          >
-                            {this.props.data["bibl.author"]}{" "}
-                          </Link>
-                        </Typography>
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                      {Boolean(this.props.data["bibl.author"]) ? (
+                        <div>
+                          <Typography className={classes.text}>
+                            {" "}
+                            Références bibliographiques:{" "}
+                          </Typography>
+                          <Typography className={classes.text}>
+                            {"-"} {this.props.data["bibl.author"]}.{" "}
+                            <Link
+                              href={this.props.data["bibl.uri"]}
+                              target="_blank"
+                            >
+                              {this.props.data["bibl.author"]}{" "}
+                            </Link>
+                          </Typography>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
 
-                    {this.state.wills.length > 0 ? (
-                      <div>
-                        <Typography className={classes.text}>
-                          Ce Poilus est l'auteur{" "}
-                          {this.state.wills.length > 1
-                            ? " des testaments suivants :"
-                            : " du testament suivant :"}{" "}
-                        </Typography>
-                        <ul>
-                          {this.state.wills.map((will, i) => {
-                            const will_uri =
-                              getParamConfig("web_url") +
-                              "/testament/" +
-                              will["_id"];
-                            return (
-                              <li key={i}>
-                                <Link href={will_uri} target="_blank">
-                                  Testament {" " + parseInt(i + 1, 10)}
-                                  {will_dates[i].length > 0
-                                    ? ", rédigé le " +
-                                      will_dates[i][0][0] +
-                                      " " +
-                                      this.months[will_dates[i][0][1] - 1] +
-                                      " " +
-                                      will_dates[i][0][2]
-                                    : ""}
-                                  {will_dates[i].length === 2
-                                    ? " et le " +
-                                      will_dates[i][1][0] +
-                                      " " +
-                                      this.months[will_dates[i][1][1] - 1] +
-                                      " " +
-                                      will_dates[i][1][2]
-                                    : ""}
-                                </Link>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    ) : (
-                      <Typography className={classes.text}>
-                        {" "}
-                        Le testament de ce Poilu sera accessible prochainement.
-                      </Typography>
-                    )}
+                    <ListWills data={this.state.wills} months={this.months} />
                   </Paper>
                 </Grid>
               </Grid>
@@ -607,6 +617,6 @@ export default class TestatorDisplay extends Component {
       );
     }
 
-    return output;
+    return [output, <Footer />];
   }
 }

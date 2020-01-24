@@ -271,7 +271,7 @@ const Styled2 = createStyled(theme => ({
   root: {
     flexWrap: "wrap",
     width: "90%",
-    margin: theme.spacing(1, 0, 0, 2)
+
   },
   menu: {
     marginTop: theme.spacing(4),
