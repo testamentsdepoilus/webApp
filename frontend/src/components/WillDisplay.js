@@ -250,7 +250,7 @@ export default class WillDisplay extends Component {
       .then(res => {
         if (res.status === 200) {
           downloadFile(
-            "http://127.0.0.1/outputPDF/" + this.props.id + ".pdf",
+            getParamConfig("web_url") + "/outputPDF/" + this.props.id + ".pdf",
             this.props.id + ".pdf"
           );
         } else {
