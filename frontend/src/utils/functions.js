@@ -641,8 +641,12 @@ export function generateZipPDF(outputsHtml, pdfFilesname) {
         };
         await generatePDF(inputItem).then(res => {
           if (res.status === 200) {
-            urls.push("http://127.0.0.1/outputPDF/" + pdfFilesname[i] + ".pdf");
-            console.log("dans Promise :", urls);
+            urls.push(
+              getParamConfig("web_host") +
+                "/outputPDF/" +
+                pdfFilesname[i] +
+                ".pdf"
+            );
           } else {
             reject(res);
           }
@@ -1011,8 +1015,7 @@ export function toDataUrl(src, callback = null, outputFormat = "image/jpg") {
       var ctx = canvas.getContext("2d");
       var dataURL;
       // Resize the canavas to the image dimensions
-      console.log(" this.width :", this.width);
-      console.log(" this.height :", this.height);
+
       canvas.height = this.height;
       canvas.width = this.width;
       // Draw the image to a canvas

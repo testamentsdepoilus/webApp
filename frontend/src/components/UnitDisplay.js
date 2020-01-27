@@ -94,7 +94,10 @@ export default class UnitDisplay extends Component {
       .then(res => {
         if (res.status === 200) {
           downloadFile(
-            "http://127.0.0.1/outputPDF/" + inputItem.filename + ".pdf",
+            getParamConfig("web_host") +
+              "/outputPDF/" +
+              inputItem.filename +
+              ".pdf",
             inputItem.filename + ".pdf"
           );
         } else {

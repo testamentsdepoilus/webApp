@@ -133,7 +133,10 @@ export default class PlaceDisplay extends Component {
       .then(res => {
         if (res.status === 200) {
           downloadFile(
-            "http://127.0.0.1/outputPDF/" + inputItem.filename + ".pdf",
+            getParamConfig("web_url") +
+              "/outputPDF/" +
+              inputItem.filename +
+              ".pdf",
             inputItem.filename + ".pdf"
           );
         } else {

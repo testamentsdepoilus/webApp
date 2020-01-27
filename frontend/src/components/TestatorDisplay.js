@@ -183,7 +183,10 @@ export default class TestatorDisplay extends Component {
     generatePDF(inputItem)
       .then(res => {
         downloadFile(
-          "http://127.0.0.1/outputPDF/" + inputItem.filename + ".pdf",
+          getParamConfig("web_url") +
+            "/outputPDF/" +
+            inputItem.filename +
+            ".pdf",
           inputItem.filename + ".pdf"
         );
         this.setState({

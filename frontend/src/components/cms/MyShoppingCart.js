@@ -595,9 +595,11 @@ export default class MyShoppingCart extends Component {
           };
           generatePDF(inputItem).then(res => {
             if (res.status === 200) {
-              console.log(res);
               downloadFile(
-                "http://127.0.0.1/outputPDF/" + output_filename[0] + ".pdf",
+                getParamConfig("web_url") +
+                  "/outputPDF/" +
+                  output_filename[0] +
+                  ".pdf",
                 output_filename[0] + ".pdf"
               );
               this.setState({
@@ -605,7 +607,7 @@ export default class MyShoppingCart extends Component {
               });
             } else {
               const err = res.err ? res.err : "Connexion au serveur a échoué !";
-              console.log("error :", err);
+              console.log(err);
               this.setState({
                 isLoading: false
               });
@@ -620,7 +622,6 @@ export default class MyShoppingCart extends Component {
               });
             })
             .catch(e => {
-              console.log("error zip: ", e);
               this.setState({
                 isLoading: false
               });
