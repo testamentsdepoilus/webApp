@@ -7,8 +7,6 @@ import JSZip from "jszip";
 import FileSaver from "file-saver";
 import html2canvas from "html2canvas";
 import isEqual from "lodash/isEqual";
-import html2pdf from "html2pdf.js";
-import image2base64 from "image-to-base64";
 import React from "react";
 import TestatorDisplay from "../components/TestatorDisplay";
 import ReactDOM from "react-dom";
@@ -427,6 +425,26 @@ export const updateConfigMail = async item => {
   }
 };
 
+export const generateWillPDF = async item => {
+  try {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/utils/generateWillPDF", item);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const generatePDF = async item => {
+  try {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/utils/generatePDF", item);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const downloadFile = (url, fileName) => {
   // Create an invisible A element
   const a = document.createElement("a");
@@ -439,8 +457,9 @@ export const downloadFile = (url, fileName) => {
   // Use download attribute to set set desired file name
   a.setAttribute("download", fileName);
 
+  a.setAttribute("target", "_blank");
   // Trigger the download by simulating click
-  a.click();
+  a.dispatchEvent(new MouseEvent("click"));
 
   // Cleanup
   window.URL.revokeObjectURL(a.href);
@@ -513,6 +532,7 @@ function urlToPromise(url) {
       if (err) {
         reject(err);
       } else {
+        console.log(data);
         resolve(data);
       }
     });
@@ -521,7 +541,7 @@ function urlToPromise(url) {
 
 // Create & download zip
 export function downloadZipFiles(urls, fileName) {
-  var zip = new JSZip();
+  let zip = new JSZip();
   urls.forEach(url => {
     const file_name = url.slice(url.lastIndexOf("/") + 1);
     zip.file(file_name, urlToPromise(url));
@@ -533,7 +553,7 @@ export function downloadZipFiles(urls, fileName) {
 }
 
 // footer function pdf
-
+/*
 function footerPDF() {
   const date = new Date();
 
@@ -544,7 +564,7 @@ function footerPDF() {
     date.toLocaleDateString("fr-FR");
 
   return footer;
-}
+}*/
 
 export function generateTestatorHTML(ids) {
   return new Promise(async (resolve, reject) => {
@@ -610,12 +630,25 @@ export function generateTestatorHTML(ids) {
   });
 }
 
-export function generateZipPDF(outputsHtml, pdfFilesname, filename) {
+export function generateZipPDF(outputsHtml, pdfFilesname) {
   return new Promise(async (resolve, reject) => {
     try {
-      const zip = new JSZip();
+      let urls = [];
       await asyncForEach(outputsHtml, async (outputHtml, i) => {
-        const opt = {
+        const inputItem = {
+          outputHtml: outputHtml,
+          filename: pdfFilesname[i]
+        };
+        await generatePDF(inputItem).then(res => {
+          if (res.status === 200) {
+            urls.push("http://127.0.0.1/outputPDF/" + pdfFilesname[i] + ".pdf");
+            console.log("dans Promise :", urls);
+          } else {
+            reject(res);
+          }
+        });
+
+        /*const opt = {
           pagebreak: { mode: ["avoid-all", "css", "legacy"] },
           margin: 1,
           filename: pdfFilesname[i] + ".pdf",
@@ -645,24 +678,24 @@ export function generateZipPDF(outputsHtml, pdfFilesname, filename) {
           })
           .output();
 
-        zip.file(pdfFilesname[i] + ".pdf", output_pdf);
+        zip.file(pdfFilesname[i] + ".pdf", output_pdf);*/
       });
-      zip.generateAsync({ type: "blob" }).then(function(content) {
+      /* zip.generateAsync({ type: "blob" }).then(function(content) {
         FileSaver.saveAs(content, filename);
-      });
+      });*/
 
-      resolve("succes");
+      resolve(urls);
     } catch (e) {
-      reject("error :" + e);
+      reject(e);
     }
   });
 }
-
-export async function generatePDF(outputHtml, filename) {
+/*
+ async function generatePDF2(outputHtml, filename) {
   return new Promise((resolve, reject) => {
     try {
       let outputHtml_ =
-        '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" />';
+        '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" /></head> <body>';
       outputHtml_ += outputHtml + "</body></html>";
       console.log("generate pdf ...");
       console.log(outputHtml_);
@@ -700,9 +733,9 @@ export async function generatePDF(outputHtml, filename) {
       reject("error :" + e);
     }
   });
-}
-
-export async function generateWillPDF(data, testator_data) {
+}*/
+/*
+async function generateWillPDF2(data, testator_data) {
   return new Promise((resolve, reject) => {
     try {
       const months = [
@@ -900,7 +933,7 @@ export async function generateWillPDF(data, testator_data) {
       outputHtml += '<div id="will" class="before">' + testator_data + "</div>";
 
       outputHtml += "</div></body></html>";
-
+      console.log(outputHtml);
       const opt = {
         pagebreak: {
           mode: ["avoid-all", "css", "legacy"],
@@ -960,7 +993,7 @@ export async function generateWillPDF(data, testator_data) {
       reject("error :" + e);
     }
   });
-}
+}*/
 
 export function toDataUrl(src, callback = null, outputFormat = "image/jpg") {
   return new Promise((resolve, reject) => {

@@ -6,7 +6,8 @@ import {
   getHitsFromQuery,
   getUserToken,
   updateMyListWills,
-  generatePDF
+  generatePDF,
+  downloadFile
 } from "../utils/functions";
 import {
   Paper,
@@ -123,8 +124,21 @@ export default class PlaceDisplay extends Component {
     this.setState({
       isLoading: true
     });
-    generatePDF(lieu_div, "lieu_" + this.props.id)
+    const inputItem = {
+      outputHtml: lieu_div,
+      filename: "lieu_" + this.props.id
+    };
+
+    generatePDF(inputItem)
       .then(res => {
+        if (res.status === 200) {
+          downloadFile(
+            "http://127.0.0.1/outputPDF/" + inputItem.filename + ".pdf",
+            inputItem.filename + ".pdf"
+          );
+        } else {
+          console.log(res);
+        }
         this.setState({
           isLoading: false
         });
@@ -486,7 +500,7 @@ export default class PlaceDisplay extends Component {
                           id="lieu_notice"
                           className={classNames(classes.paper)}
                         >
-                          <Typography className={classes.name}>
+                          <Typography id="name" className={classes.name}>
                             {this.props.data["city"]}
                             {" ("}
                             {Boolean(this.props.data["region"])
@@ -641,36 +655,38 @@ export default class PlaceDisplay extends Component {
                                   let will_date = [];
                                   if (
                                     Boolean(
-                                      hit["will_contents.will_date_range"]
+                                      hit._source[
+                                        "will_contents.will_date_range"
+                                      ]
                                     )
                                   ) {
                                     let date_ = new Date(
-                                      hit["will_contents.will_date_range"][
-                                        "gte"
-                                      ]
+                                      hit._source[
+                                        "will_contents.will_date_range"
+                                      ]["gte"]
                                     );
                                     will_date.push(
                                       date_.toLocaleDateString().split("/")
                                     );
                                     if (
-                                      hit["will_contents.will_date_range"][
-                                        "gte"
-                                      ] !==
-                                      hit["will_contents.will_date_range"][
-                                        "lte"
-                                      ]
+                                      hit._source[
+                                        "will_contents.will_date_range"
+                                      ]["gte"] !==
+                                      hit._source[
+                                        "will_contents.will_date_range"
+                                      ]["lte"]
                                     ) {
                                       date_ = new Date(
-                                        hit["will_contents.will_date_range"][
-                                          "lte"
-                                        ]
+                                        hit._source[
+                                          "will_contents.will_date_range"
+                                        ]["lte"]
                                       );
                                       will_date.push(
                                         date_.toLocaleDateString().split("/")
                                       );
                                     }
                                   }
-                                  console.log(will_date);
+                                  //console.log(will_date);
                                   return (
                                     <li key={i} className={classes.text}>
                                       <Link

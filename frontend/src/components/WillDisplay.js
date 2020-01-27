@@ -241,7 +241,32 @@ export default class WillDisplay extends Component {
     this.setState({
       isLoading: true
     });
-    generateWillPDF(this.props.data, this.state.testator_notice)
+
+    const input_item = {
+      data: this.props.data,
+      testator_data: this.state.testator_notice
+    };
+    generateWillPDF(input_item)
+      .then(res => {
+        if (res.status === 200) {
+          downloadFile(
+            "http://127.0.0.1/outputPDF/" + this.props.id + ".pdf",
+            this.props.id + ".pdf"
+          );
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          console.log("error :", err);
+        }
+        this.setState({
+          isLoading: false
+        });
+      })
+      .catch(e => {
+        this.setState({
+          isLoading: false
+        });
+      });
+    /*generateWillPDF(this.props.data, this.state.testator_notice)
       .then(res => {
         this.setState({
           isLoading: false
@@ -249,7 +274,7 @@ export default class WillDisplay extends Component {
       })
       .catch(e => {
         console.log(e);
-      });
+      });*/
   }
 
   handleNextPage(event) {

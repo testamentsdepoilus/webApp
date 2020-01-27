@@ -589,26 +589,38 @@ export default class MyShoppingCart extends Component {
     generateTestatorHTML(myTestators_)
       .then(outputHTML => {
         if (outputHTML.length === 1) {
-          generatePDF(outputHTML[0], output_filename[0])
-            .then(res => {
+          const inputItem = {
+            outputHtml: outputHTML[0],
+            filename: output_filename[0]
+          };
+          generatePDF(inputItem).then(res => {
+            if (res.status === 200) {
+              console.log(res);
+              downloadFile(
+                "http://127.0.0.1/outputPDF/" + output_filename[0] + ".pdf",
+                output_filename[0] + ".pdf"
+              );
               this.setState({
                 isLoading: false
               });
-            })
-            .catch(e => {
+            } else {
+              const err = res.err ? res.err : "Connexion au serveur a échoué !";
+              console.log("error :", err);
               this.setState({
                 isLoading: false
               });
-              console.log(e);
-            });
+            }
+          });
         } else if (outputHTML.length > 1) {
-          generateZipPDF(outputHTML, output_filename, "testateurs.zip")
+          generateZipPDF(outputHTML, output_filename)
             .then(res => {
+              downloadZipFiles(res, "testateurs.zip");
               this.setState({
                 isLoading: false
               });
             })
             .catch(e => {
+              console.log("error zip: ", e);
               this.setState({
                 isLoading: false
               });

@@ -7,7 +7,8 @@ import {
   getHitsFromQuery,
   getUserToken,
   updateMyListWills,
-  generatePDF
+  generatePDF,
+  downloadFile
 } from "../utils/functions";
 import {
   Paper,
@@ -85,8 +86,20 @@ export default class UnitDisplay extends Component {
     this.setState({
       isLoading: true
     });
-    generatePDF(unit_div, "unite_militaire_" + this.props.id)
+    const inputItem = {
+      outputHtml: unit_div,
+      filename: "unite_militaire_" + this.props.id
+    };
+    generatePDF(inputItem)
       .then(res => {
+        if (res.status === 200) {
+          downloadFile(
+            "http://127.0.0.1/outputPDF/" + inputItem.filename + ".pdf",
+            inputItem.filename + ".pdf"
+          );
+        } else {
+          console.log(res);
+        }
         this.setState({
           isLoading: false
         });
@@ -293,7 +306,7 @@ export default class UnitDisplay extends Component {
                 </Grid>
                 <Grid key={2} item>
                   <Paper id="unit_notice" className={classNames(classes.paper)}>
-                    <Typography className={classes.typo1}>
+                    <Typography id="name" className={classes.typo1}>
                       {this.props.data["country"] +
                         ". " +
                         this.props.data["composante"] +

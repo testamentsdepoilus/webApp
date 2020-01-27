@@ -5,7 +5,8 @@ import {
   getHitsFromQuery,
   getUserToken,
   updateMyListWills,
-  generatePDF
+  generatePDF,
+  downloadFile
 } from "../utils/functions";
 import {
   Paper,
@@ -174,8 +175,17 @@ export default class TestatorDisplay extends Component {
     this.setState({
       isLoading: true
     });
-    generatePDF(testator_div, "testateur_" + this.props.id)
+    const inputItem = {
+      outputHtml: testator_div,
+      filename: "testateur_" + this.props.id
+    };
+
+    generatePDF(inputItem)
       .then(res => {
+        downloadFile(
+          "http://127.0.0.1/outputPDF/" + inputItem.filename + ".pdf",
+          inputItem.filename + ".pdf"
+        );
         this.setState({
           isLoading: false
         });
@@ -421,7 +431,7 @@ export default class TestatorDisplay extends Component {
                     className={classNames(classes.paper)}
                   >
                     <div id="testator_info">
-                      <Typography className={classes.name}>
+                      <Typography id="name" className={classes.name}>
                         {this.props.data["persName.fullIndexEntryForm.forename"]
                           .toString()
                           .replace(/,/g, " ") + " "}
