@@ -126,7 +126,7 @@ export default class PlaceDisplay extends Component {
     });
     const inputItem = {
       outputHtml: lieu_div,
-      filename: "lieu_" + this.props.id
+      filename: "Projet_TdP_lieu_" + this.props.id
     };
 
     generatePDF(inputItem)

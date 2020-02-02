@@ -177,7 +177,7 @@ export default class TestatorDisplay extends Component {
     });
     const inputItem = {
       outputHtml: testator_div,
-      filename: "testateur_" + this.props.id
+      filename: "Projet_TdP_testateur_" + this.props.id
     };
 
     generatePDF(inputItem)

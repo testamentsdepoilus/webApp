@@ -591,7 +591,7 @@ export default class MyShoppingCart extends Component {
         if (outputHTML.length === 1) {
           const inputItem = {
             outputHtml: outputHTML[0],
-            filename: output_filename[0]
+            filename: "Projet_TdP_" + output_filename[0]
           };
           generatePDF(inputItem).then(res => {
             if (res.status === 200) {

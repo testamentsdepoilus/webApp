@@ -14,7 +14,9 @@ import {
   CircularProgress,
   TextField,
   Container,
-  Button
+  Button,
+  Snackbar,
+  SnackbarContent
 } from "@material-ui/core";
 import {
   createStyled,
@@ -31,6 +33,8 @@ import ResultWills from "./ResultWills";
 import TextSearch from "./TextSearch";
 import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
 import SaveIcon from "@material-ui/icons/SaveOutlined";
+import InfoIcon from "@material-ui/icons/Info";
+import CloseIcon from "@material-ui/icons/Close";
 
 // Style button
 const Styled = createStyled(theme => ({
@@ -59,6 +63,21 @@ const Styled = createStyled(theme => ({
   },
   popperTitle: {
     fontWeight: 600
+  },
+  info: {
+    backgroundColor: "#1976d2"
+  },
+  icon: {
+    fontSize: 20
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing(1)
+  },
+  message: {
+    display: "flex",
+    alignItems: "center",
+    fontSize: 16
   }
 }));
 
@@ -90,7 +109,9 @@ class Results extends React.Component {
       anchorEl: null,
       totalHits: null,
       anchorElSearch: null,
-      label: ""
+      label: "",
+      openAlert: false,
+      message: ""
     };
     this.userToken = getUserToken();
     this.topFunction = this.topFunction.bind(this);
@@ -130,7 +151,8 @@ class Results extends React.Component {
 
   handleSearchClose(event) {
     this.setState({
-      anchorElSearch: null
+      anchorElSearch: null,
+      openAlert: false
     });
   }
 
@@ -179,6 +201,8 @@ class Results extends React.Component {
       const date = new Date();
       label_ = document.location.href.split("?")[1] + date;
     }
+    console.log("label_ :", label_);
+
     if (idx === -1 && label_.length > 0) {
       mySearches_.push({
         label: label_,
@@ -194,14 +218,29 @@ class Results extends React.Component {
           localStorage.setItem("myBackups", JSON.stringify(myBackups_));
           this.setState({
             anchorElSearch: null,
-            label: ""
+            label: "",
+            openAlert: true,
+            message: "Votre recherche a bien été enregistrée !"
+          });
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          console.log("err :", err);
+          this.setState({
+            openAlert: true,
+            message: "Votre recherche n'a pas été enregistrée !"
           });
         }
       });
-    } else {
+    } else if (idx > -1) {
+      console.log("find :", mySearches_[idx]);
       this.setState({
         anchorElSearch: null,
-        label: ""
+        label: "",
+        openAlert: true,
+        message:
+          "Votre recherche est déjà enregistrée sous le label " +
+          mySearches_[idx].label +
+          " !"
       });
     }
   }
@@ -582,17 +621,55 @@ class Results extends React.Component {
         </Grid>
         <Styled>
           {({ classes }) => (
-            <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
-              <Fab
-                id="btTop"
-                onClick={this.topFunction}
-                aria-label="Top"
-                className={classNames(classes.margin, classes.bootstrapRoot)}
-                size="medium"
+            <div>
+              <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
+                <Fab
+                  id="btTop"
+                  onClick={this.topFunction}
+                  aria-label="Top"
+                  className={classNames(classes.margin, classes.bootstrapRoot)}
+                  size="medium"
+                >
+                  <ArrowUpIcon />
+                </Fab>
+              </Tooltip>
+              <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                key="topCenter"
+                open={this.state.openAlert}
+                onClose={this.handleSearchClose}
+                autoHideDuration={5000}
+                ContentProps={{
+                  "aria-describedby": "message-id"
+                }}
               >
-                <ArrowUpIcon />
-              </Fab>
-            </Tooltip>
+                <SnackbarContent
+                  className={classes.info}
+                  aria-describedby="client-snackbar"
+                  message={
+                    <span id="client-snackbar" className={classes.message}>
+                      <InfoIcon
+                        className={classNames(
+                          classes.icon,
+                          classes.iconVariant
+                        )}
+                      />
+                      {this.state.message}
+                    </span>
+                  }
+                  action={[
+                    <IconButton
+                      key="close"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={this.handleSearchClose}
+                    >
+                      <CloseIcon className={classes.icon} />
+                    </IconButton>
+                  ]}
+                />
+              </Snackbar>
+            </div>
           )}
         </Styled>
       </div>

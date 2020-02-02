@@ -36,12 +36,14 @@ export default class GeoMap extends React.Component {
 
   handleCheckA(event) {
     this.setState({
-      checkedA: event.target.checked
+      checkedA: event.target.checked,
+      count: 0
     });
   }
   handleCheckB(event) {
     this.setState({
-      checkedB: event.target.checked
+      checkedB: event.target.checked,
+      count: 0
     });
   }
 

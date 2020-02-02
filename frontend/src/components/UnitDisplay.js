@@ -88,7 +88,7 @@ export default class UnitDisplay extends Component {
     });
     const inputItem = {
       outputHtml: unit_div,
-      filename: "unite_militaire_" + this.props.id
+      filename: "Projet_TdP_unite_militaire_" + this.props.id
     };
     generatePDF(inputItem)
       .then(res => {

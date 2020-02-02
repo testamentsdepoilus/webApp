@@ -26,6 +26,40 @@ export default class CustumerDataSearch extends Component {
   }
 
   render() {
+    const terms_normalized = {
+      employe: "employé",
+      garcon: "garçon",
+      cafe: "café",
+      negociant: "négociant",
+      epicier: "épicier",
+      commercant: "commerçant",
+      nouveautes: "nouveautés",
+      departement: "département",
+      cremier: "crémier",
+      bicetre: "Bicêtre",
+      editeurs: "éditeurs",
+      societe: "Société",
+      generale: "Générale",
+      metropolitain: "Métropolitain",
+      montbeliard: "Montbéliard",
+      doubs: "Doubs",
+      "thomson-houston": "Thomson-Houston",
+      "d'electricite": "d'électricité",
+      hotelier: "hôtelier",
+      bangkok: "Bangkok",
+      royaume: "Royaume",
+      siam: "Siam",
+      orfevre: "orfèvre",
+      pepinieriste: "pépiniériste",
+      prêtre: "prêtre",
+      cathedrale: "cathédrale",
+      "l'eglise": "l'église",
+      proprietaire: "propriétaire",
+      representant: "représentant",
+      represantant: "représantant",
+      facon: "façon",
+      ingenieur: "ingénieur"
+    };
     return (
       <ExpansionPanel>
         <ExpansionPanelSummary
@@ -115,14 +149,43 @@ export default class CustumerDataSearch extends Component {
                   ]
                 }}
                 componentId="profession"
-                dataField="testator.occupation.keyword"
-                sortBy={"asc"}
+                dataField="testator.occupation.no_accent"
+                sortBy="asc"
+                size={500}
                 showCount={true}
                 autosuggest={true}
                 placeholder="Profession"
                 URLParams={true}
                 showSearch={true}
                 searchPlaceholder="Taper la profession ici"
+                renderItem={(label, count, isSelected) => {
+                  let label_ = "";
+                  label.split(" ").forEach(item => {
+                    if (item.length === 1) {
+                      item = item.replace("a", "à");
+                    } else {
+                      for (let [key, value] of Object.entries(
+                        terms_normalized
+                      )) {
+                        item = item.replace(key, value);
+                      }
+                    }
+
+                    label_ += item + " ";
+                  });
+                  return (
+                    <div>
+                      {label_}
+                      <span
+                        style={{
+                          marginLeft: 5
+                        }}
+                      >
+                        ({count})
+                      </span>
+                    </div>
+                  );
+                }}
                 innerClass={{
                   list: "list"
                 }}

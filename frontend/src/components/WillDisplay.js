@@ -244,7 +244,7 @@ export default class WillDisplay extends Component {
 
     const input_item = {
       data: this.props.data,
-      testator_data: this.state.testator_notice
+      testator_data: "Projet_TdP_testament_" + this.state.testator_notice
     };
     generateWillPDF(input_item)
       .then(res => {
