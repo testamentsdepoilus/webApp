@@ -21,6 +21,7 @@ import {
 } from "../utils/functions";
 
 import PlaceDisplay from "./PlaceDisplay";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   ul: {
@@ -229,6 +230,7 @@ class Places extends Component {
                         <PlaceDisplay id={item["_id"]} data={item} />
                       </Grid>
                     </Grid>
+                    <Footer />
                   </div>
                 );
               });

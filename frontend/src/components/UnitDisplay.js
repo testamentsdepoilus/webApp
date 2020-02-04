@@ -23,7 +23,6 @@ import {
 import classNames from "classnames";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -424,6 +423,6 @@ export default class UnitDisplay extends Component {
       );
     }
 
-    return [output, <Footer />];
+    return output;
   }
 }

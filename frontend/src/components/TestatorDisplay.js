@@ -23,7 +23,6 @@ import classNames from "classnames";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -630,6 +629,6 @@ export default class TestatorDisplay extends Component {
       );
     }
 
-    return [output, <Footer />];
+    return output;
   }
 }

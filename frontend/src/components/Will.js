@@ -20,6 +20,7 @@ import {
 import classNames from "classnames";
 import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
 import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   link: {
@@ -140,6 +141,7 @@ class Will extends Component {
               createPageMenu={createPageMenu}
             />
           </Paper>
+          <Footer />
         </div>
       );
     } else {

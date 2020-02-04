@@ -21,6 +21,7 @@ import {
 } from "../utils/functions";
 
 import UnitDisplay from "./UnitDisplay";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   ul: {
@@ -198,6 +199,7 @@ class Units extends Component {
                         <UnitDisplay id={item["_id"]} data={item} />
                       </Grid>
                     </Grid>
+                    <Footer />
                   </div>
                 );
               });

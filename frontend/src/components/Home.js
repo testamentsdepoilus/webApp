@@ -38,7 +38,7 @@ const Styled = createStyled(theme => ({
   root: {
     padding: theme.spacing(2),
     display: "block",
-    width: "80%",
+    width: "90%",
     margin: "auto",
     marginTop: theme.spacing(3)
   },

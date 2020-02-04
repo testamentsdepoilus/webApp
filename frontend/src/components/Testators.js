@@ -28,6 +28,7 @@ import {
 } from "../utils/functions";
 import TestatorDisplay from "./TestatorDisplay";
 import ClearIcon from "@material-ui/icons/Clear";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   ul: {
@@ -320,6 +321,7 @@ class Testators extends Component {
                         <TestatorDisplay id={item["_id"]} data={item} />
                       </Grid>
                     </Grid>
+                    <Footer />
                   </div>
                 );
               });

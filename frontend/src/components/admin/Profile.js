@@ -7,6 +7,7 @@ import {
   getParamConfig
 } from "../../utils/functions";
 import Menu from "../cms/Menu";
+import Footer from "../Footer";
 
 const Styled = createStyled(theme => ({
   root: {
@@ -74,6 +75,7 @@ class Profile extends Component {
                 </Grid>
               </Grid>
             </div>
+            <Footer />
           </div>
         )}
       </Styled>

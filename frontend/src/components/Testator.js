@@ -16,6 +16,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 import TestatorDisplay from "./TestatorDisplay";
+import Footer from "./Footer";
 
 class Testator extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class Testator extends Component {
               data={this.state.data[0]._source}
             />
           </Paper>
+          <Footer />
         </div>
       );
     } else {

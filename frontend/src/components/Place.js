@@ -13,6 +13,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import PlaceDisplay from "./PlaceDisplay";
 import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
+import Footer from "./Footer";
 
 class Place extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Place extends Component {
             id={this.state.data[0]["_id"]}
             data={this.state.data[0]._source}
           />
+          <Footer />
         </div>
       );
     } else {

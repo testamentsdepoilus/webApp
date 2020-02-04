@@ -24,6 +24,7 @@ import {
 } from "../utils/functions";
 import classNames from "classnames";
 import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
+import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   menu: {
@@ -409,6 +410,7 @@ class Wills extends Component {
                         />
                       </Grid>
                     </Grid>
+                    <Footer />
                   </div>
                 );
               });

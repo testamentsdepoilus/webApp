@@ -50,6 +50,7 @@ import {
 } from "@material-ui/core";
 import classNames from "classnames";
 import Menu from "./Menu";
+import Footer from "../Footer";
 
 // Up to top page click
 window.onscroll = function() {
@@ -1136,6 +1137,7 @@ export default class MyShoppingCart extends Component {
                 <ArrowUpIcon />
               </Fab>
             </Tooltip>
+            <Footer />
           </div>
         )}
       </Styled2>

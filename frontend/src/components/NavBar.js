@@ -12,7 +12,7 @@ import {
   DialogTitle,
   Grid
 } from "@material-ui/core";
-import { createStyled } from "../utils/functions";
+import { createStyled, getParamConfig } from "../utils/functions";
 import classNames from "classnames";
 import AccountIcon from "@material-ui/icons/AccountCircleOutlined";
 import CloseIcon from "@material-ui/icons/Close";
@@ -22,9 +22,7 @@ const Styled = createStyled(theme => ({
   nav_root: {
     background: "#eceff1",
     color: "white",
-    position: "static",
-    flexGrow: 1,
-    textAlign: "center"
+    position: "static"
   },
   link: {
     textTransform: "none",
@@ -61,23 +59,9 @@ const Styled = createStyled(theme => ({
   menu: {
     padding: theme.spacing(6, 0, 2, 2)
   },
-  typography: {
-    color: "#fff",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
-    fontSize: 28,
-    fontWeight: 500,
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(",")
+  titre_site: {
+    width: "100%",
+    height: "100%"
   },
   logIn: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -112,7 +96,7 @@ class NavBar extends Component {
   constructor() {
     super();
     this.state = {
-      selectedId: "search",
+      selectedId: "",
       open: false,
       anchorEl: null,
       anchorElExplor: null
@@ -125,7 +109,10 @@ class NavBar extends Component {
       "testators",
       "places",
       "news",
-      "units"
+      "articles",
+      "units",
+      "explore",
+      "mySpace"
     ];
     this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
@@ -173,7 +160,6 @@ class NavBar extends Component {
     const findLink = this.tabLinks.find(link =>
       document.location.href.includes(link)
     );
-
     this.setState({
       selectedId: findLink
     });
@@ -221,9 +207,14 @@ class NavBar extends Component {
           <div>
             <AppBar className={classNames(classes.nav_root)}>
               <Link id="home" component={RouterLink} to="/accueil">
-                <Typography className={classes.typography}>
-                  Testaments de Poilus
-                </Typography>
+                <img
+                  className={classes.titre_site}
+                  src={
+                    getParamConfig("web_url") +
+                    "/images/Entete_titre-site-haut-300dpi.jpg"
+                  }
+                  alt="titre_site"
+                />
               </Link>
 
               <Grid container direction="row" spacing={1}>
@@ -244,6 +235,7 @@ class NavBar extends Component {
                       }
                       component={RouterLink}
                       to="/recherche"
+                      onClick={this.handleListItemClick}
                     >
                       {" "}
                       Recherche{" "}
@@ -257,6 +249,7 @@ class NavBar extends Component {
                       }
                       component={RouterLink}
                       to="/explore"
+                      onClick={this.handleListItemClick}
                     >
                       Explorer
                     </Link>
@@ -321,6 +314,7 @@ class NavBar extends Component {
                       }
                       component={RouterLink}
                       to="/news"
+                      onClick={this.handleListItemClick}
                     >
                       {" "}
                       Les actualités{" "}
@@ -334,6 +328,7 @@ class NavBar extends Component {
                       }
                       component={RouterLink}
                       to="/articles"
+                      onClick={this.handleListItemClick}
                     >
                       {" "}
                       L'état de la recherche{" "}
@@ -347,6 +342,7 @@ class NavBar extends Component {
                       }
                       component={RouterLink}
                       to="/apropos"
+                      onClick={this.handleListItemClick}
                     >
                       {" "}
                       A propos{" "}
@@ -361,6 +357,7 @@ class NavBar extends Component {
                         }
                         component={RouterLink}
                         to="/espace"
+                        onClick={this.handleListItemClick}
                       >
                         {" "}
                         Mon espace{" "}

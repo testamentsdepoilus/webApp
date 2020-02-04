@@ -37,7 +37,6 @@ import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutline
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 import TestatorDisplay from "./TestatorDisplay";
 import ReactDOM from "react-dom";
-import Footer from "./Footer";
 
 const Styled = createStyled(theme => ({
   paper: {
@@ -131,6 +130,7 @@ export default class WillDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      will_id: 0,
       idx: 0,
       cur_page: null,
       copyLink: null,
@@ -169,6 +169,16 @@ export default class WillDisplay extends Component {
     this.handleExportPDFClick = this.handleExportPDFClick.bind(this);
     this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
     this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.id !== prevState.will_id) {
+      return {
+        will_id: nextProps.id,
+        idx: 0
+      };
+    }
+    return null;
   }
 
   handleAlertClose = event => {
@@ -244,14 +254,17 @@ export default class WillDisplay extends Component {
 
     const input_item = {
       data: this.props.data,
-      testator_data: "Projet_TdP_testament_" + this.state.testator_notice
+      testator_data: this.state.testator_notice
     };
     generateWillPDF(input_item)
       .then(res => {
         if (res.status === 200) {
           downloadFile(
-            getParamConfig("web_url") + "/outputPDF/" + this.props.id + ".pdf",
-            this.props.id + ".pdf"
+            getParamConfig("web_url") +
+              "/outputPDF/Projet_TdP_testament_" +
+              this.props.id +
+              ".pdf",
+            "Projet_TdP_testament_" + this.props.id + ".pdf"
           );
         } else {
           const err = res.err ? res.err : "Connexion au serveur a échoué !";
@@ -405,35 +418,19 @@ export default class WillDisplay extends Component {
       })
     )
       .then(data => {
-        getHitsFromQuery(
-          getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-          JSON.stringify({
-            _source: ["_id", "will_contents.will_date_range", "testator.ref"],
-            query: {
-              term: {
-                "testator.ref": data[0]._id
-              }
-            }
-          })
-        )
-          .then(hits => {
-            ReactDOM.render(
-              <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
-              document.getElementById("testator_none")
-            );
-            if (
-              this.state.testator_notice !==
-              document.getElementById("testator_notice").innerHTML
-            ) {
-              this.setState({
-                testator_notice: document.getElementById("testator_notice")
-                  .innerHTML
-              });
-            }
-          })
-          .catch(err => {
-            console.log("Erreur :", err);
+        ReactDOM.render(
+          <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
+          document.getElementById("testator_none")
+        );
+        if (
+          this.state.testator_notice !==
+          document.getElementById("testator_notice").innerHTML
+        ) {
+          this.setState({
+            testator_notice: document.getElementById("testator_notice")
+              .innerHTML
           });
+        }
       })
       .catch(error => {
         console.log("error :", error);
@@ -518,35 +515,19 @@ export default class WillDisplay extends Component {
       })
     )
       .then(data => {
-        getHitsFromQuery(
-          getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
-          JSON.stringify({
-            _source: ["_id", "will_contents.will_date_range", "testator.ref"],
-            query: {
-              term: {
-                "testator.ref": data[0]._id
-              }
-            }
-          })
-        )
-          .then(hits => {
-            ReactDOM.render(
-              <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
-              document.getElementById("testator_none")
-            );
-            if (
-              this.state.testator_notice !==
-              document.getElementById("testator_notice").innerHTML
-            ) {
-              this.setState({
-                testator_notice: document.getElementById("testator_notice")
-                  .innerHTML
-              });
-            }
-          })
-          .catch(err => {
-            console.log("Erreur :", err);
+        ReactDOM.render(
+          <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
+          document.getElementById("testator_none")
+        );
+        if (
+          this.state.testator_notice !==
+          document.getElementById("testator_notice").innerHTML
+        ) {
+          this.setState({
+            testator_notice: document.getElementById("testator_notice")
+              .innerHTML
           });
+        }
       })
       .catch(error => {
         console.log("error :", error);
@@ -1056,6 +1037,6 @@ export default class WillDisplay extends Component {
       );
     }
 
-    return [output, <Footer />];
+    return output;
   }
 }
