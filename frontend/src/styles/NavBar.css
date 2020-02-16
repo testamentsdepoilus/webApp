@@ -1,0 +1,52 @@
+.nav_root {
+  background: #eceff1;
+  color: white;
+  position: static;
+  font-family: -apple-system;
+  font-size: 1rem;
+}
+
+.titre_site {
+  width: 100%;
+  height: 100%;
+}
+
+.menu {
+  padding: 10px 0px 10px 10px;
+}
+
+.link {
+  text-transform: none;
+  color: #212121;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: none;
+  color: #0091ea;
+  font-weight: 600;
+}
+
+.activedLink {
+  color: #0091ea;
+  font-weight: 600;
+}
+
+.logIn {
+  position: absolute;
+  right: 5%;
+}
+
+.userLogin {
+  background-color: #bbdefb;
+}
+
+.userLogout {
+  background-color: red;
+}
+
+.closeButton {
+  position: absolute;
+  right: 5px;
+  color: grey;
+}

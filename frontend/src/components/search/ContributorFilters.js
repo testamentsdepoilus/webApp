@@ -3,7 +3,7 @@ import { SingleDropdownList } from "@appbaseio/reactivesearch";
 
 const ContributorFilters = () => (
   <SingleDropdownList
-    className="contributors"
+    className="datasearch"
     react={{
       and: [
         "texte",

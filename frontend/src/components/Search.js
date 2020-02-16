@@ -1,16 +1,26 @@
 import React, { Component } from "react";
 import "./../styles/App.css";
-import "./../styles/leftBar.css";
-import { ReactiveBase } from "@appbaseio/reactivesearch";
+import { ReactiveBase, ReactiveComponent } from "@appbaseio/reactivesearch";
 import ContributorFilters from "./search/ContributorFilters";
 import Results from "./search/Results";
 import DateFilter from "./search/DateFilter";
-import { Grid, Select, MenuItem, Paper } from "@material-ui/core";
+import {
+  Grid,
+  Select,
+  MenuItem,
+  Paper,
+  Breadcrumbs,
+  Link,
+  Typography
+} from "@material-ui/core";
 import CustumerDataSearch from "./search/DataSearch";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import { getParamConfig } from "../utils/functions";
 import CollectionFilter from "./search/CollectionFilter";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import { Link as RouterLink } from "react-router-dom";
+import GeoMap from "./search/GeoMap_bis";
 
 class Search extends Component {
   constructor(props) {
@@ -84,6 +94,26 @@ class Search extends Component {
         type="_doc"
       >
         <div className="search">
+          <div className="menu">
+            <Paper elevation={0}>
+              <Breadcrumbs
+                separator={<NavigateNextIcon fontSize="small" />}
+                aria-label="Breadcrumb"
+              >
+                <Link
+                  id="home"
+                  key={0}
+                  color="inherit"
+                  component={RouterLink}
+                  to="/accueil"
+                >
+                  Accueil
+                </Link>
+                <Typography color="textPrimary">Recherche</Typography>
+              </Breadcrumbs>
+            </Paper>
+          </div>
+          <h1 className="heading">RECHERCHE</h1>
           <Grid
             container
             justify="center"
@@ -119,6 +149,98 @@ class Search extends Component {
                 <Paper>
                   <ContributorFilters />
                 </Paper>
+                <ReactiveComponent
+                  componentId="mapSearch"
+                  react={{
+                    and: [
+                      "texte",
+                      "contributeur",
+                      "institution",
+                      "collection",
+                      "date_naissance",
+                      "date_redaction",
+                      "date_deces",
+                      "cote",
+                      "lieu",
+                      "nom_testateur",
+                      "notoriale",
+                      "profession",
+                      "unite"
+                    ]
+                  }}
+                  defaultQuery={() => ({
+                    _source: [
+                      "will_contents.birth_place",
+                      "testator.forename",
+                      "testator.surname",
+                      "testator.ref",
+                      "will_contents.death_place",
+                      "will_contents.death_date",
+                      "will_contents.birth_date",
+                      "will_contents.birth_place_norm",
+                      "will_contents.death_place_norm",
+                      "will_contents.birth_place_ref",
+                      "will_contents.death_place_ref"
+                    ],
+                    size: 1000,
+                    query: {
+                      match_all: {}
+                    }
+                  })}
+                  render={({ data }) => {
+                    if (data.length > 0) {
+                      let birth_data = {};
+                      let death_data = {};
+
+                      data.forEach(item => {
+                        if (Boolean(item["will_contents.birth_place_ref"])) {
+                          if (
+                            Boolean(
+                              birth_data[item["will_contents.birth_place_ref"]]
+                            )
+                          ) {
+                            birth_data[
+                              item["will_contents.birth_place_ref"]
+                            ].push(item);
+                          } else {
+                            birth_data[
+                              item["will_contents.birth_place_ref"]
+                            ] = [];
+                            birth_data[
+                              item["will_contents.birth_place_ref"]
+                            ].push(item);
+                          }
+                        }
+                        if (Boolean(item["will_contents.death_place_ref"])) {
+                          if (
+                            Boolean(
+                              death_data[item["will_contents.death_place_ref"]]
+                            )
+                          ) {
+                            death_data[
+                              item["will_contents.death_place_ref"]
+                            ].push(item);
+                          } else {
+                            death_data[
+                              item["will_contents.death_place_ref"]
+                            ] = [];
+                            death_data[
+                              item["will_contents.death_place_ref"]
+                            ].push(item);
+                          }
+                        }
+                      });
+                      return (
+                        <GeoMap
+                          birth_data={birth_data}
+                          death_data={death_data}
+                        />
+                      );
+                    } else {
+                      return null;
+                    }
+                  }}
+                />
               </div>
             </Grid>
             <Grid item xs={8}>

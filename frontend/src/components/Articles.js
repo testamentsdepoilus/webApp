@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
-  createStyled,
   getParamConfig,
   getHitsFromQuery,
   getTotalHits
@@ -17,73 +16,7 @@ import {
   MenuItem
 } from "@material-ui/core";
 
-import classNames from "classnames";
 import Footer from "./Footer";
-
-const Styled = createStyled(theme => ({
-  root: {
-    flexWrap: "wrap",
-    margin: theme.spacing(2, 0, 0, 2)
-  },
-  list: {
-    border: "1px solid #dadce0",
-    margin: "auto",
-    marginTop: theme.spacing(4)
-  },
-  detail: {
-    border: "1px solid #dadce0",
-    marginTop: theme.spacing(4)
-  },
-  item: {
-    textAlign: "justify",
-    padding: theme.spacing(1),
-    margin: theme.spacing(1),
-    backgroundColor: "#f5f5f5"
-  },
-  foot: {
-    fontSize: 14,
-    margin: theme.spacing(1)
-  },
-  head: {
-    fontSize: 14,
-    margin: theme.spacing(1),
-    padding: theme.spacing(1)
-  },
-  title: {
-    color: "#000000",
-    fontSize: "1.5em"
-  },
-  icon: {
-    fontSize: 20
-  },
-  menu: {
-    marginTop: theme.spacing(4),
-    fontSize: 14,
-    textAlign: "justify",
-    display: "block",
-    verticalAlign: "middle"
-  },
-  link: {
-    textTransform: "none",
-    paddingLeft: 15,
-    color: "#212121",
-    fontWeight: 500,
-    fontFamily: "-apple-system",
-    "&:hover, &:focus": {
-      color: "#0091EA",
-      fontWeight: 600,
-      backgroundColor: "#eceff1"
-    },
-    "&:active": {
-      color: "#0091EA",
-      fontWeight: 600
-    }
-  },
-  activedLink: {
-    color: "#0091EA",
-    fontWeight: 600
-  }
-}));
 
 class Articles extends Component {
   constructor(props) {
@@ -248,89 +181,76 @@ class Articles extends Component {
     );
 
     const menuArticles = (
-      <Styled>
-        {({ classes }) => (
-          <Paper className={classes.menu}>
-            <Typography>List des articles :</Typography>
-            <MenuList>
-              {this.state.data.map((item, i) => (
-                <MenuItem key={i}>
-                  <Link
-                    id={item["_id"]}
-                    className={
-                      this.state.selectedId === item["_id"]
-                        ? classNames(classes.link, classes.activedLink)
-                        : classes.link
-                    }
-                    component={RouterLink}
-                    to={"/articles/" + item["_id"]}
-                    onClick={this.handleListItemClick}
-                  >
-                    {item._source["title"]}
-                  </Link>
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Paper>
-        )}
-      </Styled>
+      <Paper className="menu_articles">
+        <MenuList>
+          {this.state.data.map((item, i) => (
+            <MenuItem key={i}>
+              <Link
+                id={item["_id"]}
+                className={
+                  this.state.selectedId === item["_id"] ? "activedLink" : "link"
+                }
+                component={RouterLink}
+                to={"/articles/" + item["_id"]}
+                onClick={this.handleListItemClick}
+              >
+                {item._source["title"]}
+              </Link>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Paper>
     );
 
     const date = Boolean(curItem) ? new Date(curItem._source["created"]) : null;
     return [
-      <Styled>
-        {({ classes }) =>
-          Boolean(curItem) ? (
-            <div id="root" className={classes.root}>
-              {navLink}
+      Boolean(curItem) ? (
+        <div className="articles">
+          {navLink}
 
-              <Grid container direction="row" spacing={2}>
-                <Grid item xs={4}>
-                  {menuArticles}
-                </Grid>
-                <Grid item xs={8}>
-                  <div className={classes.detail}>
-                    <Paper className={classes.item} key={0}>
-                      <Typography className={classes.title}>
-                        {" "}
-                        {curItem._source["title"]}{" "}
-                      </Typography>
-                      <Paper className={classes.head}>
-                        <Grid
-                          container
-                          direction="row"
-                          justify="space-between"
-                          alignItems="center"
-                        >
-                          <Grid item>{curItem._source["author"]}</Grid>
-                          <Grid item>
-                            {Boolean(date)
-                              ? "Mise à jour le " +
-                                date.toLocaleDateString() +
-                                " à " +
-                                date.toLocaleTimeString()
-                              : ""}
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            curItem._source["detail"] !== ""
-                              ? curItem._source["detail"]
-                              : curItem._source["summary"]
-                        }}
-                      ></div>
-                    </Paper>
-                  </div>
-                </Grid>
-              </Grid>
-            </div>
-          ) : (
-            <Typography variant="h4">Articles introuvables !</Typography>
-          )
-        }
-      </Styled>,
+          <h2>ETAT DE LA RECHERCHE</h2>
+          <Grid container direction="row" spacing={2}>
+            <Grid item xs={2}>
+              {menuArticles}
+            </Grid>
+            <Grid item xs={10}>
+              <div className="detail">
+                <Paper className="item" key={0}>
+                  <h1 className="title_article">{curItem._source["title"]} </h1>
+                  <Paper className="head">
+                    <Grid
+                      container
+                      direction="row"
+                      justify="space-between"
+                      alignItems="center"
+                    >
+                      <Grid item>{curItem._source["author"]}</Grid>
+                      <Grid item>
+                        {Boolean(date)
+                          ? "Mise à jour le " +
+                            date.toLocaleDateString() +
+                            " à " +
+                            date.toLocaleTimeString()
+                          : ""}
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        curItem._source["detail"] !== ""
+                          ? curItem._source["detail"]
+                          : curItem._source["summary"]
+                    }}
+                  ></div>
+                </Paper>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
+      ) : (
+        <Typography variant="h4">Articles introuvables !</Typography>
+      ),
       <Footer />
     ];
   }

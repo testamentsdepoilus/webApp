@@ -1,0 +1,13 @@
+.search .menu {
+  margin: 0 0 1em 1em;
+}
+
+.search .leftSidebar {
+  border-right: 0.5em solid #bdbcc0;
+  text-align: center;
+  max-width: 24em;
+}
+
+.search .leftSidebar > div {
+  margin-top: 1em;
+}

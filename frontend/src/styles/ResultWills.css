@@ -1,0 +1,50 @@
+.resultWills .typoName {
+  font-size: 1.2rem;
+  font-style: oblique;
+  color: #424242;
+}
+
+.resultWills .typoSurname {
+  font-weight: 600;
+  font-variant-caps: small-caps;
+}
+.resultWills .typoText {
+  font-size: 16;
+  font-weight: 500;
+  margin-top: 15;
+  padding-left: 20;
+  display: block;
+}
+
+.resultWills .typoSubTitle {
+  font-size: 0.85rem;
+}
+
+.resultWills .chip {
+  margin: 0.5em;
+}
+
+.resultWills .chipRoot {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0.5em;
+}
+
+.resultWills .info {
+  background-color: #1976d2;
+}
+
+.resultWills .icon {
+  font-size: 2rem;
+}
+
+.info .message {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.info .message .iconVariant {
+  margin-right: 5px;
+}

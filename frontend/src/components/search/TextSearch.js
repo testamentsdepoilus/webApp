@@ -1,43 +1,6 @@
 import React from "react";
 import { DataSearch } from "@appbaseio/reactivesearch";
-import "../../styles/leftBar.css";
 import { Grid, Typography, MenuItem, Select } from "@material-ui/core";
-import { createStyled } from "../../utils/functions";
-import classNames from "classnames";
-// Style button
-const Styled = createStyled(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    margin: theme.spacing(2, 1, 4, 1)
-  },
-  inputSearch: {
-    borderRadius: "22px",
-    border: "1px solid red"
-  },
-  typography: {
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(",")
-  },
-  typoTitle: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#424242"
-  },
-  select: {
-    height: 20
-  }
-}));
 
 class TextSearch extends React.Component {
   constructor(props) {
@@ -109,62 +72,50 @@ class TextSearch extends React.Component {
         ? "édition"
         : "transcription";
     return (
-      <Styled>
-        {({ classes }) => (
-          <Grid
-            className={classes.root}
-            container
-            justify="center"
-            direction="column"
-            spacing={1}
-          >
-            <Grid item>
-              <Grid container direction="row" spacing={1}>
-                <Grid item>
-                  <Typography
-                    className={classNames(
-                      classes.typography,
-                      classes.typoTitle
-                    )}
-                  >
-                    Effectuer votre recherche dans
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Select
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                    className={classes.select}
-                    name="value"
-                  >
-                    <MenuItem value="will_pages.transcription_text">
-                      transcription
-                    </MenuItem>
-                    <MenuItem value="will_pages.edition_text">édition</MenuItem>
-                  </Select>
-                </Grid>
+      <div className="textSearch">
+        <Grid container justify="center" direction="column" spacing={1}>
+          <Grid item>
+            <Grid container direction="row" spacing={1}>
+              <Grid item>
+                <Typography className="typoTitle">
+                  Effectuer votre recherche dans
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Select
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  className="select"
+                  name="value"
+                >
+                  <MenuItem value="will_pages.transcription_text">
+                    transcription
+                  </MenuItem>
+                  <MenuItem value="will_pages.edition_text">édition</MenuItem>
+                </Select>
               </Grid>
             </Grid>
-            <Grid item className={classes.dataSearch}>
-              <DataSearch
-                componentId="texte"
-                dataField={[this.state.value]}
-                queryFormat="or"
-                placeholder={"Que recherchez-vous dans " + page_name + " ?"}
-                filterLabel="recherche"
-                autosuggest={true}
-                showIcon={false}
-                customQuery={this.customQuery}
-                URLParams={true}
-                searchOperators={true}
-                innerClass={{
-                  input: classes.inputSearch
-                }}
-              />
-            </Grid>
           </Grid>
-        )}
-      </Styled>
+          <Grid item>
+            <DataSearch
+              className="dataSearch"
+              componentId="texte"
+              dataField={[this.state.value]}
+              queryFormat="or"
+              placeholder={"Que recherchez-vous dans " + page_name + " ?"}
+              filterLabel="recherche"
+              autosuggest={true}
+              showIcon={false}
+              customQuery={this.customQuery}
+              URLParams={true}
+              searchOperators={true}
+              innerClass={{
+                input: "inputSearch"
+              }}
+            />
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }

@@ -1,12 +1,49 @@
-.wills_menu {
-  margin: 1em 0 1em 2em;
+.wills .menu {
+  margin: 0 0 1em 1em;
 }
 
-.wills_order {
+.wills .wills_order {
   position: static;
   float: right;
 }
 
-.wills_result {
-  margin-top: 4em;
+.wills .wills_result {
+  margin-top: 1em;
+}
+
+.wills ul {
+  list-style-type: none;
+  margin-top: 1em;
+}
+
+.wills .li {
+  margin-top: 1em;
+  font-size: 0.9rem;
+}
+
+.wills .li_active {
+  margin-top: 1em;
+  font-size: 0.9rem;
+  color: #0091ea;
+  font-weight: 600;
+}
+
+.wills .typoSurname {
+  font-variant-caps: small-caps;
+}
+
+.wills .resultsInfo {
+  margin-left: 2em;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.wills .pagination {
+  position: relative;
+  bottom: 6em;
+}
+
+.wills .sortResult {
+  margin: 0 0 2em 0;
+  font-weight: 600;
 }

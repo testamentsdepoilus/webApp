@@ -22,6 +22,7 @@
     "helmet": "^3.21.2",
     "html-pdf": "^2.2.0",
     "http-errors": "~1.6.3",
+    "image-to-base64": "^2.0.1",
     "jade": "^1.11.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",

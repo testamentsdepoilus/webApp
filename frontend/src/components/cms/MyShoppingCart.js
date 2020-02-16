@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
-import { lighten } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -21,7 +19,6 @@ import VisibilityIcon from "@material-ui/icons/VisibilityOutlined";
 import ExportIcon from "@material-ui/icons/SaveAltOutlined";
 import CompareIcon from "@material-ui/icons/CompareOutlined";
 import {
-  createStyled,
   getParamConfig,
   updateMyListWills,
   getHitsFromQuery,
@@ -48,7 +45,6 @@ import {
   CircularProgress,
   FormControlLabel
 } from "@material-ui/core";
-import classNames from "classnames";
 import Menu from "./Menu";
 import Footer from "../Footer";
 
@@ -102,7 +98,6 @@ const headCells = [
 
 function EnhancedTableHead(props) {
   const {
-    classes,
     onSelectAllClick,
     order,
     orderBy,
@@ -124,7 +119,7 @@ function EnhancedTableHead(props) {
   };
   return (
     <TableHead>
-      <TableRow className={classes.head}>
+      <TableRow className="head">
         <Tooltip title="Sélectionner tous les éléments">
           <TableCell padding="checkbox">
             <FormControlLabel
@@ -138,11 +133,11 @@ function EnhancedTableHead(props) {
               }
               label={
                 numSelected === rowCount ? (
-                  <Typography className={classes.labelCheckBox}>
+                  <Typography className="labelCheckBox">
                     Désélectionner tout
                   </Typography>
                 ) : (
-                  <Typography className={classes.labelCheckBox}>
+                  <Typography className="labelCheckBox">
                     Séléctionner tout
                   </Typography>
                 )
@@ -162,14 +157,7 @@ function EnhancedTableHead(props) {
               direction={order}
               onClick={createSortHandler(headCell.id)}
             >
-              <Typography className={classes.labelTitle}>
-                {title_[title]}
-              </Typography>
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
+              <Typography className="labelTitle">{title_[title]}</Typography>
             </TableSortLabel>
           </TableCell>
         ))}
@@ -180,7 +168,6 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -189,31 +176,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired
 };
-
-const Styled1 = createStyled(theme => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1)
-  },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
-  title: {
-    flex: "1 1 100%",
-    color: "#0d47a1",
-    fontSize: 24,
-    fontWeight: 600,
-    fontFamily: "-apple-system",
-    margin: theme.spacing(2, 0, 3)
-  }
-}));
 
 const EnhancedTableToolbar = props => {
   const { numSelected, actionButton, title } = props;
@@ -225,32 +187,38 @@ const EnhancedTableToolbar = props => {
     mySearches: "Mes recherches"
   };
   return (
-    <Styled1>
-      {({ classes }) => (
-        <Toolbar
-          className={clsx(classes.root, {
-            [classes.highlight]: numSelected > 0
-          })}
-          id={title}
-        >
+    <Toolbar className="toolBar" id={title}>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+      >
+        <Grid item>
+          <h6 className="title" id="tableTitle">
+            {title_[title]}
+          </h6>
+        </Grid>
+        <Grid item>
           {numSelected > 0 ? (
-            <Typography
-              className={classes.title}
-              color="inherit"
-              variant="subtitle1"
-            >
-              {numSelected} sélectionnés
-            </Typography>
+            <Grid container direction="row" alignItems="center" spacing={1}>
+              <Grid item>
+                <Typography
+                  className="highlight"
+                  color="inherit"
+                  variant="subtitle1"
+                >
+                  {numSelected} sélectionnés
+                </Typography>
+              </Grid>
+              <Grid item>{actionButton}</Grid>
+            </Grid>
           ) : (
-            <Typography className={classes.title} variant="h6" id="tableTitle">
-              {title_[title]}
-            </Typography>
+            actionButton
           )}
-
-          {numSelected > 0 ? actionButton : null}
-        </Toolbar>
-      )}
-    </Styled1>
+        </Grid>
+      </Grid>
+    </Toolbar>
   );
 };
 
@@ -283,82 +251,8 @@ AlertMessage.propTypes = {
   message: PropTypes.string.isRequired
 };
 
-const Styled2 = createStyled(theme => ({
-  root: {
-    flexWrap: "wrap",
-    width: "90%",
-    marginTop: theme.spacing(1, 0, 0, 2)
-  },
-  menu: {
-    marginTop: theme.spacing(2)
-  },
-  link: {
-    fontSize: 14,
-    textAlign: "justify",
-    textDecoration: "none"
-  },
-  paper: {
-    width: "100%",
-    height: 450,
-    margin: "auto",
-    marginTop: theme.spacing(2)
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1
-  },
-  head: {
-    backgroundColor: "#e3f2fd"
-  },
-  backBt: {
-    color: "#fff",
-    backgroundColor: "#1976d2"
-  },
-  addBt: {
-    color: "#0d47a1",
-    fontSize: 35
-  },
-  typeSelect: {
-    display: "flex",
-    width: "10em",
-    margin: theme.spacing(3, 0, 3)
-  },
-  margin: {
-    margin: theme.spacing(12)
-  },
-  bootstrapRoot: {
-    display: "none",
-    position: "fixed",
-    bottom: 10,
-    right: 10,
-    boxShadow: "none",
-    fontSize: 16,
-    border: "1px solid",
-
-    "&:hover": {
-      backgroundColor: "#bcaaa4",
-      borderColor: "#bcaaa4"
-    }
-  },
-  labelCheckBox: {
-    fontSize: "0.8rem"
-  },
-  labelTitle: {
-    fontSize: "1rem",
-    fontWeight: 600,
-    marginLeft: theme.spacing(2)
-  }
-}));
-
 export default class MyShoppingCart extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       order: {
@@ -394,7 +288,7 @@ export default class MyShoppingCart extends Component {
   }
 
   handleRequestSort = title => {
-    return function(event, property) {
+    return function(property) {
       const isDesc =
         this.state.orderBy === property && this.state.order[title] === "desc";
       let order_ = this.state.order;
@@ -432,7 +326,7 @@ export default class MyShoppingCart extends Component {
     }.bind(this);
   };
 
-  handleClick = (event, name, title) => {
+  handleClick = (name, title) => {
     const selectedIndex = this.state.selected[title].indexOf(name);
     let newSelected = [];
 
@@ -457,19 +351,19 @@ export default class MyShoppingCart extends Component {
     });
   };
 
-  handleRemoveWill = event => {
+  handleRemoveWill() {
     this.setState({
       open: true
     });
-  };
+  }
 
-  handleDialogClose = event => {
+  handleDialogClose() {
     this.setState({
       open: false
     });
-  };
+  }
 
-  handleDialogConfirm = event => {
+  handleDialogConfirm() {
     let myBackups_ = JSON.parse(localStorage.myBackups);
     myBackups_[this.state.type] =
       this.state.type === "mySearches"
@@ -502,11 +396,11 @@ export default class MyShoppingCart extends Component {
         });
       }
     });
-  };
+  }
 
-  handleAlertClose = event => {
+  handleAlertClose() {
     document.location.reload();
-  };
+  }
 
   handleDisplayWill = (row, title) => {
     return function(e) {
@@ -549,7 +443,7 @@ export default class MyShoppingCart extends Component {
     };
   };
 
-  handleCompareWill = (event, title) => {
+  handleCompareWill = title => {
     window.open(
       getParamConfig("web_url") +
         "/compare/" +
@@ -558,7 +452,7 @@ export default class MyShoppingCart extends Component {
     );
   };
 
-  handleExportWill = event => {
+  handleExportWill() {
     const myBackups_ = JSON.parse(localStorage.myBackups);
     const myWills_ = myBackups_.myWills.filter(item =>
       this.state.selected[this.state.type].includes(item)
@@ -576,7 +470,7 @@ export default class MyShoppingCart extends Component {
       });
       downloadZipFiles(urls, "testaments.zip");
     }
-  };
+  }
 
   handleExportTestator() {
     this.setState({
@@ -643,120 +537,115 @@ export default class MyShoppingCart extends Component {
       mySearches: "recherches"
     };
     return (
-      <Styled2>
-        {({ classes }) => (
-          <TableContainer component={Paper} className={classes.paper}>
-            <EnhancedTableToolbar
-              numSelected={this.state.selected[title].length}
-              actionButton={actionButton}
-              title={title}
-            />
+      <TableContainer component={Paper} className="paper">
+        <EnhancedTableToolbar
+          numSelected={this.state.selected[title].length}
+          actionButton={actionButton}
+          title={title}
+        />
 
-            <Table
-              className={classes.table}
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                classes={classes}
-                numSelected={this.state.selected[title].length}
-                order={this.state.order[title]}
-                orderBy={this.state.orderBy}
-                onSelectAllClick={this.handleSelectAllClick(data, title)}
-                onRequestSort={this.handleRequestSort(title)}
-                rowCount={data.length}
-                title={title}
-              />
-              <TableBody>
-                {stableSort(
-                  data,
-                  getSorting(this.state.order[title], this.state.orderBy)
-                ).map((row, index) => {
-                  const isItemSelected =
-                    title === "mySearches"
-                      ? isSelected(row.label)
-                      : isSelected(row["_id"]);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+        <Table
+          className="table"
+          aria-labelledby="tableTitle"
+          size={"medium"}
+          aria-label="enhanced table"
+        >
+          <EnhancedTableHead
+            numSelected={this.state.selected[title].length}
+            order={this.state.order[title]}
+            orderBy={this.state.orderBy}
+            onSelectAllClick={this.handleSelectAllClick(data, title)}
+            onRequestSort={this.handleRequestSort(title)}
+            rowCount={data.length}
+            title={title}
+          />
+          <TableBody>
+            {stableSort(
+              data,
+              getSorting(this.state.order[title], this.state.orderBy)
+            ).map((row, index) => {
+              const isItemSelected =
+                title === "mySearches"
+                  ? isSelected(row.label)
+                  : isSelected(row["_id"]);
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={index}
-                      selected={isItemSelected}
+              return (
+                <TableRow
+                  hover
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={index}
+                  selected={isItemSelected}
+                >
+                  {title === "mySearches" ? (
+                    <TableCell
+                      onClick={event =>
+                        this.handleClick(event, row.label, title)
+                      }
+                      role="checkbox"
+                      padding="checkbox"
                     >
-                      {title === "mySearches" ? (
-                        <TableCell
-                          onClick={event =>
-                            this.handleClick(event, row.label, title)
-                          }
-                          role="checkbox"
-                          padding="checkbox"
-                        >
-                          <Checkbox
-                            checked={isItemSelected}
-                            inputProps={{ "aria-labelledby": labelId }}
-                          />
-                        </TableCell>
-                      ) : (
-                        <TableCell
-                          onClick={event =>
-                            this.handleClick(event, row["_id"], title)
-                          }
-                          role="checkbox"
-                          padding="checkbox"
-                        >
-                          <Checkbox
-                            checked={isItemSelected}
-                            inputProps={{ "aria-labelledby": labelId }}
-                          />
-                        </TableCell>
-                      )}
-                      {title === "mySearches" ? (
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                        >
-                          {row.label}
-                        </TableCell>
-                      ) : (
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                        >
-                          {row.title.replace("Testament de", "")}
-                        </TableCell>
-                      )}
-                      <TableCell align="center">
-                        <Tooltip
-                          title={
-                            title === "myUnits"
-                              ? "Accéder aux " + title_norm[title]
-                              : "Accéder au " + title_norm[title]
-                          }
-                        >
-                          <IconButton
-                            onClick={this.handleDisplayWill(row, title)}
-                            aria-label="display"
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </Styled2>
+                      <Checkbox
+                        checked={isItemSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                      />
+                    </TableCell>
+                  ) : (
+                    <TableCell
+                      onClick={event =>
+                        this.handleClick(event, row["_id"], title)
+                      }
+                      role="checkbox"
+                      padding="checkbox"
+                    >
+                      <Checkbox
+                        checked={isItemSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                      />
+                    </TableCell>
+                  )}
+                  {title === "mySearches" ? (
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
+                    >
+                      {row.label}
+                    </TableCell>
+                  ) : (
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
+                    >
+                      {row.title.replace("Testament de", "")}
+                    </TableCell>
+                  )}
+                  <TableCell align="center">
+                    <Tooltip
+                      title={
+                        title === "myUnits"
+                          ? "Accéder aux " + title_norm[title]
+                          : "Accéder au " + title_norm[title]
+                      }
+                    >
+                      <IconButton
+                        onClick={this.handleDisplayWill(row, title)}
+                        aria-label="display"
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   }
 
@@ -906,7 +795,16 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des testament">
-              <IconButton onClick={this.handleExportWill} aria-label="export">
+              <IconButton
+                disabled={
+                  Boolean(this.state.selected[title]) &&
+                  this.state.selected[this.state.type].length > 0
+                    ? false
+                    : true
+                }
+                onClick={this.handleExportWill}
+                aria-label="export"
+              >
                 <ExportIcon />
               </IconButton>
             </Tooltip>
@@ -917,7 +815,16 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des lieux">
-              <IconButton onClick={this.handleExportPlace} aria-label="export">
+              <IconButton
+                disabled={
+                  Boolean(this.state.selected[title]) &&
+                  this.state.selected[this.state.type].length > 0
+                    ? false
+                    : true
+                }
+                onClick={this.handleExportPlace}
+                aria-label="export"
+              >
                 <ExportIcon />
               </IconButton>
             </Tooltip>
@@ -928,7 +835,16 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des unités militaires">
-              <IconButton onClick={this.handleExportUnit} aria-label="export">
+              <IconButton
+                disabled={
+                  Boolean(this.state.selected[title]) &&
+                  this.state.selected[this.state.type].length > 0
+                    ? false
+                    : true
+                }
+                onClick={this.handleExportUnit}
+                aria-label="export"
+              >
                 <ExportIcon />
               </IconButton>
             </Tooltip>
@@ -940,6 +856,12 @@ export default class MyShoppingCart extends Component {
           <Grid item>
             <Tooltip title="Export des testateurs">
               <IconButton
+                disabled={
+                  Boolean(this.state.selected[title]) &&
+                  this.state.selected[this.state.type].length > 0
+                    ? false
+                    : true
+                }
                 onClick={this.handleExportTestator}
                 aria-label="export"
               >
@@ -961,47 +883,52 @@ export default class MyShoppingCart extends Component {
 
   render() {
     const menu = (
-      <Styled2>
-        {({ classes }) => (
-          <Paper className={classes.menu}>
-            <MenuList>
-              <MenuItem key={1}>
-                <a href="#wills_div" className={classes.link}>
-                  Testaments
-                </a>
-              </MenuItem>
-              <MenuItem key={2}>
-                {" "}
-                <a href="#testators_div" className={classes.link}>
-                  Testateurs
-                </a>
-              </MenuItem>
-              <MenuItem key={3}>
-                <a href="#places_div" className={classes.link}>
-                  Lieux
-                </a>
-              </MenuItem>
-              <MenuItem key={4}>
-                <a href="#units_div" className={classes.link}>
-                  Unités militaires
-                </a>
-              </MenuItem>
-              <MenuItem key={5}>
-                <a href="#searches_div" className={classes.link}>
-                  Mes recherches
-                </a>
-              </MenuItem>
-            </MenuList>
-          </Paper>
-        )}
-      </Styled2>
+      <Paper className="menu">
+        <MenuList>
+          <MenuItem key={1}>
+            <a href="#wills_div" className="link">
+              Testaments
+            </a>
+          </MenuItem>
+          <MenuItem key={2}>
+            {" "}
+            <a href="#testators_div" className="link">
+              Testateurs
+            </a>
+          </MenuItem>
+          <MenuItem key={3}>
+            <a href="#places_div" className="link">
+              Lieux
+            </a>
+          </MenuItem>
+          <MenuItem key={4}>
+            <a href="#units_div" className="link">
+              Unités militaires
+            </a>
+          </MenuItem>
+          <MenuItem key={5}>
+            <a href="#searches_div" className="link">
+              Mes recherches
+            </a>
+          </MenuItem>
+        </MenuList>
+      </Paper>
     );
 
     const actionButton = (
       <Grid container direction="row" justify="flex-end" alignItems="center">
         <Grid item>
           <Tooltip title="Suppression des éléments sélectionnés">
-            <IconButton onClick={this.handleRemoveWill} aria-label="delete">
+            <IconButton
+              disabled={
+                Boolean(this.state.selected[this.state.type]) &&
+                this.state.selected[this.state.type].length > 0
+                  ? false
+                  : true
+              }
+              onClick={this.handleRemoveWill}
+              aria-label="delete"
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -1013,6 +940,12 @@ export default class MyShoppingCart extends Component {
             <Grid item>
               <Tooltip title="Comparer des testaments">
                 <IconButton
+                  disabled={
+                    Boolean(this.state.selected[this.state.type]) &&
+                    this.state.selected[this.state.type].length > 0
+                      ? false
+                      : true
+                  }
                   onClick={event => this.handleCompareWill(event, "myWills")}
                   aria-label="compare"
                 >
@@ -1040,107 +973,97 @@ export default class MyShoppingCart extends Component {
     );
 
     const defaultView = (
-      <Styled2>
-        {({ classes }) => (
-          <div className={classes.root}>
-            <Menu />
-            <div id="testator_none" style={{ display: "none" }}></div>
-            <Grid container direction="row" justify="center" spacing={2}>
-              <Grid item xs={4}>
-                {menu}
-              </Grid>
-              <Grid item xs={8}>
-                <section id="wills_div">
-                  {this.setDefaultView(
-                    this.state.data["myWills"],
-                    "myWills",
-                    actionButton
-                  )}
-                </section>
-                <section id="testators_div">
-                  {this.setDefaultView(
-                    this.state.data["myTestators"],
-                    "myTestators",
-                    actionButton
-                  )}
-                </section>
-                <section id="places_div">
-                  {this.setDefaultView(
-                    this.state.data["myPlaces"],
-                    "myPlaces",
-                    actionButton
-                  )}
-                </section>
-                <section id="units_div">
-                  {this.setDefaultView(
-                    this.state.data["myUnits"],
-                    "myUnits",
-                    actionButton
-                  )}
-                </section>
-                <section id="searches_div">
-                  {this.setDefaultView(
-                    this.state.data["mySearches"],
-                    "mySearches",
-                    actionButton
-                  )}
-                </section>
-              </Grid>
-            </Grid>
-            <Dialog
-              open={this.state.open}
-              onClose={this.handleDialogClose}
-              aria-labelledby={"draggable-dialog-title"}
-            >
-              <DialogTitle
-                style={{ cursor: "move" }}
-                id={"draggable-dialog-title"}
-              >
-                Confirmation
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Souhaitez-vous vraiment supprimer les{" "}
-                  {Boolean(this.state.selected[this.state.type])
-                    ? this.state.selected[this.state.type].length
-                    : 0}{" "}
-                  éléments sélectionnés ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  autoFocus
-                  onClick={this.handleDialogClose}
-                  color="primary"
-                >
-                  Annuler
-                </Button>
-                <Button onClick={this.handleDialogConfirm} color="primary">
-                  Supprimer
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <AlertMessage
-              message={this.state.mess}
-              openAlert={this.state.openAlert}
-              handleClose={this.handleAlertClose}
-            />
+      <div className="favoris">
+        <Menu />
+        <div id="testator_none" style={{ display: "none" }}></div>
+        <h1 className="heading">MES FAVORIS</h1>
+        <Grid container direction="row" justify="center" spacing={2}>
+          <Grid item xs={4}>
+            {menu}
+          </Grid>
+          <Grid item xs={8}>
+            <section id="wills_div">
+              {this.setDefaultView(
+                this.state.data["myWills"],
+                "myWills",
+                actionButton
+              )}
+            </section>
+            <section id="testators_div">
+              {this.setDefaultView(
+                this.state.data["myTestators"],
+                "myTestators",
+                actionButton
+              )}
+            </section>
+            <section id="places_div">
+              {this.setDefaultView(
+                this.state.data["myPlaces"],
+                "myPlaces",
+                actionButton
+              )}
+            </section>
+            <section id="units_div">
+              {this.setDefaultView(
+                this.state.data["myUnits"],
+                "myUnits",
+                actionButton
+              )}
+            </section>
+            <section id="searches_div">
+              {this.setDefaultView(
+                this.state.data["mySearches"],
+                "mySearches",
+                actionButton
+              )}
+            </section>
+          </Grid>
+        </Grid>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleDialogClose}
+          aria-labelledby={"draggable-dialog-title"}
+        >
+          <DialogTitle style={{ cursor: "move" }} id={"draggable-dialog-title"}>
+            Confirmation
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Souhaitez-vous vraiment supprimer les{" "}
+              {Boolean(this.state.selected[this.state.type])
+                ? this.state.selected[this.state.type].length
+                : 0}{" "}
+              éléments sélectionnés ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={this.handleDialogClose} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={this.handleDialogConfirm} color="primary">
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <AlertMessage
+          message={this.state.mess}
+          openAlert={this.state.openAlert}
+          handleClose={this.handleAlertClose}
+        />
 
-            <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
-              <Fab
-                id="btTop"
-                onClick={this.topFunction}
-                aria-label="Top"
-                className={classNames(classes.margin, classes.bootstrapRoot)}
-                size="medium"
-              >
-                <ArrowUpIcon />
-              </Fab>
-            </Tooltip>
-            <Footer />
-          </div>
-        )}
-      </Styled2>
+        <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
+          <Fab
+            id="btTop"
+            onClick={this.topFunction}
+            aria-label="Top"
+            className="bootstrapRoot"
+            size="medium"
+          >
+            <ArrowUpIcon />
+          </Fab>
+        </Tooltip>
+        <Footer />
+      </div>
     );
 
     return defaultView;

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
-import "../../styles/leftBar.css";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -19,7 +18,7 @@ export default class CustumerDataSearch extends Component {
     };
     this.handleClick = this.handleClick.bind(this);
   }
-  handleClick(event) {
+  handleClick() {
     this.setState({
       displayMore: !this.state.displayMore
     });
@@ -252,8 +251,7 @@ export default class CustumerDataSearch extends Component {
                 autosuggest={true}
                 placeholder="Institution de conservation"
                 URLParams={true}
-                showSearch={true}
-                searchPlaceholder="Taper l'institution ici"
+                showSearch={false}
               />
             </Grid>
             <Grid item>

@@ -14,9 +14,8 @@ import {
 } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
-import classNames from "classnames";
+
 import {
-  createStyled,
   getParamConfig,
   getUserToken,
   updateMyListWills
@@ -27,79 +26,6 @@ import ListAddIcon from "@material-ui/icons/PlaylistAddOutlined";
 import ListAddCheckIcon from "@material-ui/icons/PlaylistAddCheckOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-
-// Style button
-const Styled = createStyled(theme => ({
-  typography: {
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(",")
-  },
-  typoName: {
-    fontSize: "1.2rem",
-    fontStyle: "oblique",
-    color: "#424242"
-  },
-  typoSurname: {
-    fontWeight: 600,
-    fontVariantCaps: "small-caps"
-  },
-  typoText: {
-    fontSize: 16,
-    fontWeight: 500,
-    marginTop: 15,
-    paddingLeft: 20,
-    display: "block"
-  },
-  typoSubTitle: {
-    fontSize: "0.85rem"
-  },
-
-  margin: {
-    margin: theme.spacing(12)
-  },
-
-  willTitle: {
-    "&:hover": {
-      borderColor: "#E0E0E0",
-      border: "solid",
-      cursor: "pointer"
-    }
-  },
-  chip: {
-    margin: theme.spacing(0.5)
-  },
-  chipRoot: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    padding: theme.spacing(0.5)
-  },
-  info: {
-    backgroundColor: "#1976d2"
-  },
-  icon: {
-    fontSize: 20
-  },
-  iconVariant: {
-    opacity: 0.9,
-    marginRight: theme.spacing(1)
-  },
-  message: {
-    display: "flex",
-    alignItems: "center",
-    fontSize: 16
-  }
-}));
 
 const listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
 
@@ -370,20 +296,14 @@ export default class ResultWills extends React.Component {
             div_text_page = hit.highlight[Object.keys(hit.highlight)[0]].map(
               (page, k) => {
                 return (
-                  <Styled key={k + 1000}>
-                    {({ classes }) => (
-                      <Typography
-                        component="span"
-                        className={classNames(
-                          classes.typoText,
-                          classes.typography
-                        )}
-                        dangerouslySetInnerHTML={{
-                          __html: page
-                        }}
-                      />
-                    )}
-                  </Styled>
+                  <Typography
+                    key={k + 1000}
+                    component="span"
+                    className="typoText"
+                    dangerouslySetInnerHTML={{
+                      __html: page
+                    }}
+                  />
                 );
               }
             );
@@ -421,142 +341,124 @@ export default class ResultWills extends React.Component {
         <span> Boolean(will_date) ? " rédigé le " + will_date : ""; </span>
       );*/
       return (
-        <Styled key={j}>
-          {({ classes }) => (
-            <div>
-              <ListItem alignItems="flex-start" component="div">
-                <ListItemText
-                  primary={
-                    <Grid
-                      container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="center"
-                      spacing={1}
-                    >
-                      <Grid item xs="auto">
-                        <Tooltip title={title_testator} arrow={true}>
-                          <Link
-                            href={
-                              getParamConfig("web_url") +
-                              "/testament/" +
-                              item["_id"]
-                            }
-                            aria-label="More"
-                            className={classNames(
-                              classes.typoName,
-                              classes.typography
-                            )}
+        <div className="resultWills" key={j}>
+          <ListItem alignItems="flex-start" component="div">
+            <ListItemText
+              primary={
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid item xs="auto">
+                    <Tooltip title={title_testator} arrow={true}>
+                      <Link
+                        href={
+                          getParamConfig("web_url") +
+                          "/testament/" +
+                          item["_id"]
+                        }
+                        aria-label="More"
+                        className="typoName"
+                      >
+                        {item["testator.forename"] + " "}
+                        <span className="typoSurname">
+                          {item["testator.surname"]}
+                        </span>
+                      </Link>
+                    </Tooltip>
+                    {Boolean(will_date) ? (
+                      <Typography className="typoSubTitle">
+                        Testament rédigé le {will_date}
+                      </Typography>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+                  <Grid item xs="auto" value={item["_id"]}>
+                    <Grid container direction="row" spacing={1}>
+                      <Grid item onClick={this.handleClickWill(item)}>
+                        {Boolean(this.state.styleTitle[item["_id"]]) ? (
+                          <Tooltip
+                            title="Supprimer de la liste de comparaison"
+                            style={{ cursor: "hand" }}
+                            interactive
+                            arrow={true}
                           >
-                            {item["testator.forename"] + " "}
-                            <span
-                              className={classNames(
-                                classes.typoName,
-                                classes.typography,
-                                classes.typoSurname
-                              )}
-                            >
-                              {item["testator.surname"]}
-                            </span>
-                          </Link>
-                        </Tooltip>
-                        {Boolean(will_date) ? (
-                          <Typography
-                            className={classNames(
-                              classes.typography,
-                              classes.typoSubTitle
-                            )}
-                          >
-                            Testament rédigé le {will_date}
-                          </Typography>
+                            <IconButton>
+                              <ListAddCheckIcon color="action" />
+                            </IconButton>
+                          </Tooltip>
                         ) : (
-                          ""
+                          <Tooltip
+                            title="Ajouter à la comparaison"
+                            style={{ cursor: "hand" }}
+                            interactive
+                            arrow={true}
+                          >
+                            <IconButton>
+                              <ListAddIcon />
+                            </IconButton>
+                          </Tooltip>
                         )}
                       </Grid>
-                      <Grid item xs="auto" value={item["_id"]}>
-                        <Grid container direction="row" spacing={1}>
-                          <Grid item onClick={this.handleClickWill(item)}>
-                            {Boolean(this.state.styleTitle[item["_id"]]) ? (
-                              <Tooltip
-                                title="Supprimer de la liste de comparaison"
-                                style={{ cursor: "hand" }}
-                                interactive
-                                arrow={true}
+                      <Grid item>
+                        {Boolean(this.userToken) ? (
+                          isAdded === -1 ? (
+                            <Tooltip
+                              title="Ajouter au panier"
+                              placement="bottom"
+                              style={{ cursor: "hand" }}
+                              arrow={true}
+                            >
+                              <IconButton
+                                onClick={this.handleAddShoppingWill(
+                                  item["_id"]
+                                )}
                               >
-                                <IconButton>
-                                  <ListAddCheckIcon color="action" />
-                                </IconButton>
-                              </Tooltip>
-                            ) : (
-                              <Tooltip
-                                title="Ajouter à la comparaison"
-                                style={{ cursor: "hand" }}
-                                interactive
-                                arrow={true}
+                                <AddShoppingCartIcon />
+                              </IconButton>
+                            </Tooltip>
+                          ) : (
+                            <Tooltip
+                              title="Supprimer du panier"
+                              placement="bottom"
+                              style={{ cursor: "hand" }}
+                              arrow={true}
+                            >
+                              <IconButton
+                                onClick={this.handleremoveShoppingWill(
+                                  item["_id"]
+                                )}
                               >
-                                <IconButton>
-                                  <ListAddIcon />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </Grid>
-                          <Grid item>
-                            {Boolean(this.userToken) ? (
-                              isAdded === -1 ? (
-                                <Tooltip
-                                  title="Ajouter au panier"
-                                  placement="bottom"
-                                  style={{ cursor: "hand" }}
-                                  arrow={true}
-                                >
-                                  <IconButton
-                                    onClick={this.handleAddShoppingWill(
-                                      item["_id"]
-                                    )}
-                                  >
-                                    <AddShoppingCartIcon />
-                                  </IconButton>
-                                </Tooltip>
-                              ) : (
-                                <Tooltip
-                                  title="Supprimer du panier"
-                                  placement="bottom"
-                                  style={{ cursor: "hand" }}
-                                  arrow={true}
-                                >
-                                  <IconButton
-                                    onClick={this.handleremoveShoppingWill(
-                                      item["_id"]
-                                    )}
-                                  >
-                                    <RemoveShoppingCartIcon color="action" />
-                                  </IconButton>
-                                </Tooltip>
-                              )
-                            ) : (
-                              <Tooltip
-                                title="Connectez-vous pour ajouter ce testament au panier"
-                                arrow={true}
-                              >
-                                <span>
-                                  <IconButton aria-label="addShop" disabled>
-                                    <AddShoppingCartIcon />
-                                  </IconButton>
-                                </span>
-                              </Tooltip>
-                            )}
-                          </Grid>
-                        </Grid>
+                                <RemoveShoppingCartIcon color="action" />
+                              </IconButton>
+                            </Tooltip>
+                          )
+                        ) : (
+                          <Tooltip
+                            title="Connectez-vous pour ajouter ce testament au panier"
+                            arrow={true}
+                          >
+                            <span>
+                              <IconButton aria-label="addShop" disabled>
+                                <AddShoppingCartIcon />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        )}
                       </Grid>
                     </Grid>
-                  }
-                  secondary={descriptions}
-                />
-              </ListItem>
-              <Divider variant="inset" />
-            </div>
-          )}
-        </Styled>
+                  </Grid>
+                </Grid>
+              }
+              secondary={descriptions}
+            />
+          </ListItem>
+          <Divider variant="inset" />
+        </div>
       );
     });
 
@@ -571,32 +473,26 @@ export default class ResultWills extends React.Component {
           "aria-describedby": "message-id"
         }}
       >
-        <Styled>
-          {({ classes }) => (
-            <SnackbarContent
-              className={classes.info}
-              aria-describedby="client-snackbar"
-              message={
-                <span id="client-snackbar" className={classes.message}>
-                  <InfoIcon
-                    className={classNames(classes.icon, classes.iconVariant)}
-                  />
-                  Le nombre maximum de testaments à comparer est atteint.
-                </span>
-              }
-              action={[
-                <IconButton
-                  key="close"
-                  aria-label="close"
-                  color="inherit"
-                  onClick={this.handleClose}
-                >
-                  <CloseIcon className={classes.icon} />
-                </IconButton>
-              ]}
-            />
-          )}
-        </Styled>
+        <SnackbarContent
+          className="info"
+          aria-describedby="client-snackbar"
+          message={
+            <span id="client-snackbar" className="message">
+              <InfoIcon className="iconVariant" />
+              Le nombre maximum de testaments à comparer est atteint.
+            </span>
+          }
+          action={[
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              onClick={this.handleClose}
+            >
+              <CloseIcon className="icon" />
+            </IconButton>
+          ]}
+        />
       </Snackbar>
     );
     return <div className="list-container">{results}</div>;

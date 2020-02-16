@@ -1,0 +1,26 @@
+.unitDisplay .unit_notice {
+  padding: 1em;
+  text-align: justify;
+  color: #212121;
+  background-color: #fafafa;
+  max-width: 55em;
+  margin: auto;
+}
+
+.unitDisplay .typo1 {
+  font-size: 1.2rem;
+  font-family: -apple-system;
+  margin-top: 1em;
+  font-weight: 600;
+}
+
+.unitDisplay .typo2 {
+  font-size: 1rem;
+  font-family: -apple-system;
+  margin-top: 1em;
+}
+
+.unitDisplay .urlUnit {
+  color: #0091ea;
+  font-size: 1rem;
+}

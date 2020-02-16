@@ -1,0 +1,38 @@
+.results .topButton {
+  display: none;
+  position: fixed;
+  bottom: 30%;
+  right: 5%;
+  box-shadow: none;
+  font-size: 1rem;
+  border: 1px solid;
+}
+
+.results .topButton:hover {
+  background-color: #bcaaa4;
+  border-color: #bcaaa4;
+}
+
+.results .popper {
+  border: 1px solid;
+  font-size: 0.9rem;
+  padding: 1em;
+  background-color: white;
+}
+
+.results .popperTitle {
+  font-weight: 600;
+}
+.results .info {
+  background-color: #1976d2;
+}
+
+.results .icon {
+  font-size: 20;
+}
+
+.results .message {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}

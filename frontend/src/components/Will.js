@@ -10,113 +10,12 @@ import {
   IconButton,
   Tooltip
 } from "@material-ui/core";
-import "../styles/Wills.css";
+
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import {
-  getParamConfig,
-  createStyled,
-  getHitsFromQuery
-} from "../utils/functions";
-import classNames from "classnames";
-import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
+import { getParamConfig, getHitsFromQuery } from "../utils/functions";
+
 import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 import Footer from "./Footer";
-
-const Styled = createStyled(theme => ({
-  link: {
-    textTransform: "none",
-    paddingLeft: 15,
-    color: "#212121",
-    fontSize: 18,
-    fontWeight: 500,
-    fontFamily: "-apple-system",
-    "&:hover, &:focus": {
-      color: "#0091EA",
-      fontWeight: 600,
-      backgroundColor: "#eceff1"
-    },
-    "&:active": {
-      color: "#0091EA",
-      fontWeight: 600
-    }
-  },
-  activedLink: {
-    color: "#0091EA",
-    fontWeight: 600
-  },
-
-  linkPage: {
-    color: "#212121",
-    fontSize: 18,
-    fontWeight: 400,
-    "&:hover": {
-      color: "#0091EA"
-    }
-  },
-  selectedLink: {
-    fontWeight: 600,
-    color: "#0091EA",
-    fontSize: 18
-  }
-}));
-
-function createPageMenu(will_id, pages, idx, handleClick, handeOpenModal) {
-  let menu = [];
-  const listMenu = {
-    page: "Page",
-    envelope: "Enveloppe",
-    codicil: "Codicille"
-  };
-  for (let i = 0; i < pages.length; i++) {
-    menu.push(
-      <Styled key={i}>
-        {({ classes }) => (
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
-              <Link
-                id={i}
-                value={i}
-                color="inherit"
-                component={RouterLink}
-                to={
-                  "/testament/" +
-                  will_id +
-                  "/" +
-                  pages[i]["page_type"].type +
-                  "_" +
-                  pages[i]["page_type"].id
-                }
-                onClick={handleClick}
-                className={
-                  parseInt(idx, 10) === i
-                    ? classNames(classes.typography, classes.selectedLink)
-                    : classNames(classes.linkPage, classes.typography)
-                }
-              >
-                {listMenu[pages[i]["page_type"].type]}{" "}
-                {pages[i]["page_type"].id}
-              </Link>
-            </Grid>
-            <Grid item>
-              <IconButton id={i} onClick={handeOpenModal}>
-                <InsertLinkIcon id={i} />
-              </IconButton>
-            </Grid>
-          </Grid>
-        )}
-      </Styled>
-    );
-  }
-  return (
-    <Breadcrumbs
-      style={{ marginTop: 20, marginBottom: 20 }}
-      aria-label="Breadcrumb"
-    >
-      {" "}
-      {menu}{" "}
-    </Breadcrumbs>
-  );
-}
 
 class Will extends Component {
   constructor(props) {
@@ -138,7 +37,6 @@ class Will extends Component {
               id={this.state.data[0]["_id"]}
               data={this.state.data[0]._source}
               cur_page={this.state.page}
-              createPageMenu={createPageMenu}
             />
           </Paper>
           <Footer />

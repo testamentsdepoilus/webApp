@@ -24,35 +24,76 @@ import Units from "./components/Units";
 import ConfigMail from "./components/cms/ConfigMail";
 import Explore from "./components/Explore";
 import Contact from "./components/Contact";
+import { StylesProvider } from "@material-ui/core";
+import "./styles/NavBar.css";
+import "./styles/WillDisplay.css";
+import "./styles/Wills.css";
+import "./styles/Footer.css";
+import "./styles/About.css";
+import "./styles/Articles.css";
+import "./styles/News.css";
+import "./styles/Compare.css";
+import "./styles/Explore.css";
+import "./styles/Home.css";
+import "./styles/PlaceDisplay.css";
+import "./styles/Places.css";
+import "./styles/Testator.css";
+import "./styles/TestatorDisplay.css";
+import "./styles/Testators.css";
+import "./styles/Units.css";
+import "./styles/Unit.css";
+import "./styles/UnitDisplay.css";
+import "./styles/Search.css";
+import "./styles/DataSearch.css";
+import "./styles/DateFilter.css";
+import "./styles/TextSearch.css";
+import "./styles/ResultWills.css";
+import "./styles/Results.css";
+import "./styles/Results.css";
+import "./styles/ConfigMail.css";
+import "./styles/EditPost.css";
+import "./styles/Manage.css";
+import "./styles/Menu.css";
+import "./styles/MyShoppingCart.css";
+import "./styles/NewPost.css";
+import "./styles/Login.css";
+import "./styles/Register.css";
+import "./styles/LogRegister.css";
+import "./styles/Profile.css";
+import "./styles/WillCompare.css";
+import "./styles/Compare.css";
+
 function App() {
   return (
     <BrowserRouter basename="/testaments-de-poilus">
       <div className="App">
-        <Navbar />
-        <Route exact path="/" component={Home} />
-        <Route exact path="/accueil" component={Home} />
-        <Route exact path="/recherche" component={Search} />
-        <Route path="/news" component={News} />
-        <Route path="/articles" component={Articles} />
-        <Route path="/apropos" component={About} />
-        <Route exact path="/testaments" component={Wills} />
-        <Route exact path="/testateurs" component={Testators} />
-        <Route exact path="/places" component={Places} />
-        <Route exact path="/armees" component={Units} />
-        <Route path="/testament" component={Will} />
-        <Route path="/testateur" component={Testator} />
-        <Route path="/place" component={Place} />
-        <Route path="/armee" component={Unit} />
-        <Route path="/home" component={Home} />
-        <Route exact path="/login" component={LogRegister} />
-        <Route exact path="/espace" component={MySpace} />
-        <Route exact path="/espace/profile" component={Profile} />
-        <Route exact path="/espace/panier" component={MyShoppingCart} />
-        <Route path="/espace/cms" component={Manage} />
-        <Route exact path="/espace/config" component={ConfigMail} />
-        <Route path="/compare" component={Compare} />
-        <Route exact path="/explore" component={Explore} />
-        <Route exact path="/contact" component={Contact} />
+        <StylesProvider injectFirst>
+          <Navbar />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/accueil" component={Home} />
+          <Route exact path="/recherche" component={Search} />
+          <Route path="/news" component={News} />
+          <Route path="/articles" component={Articles} />
+          <Route path="/apropos" component={About} />
+          <Route exact path="/testaments" component={Wills} />
+          <Route exact path="/testateurs" component={Testators} />
+          <Route exact path="/places" component={Places} />
+          <Route exact path="/armees" component={Units} />
+          <Route path="/testament" component={Will} />
+          <Route path="/testateur" component={Testator} />
+          <Route path="/place" component={Place} />
+          <Route path="/armee" component={Unit} />
+          <Route path="/home" component={Home} />
+          <Route exact path="/login" component={LogRegister} />
+          <Route exact path="/espace" component={MySpace} />
+          <Route exact path="/espace/profile" component={Profile} />
+          <Route exact path="/espace/panier" component={MyShoppingCart} />
+          <Route path="/espace/cms" component={Manage} />
+          <Route exact path="/espace/config" component={ConfigMail} />
+          <Route path="/compare" component={Compare} />
+          <Route exact path="/explore" component={Explore} />
+          <Route exact path="/contact" component={Contact} />
+        </StylesProvider>
       </div>
     </BrowserRouter>
   );

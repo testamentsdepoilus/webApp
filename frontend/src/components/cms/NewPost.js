@@ -3,7 +3,7 @@ import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { createStyled, publish } from "../../utils/functions";
+import { publish } from "../../utils/functions";
 import {
   TextField,
   Button,
@@ -19,67 +19,6 @@ import {
 } from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
-
-const Styled = createStyled(theme => ({
-  root: {
-    width: "60%",
-    margin: "auto"
-  },
-
-  paper: {
-    margin: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  demoEditor: {
-    height: "15em",
-    backgroundColor: "#FAFAFA"
-  },
-
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  },
-  header: {
-    display: "flex",
-    color: "#0d47a1",
-    fontSize: 24,
-    fontWeight: 600,
-    fontFamily: "-apple-system",
-    margin: theme.spacing(2, 0, 3)
-  },
-  title: {
-    display: "flex",
-    margin: theme.spacing(3, 0, 0),
-    color: "#1a1a1a",
-    fontSize: 18,
-    fontWeight: 600,
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(",")
-  },
-  input: {
-    display: "none"
-  },
-  img: {
-    width: "4em",
-    height: "4em"
-  },
-  type: {
-    display: "flex",
-    width: "10em",
-    margin: theme.spacing(3, 0, 3)
-  }
-}));
 
 function uploadImageCallBack(file) {
   return new Promise((resolve, reject) => {
@@ -210,24 +149,24 @@ export default class NewPost extends Component {
     }
   };
 
-  handleAlertClose = event => {
+  handleAlertClose() {
     this.setState({
       openAlert: false,
       message: ""
     });
-  };
+  }
 
-  handleDisplay = event => {
+  handleDisplay() {
     this.setState({
       openDialog: true
     });
-  };
+  }
 
-  handleClose = event => {
+  handleClose() {
     this.setState({
       openDialog: false
     });
-  };
+  }
 
   convertToHtml = object => {
     const obj_raw = convertToRaw(object.getCurrentContent());
@@ -246,249 +185,225 @@ export default class NewPost extends Component {
     }
 
     return (
-      <Styled>
-        {({ classes }) => (
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-              >
-                <Grid item>{this.props.backButton}</Grid>
-                <Grid item xs={6}>
-                  <Typography className={classes.header} id="postTitle">
-                    Ajouter un nouveau post
-                  </Typography>
-                </Grid>
-              </Grid>
+      <div className="newPost">
+        <Paper className="paper">
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item>{this.props.backButton}</Grid>
+            <Grid item xs={6}>
+              <Typography className="header" id="postTitle">
+                Ajouter un nouveau post
+              </Typography>
+            </Grid>
+          </Grid>
 
-              <form
-                className={classes.form}
-                noValidate
-                onSubmit={this.onSubmit}
-              >
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <Grid item xs={6}>
-                    <TextField
-                      id="author"
-                      variant="outlined"
-                      fullWidth
-                      label="Auteur"
-                      type="author"
-                      name="author"
-                      autoFocus
-                      value={this.state.author}
-                      onChange={this.onChange}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <NativeSelect
-                      id="type"
-                      className={classes.type}
-                      variant="outlined"
-                      value={this.state.type}
-                      name="type"
-                      onChange={this.handleTypeChange}
-                    >
-                      <option value={1}>Article</option>
-                      <option value={2}>Actualité</option>
-                      <option value={3}>A propos</option>
-                    </NativeSelect>
-                  </Grid>
-                </Grid>
-
+          <form className="form" noValidate onSubmit={this.onSubmit}>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item xs={6}>
                 <TextField
-                  id="title"
+                  id="author"
                   variant="outlined"
                   fullWidth
-                  label="Titre"
-                  type="title"
-                  name="title"
+                  label="Auteur"
+                  type="author"
+                  name="author"
                   autoFocus
-                  value={this.state.title}
+                  value={this.state.author}
                   onChange={this.onChange}
+                  className="textField"
                 />
-
-                <input
-                  accept="image/*"
-                  className={classes.input}
-                  id="contained-button-file"
-                  type="file"
-                  onChange={this.handleFileChange}
-                />
-                <Grid container alignItems="center" spacing={2}>
-                  <Grid item>
-                    <TextField
-                      id="outlined-full-width"
-                      label="Image"
-                      placeholder="Copie url image ici"
-                      margin="normal"
-                      variant="outlined"
-                      onChange={this.handleChangeText}
-                      name="file"
-                      value={this.state.url_image}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <label htmlFor="contained-button-file">
-                              <Button
-                                component="span"
-                                className={classes.button}
-                              >
-                                <CloudUploadIcon
-                                  className={classes.rightIcon}
-                                />
-                              </Button>
-                            </label>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    {src_img ? (
-                      <img
-                        src={src_img}
-                        id="img"
-                        alt="toto"
-                        className={classes.img}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </Grid>
-                </Grid>
-                <div>
-                  <Typography className={classes.title}>Résumé</Typography>
-                  <Editor
-                    id="editorStateResume"
-                    editorStateResume={this.state.editorStateResume}
-                    wrapperClassName={classes.demoWrapper}
-                    editorClassName={classes.demoEditor}
-                    onEditorStateChange={this.onEditorStateResumeChange}
-                    toolbar={{
-                      image: {
-                        uploadCallback: uploadImageCallBack,
-                        alt: { present: true, mandatory: true }
-                      }
-                    }}
-                  />
-                </div>
-                <div>
-                  <Typography className={classes.title}>Contenu</Typography>
-                  <Editor
-                    id="editorStateDetail"
-                    editorStateDetail={this.state.editorStateDetail}
-                    wrapperClassName={classes.demoWrapper}
-                    editorClassName={classes.demoEditor}
-                    onEditorStateChange={this.onEditorStateDetailChange}
-                    toolbar={{
-                      image: {
-                        uploadCallback: uploadImageCallBack,
-                        alt: { present: true, mandatory: true }
-                      }
-                    }}
-                  />
-                </div>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-evenly"
-                  alignItems="center"
+              </Grid>
+              <Grid item>
+                <NativeSelect
+                  id="type"
+                  className="type"
+                  variant="outlined"
+                  value={this.state.type}
+                  name="type"
+                  onChange={this.handleTypeChange}
                 >
-                  <Grid item>
-                    <Button
-                      id="btPublication"
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      type="submit"
-                    >
-                      Publier
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      id="btDisplay"
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      onClick={this.handleDisplay}
-                    >
-                      Visualiser
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
-            </Paper>
+                  <option value={1}>Article</option>
+                  <option value={2}>Actualité</option>
+                  <option value={3}>A propos</option>
+                </NativeSelect>
+              </Grid>
+            </Grid>
 
-            <this.props.alertMessage
-              message={this.state.message}
-              openAlert={this.state.openAlert}
-              handleClose={this.handleAlertClose}
+            <TextField
+              id="title"
+              variant="outlined"
+              fullWidth
+              label="Titre"
+              type="title"
+              name="title"
+              autoFocus
+              value={this.state.title}
+              onChange={this.onChange}
+              className="textField"
             />
-            <Dialog
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-              open={this.state.openDialog}
-              onClose={this.handleClose}
-            >
-              <DialogTitle id="dialog-display-post">
-                <IconButton aria-label="close" onClick={this.handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </DialogTitle>
 
-              <DialogContent>
-                <Grid
-                  container
-                  direction="column"
-                  alignItems="center"
-                  spacing={3}
+            <input
+              accept="image/*"
+              className="input"
+              id="contained-button-file"
+              type="file"
+              onChange={this.handleFileChange}
+            />
+            <Grid container alignItems="center" spacing={2}>
+              <Grid item>
+                <TextField
+                  id="outlined-full-width"
+                  className="textField"
+                  label="Image"
+                  placeholder="Copie url image ici"
+                  margin="normal"
+                  variant="outlined"
+                  onChange={this.handleChangeText}
+                  name="file"
+                  value={this.state.url_image}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <label htmlFor="contained-button-file">
+                          <Button component="span" className="button">
+                            <CloudUploadIcon className="rightIcon" />
+                          </Button>
+                        </label>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+
+              <Grid item>
+                {src_img ? (
+                  <img src={src_img} id="img" alt="toto" className="img" />
+                ) : (
+                  ""
+                )}
+              </Grid>
+            </Grid>
+            <div>
+              <Typography className="title">Résumé</Typography>
+              <Editor
+                id="editorStateResume"
+                editorStateResume={this.state.editorStateResume}
+                wrapperClassName="demoWrapper"
+                editorClassName="demoEditor"
+                onEditorStateChange={this.onEditorStateResumeChange}
+                toolbar={{
+                  image: {
+                    uploadCallback: uploadImageCallBack,
+                    alt: { present: true, mandatory: true }
+                  }
+                }}
+              />
+            </div>
+            <div>
+              <Typography className="title">Contenu</Typography>
+              <Editor
+                id="editorStateDetail"
+                editorStateDetail={this.state.editorStateDetail}
+                wrapperClassName="demoWrapper"
+                editorClassName="demoEditor"
+                onEditorStateChange={this.onEditorStateDetailChange}
+                toolbar={{
+                  image: {
+                    uploadCallback: uploadImageCallBack,
+                    alt: { present: true, mandatory: true }
+                  }
+                }}
+              />
+            </div>
+            <Grid
+              container
+              direction="row"
+              justify="space-evenly"
+              alignItems="center"
+            >
+              <Grid item>
+                <Button
+                  id="btPublication"
+                  variant="contained"
+                  color="primary"
+                  className="submit"
+                  type="submit"
                 >
-                  <Grid item>
-                    <Paper>
-                      <Typography>Titre : {this.state.title}</Typography>
-                    </Paper>
-                  </Grid>
-                  <Grid item>
-                    <Paper>
-                      <Typography>Résumé :</Typography>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: this.convertToHtml(
-                            this.state.editorStateResume
-                          )
-                        }}
-                      ></div>
-                    </Paper>
-                  </Grid>
-                  <Grid item>
-                    <Paper>
-                      <Typography>Détail :</Typography>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: this.convertToHtml(
-                            this.state.editorStateDetail
-                          )
-                        }}
-                      ></div>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </DialogContent>
-            </Dialog>
-          </div>
-        )}
-      </Styled>
+                  Publier
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  id="btDisplay"
+                  variant="contained"
+                  color="primary"
+                  className="submit"
+                  onClick={this.handleDisplay}
+                >
+                  Visualiser
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Paper>
+
+        <this.props.alertMessage
+          message={this.state.message}
+          openAlert={this.state.openAlert}
+          handleClose={this.handleAlertClose}
+        />
+        <Dialog
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.openDialog}
+          onClose={this.handleClose}
+        >
+          <DialogTitle id="dialog-display-post">
+            <IconButton aria-label="close" onClick={this.handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+
+          <DialogContent>
+            <Grid container direction="column" alignItems="center" spacing={3}>
+              <Grid item>
+                <Paper>
+                  <Typography>Titre : {this.state.title}</Typography>
+                </Paper>
+              </Grid>
+              <Grid item>
+                <Paper>
+                  <Typography>Résumé :</Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: this.convertToHtml(this.state.editorStateResume)
+                    }}
+                  ></div>
+                </Paper>
+              </Grid>
+              <Grid item>
+                <Paper>
+                  <Typography>Détail :</Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: this.convertToHtml(this.state.editorStateDetail)
+                    }}
+                  ></div>
+                </Paper>
+              </Grid>
+            </Grid>
+          </DialogContent>
+        </Dialog>
+      </div>
     );
   }
 }

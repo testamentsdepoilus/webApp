@@ -1,0 +1,79 @@
+.favoris {
+  flex-wrap: wrap;
+  width: 90%;
+  margin-top: 1em 0 0 1em;
+}
+
+.favoris .menu {
+  margin-top: 1em;
+}
+
+.favoris .link {
+  font-size: 1rem;
+  text-align: justify;
+  text-decoration: none;
+}
+
+.favoris .paper {
+  width: 100%;
+  height: 450px;
+  margin: auto;
+  margin-top: 1em;
+}
+
+.favoris .visuallyHidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1;
+  margin: -1;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  top: 20;
+  width: 1;
+}
+
+.favoris .head {
+  background-color: #e3f2fd;
+}
+
+.favoris .bootstrapRoot {
+  display: none;
+  position: fixed;
+  bottom: 10;
+  right: 10;
+  box-shadow: none;
+  font-size: 1rem;
+  border: 1px solid;
+}
+
+.favoris .bootstrapRoot:hover {
+  background-color: #bcaaa4;
+  border-color: #bcaaa4;
+}
+
+.favoris .labelCheckBox {
+  font-size: 0.8rem;
+  width: 10em;
+}
+
+.favoris .labelTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 1em;
+}
+
+.favoris .toolBar {
+  width: 90%;
+}
+
+.favoris .highlight {
+  font-size: 1rem;
+  background-color: #e99ad1ab;
+}
+
+.favoris .title {
+  color: #0d47a1;
+  font-size: 1.5rem;
+  font-weight: 600;
+}

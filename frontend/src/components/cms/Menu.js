@@ -8,40 +8,7 @@ import {
   MenuItem
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import classNames from "classnames";
-import {
-  createStyled,
-  getParamConfig,
-  getUserToken
-} from "../../utils/functions";
-
-const Styled = createStyled(theme => ({
-  menu: {
-    display: "flex"
-  },
-
-  link: {
-    textTransform: "none",
-    paddingLeft: 15,
-    color: "#212121",
-    fontSize: "1rem",
-    fontWeight: 500,
-    fontFamily: "-apple-system",
-    "&:hover, &:focus": {
-      color: "#0091EA",
-      fontWeight: 600,
-      backgroundColor: "#eceff1"
-    },
-    "&:active": {
-      color: "#0091EA",
-      fontWeight: 600
-    }
-  },
-  activedLink: {
-    color: "#0091EA",
-    fontWeight: 600
-  }
-}));
+import { getParamConfig, getUserToken } from "../../utils/functions";
 
 class Menu extends Component {
   constructor() {
@@ -92,98 +59,83 @@ class Menu extends Component {
 
   render() {
     return this.state.myData ? (
-      <Styled>
-        {({ classes }) => (
-          <Breadcrumbs aria-label="Breadcrumb">
-            <Link
-              id="profile"
-              className={
-                this.state.selectedId === "profile"
-                  ? classNames(classes.link, classes.activedLink)
-                  : classes.link
-              }
-              component={RouterLink}
-              to="/espace/profile"
-              onClick={this.handleListItemClick}
-            >
-              Mon profil
-            </Link>
+      <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+        <Link
+          id="profile"
+          className={
+            this.state.selectedId === "profile" ? "activedLink" : "link"
+          }
+          component={RouterLink}
+          to="/espace/profile"
+          onClick={this.handleListItemClick}
+        >
+          Mon profil
+        </Link>
 
-            <Link
-              id="panier"
-              className={
-                this.state.selectedId === "panier"
-                  ? classNames(classes.link, classes.activedLink)
-                  : classes.link
-              }
-              component={RouterLink}
-              to="/espace/panier"
-              onClick={this.handleListItemClick}
+        <Link
+          id="panier"
+          className={
+            this.state.selectedId === "panier" ? "activedLink" : "link"
+          }
+          component={RouterLink}
+          to="/espace/panier"
+          onClick={this.handleListItemClick}
+        >
+          Mes favoris
+        </Link>
+        {this.state.myData.isAdmin ? (
+          <div>
+            <Button className="link" onClick={this.handleExplorClick}>
+              Administration
+              <ExpandMoreIcon className="icon" />
+            </Button>
+            <MenuUi
+              id="simple-menu-explor"
+              anchorEl={this.state.anchorElExplor}
+              keepMounted
+              open={Boolean(this.state.anchorElExplor)}
+              onClose={this.handleExplorClose}
+              elevation={0}
+              getContentAnchorEl={null}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center"
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center"
+              }}
             >
-              Mes favoris
-            </Link>
-            {this.state.myData.isAdmin ? (
-              <div>
-                <Button
-                  className={classNames(classes.link)}
-                  onClick={this.handleExplorClick}
+              <MenuItem onClick={this.handleExplorClose}>
+                <Link
+                  id="cms"
+                  className={
+                    this.state.selectedId === "cms" ? "activedLink" : "link"
+                  }
+                  component={RouterLink}
+                  to="/espace/cms"
+                  onClick={this.handleListItemClick}
                 >
-                  Administration
-                  <ExpandMoreIcon className={classNames(classes.icon)} />
-                </Button>
-                <MenuUi
-                  id="simple-menu-explor"
-                  anchorEl={this.state.anchorElExplor}
-                  keepMounted
-                  open={Boolean(this.state.anchorElExplor)}
-                  onClose={this.handleExplorClose}
-                  elevation={0}
-                  getContentAnchorEl={null}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center"
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center"
-                  }}
+                  Gestion de contenu
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={this.handleExplorClose}>
+                <Link
+                  id="config"
+                  className={
+                    this.state.selectedId === "config" ? "activedLink" : "link"
+                  }
+                  component={RouterLink}
+                  to="/espace/config"
+                  onClick={this.handleListItemClick}
                 >
-                  <MenuItem onClick={this.handleExplorClose}>
-                    <Link
-                      id="cms"
-                      className={
-                        this.state.selectedId === "cms"
-                          ? classNames(classes.link, classes.activedLink)
-                          : classes.link
-                      }
-                      component={RouterLink}
-                      to="/espace/cms"
-                      onClick={this.handleListItemClick}
-                    >
-                      Gestion de contenu
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={this.handleExplorClose}>
-                    <Link
-                      id="config"
-                      className={
-                        this.state.selectedId === "config"
-                          ? classNames(classes.link, classes.activedLink)
-                          : classes.link
-                      }
-                      component={RouterLink}
-                      to="/espace/config"
-                      onClick={this.handleListItemClick}
-                    >
-                      Configuration
-                    </Link>
-                  </MenuItem>
-                </MenuUi>
-              </div>
-            ) : null}
-          </Breadcrumbs>
-        )}
-      </Styled>
+                  Configuration
+                </Link>
+              </MenuItem>
+            </MenuUi>
+          </div>
+        ) : null}
+      </Breadcrumbs>
     ) : null;
   }
 }

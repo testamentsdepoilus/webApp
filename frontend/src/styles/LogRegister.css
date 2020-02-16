@@ -1,0 +1,11 @@
+.logRegister {
+  width: 500;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+}
+.logRegister .avatar {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2em;
+}

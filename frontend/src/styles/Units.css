@@ -1,0 +1,36 @@
+.units .menu {
+  margin: 0 0 1em 1em;
+}
+
+.units ul {
+  list-style-type: none;
+  margin-top: 1em;
+}
+
+.units .li {
+  margin-top: 1em;
+  font-size: 0.9em;
+}
+
+.units .li_active {
+  margin-top: 1em;
+  font-size: 0.9em;
+  color: #0091ea;
+  font-weight: 600;
+}
+
+.units .resultsInfo {
+  margin: 1em 0 0 2em;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.units .pagination {
+  position: relative;
+  bottom: 6em;
+}
+
+.units .sortResult {
+  margin: 0 0 2em 5em;
+  font-weight: 600;
+}

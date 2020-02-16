@@ -8,7 +8,6 @@ import {
   IconButton,
   Grid
 } from "@material-ui/core";
-import "../styles/Unit.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import UnitDisplay from "./UnitDisplay";

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const cors = require("cors");
-const fs = require("fs");
 const pdf = require("html-pdf");
+const resolve = require("path").resolve;
 
 router.use(cors());
 
@@ -40,7 +40,15 @@ router.post("/generateWillPDF", async (req, res, next) => {
     };
 
     let outputHtml =
-      '<html> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" /><style> #root { margin: 1em; font-family: -apple-system; font-size: 0.9rem;} .before { page-break-before: always; } .after { page-break-after: always; } .avoid { page-break-inside: avoid; } #name {font-size: 1.1rem; font-weight: 600; color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;}  a {text-decoration: none;}</style></head> <body> <div id="root">';
+      '<html> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+      "<style> #root { margin: 1em; font-family: -apple-system; font-size: 0.8rem;} .before { page-break-before: always; } .after" +
+      "{ page-break-after: always; } .avoid { page-break-inside: avoid; } #name {font-size: 1.1rem; font-weight: 600; " +
+      "color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;}  a {text-decoration: none;}</style></head>" +
+      '<body> <div id="root"><img src="file://' +
+      resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
+      '" alt="Xcel-RCM" style="display: none"/> <img src="file://' +
+      resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
+      '" alt="Xcel-RCM" style="display: none" />';
 
     // Create div infos testateur
     const will_uri = process.env.host_web + "/testament/" + data["will_id"];
@@ -61,17 +69,17 @@ router.post("/generateWillPDF", async (req, res, next) => {
       : null;
 
     death_date = Boolean(death_date)
-      ? death_date.toLocaleDateString().split("/")
+      ? death_date.toLocaleDateString().split("-")
       : null;
 
     outputHtml += "<p> Mort pour la France ";
-    outputHtml += +Boolean(death_date)
+    outputHtml += Boolean(death_date)
       ? " le " +
-        death_date[0] +
+        death_date[2] +
         " " +
         months[death_date[1] - 1] +
         " " +
-        death_date[2]
+        death_date[0]
       : "";
     outputHtml += Boolean(data["will_contents.death_place_norm"]) ? " à " : "";
     outputHtml += Boolean(data["will_contents.death_place_ref"])
@@ -87,13 +95,13 @@ router.post("/generateWillPDF", async (req, res, next) => {
     let will_date = [];
     if (Boolean(data["will_contents.will_date_range"])) {
       let date_ = new Date(data["will_contents.will_date_range"]["gte"]);
-      will_date.push(date_.toLocaleDateString().split("/"));
+      will_date.push(date_.toLocaleDateString().split("-"));
       if (
         data["will_contents.will_date_range"]["gte"] !==
         data["will_contents.will_date_range"]["lte"]
       ) {
         date_ = new Date(data["will_contents.will_date_range"]["lte"]);
-        will_date.push(date_.toLocaleDateString().split("/"));
+        will_date.push(date_.toLocaleDateString().split("-"));
       }
     }
 
@@ -104,25 +112,25 @@ router.post("/generateWillPDF", async (req, res, next) => {
       if (will_date.length === 1) {
         outputHtml +=
           "<p> Testament rédigé le " +
-          will_date[0][0] +
+          will_date[0][2] +
           " " +
           months[will_date[0][1] - 1] +
           " " +
-          will_date[0][2];
+          will_date[0][0];
       } else if (will_date.length === 2) {
         outputHtml +=
           "<p> Date de rédaction : " +
-          will_date[0][0] +
+          will_date[0][2] +
           " " +
           this.months[will_date[0][1] - 1] +
           " " +
-          will_date[0][2] +
+          will_date[0][0] +
           " et " +
-          will_date[1][0] +
+          will_date[1][2] +
           " " +
           this.months[will_date[1][1] - 1] +
           " " +
-          will_date[1][2];
+          will_date[1][0];
       }
       if (Boolean(data["will_contents.will_place_norm"])) {
         outputHtml += " à ";
@@ -239,36 +247,43 @@ router.post("/generateWillPDF", async (req, res, next) => {
       header: {
         height: "24mm",
         contents:
-          '<div style="background-color: rgb(0,0,0); color: rgb(255,255,255); text-align: center;">Testament de poilus</div>'
+          '<img src="file://' +
+          resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
+          '" alt="Xcel-RCM" width="100%" height="40" />'
       },
       footer: {
-        height: "24mm",
+        height: "28mm",
         contents: {
           default:
-            '<div style="font-size: 0.8rem"><hr><div style="position: absolute; right: 5px;"><span style="color: #444;">{{page}}</span>/<span>{{pages}}</span></div><span>' +
+            '<div style="font-size: 0.7rem"><hr><div style="position: absolute; right: 5px;"><span style="color: #444;">{{page}}' +
+            "</span>/<span>{{pages}}</span></div><span>" +
             footerPDF() +
-            " </span></div>"
+            '</span><img src="file://' +
+            resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
+            '" alt="Xcel-RCM" width="100%" height="40" /></div>'
         }
       }
     };
     pdf
       .create(outputHtml, options)
-      .toFile("/var/www/html/outputPDF/" + data["will_id"] + ".pdf", function(
-        err,
-        result
-      ) {
-        if (err) {
+      .toFile(
+        "/var/www/html/outputPDF/Projet_TdP_testament_" +
+          data["will_id"] +
+          ".pdf",
+        function(err, result) {
+          if (err) {
+            res.send({
+              status: 400,
+              err: "Error: " + e
+            });
+            return console.log(err);
+          }
           res.send({
-            status: 400,
-            err: "Error: " + e
+            status: 200,
+            res: result
           });
-          return console.log(err);
         }
-        res.send({
-          status: 200,
-          res: result
-        });
-      });
+      );
     /* const opt = {
       pagebreak: {
         mode: ["avoid-all", "css", "legacy"],
@@ -295,8 +310,17 @@ router.post("/generatePDF", async (req, res, next) => {
   try {
     let footer_html = footerPDF();
     let outputHtml =
-      '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" /><style> #root {margin: 1em; font-family: -apple-system; font-size: 0.9rem;}  #name {font-size: 1.1rem; font-weight: 600; color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;} a {text-decoration: none;}</style></head> <body><div id="root">';
+      '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title>' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+      "<style> #root {margin: 1em; font-family: -apple-system; font-size: 0.8rem;}  #name {font-size: 1.1rem; " +
+      "font-weight: 600; color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;} a {text-decoration: none;}" +
+      '</style></head> <body><div id="root"><img src="file://' +
+      resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
+      '" alt="Xcel-RCM" height="40" style="display: none"/> <img src="file://' +
+      resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
+      '" alt="Xcel-RCM" height="30" style="display: none" />';
     outputHtml += req.body["outputHtml"] + "</div></body></html>";
+    console.log(resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg"));
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
       orientation: "portrait", // portrait or landscape
@@ -306,15 +330,20 @@ router.post("/generatePDF", async (req, res, next) => {
       header: {
         height: "24mm",
         contents:
-          '<div style="background-color: rgb(0,0,0); color: rgb(255,255,255); text-align: center;">Testaments de poilus</div>'
+          '<img src="file://' +
+          resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
+          '" alt="Xcel-RCM" width="100%" height="40" />'
       },
       footer: {
-        height: "24mm",
+        height: "28mm",
         contents: {
           default:
-            '<div style="font-size: 0.8rem"><hr><div style="position: absolute; right: 0px;"><span style="color: #444;">{{page}}</span>/<span>{{pages}}</span></div><span>' +
+            '<div style="font-size: 0.7rem"><hr><div style="position: absolute; right: 0px;"><span style="color: #444;">{{page}}' +
+            "</span>/<span>{{pages}}</span></div><span>" +
             footer_html +
-            " </span></div>" // fallback value
+            '</span><img src="file://' +
+            resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
+            '" alt="Xcel-RCM" width="100%" height="40" /></div>' // fallback value
         }
       }
     };

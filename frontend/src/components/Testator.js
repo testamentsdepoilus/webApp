@@ -11,7 +11,6 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import "../styles/Testator.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";

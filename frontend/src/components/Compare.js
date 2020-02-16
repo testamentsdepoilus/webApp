@@ -9,7 +9,6 @@ import {
   Tooltip,
   IconButton
 } from "@material-ui/core";
-import "../styles/Wills.css";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import WillCompare from "./WillCompare";
@@ -71,7 +70,7 @@ class Compare extends Component {
       : "/recherche";*/
 
     return (
-      <div>
+      <div className="compare">
         <Grid
           container
           direction="row"
@@ -115,6 +114,7 @@ class Compare extends Component {
           </Grid>
         </Grid>
         <div>
+          <h1 className="heading">COMPARAISON DES TESTAMENTS</h1>
           {this.state.data.length > 0 ? (
             <WillCompare data={this.state.data} />
           ) : (
