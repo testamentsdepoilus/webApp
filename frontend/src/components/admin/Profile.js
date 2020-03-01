@@ -1,8 +1,14 @@
 import React, { Component } from "react";
-import { Typography, List, ListItem, Grid } from "@material-ui/core";
-
+import {
+  Typography,
+  List,
+  ListItem,
+  Grid,
+  Breadcrumbs,
+  Link
+} from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom";
 import { getUserToken, getParamConfig } from "../../utils/functions";
-import Menu from "../cms/Menu";
 import Footer from "../Footer";
 
 class Profile extends Component {
@@ -30,7 +36,35 @@ class Profile extends Component {
   render() {
     return (
       <div>
-        <Menu />
+        <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+          <Link
+            id="home"
+            key={0}
+            color="inherit"
+            href={getParamConfig("web_url") + "/accueil"}
+          >
+            Accueil
+          </Link>
+
+          <Link
+            id="espace"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace"
+          >
+            Mon espace
+          </Link>
+          <Link
+            id="profile"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace/profile"
+          >
+            Mon profil
+          </Link>
+        </Breadcrumbs>
         <div className="profile">
           <Grid container direction="column" justify="center">
             <Grid item>

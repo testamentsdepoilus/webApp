@@ -8,12 +8,18 @@ import {
   IconButton,
   Dialog,
   DialogTitle,
-  DialogContent
+  DialogContent,
+  Breadcrumbs,
+  Link
 } from "@material-ui/core";
-import { getUserToken, updateConfigMail } from "../../utils/functions";
+import {
+  getUserToken,
+  updateConfigMail,
+  getParamConfig
+} from "../../utils/functions";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
-import Menu from "./Menu";
+import { Link as RouterLink } from "react-router-dom";
 
 class ConfigMail extends Component {
   constructor() {
@@ -96,7 +102,35 @@ class ConfigMail extends Component {
   render() {
     return (
       <div className="configMail">
-        <Menu />
+        <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+          <Link
+            id="home"
+            key={0}
+            color="inherit"
+            href={getParamConfig("web_url") + "/accueil"}
+          >
+            Accueil
+          </Link>
+
+          <Link
+            id="espace"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace"
+          >
+            Mon espace
+          </Link>
+          <Link
+            id="config"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace/config"
+          >
+            Configuration
+          </Link>
+        </Breadcrumbs>
         <div className="paper">
           <Typography className="header" id="postTitle">
             Configurer le serveur d'envoie du mail aux utilisateurs

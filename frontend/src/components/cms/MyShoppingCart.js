@@ -43,9 +43,11 @@ import {
   TableContainer,
   Fab,
   CircularProgress,
-  FormControlLabel
+  FormControlLabel,
+  Breadcrumbs,
+  Link
 } from "@material-ui/core";
-import Menu from "./Menu";
+import { Link as RouterLink } from "react-router-dom";
 import Footer from "../Footer";
 
 // Up to top page click
@@ -285,6 +287,10 @@ export default class MyShoppingCart extends Component {
     };
     this.userToken = getUserToken();
     this.handleExportTestator = this.handleExportTestator.bind(this);
+    this.handleRemoveWill = this.handleRemoveWill.bind(this);
+    this.handleDialogConfirm = this.handleDialogConfirm.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
   }
 
   handleRequestSort = title => {
@@ -327,6 +333,10 @@ export default class MyShoppingCart extends Component {
   };
 
   handleClick = (name, title) => {
+    console.log("this.state.selected :", this.state.selected);
+    console.log("name :", name);
+    console.log("title :", title);
+
     const selectedIndex = this.state.selected[title].indexOf(name);
     let newSelected = [];
 
@@ -351,9 +361,10 @@ export default class MyShoppingCart extends Component {
     });
   };
 
-  handleRemoveWill() {
+  handleRemoveWill(title) {
     this.setState({
-      open: true
+      open: true,
+      type: title
     });
   }
 
@@ -580,9 +591,7 @@ export default class MyShoppingCart extends Component {
                 >
                   {title === "mySearches" ? (
                     <TableCell
-                      onClick={event =>
-                        this.handleClick(event, row.label, title)
-                      }
+                      onClick={envent => this.handleClick(row.label, title)}
                       role="checkbox"
                       padding="checkbox"
                     >
@@ -593,9 +602,7 @@ export default class MyShoppingCart extends Component {
                     </TableCell>
                   ) : (
                     <TableCell
-                      onClick={event =>
-                        this.handleClick(event, row["_id"], title)
-                      }
+                      onClick={event => this.handleClick(row["_id"], title)}
                       role="checkbox"
                       padding="checkbox"
                     >
@@ -795,18 +802,20 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des testament">
-              <IconButton
-                disabled={
-                  Boolean(this.state.selected[title]) &&
-                  this.state.selected[this.state.type].length > 0
-                    ? false
-                    : true
-                }
-                onClick={this.handleExportWill}
-                aria-label="export"
-              >
-                <ExportIcon />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={
+                    Boolean(this.state.selected[title]) &&
+                    this.state.selected[title].length > 0
+                      ? false
+                      : true
+                  }
+                  onClick={this.handleExportWill}
+                  aria-label="export"
+                >
+                  <ExportIcon />
+                </IconButton>
+              </span>
             </Tooltip>
           </Grid>
         );
@@ -815,18 +824,20 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des lieux">
-              <IconButton
-                disabled={
-                  Boolean(this.state.selected[title]) &&
-                  this.state.selected[this.state.type].length > 0
-                    ? false
-                    : true
-                }
-                onClick={this.handleExportPlace}
-                aria-label="export"
-              >
-                <ExportIcon />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={
+                    Boolean(this.state.selected[title]) &&
+                    this.state.selected[title].length > 0
+                      ? false
+                      : true
+                  }
+                  onClick={this.handleExportPlace}
+                  aria-label="export"
+                >
+                  <ExportIcon />
+                </IconButton>
+              </span>
             </Tooltip>
           </Grid>
         );
@@ -835,18 +846,20 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des unités militaires">
-              <IconButton
-                disabled={
-                  Boolean(this.state.selected[title]) &&
-                  this.state.selected[this.state.type].length > 0
-                    ? false
-                    : true
-                }
-                onClick={this.handleExportUnit}
-                aria-label="export"
-              >
-                <ExportIcon />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={
+                    Boolean(this.state.selected[title]) &&
+                    this.state.selected[title].length > 0
+                      ? false
+                      : true
+                  }
+                  onClick={this.handleExportUnit}
+                  aria-label="export"
+                >
+                  <ExportIcon />
+                </IconButton>
+              </span>
             </Tooltip>
           </Grid>
         );
@@ -855,18 +868,20 @@ export default class MyShoppingCart extends Component {
         output = (
           <Grid item>
             <Tooltip title="Export des testateurs">
-              <IconButton
-                disabled={
-                  Boolean(this.state.selected[title]) &&
-                  this.state.selected[this.state.type].length > 0
-                    ? false
-                    : true
-                }
-                onClick={this.handleExportTestator}
-                aria-label="export"
-              >
-                <ExportIcon />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={
+                    Boolean(this.state.selected[title]) &&
+                    this.state.selected[title].length > 0
+                      ? false
+                      : true
+                  }
+                  onClick={this.handleExportTestator}
+                  aria-label="export"
+                >
+                  <ExportIcon />
+                </IconButton>
+              </span>
             </Tooltip>
             {Boolean(this.state.isLoading) ? <CircularProgress /> : ""}
           </Grid>
@@ -879,6 +894,75 @@ export default class MyShoppingCart extends Component {
         break;
     }
     return output;
+  };
+
+  actionButton = function(title) {
+    return (
+      <Grid
+        id={"actionBt_" + title}
+        container
+        direction="row"
+        justify="flex-end"
+        alignItems="center"
+      >
+        <Grid item>
+          <Tooltip title="Suppression des éléments sélectionnés">
+            <span>
+              <IconButton
+                disabled={
+                  Boolean(this.state.selected[title]) &&
+                  this.state.selected[title].length > 0
+                    ? false
+                    : true
+                }
+                onClick={event => this.handleRemoveWill(title)}
+                aria-label="delete"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Grid>
+        {this.exportRender(title)}
+        {title === "myWills" ? (
+          Boolean(this.state.selected[title]) &&
+          this.state.selected[title].length < 4 ? (
+            <Grid item>
+              <Tooltip title="Comparer des testaments">
+                <span>
+                  <IconButton
+                    disabled={
+                      Boolean(this.state.selected[title]) &&
+                      this.state.selected[title].length > 0
+                        ? false
+                        : true
+                    }
+                    onClick={event => this.handleCompareWill(event, "myWills")}
+                    aria-label="compare"
+                  >
+                    <CompareIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Grid>
+          ) : (
+            <Grid item>
+              <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
+                <span>
+                  <IconButton
+                    onClick={this.handleCompareWill}
+                    aria-label="compare"
+                    disabled
+                  >
+                    <CompareIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Grid>
+          )
+        ) : null}
+      </Grid>
+    );
   };
 
   render() {
@@ -915,66 +999,37 @@ export default class MyShoppingCart extends Component {
       </Paper>
     );
 
-    const actionButton = (
-      <Grid container direction="row" justify="flex-end" alignItems="center">
-        <Grid item>
-          <Tooltip title="Suppression des éléments sélectionnés">
-            <IconButton
-              disabled={
-                Boolean(this.state.selected[this.state.type]) &&
-                this.state.selected[this.state.type].length > 0
-                  ? false
-                  : true
-              }
-              onClick={this.handleRemoveWill}
-              aria-label="delete"
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-        {this.exportRender(this.state.type)}
-        {this.state.type === "myWills" ? (
-          Boolean(this.state.selected[this.state.type]) &&
-          this.state.selected[this.state.type].length < 4 ? (
-            <Grid item>
-              <Tooltip title="Comparer des testaments">
-                <IconButton
-                  disabled={
-                    Boolean(this.state.selected[this.state.type]) &&
-                    this.state.selected[this.state.type].length > 0
-                      ? false
-                      : true
-                  }
-                  onClick={event => this.handleCompareWill(event, "myWills")}
-                  aria-label="compare"
-                >
-                  <CompareIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          ) : (
-            <Grid item>
-              <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
-                <span>
-                  <IconButton
-                    onClick={this.handleCompareWill}
-                    aria-label="compare"
-                    disabled
-                  >
-                    <CompareIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
-            </Grid>
-          )
-        ) : null}
-      </Grid>
-    );
-
     const defaultView = (
       <div className="favoris">
-        <Menu />
+        <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+          <Link
+            id="home"
+            key={0}
+            color="inherit"
+            href={getParamConfig("web_url") + "/accueil"}
+          >
+            Accueil
+          </Link>
+
+          <Link
+            id="espace"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace"
+          >
+            Mon espace
+          </Link>
+          <Link
+            id="favoris"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace/panier"
+          >
+            Mes favoris
+          </Link>
+        </Breadcrumbs>
         <div id="testator_none" style={{ display: "none" }}></div>
         <h1 className="heading">MES FAVORIS</h1>
         <Grid container direction="row" justify="center" spacing={2}>
@@ -986,35 +1041,35 @@ export default class MyShoppingCart extends Component {
               {this.setDefaultView(
                 this.state.data["myWills"],
                 "myWills",
-                actionButton
+                this.actionButton("myWills")
               )}
             </section>
             <section id="testators_div">
               {this.setDefaultView(
                 this.state.data["myTestators"],
                 "myTestators",
-                actionButton
+                this.actionButton("myTestators")
               )}
             </section>
             <section id="places_div">
               {this.setDefaultView(
                 this.state.data["myPlaces"],
                 "myPlaces",
-                actionButton
+                this.actionButton("myPlaces")
               )}
             </section>
             <section id="units_div">
               {this.setDefaultView(
                 this.state.data["myUnits"],
                 "myUnits",
-                actionButton
+                this.actionButton("myUnits")
               )}
             </section>
             <section id="searches_div">
               {this.setDefaultView(
                 this.state.data["mySearches"],
                 "mySearches",
-                actionButton
+                this.actionButton("mySearches")
               )}
             </section>
           </Grid>

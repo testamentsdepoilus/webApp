@@ -34,13 +34,15 @@ import {
   MenuList,
   MenuItem,
   Grid,
-  Fab
+  Fab,
+  Breadcrumbs,
+  Link
 } from "@material-ui/core";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import NewPost from "./NewPost";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EditPost from "./EditPost";
-import Menu from "./Menu";
+import { Link as RouterLink } from "react-router-dom";
 import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 
 // Up to top page click
@@ -159,7 +161,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = props => {
-  const { numSelected, handleAddNewPost, deleteButton, title } = props;
+  const { numSelected, handleAddNewPost, handleRemovePost, title } = props;
 
   return (
     <Toolbar className="toolBar" id={title}>
@@ -197,7 +199,17 @@ const EnhancedTableToolbar = props => {
                   {numSelected} sélectionnés
                 </Typography>
               </Grid>
-              <Grid item>{deleteButton}</Grid>
+              <Grid item>
+                <Tooltip title="Suppression de contenu">
+                  <IconButton
+                    value={title}
+                    onClick={handleRemovePost}
+                    aria-label="delete"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
             </Grid>
           ) : (
             <IconButton disabled aria-label="delete">
@@ -213,7 +225,7 @@ const EnhancedTableToolbar = props => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   handleAddNewPost: PropTypes.func.isRequired,
-  deleteButton: PropTypes.element.isRequired,
+  handleRemovePost: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired
 };
 const AlertMessage = props => {
@@ -342,8 +354,10 @@ export default class Manage extends Component {
   };
 
   handleRemovePost = event => {
+    const type_ = { articles: 1, news: 2, about: 3 };
     this.setState({
-      open: true
+      open: true,
+      type: type_[event.currentTarget.value]
     });
   };
 
@@ -420,7 +434,7 @@ export default class Manage extends Component {
     }.bind(this);
   };
 
-  setDefaultView(data, title, deleteButton) {
+  setDefaultView(data, title) {
     const isSelected = name => this.state.selected[title].indexOf(name) !== -1;
 
     return (
@@ -429,7 +443,7 @@ export default class Manage extends Component {
           <EnhancedTableToolbar
             numSelected={this.state.selected[title].length}
             handleAddNewPost={this.handleAddNewPost}
-            deleteButton={deleteButton}
+            handleRemovePost={this.handleRemovePost}
             title={title}
           />
 
@@ -604,14 +618,6 @@ export default class Manage extends Component {
       </Tooltip>
     );
 
-    const deleteButton = (
-      <Tooltip title="Suppression de contenu">
-        <IconButton onClick={this.handleRemovePost} aria-label="delete">
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
-    );
-
     switch (this.state.choice) {
       case 0:
         this.curView = (
@@ -634,26 +640,50 @@ export default class Manage extends Component {
       case 2:
         this.curView = (
           <div className="manage_root">
-            <Menu />
+            <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+              <Link
+                id="home"
+                key={0}
+                color="inherit"
+                href={getParamConfig("web_url") + "/accueil"}
+              >
+                Accueil
+              </Link>
+
+              <Link
+                id="espace"
+                key={1}
+                color="inherit"
+                component={RouterLink}
+                to="/espace"
+              >
+                Mon espace
+              </Link>
+              <Link
+                id="cms"
+                key={1}
+                color="inherit"
+                component={RouterLink}
+                to="/espace/cms"
+              >
+                Gestion de contenu
+              </Link>
+            </Breadcrumbs>
             <Grid container direction="row" justify="center" spacing={2}>
               <Grid item xs={4}>
                 {menu}
               </Grid>
               <Grid item xs={8}>
                 <section id="articles_div">
-                  {this.setDefaultView(
-                    this.state.articles,
-                    "articles",
-                    deleteButton
-                  )}
+                  {this.setDefaultView(this.state.articles, "articles")}
                 </section>
                 <section id="news_div">
                   {" "}
-                  {this.setDefaultView(this.state.news, "news", deleteButton)}
+                  {this.setDefaultView(this.state.news, "news")}
                 </section>
                 <section id="about_div">
                   {" "}
-                  {this.setDefaultView(this.state.about, "about", deleteButton)}
+                  {this.setDefaultView(this.state.about, "about")}
                 </section>
               </Grid>
             </Grid>

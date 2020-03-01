@@ -10,7 +10,8 @@ import {
   Snackbar,
   SnackbarContent,
   Link,
-  Tooltip
+  Tooltip,
+  Button
 } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -26,6 +27,7 @@ import ListAddIcon from "@material-ui/icons/PlaylistAddOutlined";
 import ListAddCheckIcon from "@material-ui/icons/PlaylistAddCheckOutlined";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
+import CompareIcon from "@material-ui/icons/CompareOutlined";
 
 const listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
 
@@ -495,6 +497,31 @@ export default class ResultWills extends React.Component {
         />
       </Snackbar>
     );
-    return <div className="list-container">{results}</div>;
+    return (
+      <div className="list-container">
+        <div className="menuComparaison">
+          <Grid container direction="column" spacing={1}>
+            <Grid item>
+              <Tooltip
+                title="Comparer les testaments"
+                style={{ cursor: "hand" }}
+                interactive
+              >
+                <Button id="btCompare" aria-label="Compare" size="small">
+                  <CompareIcon />
+                  Comparer les testaments
+                </Button>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <div id="chipRoot">
+                <div id="chipWill"></div>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
+        {results}
+      </div>
+    );
   }
 }

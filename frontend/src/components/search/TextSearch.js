@@ -57,7 +57,7 @@ class TextSearch extends React.Component {
                   post_tags: ["</mark>"],
                   boundary_scanner_locale: "fr-FR",
                   number_of_fragments: 10,
-                  fragment_size: 50
+                  fragment_size: 80
                 }
               }
             }

@@ -28,7 +28,7 @@ import {
 } from "@material-ui/core";
 import DateFilter from "./search/DateFilter";
 import MoreIcon from "@material-ui/icons/More";
-import ApexCharts from "apexcharts";
+
 import Footer from "./Footer";
 
 class Home extends Component {
@@ -99,38 +99,6 @@ class Home extends Component {
       this.state.selectedArticle["_id"];
   }
 
-  componentDidUpdate() {
-    if (!Boolean(this.chart) && this.state.chart_data.length === 4) {
-      let series = this.state.chart_data.map(item => Object.values(item)[0]);
-      let labels = this.state.chart_data.map(item => Object.keys(item)[0]);
-
-      var options = {
-        chart: {
-          type: "pie",
-          width: 380
-        },
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: "bottom"
-              }
-            }
-          }
-        ],
-        series: series,
-        labels: labels
-      };
-
-      this.chart = new ApexCharts(document.querySelector("#chart"), options);
-
-      this.chart.render();
-    }
-  }
   componentDidMount() {
     getTotalHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_wills")
@@ -392,7 +360,13 @@ class Home extends Component {
               </Grid>
               <Grid item>
                 <h2 className="card_title">Visualiser les données</h2>
-                <div id="chart" className="chart"></div>
+
+                <iframe
+                  className="chart"
+                  id="chart"
+                  title="visualisation"
+                  src="http://patrimeph.ensea.fr/app/kibana#/visualize/edit/b5369500-42d2-11ea-bf92-1d413825e631?embed=true&_g=()"
+                ></iframe>
               </Grid>
             </Grid>
           </Grid>
@@ -561,6 +535,7 @@ class Home extends Component {
                               "lieu_deces"
                             ]
                           }}
+                          className="home"
                           dataField=""
                           componentId="searchResult"
                           stream={true}
@@ -569,6 +544,10 @@ class Home extends Component {
                           showResultStats={true}
                           infiniteScroll={false}
                           loader="Recherche en cours ..."
+                          innerClass={{
+                            resultsInfo: "resultsInfo",
+                            pagination: "pagination"
+                          }}
                           renderResultStats={this.renderResultStats}
                           renderItem={function(res) {
                             let will_date = Boolean(

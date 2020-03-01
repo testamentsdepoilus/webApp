@@ -10,11 +10,6 @@
   border: 1px solid;
 }
 
-.home .statsResults {
-  border: 1px solid;
-  margin: auto;
-}
-
 .home .menuFilter {
   padding: 1em;
   flex-grow: 1em;
@@ -46,8 +41,13 @@
 }
 
 .home .chart {
-  margin-top: 5em;
   align-items: center;
+  width: 100%;
+  height: 20em;
+}
+
+.home .euiButtonEmpty__text {
+  display: none;
 }
 
 .home .images {

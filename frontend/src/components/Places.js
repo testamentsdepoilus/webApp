@@ -184,48 +184,52 @@ class Places extends Component {
                     .catch(error => {
                       console.log("error :", error);
                     });
+
+                  const resultList = (
+                    <div className="resultList">
+                      <div className="sortResult">
+                        Trier par :
+                        <Select
+                          value={this.state.value}
+                          onChange={this.handleChange}
+                        >
+                          <MenuItem value={1}>commune (A-Z)</MenuItem>
+                          <MenuItem value={2}>commune (Z-A)</MenuItem>
+                          <MenuItem value={3}>région (A-Z)</MenuItem>
+                          <MenuItem value={4}>région (Z-A)</MenuItem>
+                          <MenuItem value={5}>pays (A-Z)</MenuItem>
+                          <MenuItem value={6}>pays (Z-A)</MenuItem>
+                        </Select>
+                      </div>
+                      <ul>
+                        {this.state.cur_list.map((item, i) =>
+                          Boolean(
+                            res.resultStats.currentPage === curPage_ + i
+                          ) ? (
+                            <li key={item["_id"]} className="li_active">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source["city"]}
+                            </li>
+                          ) : (
+                            <li key={item["_id"]} className="li">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source["city"]}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  );
                   return (
                     <div className="placesResult" key={j}>
-                      <Grid container direction="row">
-                        <Grid item xs={4}>
-                          <div className="sortResult">
-                            Trier par :
-                            <Select
-                              value={this.state.value}
-                              onChange={this.handleChange}
-                            >
-                              <MenuItem value={1}>commune (A-Z)</MenuItem>
-                              <MenuItem value={2}>commune (Z-A)</MenuItem>
-                              <MenuItem value={3}>région (A-Z)</MenuItem>
-                              <MenuItem value={4}>région (Z-A)</MenuItem>
-                              <MenuItem value={5}>pays (A-Z)</MenuItem>
-                              <MenuItem value={6}>pays (Z-A)</MenuItem>
-                            </Select>
-                          </div>
-                          <ul>
-                            {this.state.cur_list.map((item, i) =>
-                              Boolean(
-                                res.resultStats.currentPage === curPage_ + i
-                              ) ? (
-                                <li key={item["_id"]} className="li_active">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["city"]}
-                                </li>
-                              ) : (
-                                <li key={item["_id"]} className="li">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["city"]}
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </Grid>
-                        <Grid item xs={8}>
-                          <PlaceDisplay id={item["_id"]} data={item} />
-                        </Grid>
-                      </Grid>
+                      <PlaceDisplay
+                        id={item["_id"]}
+                        data={item}
+                        resultList={resultList}
+                      />
+
                       <Footer />
                     </div>
                   );

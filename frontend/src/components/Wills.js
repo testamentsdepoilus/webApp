@@ -189,63 +189,61 @@ class Wills extends Component {
                     .catch(error => {
                       console.log("error :", error);
                     });
-
+                  const resultList = (
+                    <div className="resultList">
+                      {" "}
+                      <div className="sortResult">
+                        Trier par :
+                        <Select
+                          value={this.state.value}
+                          onChange={this.handleChange}
+                        >
+                          <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
+                          <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
+                          <MenuItem value={3}>
+                            date de rédaction <TrendingUpIcon />
+                          </MenuItem>
+                          <MenuItem value={4}>
+                            date de rédaction <TrendingDownIcon />
+                          </MenuItem>
+                          <MenuItem value={5}>Cote (A-Z)</MenuItem>
+                          <MenuItem value={6}>Cote (Z-A)</MenuItem>
+                        </Select>
+                      </div>
+                      <ul>
+                        {this.state.cur_list.map((item, i) =>
+                          Boolean(
+                            res.resultStats.currentPage === curPage_ + i
+                          ) ? (
+                            <li key={item["_id"]} className="li_active">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source["testator.forename"] + " "}
+                              <span className="typoSurname">
+                                {item._source["testator.surname"]}
+                              </span>
+                            </li>
+                          ) : (
+                            <li key={item["_id"]} className="li">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source["testator.forename"] + " "}
+                              <span className="typoSurname">
+                                {item._source["testator.surname"]}
+                              </span>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  );
                   return (
                     <div>
-                      <Grid container direction="row" spacing={1}>
-                        <Grid item xs={2}>
-                          <div className="sortResult">
-                            Trier par :
-                            <Select
-                              value={this.state.value}
-                              onChange={this.handleChange}
-                            >
-                              <MenuItem value={1}>
-                                nom de famille (A-Z)
-                              </MenuItem>
-                              <MenuItem value={2}>
-                                nom de famille (Z-A)
-                              </MenuItem>
-                              <MenuItem value={3}>
-                                date de rédaction <TrendingUpIcon />
-                              </MenuItem>
-                              <MenuItem value={4}>
-                                date de rédaction <TrendingDownIcon />
-                              </MenuItem>
-                              <MenuItem value={5}>Cote (A-Z)</MenuItem>
-                              <MenuItem value={6}>Cote (Z-A)</MenuItem>
-                            </Select>
-                          </div>
-                          <ul>
-                            {this.state.cur_list.map((item, i) =>
-                              Boolean(
-                                res.resultStats.currentPage === curPage_ + i
-                              ) ? (
-                                <li key={item["_id"]} className="li_active">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["testator.forename"] + " "}
-                                  <span className="typoSurname">
-                                    {item._source["testator.surname"]}
-                                  </span>
-                                </li>
-                              ) : (
-                                <li key={item["_id"]} className="li">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["testator.forename"] + " "}
-                                  <span className="typoSurname">
-                                    {item._source["testator.surname"]}
-                                  </span>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </Grid>
-                        <Grid item xs={10}>
-                          <WillDisplay id={item["_id"]} data={item} />
-                        </Grid>
-                      </Grid>
+                      <WillDisplay
+                        id={item["_id"]}
+                        data={item}
+                        resultList={resultList}
+                      />
                       <Footer />
                     </div>
                   );

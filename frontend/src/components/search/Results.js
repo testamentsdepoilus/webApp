@@ -12,7 +12,9 @@ import {
   Container,
   Button,
   Snackbar,
-  SnackbarContent
+  SnackbarContent,
+  Select,
+  MenuItem
 } from "@material-ui/core";
 import {
   getTotalHits,
@@ -21,7 +23,6 @@ import {
   getUserToken
 } from "../../utils/functions";
 import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
-import CompareIcon from "@material-ui/icons/CompareOutlined";
 
 import ResultWills from "./ResultWills";
 import TextSearch from "./TextSearch";
@@ -29,6 +30,8 @@ import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
 import SaveIcon from "@material-ui/icons/SaveOutlined";
 import InfoIcon from "@material-ui/icons/Info";
 import CloseIcon from "@material-ui/icons/Close";
+import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
+import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 
 // Up to top page click
 
@@ -53,14 +56,15 @@ class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      curField: "",
-      curOrder: "asc",
       anchorEl: null,
       totalHits: null,
       anchorElSearch: null,
       label: "",
       openAlert: false,
-      message: ""
+      message: "",
+      field: "",
+      order: "",
+      value: 0
     };
     this.userToken = getUserToken();
     this.topFunction = this.topFunction.bind(this);
@@ -71,6 +75,7 @@ class Results extends React.Component {
     this.renderResultStats = this.renderResultStats.bind(this);
     this.handleSearchSave = this.handleSearchSave.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   topFunction = function() {
@@ -105,24 +110,109 @@ class Results extends React.Component {
     });
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      nextProps.field !== prevState.curField ||
-      nextProps.order !== prevState.curOrder
-    ) {
-      return {
-        curField: nextProps.field,
-        curOrder: nextProps.order
-      };
+  handleChange(event) {
+    switch (event.target.value) {
+      case 1:
+        this.setState({
+          value: event.target.value,
+          field: "testator.name_norm.keyword",
+          order: "asc"
+        });
+        break;
+      case 2:
+        this.setState({
+          value: event.target.value,
+          field: "testator.name_norm.keyword",
+          order: "desc"
+        });
+        break;
+      case 3:
+        this.setState({
+          value: event.target.value,
+          field: "will_contents.will_date",
+          order: "asc"
+        });
+        break;
+      case 4:
+        this.setState({
+          value: event.target.value,
+          field: "will_contents.will_date",
+          order: "desc"
+        });
+        break;
+      case 5:
+        this.setState({
+          value: event.target.value,
+          field: "will_identifier.cote.keyword",
+          order: "asc"
+        });
+        break;
+      case 6:
+        this.setState({
+          value: event.target.value,
+          field: "will_identifier.cote.keyword",
+          order: "desc"
+        });
+        break;
+      default:
+        this.setState({
+          value: event.target.value,
+          field: "",
+          order: ""
+        });
+        break;
     }
-    return null;
   }
-
   renderResultStats(stats) {
     if (Boolean(this.state.totalHits)) {
-      return `${stats.numberOfResults} testaments sur ${this.state.totalHits} correspondent à votre recherche`;
+      return (
+        <div className="resultStats">
+          <div>
+            {stats.numberOfResults} testaments sur {this.state.totalHits}{" "}
+            correspondent à votre recherche
+          </div>
+          <div>
+            Trier par :{" "}
+            <Select value={this.state.value} onChange={this.handleChange}>
+              <MenuItem value={0}>pertinence</MenuItem>
+              <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
+              <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
+              <MenuItem value={3}>
+                date de rédaction <TrendingUpIcon />
+              </MenuItem>
+              <MenuItem value={4}>
+                date de rédaction <TrendingDownIcon />
+              </MenuItem>
+              <MenuItem value={5}>Cote (A-Z)</MenuItem>
+              <MenuItem value={6}>Cote (Z-A)</MenuItem>
+            </Select>
+          </div>
+        </div>
+      );
     } else {
-      return ` ${stats.numberOfResults} testaments correspondent à votre recherche`;
+      return (
+        <div className="resultStats">
+          <div>
+            {stats.numberOfResults} testaments correspondent à votre recherche
+          </div>
+          <div>
+            Trier par :{" "}
+            <Select value={this.state.value} onChange={this.handleChange}>
+              <MenuItem value={0}>pertinence</MenuItem>
+              <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
+              <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
+              <MenuItem value={3}>
+                date de rédaction <TrendingUpIcon />
+              </MenuItem>
+              <MenuItem value={4}>
+                date de rédaction <TrendingDownIcon />
+              </MenuItem>
+              <MenuItem value={5}>Cote (A-Z)</MenuItem>
+              <MenuItem value={6}>Cote (Z-A)</MenuItem>
+            </Select>
+          </div>
+        </div>
+      );
     }
   }
   onChange(e) {
@@ -220,248 +310,184 @@ class Results extends React.Component {
     const id_search = open_search ? "transitions-popper" : undefined;
     return (
       <div className="results" key={0}>
-        <Grid container alignItems="baseline" justify="center" direction="row">
-          <Grid item xs={6}>
-            <div className="main-container">
-              <Grid container direction="row" alignItems="center" spacing={1}>
-                <Grid item xs={8}>
-                  <TextSearch />
-                </Grid>
-                <Grid item xs={2}>
-                  <Tooltip title="Aide à la recherche" interactive>
+        <div className="main-container">
+          <div className="searchBar">
+            <Grid container direction="row" alignItems="center" spacing={1}>
+              <Grid item xs={8}>
+                <TextSearch />
+              </Grid>
+              <Grid item xs={2}>
+                <Tooltip title="Aide à la recherche" interactive>
+                  <IconButton
+                    aria-describedby={id}
+                    onClick={this.handleHelpOpen}
+                    style={{ cursor: "help" }}
+                  >
+                    <HelpIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Popper
+                  id={id}
+                  open={open}
+                  anchorEl={this.state.anchorEl}
+                  placement="bottom-end"
+                >
+                  <div className="popper">
+                    <p className="popperTitle">Aide à la recherche :</p>
+                    <p>
+                      OR, | : opérateur de disjonction par défault (armée
+                      guerre)
+                    </p>
+                    <p>AND, + : opérateur de conjonction (armée + guerre)</p>
+                    <p>NOT, - : opérateur d'exclusion (armée -guerre) </p>
+                    <p>+ : opérateur d'inclusion (armée +guerre) </p>
+                    <p>* : troncature</p>
+                    <p>? : substitution</p>
+                    <p>
+                      " " : recherche exactment une suite de mots (ou phrase)
+                    </p>
+                    <p>^ : rendre un terme plus pertinent (armée guerre^2)</p>
+                  </div>
+                </Popper>
+              </Grid>
+              <Grid item xs={2}>
+                {Boolean(this.userToken) ? (
+                  <Tooltip
+                    title="Sauvegarder ma recherche"
+                    interactive
+                    arrow={true}
+                  >
                     <IconButton
-                      aria-describedby={id}
-                      onClick={this.handleHelpOpen}
-                      style={{ cursor: "help" }}
+                      aria-describedby="save"
+                      onClick={this.handleSearchOpen}
+                      style={{ cursor: "hand" }}
                     >
-                      <HelpIcon />
+                      <SaveIcon />
                     </IconButton>
                   </Tooltip>
-
-                  <Popper
-                    id={id}
-                    open={open}
-                    anchorEl={this.state.anchorEl}
-                    placement="bottom-end"
+                ) : (
+                  <Tooltip
+                    title="Connectez-vous pour sauvegarder votre recherche !"
+                    arrow={true}
                   >
-                    <div className="popper">
-                      <p className="popperTitle">Aide à la recherche :</p>
-                      <p>
-                        OR, | : opérateur de disjonction par défault (armée
-                        guerre)
-                      </p>
-                      <p>AND, + : opérateur de conjonction (armée + guerre)</p>
-                      <p>NOT, - : opérateur d'exclusion (armée -guerre) </p>
-                      <p>+ : opérateur d'inclusion (armée +guerre) </p>
-                      <p>* : troncature</p>
-                      <p>? : substitution</p>
-                      <p>
-                        " " : recherche exactment une suite de mots (ou phrase)
-                      </p>
-                      <p>^ : rendre un terme plus pertinent (armée guerre^2)</p>
-                    </div>
-                  </Popper>
-                </Grid>
-                <Grid item xs={2}>
-                  {Boolean(this.userToken) ? (
-                    <Tooltip
-                      title="Sauvegarder ma recherche"
-                      interactive
-                      arrow={true}
-                    >
-                      <IconButton
-                        aria-describedby="save"
-                        onClick={this.handleSearchOpen}
-                        style={{ cursor: "hand" }}
-                      >
+                    <span>
+                      <IconButton aria-describedby="save" disabled>
                         <SaveIcon />
                       </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip
-                      title="Connectez-vous pour sauvegarder votre recherche !"
-                      arrow={true}
+                    </span>
+                  </Tooltip>
+                )}
+
+                <Popper
+                  id={id_search}
+                  open={open_search}
+                  anchorEl={this.state.anchorElSearch}
+                  placement="bottom-end"
+                >
+                  <Container className="popper">
+                    <p className="popperTitle">Sauvegarder votre recherche :</p>
+                    <Grid
+                      container
+                      direction="row"
+                      justify="center"
+                      alignItems="center"
+                      spacing={1}
                     >
-                      <span>
-                        <IconButton aria-describedby="save" disabled>
-                          <SaveIcon />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  )}
-
-                  <Popper
-                    id={id_search}
-                    open={open_search}
-                    anchorEl={this.state.anchorElSearch}
-                    placement="bottom-end"
-                  >
-                    <Container className="popper">
-                      <p className="popperTitle">
-                        Sauvegarder votre recherche :
-                      </p>
-                      <Grid
-                        container
-                        direction="row"
-                        justify="center"
-                        alignItems="center"
-                        spacing={1}
-                      >
-                        <Grid item>
-                          <TextField
-                            id="input_search"
-                            variant="outlined"
-                            required
-                            label="Label"
-                            name="label"
-                            onChange={this.onChange}
-                            value={this.state.label}
-                          />
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            id="btSave"
-                            variant="contained"
-                            color="primary"
-                            onClick={this.handleSearchSave}
-                          >
-                            Sauvegarder
-                          </Button>
-                        </Grid>
+                      <Grid item>
+                        <TextField
+                          id="input_search"
+                          variant="outlined"
+                          required
+                          label="Label"
+                          name="label"
+                          onChange={this.onChange}
+                          value={this.state.label}
+                        />
                       </Grid>
-                    </Container>
-                  </Popper>
-                </Grid>
-              </Grid>
-
-              <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
-              {this.state.curField === "" && this.state.curOrder === "" ? (
-                <ReactiveList
-                  react={{
-                    and: [
-                      "texte",
-                      "contributeur",
-                      "institution",
-                      "collection",
-                      "date_naissance",
-                      "date_deces",
-                      "date_redaction",
-                      "cote",
-                      "nom_testateur",
-                      "lieu",
-                      "notoriale",
-                      "profession",
-                      "unite"
-                    ]
-                  }}
-                  dataField=""
-                  componentId="searchResult"
-                  stream={false}
-                  pagination={false}
-                  size={15}
-                  showResultStats={true}
-                  infiniteScroll={true}
-                  loader={<CircularProgress />}
-                  renderResultStats={this.renderResultStats}
-                >
-                  {({ data, error, loading }) => <ResultWills data={data} />}
-                </ReactiveList>
-              ) : (
-                <ReactiveList
-                  react={{
-                    and: [
-                      "texte",
-                      "contributeur",
-                      "institution",
-                      "collection",
-                      "date_naissance",
-                      "date_deces",
-                      "date_redaction",
-                      "cote",
-                      "nom_testateur",
-                      "lieu",
-                      "notoriale",
-                      "profession",
-                      "unite"
-                    ]
-                  }}
-                  dataField={this.state.curField}
-                  sortBy={this.state.curOrder}
-                  componentId="searchResult"
-                  stream={false}
-                  pagination={false}
-                  size={15}
-                  showResultStats={true}
-                  infiniteScroll={true}
-                  loader={<CircularProgress />}
-                  renderResultStats={function(stats) {
-                    return ` ${stats.numberOfResults} testaments sur 193 correspondent à votre recherche`;
-                  }}
-                >
-                  {({ data, error, loading }) => <ResultWills data={data} />}
-                </ReactiveList>
-              )}
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <Grid container direction="column" spacing={1}>
-              <Grid item>
-                <div className="rightSidebar">
-                  <Grid container direction="row" spacing={1}>
-                    <Grid item>
-                      <div id="chipRoot">
-                        <div id="chipWill"></div>
-                      </div>
+                      <Grid item>
+                        <Button
+                          id="btSave"
+                          variant="contained"
+                          color="primary"
+                          onClick={this.handleSearchSave}
+                        >
+                          Sauvegarder
+                        </Button>
+                      </Grid>
                     </Grid>
-                    <Grid item>
-                      <Tooltip
-                        title="Comparer les testaments"
-                        style={{ cursor: "hand" }}
-                        interactive
-                      >
-                        <Fab id="btCompare" aria-label="Compare" size="small">
-                          <CompareIcon />
-                        </Fab>
-                      </Tooltip>
-                    </Grid>
-                  </Grid>
-                </div>
+                  </Container>
+                </Popper>
               </Grid>
-              <Grid item></Grid>
-              {/* <Grid item>
-              <TagCloud
-                className="tag-container"
-                componentId="ProvenanceTag"
-                dataField="will_provenance.keyword"
-                title="Provenance"
-                size={50}
-                showCount={true}
-                multiSelect={true}
-                queryFormat="or"
-                react={{
-                  and: [
-                    "texte",
-                    "contributeur",
-                    "institution",
-                    "collection",
-                    "date",
-                    "cote",
-                    "lieu_redaction",
-                    "lieu_naissance",
-                    "nom_testateur",
-                    "lieu_deces",
-                    "notoriale"
-                  ]
-                }}
-                showFilter={true}
-                filterLabel="Provenance"
-                URLParams={true}
-                loader="Loading ..."
-              />
-            </Grid>*/}
             </Grid>
-          </Grid>
-        </Grid>
+            <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
+          </div>
+
+          {this.state.field === "" && this.state.order === "" ? (
+            <ReactiveList
+              react={{
+                and: [
+                  "texte",
+                  "contributeur",
+                  "institution",
+                  "collection",
+                  "date_naissance",
+                  "date_deces",
+                  "date_redaction",
+                  "cote",
+                  "nom_testateur",
+                  "lieu",
+                  "notoriale",
+                  "profession",
+                  "unite"
+                ]
+              }}
+              dataField=""
+              componentId="searchResult"
+              stream={false}
+              pagination={true}
+              size={15}
+              showResultStats={true}
+              infiniteScroll={true}
+              loader={<CircularProgress />}
+              renderResultStats={this.renderResultStats}
+            >
+              {({ data, error, loading }) => <ResultWills data={data} />}
+            </ReactiveList>
+          ) : (
+            <ReactiveList
+              react={{
+                and: [
+                  "texte",
+                  "contributeur",
+                  "institution",
+                  "collection",
+                  "date_naissance",
+                  "date_deces",
+                  "date_redaction",
+                  "cote",
+                  "nom_testateur",
+                  "lieu",
+                  "notoriale",
+                  "profession",
+                  "unite"
+                ]
+              }}
+              dataField={this.state.field}
+              sortBy={this.state.order}
+              componentId="searchResult"
+              stream={false}
+              pagination={true}
+              size={15}
+              showResultStats={true}
+              infiniteScroll={true}
+              loader={<CircularProgress />}
+              renderResultStats={this.renderResultStats}
+            >
+              {({ data, error, loading }) => <ResultWills data={data} />}
+            </ReactiveList>
+          )}
+        </div>
 
         <div>
           <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>

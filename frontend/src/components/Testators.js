@@ -230,82 +230,80 @@ class Testators extends Component {
                     .catch(error => {
                       console.log("error :", error);
                     });
+                  const resultList = (
+                    <div className="resultList">
+                      <div className="sortResult">
+                        Trier par :
+                        <Select
+                          value={this.state.value}
+                          onChange={this.handleChange}
+                        >
+                          <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
+                          <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
+                          <MenuItem value={3}>
+                            date de naissance <TrendingUpIcon />
+                          </MenuItem>
+                          <MenuItem value={4}>
+                            date de naissance <TrendingDownIcon />
+                          </MenuItem>
+                          <MenuItem value={5}>
+                            date de décès <TrendingUpIcon />
+                          </MenuItem>
+                          <MenuItem value={6}>
+                            date de décès <TrendingDownIcon />
+                          </MenuItem>
+                        </Select>
+                      </div>
+                      <ul>
+                        {this.state.cur_list.map((item, i) =>
+                          Boolean(
+                            res.resultStats.currentPage === curPage_ + i
+                          ) ? (
+                            <li key={item["_id"]} className="li_active">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source[
+                                "persName.fullIndexEntryForm.forename"
+                              ]
+                                .toString()
+                                .replace(/,/g, " ") + " "}
+                              <span className="typoSurname">
+                                {
+                                  item._source[
+                                    "persName.fullIndexEntryForm.surname"
+                                  ]
+                                }
+                              </span>
+                            </li>
+                          ) : (
+                            <li key={item["_id"]} className="li">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source[
+                                "persName.fullIndexEntryForm.forename"
+                              ]
+                                .toString()
+                                .replace(/,/g, " ") + " "}
+                              <span className="typoSurname">
+                                {
+                                  item._source[
+                                    "persName.fullIndexEntryForm.surname"
+                                  ]
+                                }
+                              </span>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  );
                   return (
                     <div className="testators_results" key={j}>
-                      <Grid container direction="row" spacing={2}>
-                        <Grid item xs={4}>
-                          <div className="sortResult">
-                            Trier par :
-                            <Select
-                              value={this.state.value}
-                              onChange={this.handleChange}
-                            >
-                              <MenuItem value={1}>
-                                nom de famille (A-Z)
-                              </MenuItem>
-                              <MenuItem value={2}>
-                                nom de famille (Z-A)
-                              </MenuItem>
-                              <MenuItem value={3}>
-                                date de naissance <TrendingUpIcon />
-                              </MenuItem>
-                              <MenuItem value={4}>
-                                date de naissance <TrendingDownIcon />
-                              </MenuItem>
-                              <MenuItem value={5}>
-                                date de décès <TrendingUpIcon />
-                              </MenuItem>
-                              <MenuItem value={6}>
-                                date de décès <TrendingDownIcon />
-                              </MenuItem>
-                            </Select>
-                          </div>
-                          <ul>
-                            {this.state.cur_list.map((item, i) =>
-                              Boolean(
-                                res.resultStats.currentPage === curPage_ + i
-                              ) ? (
-                                <li key={item["_id"]} className="li_active">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source[
-                                    "persName.fullIndexEntryForm.forename"
-                                  ]
-                                    .toString()
-                                    .replace(/,/g, " ") + " "}
-                                  <span className="typoSurname">
-                                    {
-                                      item._source[
-                                        "persName.fullIndexEntryForm.surname"
-                                      ]
-                                    }
-                                  </span>
-                                </li>
-                              ) : (
-                                <li key={item["_id"]} className="li">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source[
-                                    "persName.fullIndexEntryForm.forename"
-                                  ]
-                                    .toString()
-                                    .replace(/,/g, " ") + " "}
-                                  <span className="typoSurname">
-                                    {
-                                      item._source[
-                                        "persName.fullIndexEntryForm.surname"
-                                      ]
-                                    }
-                                  </span>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </Grid>
-                        <Grid item xs={8}>
-                          <TestatorDisplay id={item["_id"]} data={item} />
-                        </Grid>
-                      </Grid>
+                      <TestatorDisplay
+                        id={item["_id"]}
+                        data={item}
+                        resultList={resultList}
+                      />
                       <Footer />
                     </div>
                   );

@@ -157,45 +157,48 @@ class Units extends Component {
                     .catch(error => {
                       console.log("error :", error);
                     });
+                  const resultList = (
+                    <div className="resultList">
+                      {" "}
+                      <div className="sortResult">
+                        Trier par :
+                        <Select
+                          value={this.state.value}
+                          onChange={this.handleChange}
+                        >
+                          <MenuItem value={1}>unités (A-Z)</MenuItem>
+                          <MenuItem value={2}>unités (Z-A)</MenuItem>
+                        </Select>
+                      </div>
+                      <ul>
+                        {this.state.cur_list.map((item, i) =>
+                          Boolean(
+                            res.resultStats.currentPage === curPage_ + i
+                          ) ? (
+                            <li key={item["_id"]} className="li_active">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source["unit"]}
+                            </li>
+                          ) : (
+                            <li key={item["_id"]} className="li">
+                              {curPage_ + i + 1}
+                              {". "}
+                              {item._source["unit"]}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  );
                   return (
                     <div className="units" key={j}>
-                      <Grid container direction="row">
-                        <Grid item xs={2}>
-                          <div className="sortResult">
-                            Trier par :
-                            <Select
-                              value={this.state.value}
-                              onChange={this.handleChange}
-                            >
-                              <MenuItem value={1}>unités (A-Z)</MenuItem>
-                              <MenuItem value={2}>unités (Z-A)</MenuItem>
-                            </Select>
-                          </div>
+                      <UnitDisplay
+                        id={item["_id"]}
+                        data={item}
+                        resultList={resultList}
+                      />
 
-                          <ul>
-                            {this.state.cur_list.map((item, i) =>
-                              Boolean(
-                                res.resultStats.currentPage === curPage_ + i
-                              ) ? (
-                                <li key={item["_id"]} className="li_active">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["unit"]}
-                                </li>
-                              ) : (
-                                <li key={item["_id"]} className="li">
-                                  {curPage_ + i + 1}
-                                  {". "}
-                                  {item._source["unit"]}
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </Grid>
-                        <Grid item xs={10}>
-                          <UnitDisplay id={item["_id"]} data={item} />
-                        </Grid>
-                      </Grid>
                       <Footer />
                     </div>
                   );

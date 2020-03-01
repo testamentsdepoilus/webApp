@@ -8,9 +8,12 @@ import {
   IconButton,
   DialogTitle,
   Grid,
-  Button
+  Button,
+  MenuList,
+  MenuItem,
+  Menu
 } from "@material-ui/core";
-import { getParamConfig } from "../utils/functions";
+import { getParamConfig, getUserToken } from "../utils/functions";
 import CloseIcon from "@material-ui/icons/Close";
 import LogRegister from "./admin/LogRegister";
 import PersonIcon from "@material-ui/icons/Person";
@@ -22,7 +25,9 @@ class NavBar extends Component {
       selectedId: "",
       open: false,
       anchorEl: null,
-      anchorElExplor: null
+      anchorElExplor: null,
+      open_mySpace: false,
+      anchorEl_mySpace: null
     };
     this.handleListItemClick = this.handleListItemClick.bind(this);
     this.tabLinks = [
@@ -42,6 +47,8 @@ class NavBar extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleExplorClick = this.handleExplorClick.bind(this);
     this.handleExplorClose = this.handleExplorClose.bind(this);
+    this.handleOpenMySpace = this.handleOpenMySpace.bind(this);
+    this.usertoken = getUserToken();
   }
 
   handleListItemClick(event) {
@@ -50,20 +57,30 @@ class NavBar extends Component {
     });
   }
 
-  handleLoginClick(event) {
+  handleLoginClick() {
     //this.props.history.push("/login");
     this.setState({
       open: true
     });
   }
 
-  handleLogoutClick(event) {
+  handleOpenMySpace(event) {
+    this.setState({
+      open_mySpace: true,
+      anchorEl_mySpace: event.currentTarget
+    });
+  }
+
+  handleLogoutClick() {
     localStorage.clear();
     document.location.reload();
   }
+
   handleClose() {
     this.setState({
-      open: false
+      open: false,
+      open_mySpace: false,
+      anchorEl_mySpace: null
     });
   }
 
@@ -126,16 +143,73 @@ class NavBar extends Component {
 
     return (
       <div className="nav_root">
-        <Link id="home" component={RouterLink} to="/accueil">
-          <img
-            className="titre_site"
-            src={
-              getParamConfig("web_url") +
-              "/images/Entete_titre-site-haut-300dpi.jpg"
-            }
-            alt="titre_site"
-          />
-        </Link>
+        <Grid container direction="row" spacing={1}>
+          <Grid item xs={10}>
+            <Link id="home" component={RouterLink} to="/accueil">
+              <img
+                className="titre_site"
+                src={
+                  getParamConfig("web_url") +
+                  "/images/Entete_titre-site-haut-300dpi.jpg"
+                }
+                alt="titre_site"
+              />
+            </Link>
+          </Grid>
+          <Grid item xs={2}>
+            <div className="menu_secondary">
+              <MenuList>
+                <MenuItem>
+                  {" "}
+                  <Link
+                    id="news"
+                    className={
+                      this.state.selectedId === "news" ? "activedLink" : "link"
+                    }
+                    component={RouterLink}
+                    to="/news"
+                    onClick={this.handleListItemClick}
+                  >
+                    {" "}
+                    Les actualités{" "}
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  {" "}
+                  <Link
+                    id="articles"
+                    className={
+                      this.state.selectedId === "articles"
+                        ? "activedLink"
+                        : "link"
+                    }
+                    component={RouterLink}
+                    to="/articles"
+                    onClick={this.handleListItemClick}
+                  >
+                    {" "}
+                    L'état de la recherche{" "}
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  {" "}
+                  <Link
+                    id="about"
+                    className={
+                      this.state.selectedId === "about" ? "activedLink" : "link"
+                    }
+                    component={RouterLink}
+                    to="/apropos"
+                    onClick={this.handleListItemClick}
+                  >
+                    {" "}
+                    A propos{" "}
+                  </Link>
+                </MenuItem>
+              </MenuList>
+            </div>
+          </Grid>
+        </Grid>
 
         <Grid container direction="row" spacing={1}>
           <Grid item xs={10}>
@@ -213,72 +287,134 @@ class NavBar extends Component {
               >
                 Les unités militaires
               </Link>
-              <Link
-                id="news"
-                className={
-                  this.state.selectedId === "news" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/news"
-                onClick={this.handleListItemClick}
-              >
-                {" "}
-                Les actualités{" "}
-              </Link>
-              <Link
-                id="articles"
-                className={
-                  this.state.selectedId === "articles" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/articles"
-                onClick={this.handleListItemClick}
-              >
-                {" "}
-                L'état de la recherche{" "}
-              </Link>
-              <Link
-                id="about"
-                className={
-                  this.state.selectedId === "about" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/apropos"
-                onClick={this.handleListItemClick}
-              >
-                {" "}
-                A propos{" "}
-              </Link>
-              {localStorage.usertoken ? (
-                <Link
-                  id="mySpace"
-                  className={
-                    this.state.selectedId === "mySpace" ? "activedLink" : "link"
-                  }
-                  component={RouterLink}
-                  to="/espace"
-                  onClick={this.handleListItemClick}
-                >
-                  {" "}
-                  Mon espace{" "}
-                </Link>
-              ) : null}
             </Breadcrumbs>
           </Grid>
           <Grid item xs={2}>
             <div className="logIn">
               <Button
                 variant="contained"
-                className={localStorage.usertoken ? "userLogout" : "userLogin"}
+                className={this.usertoken ? "userLogout" : "userLogin"}
                 startIcon={<PersonIcon />}
                 onClick={
-                  localStorage.usertoken
-                    ? this.handleLogoutClick
+                  this.usertoken
+                    ? this.handleOpenMySpace
                     : this.handleLoginClick
                 }
               >
-                {localStorage.usertoken ? "Deconnexion" : "Connexion"}
+                Mon espace
               </Button>
+
+              <Menu
+                id="simple-menu-explor"
+                anchorEl={this.state.anchorEl_mySpace}
+                keepMounted
+                open={Boolean(this.state.open_mySpace)}
+                onClose={this.handleClose}
+                elevation={0}
+                getContentAnchorEl={null}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center"
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center"
+                }}
+              >
+                <MenuItem onClick={this.handleClose}>
+                  <Link
+                    id="profile"
+                    className={
+                      this.state.selectedId === "profile"
+                        ? "activedLink"
+                        : "link"
+                    }
+                    component={RouterLink}
+                    to="/espace/profile"
+                  >
+                    Mon profil
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link
+                    id="panier"
+                    className={
+                      this.state.selectedId === "panier"
+                        ? "activedLink"
+                        : "link"
+                    }
+                    component={RouterLink}
+                    to="/espace/panier"
+                  >
+                    Mes favoris
+                  </Link>
+                </MenuItem>
+                {this.usertoken && this.usertoken.isAdmin ? (
+                  <div>
+                    <Button
+                      className={
+                        this.state.selectedId === "administration"
+                          ? "activedLink"
+                          : "link"
+                      }
+                      onClick={this.handleExplorClick}
+                    >
+                      Administration
+                    </Button>
+                    <Menu
+                      id="simple-menu-explor"
+                      anchorEl={this.state.anchorElExplor}
+                      keepMounted
+                      open={Boolean(this.state.anchorElExplor)}
+                      onClose={this.handleExplorClose}
+                      elevation={0}
+                      getContentAnchorEl={null}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left"
+                      }}
+                      transformOrigin={{
+                        vertical: "center",
+                        horizontal: "right"
+                      }}
+                    >
+                      <MenuItem onClick={this.handleExplorClose}>
+                        <Link
+                          id="cms"
+                          className={
+                            this.state.selectedId === "cms"
+                              ? "activedLink"
+                              : "link"
+                          }
+                          component={RouterLink}
+                          to="/espace/cms"
+                          onClick={this.handleListItemClick}
+                        >
+                          Gestion de contenu
+                        </Link>
+                      </MenuItem>
+                      <MenuItem onClick={this.handleExplorClose}>
+                        <Link
+                          id="config"
+                          className={
+                            this.state.selectedId === "config"
+                              ? "activedLink"
+                              : "link"
+                          }
+                          component={RouterLink}
+                          to="/espace/config"
+                          onClick={this.handleListItemClick}
+                        >
+                          Configuration
+                        </Link>
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                ) : null}
+                <MenuItem onClick={this.handleLogoutClick}>
+                  DECONNEXION
+                </MenuItem>
+              </Menu>
             </div>
           </Grid>
         </Grid>
