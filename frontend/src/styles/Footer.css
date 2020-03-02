@@ -1,10 +1,8 @@
 .root_footer {
-  position: absolute;
+  position: relative;
   text-align: center;
-  display: inline-block;
-  vertical-align: top;
-  width: 90%;
   margin-top: 2em;
+  bottom: 0;
 }
 
 .menu_footer {

@@ -4,16 +4,12 @@
   display: block;
 }
 
-.main-container {
-  height: calc(100vh - 52px);
-  max-width: 50em;
-}
-
 .map-container {
   width: 100%;
   height: 35em;
   position: relative;
 }
+
 .map-popup {
   overflow-y: scroll;
   max-height: 9em;
@@ -60,13 +56,4 @@
   float: left;
   margin: 0 8px 0 0;
   opacity: 0.8;
-}
-
-.divider-root {
-  color: black;
-}
-
-.statsResults {
-  border: 1px solid;
-  margin: auto;
 }

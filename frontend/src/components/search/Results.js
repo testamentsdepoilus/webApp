@@ -166,7 +166,7 @@ class Results extends React.Component {
   renderResultStats(stats) {
     if (Boolean(this.state.totalHits)) {
       return (
-        <div className="resultStats">
+        <div className="statsResults">
           <div>
             {stats.numberOfResults} testaments sur {this.state.totalHits}{" "}
             correspondent à votre recherche
@@ -191,7 +191,7 @@ class Results extends React.Component {
       );
     } else {
       return (
-        <div className="resultStats">
+        <div className="statsResults">
           <div>
             {stats.numberOfResults} testaments correspondent à votre recherche
           </div>
@@ -442,6 +442,7 @@ class Results extends React.Component {
                   "unite"
                 ]
               }}
+              className="results"
               dataField=""
               componentId="searchResult"
               stream={false}

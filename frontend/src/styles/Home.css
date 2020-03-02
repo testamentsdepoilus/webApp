@@ -97,3 +97,8 @@
   height: 30em;
   position: relative;
 }
+
+.home .statsResults {
+  border: 1px solid;
+  margin: auto;
+}
