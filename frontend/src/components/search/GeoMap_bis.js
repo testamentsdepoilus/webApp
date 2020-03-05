@@ -8,7 +8,17 @@ import { getParamConfig } from "../../utils/functions";
 
 export default class GeoMap extends React.Component {
   map = null;
-  markers = L.markerClusterGroup();
+  markers = L.markerClusterGroup({
+    iconCreateFunction: function(cluster) {
+      var childCount = cluster.getChildCount();
+
+      return new L.DivIcon({
+        html: "<div><span>" + childCount + "</span></div>",
+        className: "marker-cluster marker-mycluster",
+        iconSize: new L.Point(40, 40)
+      });
+    }
+  });
   constructor(props) {
     super(props);
     this.state = {
@@ -67,13 +77,7 @@ export default class GeoMap extends React.Component {
     if (this.state.count === 0) {
       let element = (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Grid item container direction="row">
-            <Grid item>
-              <img
-                alt="blue-icon"
-                src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png"
-              ></img>
-            </Grid>
+          <Grid item container direction="row" alignItems="center">
             <Grid item>
               <span>Lieu de naissance</span>
             </Grid>
@@ -88,13 +92,7 @@ export default class GeoMap extends React.Component {
               />
             </Grid>
           </Grid>
-          <Grid item container direction="row">
-            <Grid item>
-              <img
-                alt="red-icon"
-                src="http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png"
-              ></img>
-            </Grid>
+          <Grid item container direction="row" alignItems="center">
             <Grid item>
               <span>Lieu de décès</span>
             </Grid>
@@ -118,9 +116,7 @@ export default class GeoMap extends React.Component {
           Boolean(point[0]["will_contents.birth_place"]) &&
           this.state.checkedA
         ) {
-          let marker = L.marker(point[0]["will_contents.birth_place"], {
-            icon: this.blueIcon
-          });
+          let marker = L.marker(point[0]["will_contents.birth_place"]);
           let contents = [];
 
           contents.push(
@@ -179,9 +175,7 @@ export default class GeoMap extends React.Component {
           Boolean(point[0]["will_contents.death_place"]) &&
           this.state.checkedB
         ) {
-          let marker = L.marker(point[0]["will_contents.death_place"], {
-            icon: this.redIcon
-          });
+          let marker = L.marker(point[0]["will_contents.death_place"]);
           let contents = [];
 
           contents.push(
@@ -265,9 +259,7 @@ export default class GeoMap extends React.Component {
         Boolean(point[0]["will_contents.birth_place"]) &&
         this.state.checkedA
       ) {
-        let marker = L.marker(point[0]["will_contents.birth_place"], {
-          icon: this.blueIcon
-        });
+        let marker = L.marker(point[0]["will_contents.birth_place"]);
         let contents = [];
 
         contents.push(
@@ -314,9 +306,7 @@ export default class GeoMap extends React.Component {
         Boolean(point[0]["will_contents.death_place"]) &&
         this.state.checkedB
       ) {
-        let marker = L.marker(point[0]["will_contents.death_place"], {
-          icon: this.redIcon
-        });
+        let marker = L.marker(point[0]["will_contents.death_place"]);
         let contents = [];
 
         contents.push(

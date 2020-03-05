@@ -365,7 +365,7 @@ class Home extends Component {
                   className="chart"
                   id="chart"
                   title="visualisation"
-                  src="http://patrimeph.ensea.fr/app/kibana#/visualize/edit/b5369500-42d2-11ea-bf92-1d413825e631?embed=true&_g=()"
+                  src="http://patrimeph.ensea.fr/k7/app/kibana#/visualize/edit/b5369500-42d2-11ea-bf92-1d413825e631?embed=true&_g=()"
                 ></iframe>
               </Grid>
             </Grid>
