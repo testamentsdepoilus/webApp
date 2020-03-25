@@ -10,7 +10,7 @@ function footerPDF() {
   const date = new Date();
   const footer =
     "Export réalisé depuis " +
-    process.env.host +
+    process.env.host_web +
     ", le " +
     date.toLocaleDateString("fr-FR");
   return footer;
@@ -45,9 +45,9 @@ router.post("/generateWillPDF", async (req, res, next) => {
       "{ page-break-after: always; } .avoid { page-break-inside: avoid; } #name {font-size: 1.1rem; font-weight: 600; " +
       "color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;}  a {text-decoration: none;}</style></head>" +
       '<body> <div id="root"><img src="file://' +
-      resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
+      resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" style="display: none"/> <img src="file://' +
-      resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
+      resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
       '" alt="Xcel-RCM" style="display: none" />';
 
     // Create div infos testateur
@@ -118,6 +118,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
           " " +
           will_date[0][0];
       } else if (will_date.length === 2) {
+        console.log("will_date :", will_date[0][1]);
         outputHtml +=
           "<p> Date de rédaction : " +
           will_date[0][2] +
@@ -248,7 +249,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
         height: "24mm",
         contents:
           '<img src="file://' +
-          resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
+          resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
           '" alt="Xcel-RCM" width="100%" height="40" />'
       },
       footer: {
@@ -259,7 +260,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
             "</span>/<span>{{pages}}</span></div><span>" +
             footerPDF() +
             '</span><img src="file://' +
-            resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
+            resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
             '" alt="Xcel-RCM" width="100%" height="40" /></div>'
         }
       }
@@ -267,7 +268,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
     pdf
       .create(outputHtml, options)
       .toFile(
-       "client/build/outputPDF/Projet_TdP_testament_" +
+        "/var/www/html/outputPDF/Projet_TdP_testament_" +
           data["will_id"] +
           ".pdf",
         function(err, result) {
@@ -315,12 +316,12 @@ router.post("/generatePDF", async (req, res, next) => {
       "<style> #root {margin: 1em; font-family: -apple-system; font-size: 0.8rem;}  #name {font-size: 1.1rem; " +
       "font-weight: 600; color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;} a {text-decoration: none;}" +
       '</style></head> <body><div id="root"><img src="file://' +
-      resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
+      resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" height="40" style="display: none"/> <img src="file://' +
-      resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
+      resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
       '" alt="Xcel-RCM" height="30" style="display: none" />';
     outputHtml += req.body["outputHtml"] + "</div></body></html>";
-   ;
+    console.log(resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg"));
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
       orientation: "portrait", // portrait or landscape
@@ -331,7 +332,7 @@ router.post("/generatePDF", async (req, res, next) => {
         height: "24mm",
         contents:
           '<img src="file://' +
-          resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
+          resolve("public/images/Entete_titre-site-haut-150dpi.jpg") +
           '" alt="Xcel-RCM" width="100%" height="40" />'
       },
       footer: {
@@ -342,7 +343,7 @@ router.post("/generatePDF", async (req, res, next) => {
             "</span>/<span>{{pages}}</span></div><span>" +
             footer_html +
             '</span><img src="file://' +
-            resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
+            resolve("public/images/Entete_Bande-logo-bas-150dpi.jpg") +
             '" alt="Xcel-RCM" width="100%" height="40" /></div>' // fallback value
         }
       }
@@ -351,7 +352,7 @@ router.post("/generatePDF", async (req, res, next) => {
     pdf
       .create(outputHtml, options)
       .toFile(
-         "client/build/outputPDF/" + req.body["filename"] + ".pdf",
+        process.env.host_web + "/outputPDF/" + req.body["filename"] + ".pdf",
         function(err, result) {
           if (err) {
             res.send({

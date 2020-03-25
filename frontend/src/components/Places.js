@@ -146,7 +146,7 @@ class Places extends Component {
               sortBy={this.state.order}
               showEndPage={false}
               renderResultStats={function(stats) {
-                return `${stats.numberOfResults} lieux trouvés.`;
+                return `${stats.numberOfResults} lieux`;
               }}
               URLParams={false}
               innerClass={{

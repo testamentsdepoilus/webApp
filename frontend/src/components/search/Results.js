@@ -333,28 +333,45 @@ class Results extends React.Component {
                   anchorEl={this.state.anchorEl}
                   placement="bottom-end"
                 >
-                  <div className="popper">
+                  <div className="searchHelp">
                     <p className="popperTitle">Aide à la recherche :</p>
                     <p>
-                      OR, | : opérateur de disjonction par défault (armée
-                      guerre)
+                      Vous pouvez saisir un mot ou plusieurs mots séparés par
+                      des espaces. Dans ce cas, la recherche va retourner tous
+                      les testaments contenant l’un ou l’autre de ces mots
+                      (équivalent de l’opérateur OR ou du caractère |). La
+                      recherche est insensible à la casse.
                     </p>
-                    <p>AND, + : opérateur de conjonction (armée + guerre)</p>
-                    <p>NOT, - : opérateur d'exclusion (armée -guerre) </p>
-                    <p>+ : opérateur d'inclusion (armée +guerre) </p>
-                    <p>* : troncature</p>
-                    <p>? : substitution</p>
                     <p>
-                      " " : recherche exactment une suite de mots (ou phrase)
+                      Le caractère ^ permet de donner plus de poids dans la
+                      recherche au mot qui le précède (exemple : armée guerre^2)
                     </p>
-                    <p>^ : rendre un terme plus pertinent (armée guerre^2)</p>
+                    <p>
+                      L’opérateur AND ou + peut être utilisé. Dans ce cas, la
+                      recherche va retourner tous les testaments contenant tous
+                      les mots saisis (armée + guerre).{" "}
+                    </p>
+                    <p>
+                      Si vous cherchez une expression précise, les caractères "
+                      " permettent de rechercher exactement une suite de mots
+                      (exemple "au poste de commandement").
+                    </p>
+                    <p>
+                      Le caractère * (troncature) peut être utilisé pour masquer
+                      un nombre de caractères allant de 0 à n dans un mot.
+                    </p>
+                    <p>Le caractère ? (masque) masque un seul caractère.</p>
+                    <p>
+                      L’opérateur NOT (ou le caractère -), permet d'exclure le
+                      mot qui le suit (armée NOT guerre ; armée -guerre).
+                    </p>
                   </div>
                 </Popper>
               </Grid>
               <Grid item xs={2}>
                 {Boolean(this.userToken) ? (
                   <Tooltip
-                    title="Sauvegarder ma recherche"
+                    title="Sauvegarder la recherche dans mes favoris"
                     interactive
                     arrow={true}
                   >
@@ -452,6 +469,9 @@ class Results extends React.Component {
               infiniteScroll={true}
               loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
+              renderNoResults={function() {
+                return <p>Aucun résultat ne correspond à cette recherche.</p>;
+              }}
             >
               {({ data, error, loading }) => <ResultWills data={data} />}
             </ReactiveList>
@@ -484,6 +504,9 @@ class Results extends React.Component {
               infiniteScroll={true}
               loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
+              renderNoResults={function() {
+                return <p>Aucun résultat ne correspond à cette recherche.</p>;
+              }}
             >
               {({ data, error, loading }) => <ResultWills data={data} />}
             </ReactiveList>
@@ -491,7 +514,7 @@ class Results extends React.Component {
         </div>
 
         <div>
-          <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
+          <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
             <Fab
               id="btTop"
               onClick={this.topFunction}

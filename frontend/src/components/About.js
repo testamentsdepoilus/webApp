@@ -167,12 +167,12 @@ class About extends Component {
         <div className="about">
           {navBar}
 
-          <h2>A PROPOS</h2>
+          <h2>À PROPOS</h2>
           <Grid container direction="row" spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={2}>
               {menuAbout}
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={10}>
               <div className="detail">
                 <Paper className="item" key={0}>
                   <h1 className="title">{curItem._source["title"]} </h1>

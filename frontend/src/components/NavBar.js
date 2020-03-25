@@ -203,7 +203,7 @@ class NavBar extends Component {
                     onClick={this.handleListItemClick}
                   >
                     {" "}
-                    A propos{" "}
+                    À propos{" "}
                   </Link>
                 </MenuItem>
               </MenuList>

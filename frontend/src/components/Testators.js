@@ -155,7 +155,7 @@ class Testators extends Component {
                     placeholder="Nom du testateur"
                     loader="En chargement ..."
                     showSearch={true}
-                    searchPlaceholder="Taper le nom ici"
+                    searchPlaceholder="Saisir un nom de testateur"
                     onChange={this.handleValueChange}
                     URLParams={true}
                     innerClass={{
@@ -197,7 +197,7 @@ class Testators extends Component {
                 pagination: "pagination"
               }}
               renderResultStats={function(stats) {
-                return `${stats.numberOfResults} testateurs trouvés.`;
+                return `${stats.numberOfResults} testateurs`;
               }}
               render={function(res) {
                 return res.data.map((item, j) => {

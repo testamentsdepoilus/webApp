@@ -92,7 +92,7 @@ class Wills extends Component {
   }
 
   handleRenderStats(stats) {
-    return `${stats.numberOfResults} testaments trouvés.`;
+    return `${stats.numberOfResults} testaments.`;
   }
 
   handleBackUp(e) {

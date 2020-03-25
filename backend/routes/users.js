@@ -92,7 +92,6 @@ router.post("/register", function(req, res, next) {
         res.send({ status: 400, err: "ES connexion au serveur a échoué !" });
       } else {
         hits = result.body.hits.hits;
-
         if (hits.length === 0) {
           bcrypt.hash(userData.password, 10, (err, hash) => {
             userData.password = hash;
@@ -100,7 +99,7 @@ router.post("/register", function(req, res, next) {
               let emailToken = jwt.sign(userData, process.env.SECRET_KEY, {
                 expiresIn: "1d"
               });
-              console.log("auth :", auth);
+
               if (typeof auth === "object" && Object.keys(auth).length > 0) {
                 let transporter = nodemailer.createTransport(
                   smtpTransport({
@@ -122,7 +121,6 @@ router.post("/register", function(req, res, next) {
                 // verify connection configuration
                 transporter.verify(function(error, success) {
                   if (error) {
-                    console.log("verify :", error);
                     res.send({ status: 400, err: error });
                   } else {
                     const link =
@@ -131,10 +129,10 @@ router.post("/register", function(req, res, next) {
                       "<div>Bonjour " +
                       userData.user_name +
                       " <br/>" +
-                      "Merci de valider votre inscription en cliquant ici : <br/> <br/>" +
+                      "Merci de valider votre inscription au site d’édition numérique des testaments de Poilus en cliquant ici : <br/> <br/>" +
                       "<a href=" +
                       link +
-                      " style=\"text-align: center; font-family: 'Open Sans', 'Arial', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Lucida Grande', 'sans-serif'; color: #fff; background-color: #ee4e8b; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; width: auto; line-height: 1.6; margin: 20px auto; padding: 15px 40px 15px 30px;\" > Oui c'est mon e-mail </a ></div>";
+                      " style=\"text-align: center; font-family: 'Open Sans', 'Arial', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Lucida Grande', 'sans-serif'; color: #fff; background-color: #ee4e8b; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; width: auto; line-height: 1.6; margin: 20px auto; padding: 15px 40px 15px 30px;\" > oui je valide mon inscription </a ></div>";
 
                     let mailOptions = {
                       from: auth.email,
@@ -145,10 +143,8 @@ router.post("/register", function(req, res, next) {
 
                     transporter.sendMail(mailOptions, function(err, info) {
                       if (err) {
-                        console.log("error sendMail :", err);
                         res.send({ status: 400, err: err.message });
                       } else {
-                        console.log("un mail a été envoyé");
                         client.index(
                           {
                             index: indexES,
@@ -177,7 +173,7 @@ router.post("/register", function(req, res, next) {
               } else {
                 res.send({
                   status: 400,
-                  err: "Merci de configurer le serveur d'envoie du mail !"
+                  err: "Merci de configurer le serveur d'envoie d'e-mail !"
                 });
               }
             } catch (e) {
@@ -191,7 +187,7 @@ router.post("/register", function(req, res, next) {
           res.send({
             status: 400,
             err:
-              "L'utilisateur avec l'adresse email (" +
+              "L'utilisateur avec l'adresse e-mail (" +
               userData.email +
               ") est déjà enregistré !"
           });
@@ -295,7 +291,6 @@ router.get("/confirmation/:token", async (req, res) => {
                 err: "ES Connexion au serveur a échoué !" + err
               });
             } else {
-              console.log(" redirect ok");
               res.redirect("http://patrimeph.ensea.fr/testaments-de-poilus");
             }
           }
@@ -474,9 +469,180 @@ router.post("/updateConfigMail", function(req, res, next) {
   );
 });
 
-/* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.send("respond with a resource");
+/* reset user password. */
+router.post("/resetPassWord", function(req, res, next) {
+  client.search(
+    {
+      index: indexES,
+      body: {
+        query: {
+          match: {
+            email: {
+              query: req.body.email,
+              operator: "and"
+            }
+          }
+        }
+      }
+    },
+    (err, result) => {
+      if (err) {
+        res.send({ status: 400, err: "ES connexion au serveur a échoué !" });
+      } else {
+        hits = result.body.hits.hits;
+
+        if (hits.length === 0) {
+          res.send({
+            status: 400,
+            err: "L'adresse e-mail " + req.body.email + " n'est pas valide !"
+          });
+        } else {
+          try {
+            let emailToken = jwt.sign(
+              { email: req.body.email },
+              process.env.SECRET_KEY,
+              {
+                expiresIn: "2h"
+              }
+            );
+
+            if (typeof auth === "object" && Object.keys(auth).length > 0) {
+              let transporter = nodemailer.createTransport(
+                smtpTransport({
+                  host: "smtp2.ensea.fr", // hostname
+                  secureConnection: true, // TLS requires secureConnection to be false
+                  port: 465, // port for secure SMTP
+                  tls: {
+                    rejectUnauthorized: false
+                  },
+                  auth: Boolean(auth.email)
+                    ? {
+                        user: auth.email,
+                        pass: simpleCrypto.decrypt(auth.password)
+                      }
+                    : {}
+                })
+              );
+
+              // verify connection configuration
+              transporter.verify(function(error, success) {
+                if (error) {
+                  res.send({ status: 400, err: error });
+                } else {
+                  const link =
+                    process.env.host_web + "/reinitialiserMDP/" + emailToken;
+                  const html =
+                    "<div>Bonjour " +
+                    hits[0]._source["user_name"] +
+                    " <p>" +
+                    "Vous avez demandé la réinitialisation de votre mot de passe d'accès à votre espace personnel du site d’édition numérique des testaments de Poilus.  </p>" +
+                    "<p> Si vous n'êtes pas à l'origine de cette demande vous pouvez ignorer ce message. </p>" +
+                    "<p> Pour réinitialiser votre mot de passe, cliquez sur le lien suivant et suivez les instructions : </p>" +
+                    "<br/> <br/> <a href=" +
+                    link +
+                    " style=\"text-align: center; font-family: 'Open Sans', 'Arial', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Lucida Grande', 'sans-serif'; color: #fff; background-color: #ee4e8b; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; width: auto; line-height: 1.6; margin: 20px auto; padding: 15px 40px 15px 30px;\" > Réinitialiser mon mot de passe </a ></div>";
+
+                  let mailOptions = {
+                    from: auth.email,
+                    to: req.body.email,
+                    subject:
+                      "Votre demande de réinitialisation de mot de passe",
+                    html: html
+                  };
+                  transporter.sendMail(mailOptions, function(err, info) {
+                    if (err) {
+                      res.send({ status: 400, err: err.message });
+                    } else {
+                      res.send({
+                        status: 200,
+                        res:
+                          "Votre demande de réinitialisation de mot a été envoyé à votre adresse e-mail."
+                      });
+                    }
+                  });
+                }
+              });
+
+              transporter.close();
+            } else {
+              res.send({
+                status: 400,
+                err: "Merci de configurer le serveur d'envoie d'e-mail !"
+              });
+            }
+          } catch (e) {
+            res.send({
+              status: 400,
+              err: "catch : " + e
+            });
+          }
+        }
+      }
+    }
+  );
+});
+
+// update user password
+router.post("/updateMDP", async (req, res) => {
+  try {
+    const user = jwt.verify(req.body.email, process.env.SECRET_KEY);
+    client.search(
+      {
+        index: indexES,
+        body: {
+          query: {
+            match: {
+              email: {
+                query: user.email,
+                operator: "and"
+              }
+            }
+          }
+        }
+      },
+      (err, result) => {
+        if (err) {
+          res.json({ status: 400, error: "Connexion au serveur a échoué !" });
+        } else {
+          hits = result.body.hits.hits;
+
+          if (hits.length === 1) {
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+              const new_password = hash;
+              let isFailed = false;
+              client.update({
+                index: indexES,
+                id: hits[0]._id,
+                body: {
+                  doc: {
+                    password: new_password
+                  }
+                }
+              }),
+                err => {
+                  if (err) {
+                    isFailed = true;
+                  }
+                };
+              if (isFailed) {
+                res.send({
+                  status: 400,
+                  err: "ES Connexion au serveur a échoué !" + err
+                });
+              } else {
+                res.send({
+                  status: 200,
+                  mess: "Votre mot de passe a été bien mis à jour !"
+                });
+              }
+            });
+          }
+        }
+      }
+    );
+  } catch (e) {
+    res.send({ status: 400, err: e });
+  }
 });
 
 module.exports = router;

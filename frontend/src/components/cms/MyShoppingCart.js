@@ -5,7 +5,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -105,12 +104,8 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
     title
   } = props;
-  const createSortHandler = property => event => {
-    onRequestSort(event, property);
-  };
 
   const title_ = {
     myWills: "Testament",
@@ -140,7 +135,7 @@ function EnhancedTableHead(props) {
                   </Typography>
                 ) : (
                   <Typography className="labelCheckBox">
-                    Séléctionner tout
+                    Sélectionner tout
                   </Typography>
                 )
               }
@@ -154,13 +149,7 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={order}
-              onClick={createSortHandler(headCell.id)}
-            >
-              <Typography className="labelTitle">{title_[title]}</Typography>
-            </TableSortLabel>
+            <Typography className="labelTitle">{title_[title]}</Typography>
           </TableCell>
         ))}
         <TableCell></TableCell>
@@ -210,7 +199,9 @@ const EnhancedTableToolbar = props => {
                   color="inherit"
                   variant="subtitle1"
                 >
-                  {numSelected} sélectionnés
+                  {numSelected === 1
+                    ? numSelected + " sélectionné"
+                    : numSelected + " sélectionnés"}
                 </Typography>
               </Grid>
               <Grid item>{actionButton}</Grid>
@@ -393,11 +384,10 @@ export default class MyShoppingCart extends Component {
     updateMyListWills(newItem).then(res => {
       if (res.status === 200) {
         this.setState({
-          open: false,
-          openAlert: true,
-          mess: "Vos éléments sélectionnés ont été supprimés !"
+          open: false
         });
         localStorage.setItem("myBackups", JSON.stringify(myBackups_));
+        document.location.reload();
       } else {
         const err = res.err ? res.err : "Connexion au serveur a échoué !";
         this.setState({
@@ -541,11 +531,11 @@ export default class MyShoppingCart extends Component {
   setDefaultView(data, title, actionButton) {
     const isSelected = name => this.state.selected[title].indexOf(name) !== -1;
     const title_norm = {
-      myWills: "testament",
-      myTestators: "testateur",
-      myPlaces: "lieu",
-      myUnits: "unités militaires",
-      mySearches: "recherches"
+      myWills: "l'édition du testament",
+      myTestators: "la notice du testateur",
+      myPlaces: "la notice du lieu",
+      myUnits: "la notice de l'unité militaire",
+      mySearches: "la recherche"
     };
     return (
       <TableContainer component={Paper} className="paper">
@@ -632,13 +622,7 @@ export default class MyShoppingCart extends Component {
                     </TableCell>
                   )}
                   <TableCell align="center">
-                    <Tooltip
-                      title={
-                        title === "myUnits"
-                          ? "Accéder aux " + title_norm[title]
-                          : "Accéder au " + title_norm[title]
-                      }
-                    >
+                    <Tooltip title={"Consulter " + title_norm[title]}>
                       <IconButton
                         onClick={this.handleDisplayWill(row, title)}
                         aria-label="display"
@@ -801,7 +785,7 @@ export default class MyShoppingCart extends Component {
       case "myWills":
         output = (
           <Grid item>
-            <Tooltip title="Export des testament">
+            <Tooltip title="Exporter les testaments sélectionnés">
               <span>
                 <IconButton
                   disabled={
@@ -823,7 +807,7 @@ export default class MyShoppingCart extends Component {
       case "myPlaces":
         output = (
           <Grid item>
-            <Tooltip title="Export des lieux">
+            <Tooltip title="Exporter les notices sélectionnées">
               <span>
                 <IconButton
                   disabled={
@@ -845,7 +829,7 @@ export default class MyShoppingCart extends Component {
       case "myUnits":
         output = (
           <Grid item>
-            <Tooltip title="Export des unités militaires">
+            <Tooltip title="Exporter les notices sélectionnées">
               <span>
                 <IconButton
                   disabled={
@@ -867,7 +851,7 @@ export default class MyShoppingCart extends Component {
       case "myTestators":
         output = (
           <Grid item>
-            <Tooltip title="Export des testateurs">
+            <Tooltip title="Exporter les notices sélectionnées">
               <span>
                 <IconButton
                   disabled={
@@ -928,7 +912,7 @@ export default class MyShoppingCart extends Component {
           Boolean(this.state.selected[title]) &&
           this.state.selected[title].length < 4 ? (
             <Grid item>
-              <Tooltip title="Comparer des testaments">
+              <Tooltip title="Comparer les testaments sélectionnés">
                 <span>
                   <IconButton
                     disabled={
@@ -1084,11 +1068,7 @@ export default class MyShoppingCart extends Component {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Souhaitez-vous vraiment supprimer les{" "}
-              {Boolean(this.state.selected[this.state.type])
-                ? this.state.selected[this.state.type].length
-                : 0}{" "}
-              éléments sélectionnés ?
+              Souhaitez-vous vraiment supprimer les éléments sélectionnés ?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -1106,7 +1086,7 @@ export default class MyShoppingCart extends Component {
           handleClose={this.handleAlertClose}
         />
 
-        <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
+        <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
           <Fab
             id="btTop"
             onClick={this.topFunction}

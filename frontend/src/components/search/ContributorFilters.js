@@ -29,7 +29,7 @@ const ContributorFilters = () => (
     URLParams={true}
     loader="En chargement ..."
     showSearch={true}
-    searchPlaceholder="Taper le nom ici"
+    searchPlaceholder="Saisir un nom de contributeur"
     innerClass={{
       list: "list"
     }}

@@ -67,10 +67,6 @@ class TextSearch extends React.Component {
     }
   };
   render() {
-    const page_name =
-      this.state.value === "will_pages.edition_text"
-        ? "édition"
-        : "transcription";
     return (
       <div className="textSearch">
         <Grid container justify="center" direction="column" spacing={1}>
@@ -78,7 +74,7 @@ class TextSearch extends React.Component {
             <Grid container direction="row" spacing={1}>
               <Grid item>
                 <Typography className="typoTitle">
-                  Effectuer votre recherche dans
+                  Effectuer une recherche dans
                 </Typography>
               </Grid>
               <Grid item>
@@ -102,7 +98,7 @@ class TextSearch extends React.Component {
               componentId="texte"
               dataField={[this.state.value]}
               queryFormat="or"
-              placeholder={"Que recherchez-vous dans " + page_name + " ?"}
+              placeholder={"Saisir un mot, une expression …"}
               filterLabel="recherche"
               autosuggest={true}
               showIcon={false}

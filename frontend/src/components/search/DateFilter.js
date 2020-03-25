@@ -70,9 +70,9 @@ class DateFilter extends React.Component {
                 >
                   <div className="dateHelp">
                     <p>
-                      Pour rechercher sur une date exacte, il faut saisir ou
-                      sélectionner deux fois la même date dans les champs date
-                      de début et date de fin
+                      Pour rechercher une date exacte, saisissez ou sélectionnez
+                      la même date dans les champs « date de début » et « date
+                      de fin ».
                     </p>
                   </div>
                 </Popper>

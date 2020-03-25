@@ -311,7 +311,7 @@ export default class TestatorDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter la notice du testateur en format PDF"
+                        title="Exporter la notice du testateur"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon fontSize="large" />
@@ -326,7 +326,7 @@ export default class TestatorDisplay extends Component {
                       {Boolean(this.userToken) ? (
                         isAdded === -1 ? (
                           <Tooltip
-                            title="Ajouter au panier"
+                            title="Ajouter au favoris"
                             placement="bottom"
                             style={{ cursor: "hand" }}
                           >
@@ -340,7 +340,7 @@ export default class TestatorDisplay extends Component {
                           </Tooltip>
                         ) : (
                           <Tooltip
-                            title="Supprimer du panier"
+                            title="Supprimer du favoris"
                             placement="bottom"
                             style={{ cursor: "hand" }}
                           >
@@ -355,7 +355,7 @@ export default class TestatorDisplay extends Component {
                         )
                       ) : (
                         <Tooltip
-                          title="Connectez-vous pour ajouter ce testament au panier"
+                          title="Connectez-vous pour ajouter ce testament à vos favoris !"
                           arrow={true}
                         >
                           <span>
@@ -397,10 +397,12 @@ export default class TestatorDisplay extends Component {
                               "persName.fullIndexEntryForm.surname"
                             ]
                           }
-                        </span>
-                        {" ("} {Boolean(birth_date) ? birth_date[2] : ""}
+                        </span>{" "}
+                        {Boolean(birth_date) ? "(" + birth_date[2] : "("}
                         {"-"}
-                        {death_date.length > 0 ? death_date[0][2] : ""} {")"}
+                        {death_date.length > 0
+                          ? death_date[0][2].trim() + ")"
+                          : ")"}
                       </h1>
                       <Typography className="text">
                         {" "}
@@ -553,7 +555,7 @@ export default class TestatorDisplay extends Component {
                       {Boolean(this.props.data["bibl.author"]) ? (
                         <div>
                           <Typography className="text">
-                            Références bibliographiques:{" "}
+                            Références bibliographiques :{" "}
                           </Typography>
                           <Typography className="text">
                             {"-"} {this.props.data["bibl.author"]}.{" "}

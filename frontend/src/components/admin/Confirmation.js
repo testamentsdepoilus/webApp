@@ -19,14 +19,12 @@ class Confirmation extends Component {
   render() {
     return (
       <div>
-        <h1>L'e-mail de confirmation a été expédié !</h1>
         <p>
-          Un mail de confirmation vous a été adressé à{" "}
+          Un courriel de confirmation vous a été envoyé à{" "}
           <span style={{ fontWeight: 600 }}>{this.props.email}</span>
         </p>
         <p>
-          Vous trouverez dans votre boîte mail un lien cliquable pour activer
-          votre inscription
+          Vous y trouverez un lien cliquable pour activer votre inscription.
         </p>
       </div>
     );

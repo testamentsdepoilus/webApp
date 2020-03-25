@@ -119,7 +119,7 @@ class Units extends Component {
               sortBy={this.state.order}
               showEndPage={false}
               renderResultStats={function(stats) {
-                return `${stats.numberOfResults} unités militaires trouvés.`;
+                return `${stats.numberOfResults} unités militaires`;
               }}
               URLParams={false}
               innerClass={{
@@ -166,8 +166,8 @@ class Units extends Component {
                           value={this.state.value}
                           onChange={this.handleChange}
                         >
-                          <MenuItem value={1}>unités (A-Z)</MenuItem>
-                          <MenuItem value={2}>unités (Z-A)</MenuItem>
+                          <MenuItem value={1}>unité (A-Z)</MenuItem>
+                          <MenuItem value={2}>unité (Z-A)</MenuItem>
                         </Select>
                       </div>
                       <ul>

@@ -410,7 +410,7 @@ export default class ResultWills extends React.Component {
                         {Boolean(this.userToken) ? (
                           isAdded === -1 ? (
                             <Tooltip
-                              title="Ajouter au panier"
+                              title="Ajouter aux favoris"
                               placement="bottom"
                               style={{ cursor: "hand" }}
                               arrow={true}
@@ -441,7 +441,7 @@ export default class ResultWills extends React.Component {
                           )
                         ) : (
                           <Tooltip
-                            title="Connectez-vous pour ajouter ce testament au panier"
+                            title="Connectez-vous pour ajouter ce testament à vos favoris !"
                             arrow={true}
                           >
                             <span>

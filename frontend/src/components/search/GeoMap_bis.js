@@ -365,6 +365,6 @@ export default class GeoMap extends React.Component {
     this.map = null;
   }
   render() {
-    return <div className={"map-container"}> </div>;
+    return <div id="map-container" className={"map-container"}></div>;
   }
 }

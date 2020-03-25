@@ -178,7 +178,10 @@ class Login extends Component {
               Se connecter
             </Button>
 
-            <Link href="#" variant="body2">
+            <Link
+              id="resetMDP"
+              href={getParamConfig("web_url") + "/lostPassWord"}
+            >
               Mot de passe oublié ?
             </Link>
           </form>

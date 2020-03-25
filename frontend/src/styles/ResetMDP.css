@@ -1,0 +1,19 @@
+.resetMDP .menu {
+  margin: 0 0 4em 1em;
+}
+
+.resetMDP .form {
+  width: 100%;
+}
+
+.resetMDP #password {
+  width: 20em;
+}
+
+.resetMDP #password-confirme {
+  width: 20em;
+}
+
+.customized-dialog-title h2 {
+  font-weight: 600;
+}

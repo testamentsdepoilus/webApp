@@ -581,7 +581,6 @@ export default class Manage extends Component {
     document.documentElement.scrollTop = 0;
   };
   render() {
-    const type_ = ["articles", "news", "about"];
     const menu = (
       <Paper className="menu">
         <MenuList>
@@ -700,11 +699,7 @@ export default class Manage extends Component {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Souhaitez-vous vraiment supprimer les{" "}
-                  {Boolean(this.state.selected[type_[this.state.type - 1]])
-                    ? this.state.selected[type_[this.state.type - 1]].length
-                    : 0}{" "}
-                  éléments sélectionnés
+                  Souhaitez-vous vraiment supprimer les éléments sélectionnés
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -725,7 +720,11 @@ export default class Manage extends Component {
               openAlert={this.state.openAlert}
               handleClose={this.handleAlertClose}
             />
-            <Tooltip title="Au top" style={{ cursor: "hand" }} interactive>
+            <Tooltip
+              title="Haut de page"
+              style={{ cursor: "hand" }}
+              interactive
+            >
               <Fab
                 id="btTop"
                 onClick={this.topFunction}

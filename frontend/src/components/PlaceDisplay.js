@@ -57,7 +57,11 @@ export default class PlaceDisplay extends Component {
   }
 
   handleExportClick() {
+    let map_div = document.getElementById("map-container");
+    map_div.style.display = "none";
+
     let lieu_div = document.getElementById("lieu_notice").innerHTML;
+
     this.setState({
       isLoading: true
     });
@@ -69,6 +73,7 @@ export default class PlaceDisplay extends Component {
     generatePDF(inputItem)
       .then(res => {
         if (res.status === 200) {
+          map_div.style.display = "block";
           downloadFile(
             getParamConfig("web_url") +
               "/outputPDF/" +
@@ -84,6 +89,7 @@ export default class PlaceDisplay extends Component {
         });
       })
       .catch(e => {
+        map_div.style.display = "block";
         this.setState({
           isLoading: false
         });
@@ -373,7 +379,7 @@ export default class PlaceDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter la notice des lieux en format PDF"
+                        title="Exporter la notice des lieux"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon fontSize="large" />
@@ -388,7 +394,7 @@ export default class PlaceDisplay extends Component {
                       {Boolean(this.userToken) ? (
                         isAdded === -1 ? (
                           <Tooltip
-                            title="Ajouter au panier"
+                            title="Ajouter aux favoris"
                             placement="bottom"
                             style={{ cursor: "hand" }}
                           >
@@ -417,7 +423,7 @@ export default class PlaceDisplay extends Component {
                         )
                       ) : (
                         <Tooltip
-                          title="Connectez-vous pour ajouter ce testament au panier"
+                          title="Connectez-vous pour ajouter ce testament à vos favoris !"
                           arrow={true}
                         >
                           <span>
@@ -475,7 +481,7 @@ export default class PlaceDisplay extends Component {
                               {this.state.birth_hits.length > 0 ? (
                                 <div>
                                   <Typography className="text">
-                                    Le lieu de naissance
+                                    Lieu de naissance
                                     {this.state.birth_hits.length > 1
                                       ? " des Poilus suivants :"
                                       : " du Poilu suivant :"}{" "}
@@ -539,7 +545,7 @@ export default class PlaceDisplay extends Component {
                               {this.state.residence_hits.length > 0 ? (
                                 <div>
                                   <Typography className="text">
-                                    Le lieu de résidence
+                                    Lieu de résidence
                                     {this.state.residence_hits.length > 1
                                       ? " des Poilus suivants :"
                                       : " du Poilu suivant :"}{" "}
@@ -585,7 +591,7 @@ export default class PlaceDisplay extends Component {
                               {this.state.redaction_hits.length > 0 ? (
                                 <div>
                                   <Typography className="text">
-                                    Le lieu de rédaction
+                                    Lieu de rédaction
                                     {this.state.redaction_hits.length > 1
                                       ? " des testaments suivants :"
                                       : " du testament suivant :"}{" "}
@@ -694,7 +700,7 @@ export default class PlaceDisplay extends Component {
                               {this.state.death_hits.length > 0 ? (
                                 <div>
                                   <Typography className="text">
-                                    Le lieu de décès
+                                    Lieu de décès
                                     {this.state.death_hits.length > 1
                                       ? " des Poilus suivants :"
                                       : " du Poilu suivant :"}{" "}

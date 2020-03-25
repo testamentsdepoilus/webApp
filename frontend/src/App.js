@@ -62,6 +62,10 @@ import "./styles/LogRegister.css";
 import "./styles/Profile.css";
 import "./styles/WillCompare.css";
 import "./styles/Compare.css";
+import LostPassWord from "./components/admin/LostPassWord";
+import ResetMDP from "./components/admin/ResetMDP";
+import "./styles/LostPassWord.css";
+import "./styles/ResetMDP.css";
 
 function App() {
   return (
@@ -93,6 +97,8 @@ function App() {
           <Route path="/compare" component={Compare} />
           <Route exact path="/explore" component={Explore} />
           <Route exact path="/contact" component={Contact} />
+          <Route exact path="/lostPassWord" component={LostPassWord} />
+          <Route path="/reinitialiserMDP" component={ResetMDP} />
         </StylesProvider>
       </div>
     </BrowserRouter>

@@ -222,7 +222,7 @@ export default class UnitDisplay extends Component {
                       <IconButton
                         id="btExport"
                         aria-label="Export"
-                        title="Exporter la notice des unités militaires en format PDF"
+                        title="Exporter la notice de l'unités militaire"
                         onClick={this.handleExportClick}
                       >
                         <ExportIcon fontSize="large" />
@@ -237,7 +237,7 @@ export default class UnitDisplay extends Component {
                       {Boolean(this.userToken) ? (
                         isAdded === -1 ? (
                           <Tooltip
-                            title="Ajouter au panier"
+                            title="Ajouter aux favoris"
                             placement="bottom"
                             style={{ cursor: "hand" }}
                           >
@@ -266,7 +266,7 @@ export default class UnitDisplay extends Component {
                         )
                       ) : (
                         <Tooltip
-                          title="Connectez-vous pour ajouter ce testament au panier"
+                          title="Connectez-vous pour ajouter ce testament à vos favoris !"
                           arrow={true}
                         >
                           <span>

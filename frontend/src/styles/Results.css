@@ -13,14 +13,16 @@
   border-color: #bcaaa4;
 }
 
-.results .popper {
+.searchHelp {
+  position: fixed;
   border: 1px solid;
   font-size: 0.9rem;
+  width: 20em;
   padding: 1em;
   background-color: white;
 }
 
-.results .popperTitle {
+.popperTitle {
   font-weight: 600;
 }
 .results .info {

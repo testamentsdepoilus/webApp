@@ -62,7 +62,8 @@ class Register extends Component {
         });
       } else if (this.state.password !== this.state.passConfirme) {
         this.setState({
-          error: "Les mots de passe saisies ne sont pas identiques",
+          error:
+            "Les mots de passe saisies ne sont pas identiques, veuillez saisir le même mot de passe.",
           isError: [false, false, true, true]
         });
       } else {
@@ -73,7 +74,6 @@ class Register extends Component {
         };
         register(user).then(res => {
           if (res.status === 200) {
-            //document.location.reload(true);
             this.setState({
               open: true
             });
@@ -175,7 +175,7 @@ class Register extends Component {
                   onChange={this.onChange}
                   value={this.state.passConfirme}
                   error={this.state.isError[3]}
-                />{" "}
+                />
               </Grid>
               <Grid item xs={1}>
                 <InputAdornment position="end">

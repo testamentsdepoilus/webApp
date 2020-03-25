@@ -305,7 +305,23 @@ export default class WillDisplay extends Component {
             </Link>
           </Grid>
           <Grid>
-            <IconButton id={i} onClick={handeOpenModal}>
+            <IconButton
+              id={i}
+              onClick={handeOpenModal}
+              title={
+                listMenu[pages[i]["page_type"].type] +
+                " " +
+                pages[i]["page_type"].id +
+                " : " +
+                getParamConfig("web_url") +
+                "/testament/" +
+                will_id +
+                "/" +
+                listMenu[pages[i]["page_type"].type] +
+                "_" +
+                pages[i]["page_type"].id
+              }
+            >
               <InsertLinkIcon id={i} />
             </IconButton>
           </Grid>
@@ -567,7 +583,7 @@ export default class WillDisplay extends Component {
                         <IconButton
                           id="btExport"
                           aria-label="Export"
-                          title="Exporter le testament en format TEI/PDF"
+                          title="Exporter le testament"
                           onClick={this.handleExportClick}
                         >
                           <ExportIcon />
@@ -616,7 +632,7 @@ export default class WillDisplay extends Component {
                         {Boolean(this.userToken) ? (
                           isAdded === -1 ? (
                             <Tooltip
-                              title="Ajouter au panier"
+                              title="Ajouter aux favoris"
                               placement="bottom"
                               style={{ cursor: "hand" }}
                             >
@@ -645,7 +661,7 @@ export default class WillDisplay extends Component {
                           )
                         ) : (
                           <Tooltip
-                            title="Connectez-vous pour ajouter ce testament au panier"
+                            title="Connectez-vous pour ajouter ce testament à vos favoris !"
                             arrow={true}
                           >
                             <span>
@@ -678,7 +694,7 @@ export default class WillDisplay extends Component {
                             </Link>
                           </h1>
                           <Typography>
-                            Mort pour la france
+                            Mort pour la France
                             {Boolean(death_date)
                               ? " le " +
                                 death_date[0] +
@@ -792,7 +808,8 @@ export default class WillDisplay extends Component {
                           )}
                           <Typography>
                             Cote aux{" "}
-                            {this.props.data["will_identifier.institution"]}{" "}
+                            {this.props.data["will_identifier.institution"]}
+                            {" : "}
                             {this.props.data["will_identifier.cote"]}
                           </Typography>
                           <Typography>
@@ -875,7 +892,9 @@ export default class WillDisplay extends Component {
               </Grid>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h6">Les contributeurs :</Typography>
+              <Typography variant="h6">
+                Contributeurs et contributrices :
+              </Typography>
               {this.props.data["contributions"].map((contributor, i) => {
                 return (
                   <Typography key={i}>

@@ -42,11 +42,10 @@
   height: 15em;
 }
 .testators .selectList {
-  width: 14em;
+  width: 15em;
   float: right;
-  clear: none;
   position: relative;
-  bottom: 3em;
+  bottom: 2em;
 }
 
 .testators .testatorSearch {

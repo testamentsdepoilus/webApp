@@ -102,7 +102,7 @@ export default class CustumerDataSearch extends Component {
                   placeholder="Nom du testateur"
                   URLParams={true}
                   showSearch={true}
-                  searchPlaceholder="Taper le nom ici"
+                  searchPlaceholder="Saisir un nom de testateur"
                   innerClass={{
                     list: "list"
                   }}
@@ -156,7 +156,7 @@ export default class CustumerDataSearch extends Component {
                 placeholder="Profession"
                 URLParams={true}
                 showSearch={true}
-                searchPlaceholder="Taper la profession ici"
+                searchPlaceholder="Saisir une profession"
                 renderItem={(label, count, isSelected) => {
                   let label_ = "";
                   label.split(" ").forEach(item => {
@@ -218,7 +218,7 @@ export default class CustumerDataSearch extends Component {
                 placeholder="Unité militaire"
                 URLParams={true}
                 showSearch={true}
-                searchPlaceholder="Taper l'unité ici"
+                searchPlaceholder="Saisir une unité militaire"
                 innerClass={{
                   list: "list"
                 }}
@@ -282,7 +282,7 @@ export default class CustumerDataSearch extends Component {
                 placeholder="Cote du testament"
                 URLParams={true}
                 showSearch={true}
-                searchPlaceholder="Taper le cote ici"
+                searchPlaceholder="Saisir une cote"
                 innerClass={{
                   list: "list"
                 }}
@@ -317,7 +317,7 @@ export default class CustumerDataSearch extends Component {
                 placeholder="Étude notariale"
                 URLParams={true}
                 showSearch={true}
-                searchPlaceholder="Taper ici"
+                searchPlaceholder="Saisir une étude notariale"
                 innerClass={{
                   list: "list"
                 }}

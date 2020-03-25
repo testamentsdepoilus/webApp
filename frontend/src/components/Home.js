@@ -365,7 +365,7 @@ class Home extends Component {
                   className="chart"
                   id="chart"
                   title="visualisation"
-                  src="http://patrimeph.ensea.fr/k7/app/kibana#/visualize/edit/b5369500-42d2-11ea-bf92-1d413825e631?embed=true&_g=()"
+                  src="http://patrimeph.ensea.fr/kibana7/app/kibana#/visualize/edit/ff5975f0-6530-11ea-8a32-c183c080aac8?embed=true&_g=()"
                 ></iframe>
               </Grid>
             </Grid>
@@ -440,7 +440,7 @@ class Home extends Component {
                                 URLParams={true}
                                 loader="En chargement ..."
                                 showSearch={true}
-                                searchPlaceholder="Taper le nom ici"
+                                searchPlaceholder="Saisir un nom de testateur"
                                 innerClass={{
                                   list: "list"
                                 }}
@@ -487,7 +487,7 @@ class Home extends Component {
                                 URLParams={true}
                                 loader="En chargement ..."
                                 showSearch={true}
-                                searchPlaceholder="Taper le cote ici"
+                                searchPlaceholder="Saisir un nom de lieu"
                                 innerClass={{
                                   list: "list"
                                 }}

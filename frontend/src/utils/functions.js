@@ -552,20 +552,6 @@ export function downloadZipFiles(urls, fileName) {
   });
 }
 
-// footer function pdf
-/*
-function footerPDF() {
-  const date = new Date();
-
-  const footer =
-    "Export réalisé depuis " +
-    getParamConfig("web_url") +
-    ", le " +
-    date.toLocaleDateString("fr-FR");
-
-  return footer;
-}*/
-
 export function generateTestatorHTML(ids) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -694,310 +680,6 @@ export function generateZipPDF(outputsHtml, pdfFilesname) {
     }
   });
 }
-/*
- async function generatePDF2(outputHtml, filename) {
-  return new Promise((resolve, reject) => {
-    try {
-      let outputHtml_ =
-        '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" /></head> <body>';
-      outputHtml_ += outputHtml + "</body></html>";
-      console.log("generate pdf ...");
-      console.log(outputHtml_);
-      const opt = {
-        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-        margin: 1,
-        filename: filename + ".pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-      };
-      html2pdf()
-        .set(opt)
-        .from(outputHtml_)
-        .toPdf()
-        .get("pdf")
-        .then(function(pdf) {
-          const totalPages = pdf.internal.getNumberOfPages();
-          const footer_ = footerPDF();
-          for (let i = 1; i <= totalPages; i++) {
-            pdf.setPage(i);
-            pdf.setFontSize(10);
-            pdf.setTextColor(150);
-            pdf.text(footer_, 0.5, pdf.internal.pageSize.getHeight() - 0.6);
-            pdf.text(
-              String(i) + "/" + String(totalPages),
-              pdf.internal.pageSize.getWidth() - 1,
-              pdf.internal.pageSize.getHeight() - 0.6
-            );
-          }
-        })
-        .save();
-      resolve("succes");
-    } catch (e) {
-      reject("error :" + e);
-    }
-  });
-}*/
-/*
-async function generateWillPDF2(data, testator_data) {
-  return new Promise((resolve, reject) => {
-    try {
-      const months = [
-        "janvier",
-        "février",
-        "mars",
-        "avril",
-        "mai",
-        "juin",
-        "juillet",
-        "août",
-        "septembre",
-        "octobre",
-        "novembre",
-        "décembre"
-      ];
-      const listMenu = {
-        page: "Page",
-        envelope: "Enveloppe",
-        codicil: "Codicille"
-      };
-
-      let outputHtml =
-        '<!DOCTYPE html><html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" /><style> .before { page-break-before: always;} .after { page-break-after: always; } .avoid { page-break-inside: avoid;} </style></head> <body> <div id="root">';
-
-      // Create div infos testateur
-      const will_uri =
-        getParamConfig("web_url") + "/testament/" + data["will_id"];
-      outputHtml +=
-        '<div id="will"> <h3> Testament de ' +
-        data["testator.forename"] +
-        "<span> " +
-        data["testator.surname"] +
-        "</span></h3>";
-      outputHtml +=
-        '<p>Permalien dans l’édition numérique : <a  href="' +
-        will_uri +
-        '" target = "_blank">' +
-        will_uri +
-        " </a></p>";
-      let death_date = Boolean(data["will_contents.death_date"])
-        ? new Date(data["will_contents.death_date"])
-        : null;
-
-      death_date = Boolean(death_date)
-        ? death_date.toLocaleDateString().split("/")
-        : null;
-
-      outputHtml += "<p> Mort pour la France ";
-      outputHtml += +Boolean(death_date)
-        ? " le " +
-          death_date[0] +
-          " " +
-          months[death_date[1] - 1] +
-          " " +
-          death_date[2]
-        : "";
-      outputHtml += Boolean(data["will_contents.death_place_norm"])
-        ? " à "
-        : "";
-      outputHtml += Boolean(data["will_contents.death_place_ref"])
-        ? '<a href="' +
-          getParamConfig("web_url") +
-          "/place/" +
-          data["will_contents.death_place_ref"] +
-          '" target="_blank">' +
-          data["will_contents.death_place_norm"] +
-          "</a>"
-        : data["will_contents.death_place_norm"];
-      outputHtml += "</p>";
-      let will_date = [];
-      if (Boolean(data["will_contents.will_date_range"])) {
-        let date_ = new Date(data["will_contents.will_date_range"]["gte"]);
-        will_date.push(date_.toLocaleDateString().split("/"));
-        if (
-          data["will_contents.will_date_range"]["gte"] !==
-          data["will_contents.will_date_range"]["lte"]
-        ) {
-          date_ = new Date(data["will_contents.will_date_range"]["lte"]);
-          will_date.push(date_.toLocaleDateString().split("/"));
-        }
-      }
-
-      if (
-        will_date.length > 0 ||
-        Boolean(data["will_contents.will_place_norm"])
-      ) {
-        if (will_date.length === 1) {
-          outputHtml +=
-            "<p> Testament rédigé le " +
-            will_date[0][0] +
-            " " +
-            months[will_date[0][1] - 1] +
-            " " +
-            will_date[0][2];
-        } else if (will_date.length === 2) {
-          outputHtml +=
-            "<p> Date de rédaction : " +
-            will_date[0][0] +
-            " " +
-            months[will_date[0][1] - 1] +
-            " " +
-            will_date[0][2] +
-            " et " +
-            will_date[1][0] +
-            " " +
-            months[will_date[1][1] - 1] +
-            " " +
-            will_date[1][2];
-        }
-        if (Boolean(data["will_contents.will_place_norm"])) {
-          outputHtml += " à ";
-          if (Boolean(data["will_contents.will_place_ref"])) {
-            outputHtml +=
-              '<a href="' +
-              getParamConfig("web_url") +
-              "/place/" +
-              data["will_contents.will_place_ref"] +
-              '" target="_blank">' +
-              data["will_contents.will_place_norm"] +
-              "</a>";
-          } else {
-            outputHtml += data["will_contents.will_place_norm"];
-          }
-        }
-        outputHtml += "</p>";
-      }
-
-      outputHtml +=
-        "<p>Cote aux " +
-        data["will_identifier.institution"] +
-        " : " +
-        data["will_identifier.cote"] +
-        "</p>";
-
-      outputHtml +=
-        "<p>" +
-        data["will_physDesc.support"][0].toUpperCase() +
-        data["will_physDesc.support"].slice(1) +
-        "." +
-        data["will_physDesc.handDesc"] +
-        ", " +
-        data["will_physDesc.dim"]["width"] +
-        data["will_physDesc.dim"]["unit"] +
-        " x " +
-        data["will_physDesc.dim"]["height"] +
-        data["will_physDesc.dim"]["unit"] +
-        "</p>";
-      outputHtml +=
-        "<p> Nombre de pages : " + data["will_pages"].length + "</p>";
-
-      outputHtml += "<h4> Les contributeurs :</h4>";
-      data["contributions"].forEach((contributor, i) => {
-        outputHtml +=
-          "<p>" +
-          contributor["resp"][0].toUpperCase() +
-          contributor["resp"].substring(1) +
-          " : " +
-          contributor["persName"].join(", ") +
-          "</p>";
-      });
-
-      outputHtml += "</div>";
-
-      let outputImage = '<div id="image" class="before"> <h4>Image :</h4>';
-      let outputTranscription =
-        '<div id="transcription"> <h4>Transcription :</h4>';
-      let outputEdition =
-        '<div id="edition" class="before"> <h4>Edition :</h4>';
-
-      data["will_pages"].forEach((page, i) => {
-        outputImage +=
-          '<div id="image_' +
-          listMenu[page["page_type"].type] +
-          page["page_type"].id +
-          '" class="after">';
-        const title =
-          "<h5>" +
-          listMenu[page["page_type"].type] +
-          " " +
-          page["page_type"].id +
-          "</h5>";
-        outputImage += title + "</div>";
-        outputTranscription += title + page["transcription"];
-        outputEdition += title + page["edition"];
-      });
-      outputImage += "</div>";
-      outputHtml += outputImage;
-      outputTranscription += "</div>";
-      outputHtml += outputTranscription;
-      outputEdition += "</div>";
-      outputHtml += outputEdition;
-
-      // Add testator information
-      outputHtml += '<div id="will" class="before">' + testator_data + "</div>";
-
-      outputHtml += "</div></body></html>";
-      console.log(outputHtml);
-      const opt = {
-        pagebreak: {
-          mode: ["avoid-all", "css", "legacy"],
-          before: ".before",
-          after: ".after",
-          avoid: ".avoid"
-        },
-        margin: 1,
-        filename: data["will_id"] + ".pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-      };
-
-      html2pdf()
-        .set(opt)
-        .from(outputHtml)
-        .toPdf()
-        .get("pdf")
-        .then(async function(pdf) {
-          await asyncForEach(data["will_pages"], async (page, i) => {
-            await image2base64(page["picture_url"] + "/full/full/0/default.jpg") // you can also to use url
-              .then(response => {
-                pdf.setPage(i + 2);
-                pdf.addImage(
-                  "data:image/jpg;base64," + response,
-                  "JPEG",
-                  1,
-                  2,
-                  5.5,
-                  6.5
-                );
-              })
-              .catch(error => {
-                console.log(error); //Exepection error....
-              });
-          });
-          const totalPages = pdf.internal.getNumberOfPages();
-          const footer_ = footerPDF();
-
-          for (let i = 1; i <= totalPages; i++) {
-            pdf.setPage(i);
-            pdf.setFontSize(10);
-            pdf.setTextColor(150);
-            pdf.text(footer_, 0.5, pdf.internal.pageSize.getHeight() - 0.6);
-            pdf.text(
-              String(i) + "/" + String(totalPages),
-              pdf.internal.pageSize.getWidth() - 1,
-              pdf.internal.pageSize.getHeight() - 0.6
-            );
-          }
-
-          resolve("succes");
-        })
-        .save();
-    } catch (e) {
-      reject("error :" + e);
-    }
-  });
-}*/
 
 export function toDataUrl(src, callback = null, outputFormat = "image/jpg") {
   return new Promise((resolve, reject) => {
@@ -1081,3 +763,30 @@ export function imageLoader(url) {
     });
   });
 }
+
+export const resetPassWord = async user => {
+  try {
+    const host = getParamConfig("web_host");
+    const res = await axios.post(host + "/users/resetPassWord", {
+      email: user.email
+    });
+    console.log("res :", res);
+    return res.data;
+  } catch (err) {
+    console.log("err :", err);
+    return err;
+  }
+};
+
+export const updateMDP = async user => {
+  try {
+    const host = getParamConfig("web_host");
+
+    const res = await axios.post(host + "/users/updateMDP", user);
+
+    return res.data;
+  } catch (err) {
+    console.log("err :", err);
+    return err;
+  }
+};

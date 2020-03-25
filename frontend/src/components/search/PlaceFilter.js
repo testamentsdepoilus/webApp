@@ -166,7 +166,7 @@ class PlaceFilter extends React.Component {
               URLParams={true}
               loader="En chargement ..."
               showSearch={true}
-              searchPlaceholder="Taper le lieu ici"
+              searchPlaceholder="Saisir un nom de lieu"
               innerClass={{
                 list: "list"
               }}
