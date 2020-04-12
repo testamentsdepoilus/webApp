@@ -9,7 +9,7 @@ import {
   Breadcrumbs,
   Link,
   Typography,
-  Grid
+  Grid,
 } from "@material-ui/core";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
@@ -18,7 +18,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
-  equalsArray
+  equalsArray,
 } from "../utils/functions";
 
 import Footer from "./Footer";
@@ -31,7 +31,7 @@ class Wills extends Component {
       order: "asc",
       value: 3,
       curPage: 0,
-      cur_list: []
+      cur_list: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleRenderStats = this.handleRenderStats.bind(this);
@@ -43,49 +43,49 @@ class Wills extends Component {
         this.setState({
           value: event.target.value,
           field: "testator.name_norm.keyword",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
           field: "testator.name_norm.keyword",
-          order: "desc"
+          order: "desc",
         });
         break;
       case 3:
         this.setState({
           value: event.target.value,
           field: "will_contents.will_date",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 4:
         this.setState({
           value: event.target.value,
           field: "will_contents.will_date",
-          order: "desc"
+          order: "desc",
         });
         break;
       case 5:
         this.setState({
           value: event.target.value,
           field: "will_identifier.cote.keyword",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 6:
         this.setState({
           value: event.target.value,
           field: "will_identifier.cote.keyword",
-          order: "desc"
+          order: "desc",
         });
         break;
       default:
         this.setState({
           value: event.target.value,
           field: "will_contents.will_date",
-          order: "asc"
+          order: "asc",
         });
         break;
     }
@@ -148,16 +148,16 @@ class Wills extends Component {
               pagination={true}
               paginationAt="top"
               size={1}
-              pages={5}
+              pages={10}
               sortBy={this.state.order}
               showEndPage={false}
               renderResultStats={this.handleRenderStats}
               URLParams={false}
               innerClass={{
                 resultsInfo: "resultsInfo",
-                pagination: "pagination"
+                pagination: "pagination",
               }}
-              render={function(res) {
+              render={function (res) {
                 return res.data.map((item, j) => {
                   window.history.replaceState(
                     getParamConfig("web_url"),
@@ -166,7 +166,7 @@ class Wills extends Component {
                   );
 
                   const curPage_ =
-                    Math.floor(res.resultStats.currentPage / 5) * 5;
+                    Math.floor(res.resultStats.currentPage / 10) * 10;
                   let sort_ = {};
                   sort_[this.state.field] = { order: this.state.order };
                   getHitsFromQuery(
@@ -175,18 +175,18 @@ class Wills extends Component {
                       getParamConfig("es_index_wills"),
                     JSON.stringify({
                       from: curPage_,
-                      size: 5,
-                      sort: [sort_]
+                      size: 10,
+                      sort: [sort_],
                     })
                   )
-                    .then(data => {
+                    .then((data) => {
                       if (!equalsArray(data, this.state.cur_list)) {
                         this.setState({
-                          cur_list: data
+                          cur_list: data,
                         });
                       }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                       console.log("error :", error);
                     });
                   const resultList = (

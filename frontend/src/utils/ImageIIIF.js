@@ -27,6 +27,11 @@ export default class ImageIIF extends React.Component {
         url: this.props.url + "/full/full/0/default.jpg",
         crossOriginPolicy: "Anonymous",
         ajaxWithCredentials: false
+      },
+      showRotationControl: true,
+      // Enable touch rotation on tactile devices
+      gestureSettingsTouch: {
+        pinchRotate: true
       }
     });
   }

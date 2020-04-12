@@ -3,41 +3,21 @@ import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { publish } from "../../utils/functions";
+import { publish, updatePost } from "../../utils/functions";
 import {
   TextField,
   Button,
   Typography,
   Grid,
-  InputAdornment,
   IconButton,
   NativeSelect,
   Paper,
   DialogTitle,
   DialogContent,
-  Dialog
+  Dialog,
+  InputLabel,
 } from "@material-ui/core";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
-
-function uploadImageCallBack(file) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.imgur.com/3/image");
-    xhr.setRequestHeader("Authorization", "Client-ID XXXXX");
-    const data = new FormData();
-    data.append("image", file);
-    xhr.send(data);
-    xhr.addEventListener("load", () => {
-      const response = JSON.parse(xhr.responseText);
-      resolve(response);
-    });
-    xhr.addEventListener("error", () => {
-      const error = JSON.parse(xhr.responseText);
-      reject(error);
-    });
-  });
-}
 
 export default class NewPost extends Component {
   constructor(props) {
@@ -50,63 +30,75 @@ export default class NewPost extends Component {
       label: null,
       in_image: null,
       url_image: "",
-      type: props.type,
+
       author: "",
       message: "",
       openAlert: false,
-      openDialog: false
+      openDialog: false,
+      order: props.favorisList.length + 1,
     };
+    this.handleDisplay = this.handleDisplay.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleAlertClose = this.handleAlertClose.bind(this);
+    this.type_title = ["Article", "Actualité", "A propos"];
   }
 
-  handleTypeChange = event => {
+  handleOrderChange = (event) => {
     this.setState({
-      type: event.target.value
-    });
-  };
-  onEditorStateResumeChange = editorState => {
-    this.setState({
-      editorStateResume: editorState
+      order: parseInt(event.target.value, 10),
     });
   };
 
-  onEditorStateDetailChange = editorState => {
+  handleTypeChange = (event) => {
     this.setState({
-      editorStateDetail: editorState
+      type: parseInt(event.target.value, 10),
     });
   };
 
-  handleFileChange = event => {
+  onEditorStateResumeChange = (editorState) => {
+    this.setState({
+      editorStateResume: editorState,
+    });
+  };
+
+  onEditorStateDetailChange = (editorState) => {
+    this.setState({
+      editorStateDetail: editorState,
+    });
+  };
+
+  handleFileChange = (event) => {
     if (event.target.files[0]) {
       const reader = new FileReader();
       const in_file = event.target.files[0];
       const image_name = event.target.files[0]["name"];
-      reader.onloadend = function(e) {
+      reader.onloadend = function (e) {
         this.setState({
           in_image: e.target.result,
           url_image: image_name,
           out_image: "",
           fileInput: in_file,
-          label: ""
+          label: "",
         });
       }.bind(this);
       reader.readAsDataURL(event.target.files[0]);
     }
   };
 
-  handleChangeText = e => {
+  handleChangeText = (e) => {
     this.setState({
       url_image: e.target.value,
-      in_image: null
+      in_image: null,
     });
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     const detail_raw = convertToRaw(
@@ -115,34 +107,72 @@ export default class NewPost extends Component {
     const resume_raw = convertToRaw(
       this.state.editorStateResume.getCurrentContent()
     );
-    const found_detail = detail_raw["blocks"].find(item => {
+    const found_detail = detail_raw["blocks"].find((item) => {
       return item["text"].trim().length > 0;
     });
 
-    const found_resume = resume_raw["blocks"].find(item => {
+    const found_resume = resume_raw["blocks"].find((item) => {
       return item["text"].trim().length > 0;
     });
+    const type = parseInt(this.props.type, 10);
     if (this.state.title) {
       const item = {
         title: this.state.title,
         summary: Boolean(found_resume) ? draftToHtml(resume_raw) : "",
         detail: Boolean(found_detail) ? draftToHtml(detail_raw) : "",
-        type: parseInt(this.state.type, 10),
+        type: type,
         author: this.state.author,
         selected: false,
-        created: new Date()
+        created: new Date(),
       };
+      if ([1, 3].includes(type)) {
+        item["order"] = parseInt(this.state.order, 10);
+      }
 
-      publish(item).then(res => {
+      publish(item).then((res) => {
         if (res.status === 200) {
-          this.setState({
-            openAlert: true,
-            message: res.mess
-          });
+          if ([1, 3].includes(type)) {
+            const ids = this.props.favorisList
+              .slice(this.state.order - 1)
+              .map((item) => item._id);
+            let doc = [];
+            for (let i = 0; i < ids.length; i++) {
+              doc.push({ order: this.state.order + i + 1 });
+            }
+            const req = {
+              id: ids,
+              doc: doc,
+            };
+            if (ids.length > 0) {
+              updatePost(req).then((res) => {
+                if (res.status === 200) {
+                  this.setState({
+                    openAlert: true,
+                    message: res.mess,
+                  });
+                } else {
+                  this.setState({
+                    openAlert: true,
+                    message: res.err,
+                  });
+                }
+              });
+            } else {
+              this.setState({
+                openAlert: true,
+                message: res.mess,
+              });
+            }
+          } else {
+            this.setState({
+              openAlert: true,
+              message: res.mess,
+            });
+          }
         } else {
           this.setState({
             openAlert: true,
-            message: res.err
+            message: res.err,
           });
         }
       });
@@ -152,36 +182,40 @@ export default class NewPost extends Component {
   handleAlertClose() {
     this.setState({
       openAlert: false,
-      message: ""
+      message: "",
     });
+    document.location.reload();
   }
 
   handleDisplay() {
     this.setState({
-      openDialog: true
+      openDialog: true,
     });
   }
 
   handleClose() {
     this.setState({
-      openDialog: false
+      openDialog: false,
     });
   }
 
-  convertToHtml = object => {
+  convertToHtml = (object) => {
     const obj_raw = convertToRaw(object.getCurrentContent());
 
-    const found_obj = obj_raw["blocks"].find(item => {
+    const found_obj = obj_raw["blocks"].find((item) => {
       return item["text"].trim().length > 0;
     });
     return Boolean(found_obj) ? draftToHtml(obj_raw) : "";
   };
+
   render() {
-    let src_img = null;
-    if (this.state.in_image) {
-      src_img = this.state.in_image;
-    } else if (this.state.url_image) {
-      src_img = this.state.url_image;
+    let option = [];
+    for (let i = 1; i < this.props.favorisList.length + 2; i++) {
+      option.push(
+        <option value={i} key={i}>
+          {i}
+        </option>
+      );
     }
 
     return (
@@ -223,74 +257,50 @@ export default class NewPost extends Component {
                 />
               </Grid>
               <Grid item>
-                <NativeSelect
-                  id="type"
-                  className="type"
-                  variant="outlined"
-                  value={this.state.type}
-                  name="type"
-                  onChange={this.handleTypeChange}
-                >
-                  <option value={1}>Article</option>
-                  <option value={2}>Actualité</option>
-                  <option value={3}>A propos</option>
-                </NativeSelect>
+                <Typography>
+                  {this.type_title[parseInt(this.props.type, 10) - 1]}
+                </Typography>
               </Grid>
             </Grid>
-
-            <TextField
-              id="title"
-              variant="outlined"
-              fullWidth
-              label="Titre"
-              type="title"
-              name="title"
-              autoFocus
-              value={this.state.title}
-              onChange={this.onChange}
-              className="textField"
-            />
-
-            <input
-              accept="image/*"
-              className="input"
-              id="contained-button-file"
-              type="file"
-              onChange={this.handleFileChange}
-            />
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item xs={6}>
                 <TextField
-                  id="outlined-full-width"
-                  className="textField"
-                  label="Image"
-                  placeholder="Copie url image ici"
-                  margin="normal"
+                  id="title"
                   variant="outlined"
-                  onChange={this.handleChangeText}
-                  name="file"
-                  value={this.state.url_image}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <label htmlFor="contained-button-file">
-                          <Button component="span" className="button">
-                            <CloudUploadIcon className="rightIcon" />
-                          </Button>
-                        </label>
-                      </InputAdornment>
-                    )
-                  }}
+                  fullWidth
+                  label="Titre"
+                  type="title"
+                  name="title"
+                  autoFocus
+                  value={this.state.title}
+                  onChange={this.onChange}
+                  className="textField"
                 />
               </Grid>
-
-              <Grid item>
-                {src_img ? (
-                  <img src={src_img} id="img" alt="toto" className="img" />
-                ) : (
-                  ""
-                )}
-              </Grid>
+              {[1, 3].includes(parseInt(this.props.type, 10)) ? (
+                <Grid item>
+                  <InputLabel id="order-select-label">
+                    Ordre d'affichage
+                  </InputLabel>
+                  <NativeSelect
+                    id="order"
+                    className="order"
+                    variant="outlined"
+                    value={this.state.order}
+                    name="order"
+                    onChange={this.handleOrderChange}
+                  >
+                    {option}
+                  </NativeSelect>
+                </Grid>
+              ) : (
+                ""
+              )}
             </Grid>
             <div>
               <Typography className="title">Résumé</Typography>
@@ -302,9 +312,8 @@ export default class NewPost extends Component {
                 onEditorStateChange={this.onEditorStateResumeChange}
                 toolbar={{
                   image: {
-                    uploadCallback: uploadImageCallBack,
-                    alt: { present: true, mandatory: true }
-                  }
+                    alt: { present: true, mandatory: true },
+                  },
                 }}
               />
             </div>
@@ -318,9 +327,8 @@ export default class NewPost extends Component {
                 onEditorStateChange={this.onEditorStateDetailChange}
                 toolbar={{
                   image: {
-                    uploadCallback: uploadImageCallBack,
-                    alt: { present: true, mandatory: true }
-                  }
+                    alt: { present: true, mandatory: true },
+                  },
                 }}
               />
             </div>
@@ -362,8 +370,9 @@ export default class NewPost extends Component {
           handleClose={this.handleAlertClose}
         />
         <Dialog
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
+          aria-labelledby="simple-modal-dialog"
+          fullWidth={true}
+          maxWidth="md"
           open={this.state.openDialog}
           onClose={this.handleClose}
         >
@@ -374,7 +383,7 @@ export default class NewPost extends Component {
           </DialogTitle>
 
           <DialogContent>
-            <Grid container direction="column" alignItems="center" spacing={3}>
+            <Grid container direction="column" spacing={3}>
               <Grid item>
                 <Paper>
                   <Typography>Titre : {this.state.title}</Typography>
@@ -385,7 +394,7 @@ export default class NewPost extends Component {
                   <Typography>Résumé :</Typography>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: this.convertToHtml(this.state.editorStateResume)
+                      __html: this.convertToHtml(this.state.editorStateResume),
                     }}
                   ></div>
                 </Paper>
@@ -395,7 +404,7 @@ export default class NewPost extends Component {
                   <Typography>Détail :</Typography>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: this.convertToHtml(this.state.editorStateDetail)
+                      __html: this.convertToHtml(this.state.editorStateDetail),
                     }}
                   ></div>
                 </Paper>

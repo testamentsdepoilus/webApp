@@ -67,34 +67,26 @@ router.post("/removePost", function(req, res, next) {
 
 /* POST update  */
 router.post("/updatePost", function(req, res, next) {
-  const id = req.body.id;
-  delete req.body.id;
-  {
-    /*const data = {
-    user_id: req.body.user_id,
-    title: req.body.title,
-    author: req.body.author,
-    summary: req.body.summary,
-    detail: req.body.detail,
-    type: req.body.type,
-    created: today
-  };*/
-  }
+  const ids = req.body.id;
+  const doc = req.body.doc;
 
   let isFailed = false;
-  client.update({
-    index: es_index,
-    id: id,
-    body: {
-      doc: req.body
-    }
-  }),
-    err => {
-      if (err) {
-        isFailed = true;
+  let i = 0;
+  for (let id of ids) {
+    client.update({
+      index: es_index,
+      id: id,
+      body: {
+        doc: doc[i]
       }
-    };
-
+    }),
+      err => {
+        if (err) {
+          isFailed = true;
+        }
+      };
+    i++;
+  }
   if (isFailed) {
     res.send({
       status: 400,

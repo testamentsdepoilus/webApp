@@ -10,6 +10,7 @@ import isEqual from "lodash/isEqual";
 import React from "react";
 import TestatorDisplay from "../components/TestatorDisplay";
 import ReactDOM from "react-dom";
+import PlaceDisplay from "../components/PlaceDisplay";
 
 // Global declaration for jsPDF (needed before call html())
 window.html2canvas = html2canvas;
@@ -593,6 +594,61 @@ export function generateTestatorHTML(ids) {
                     id={data[0]["_id"]}
                     data={data[0]._source}
                   />,
+                  document.getElementById("testator_none")
+                );
+
+                output_html[i] = document.getElementById(
+                  "testator_notice"
+                ).innerHTML;
+              })
+              .catch(err => {
+                console.log("Erreur :", err);
+              });
+          })
+          .catch(error => {
+            console.log("error :", error);
+          });
+      });
+
+      resolve(output_html);
+    } catch (e) {
+      reject("error :" + e);
+    }
+  });
+}
+
+export function generatePlaceHTML(ids) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let output_html = ids.map(id => "");
+      await asyncForEach(ids, async (id, i) => {
+        await getHitsFromQuery(
+          getParamConfig("es_host") + "/" + getParamConfig("es_index_places"),
+          JSON.stringify({
+            query: {
+              term: {
+                _id: id
+              }
+            }
+          })
+        )
+          .then(async data => {
+            await getHitsFromQuery(
+              getParamConfig("es_host") +
+                "/" +
+                getParamConfig("es_index_wills"),
+              JSON.stringify({
+                _source: ["_id", "will_contents.will_date_range", "place.ref"],
+                query: {
+                  term: {
+                    "place.ref": data[0]._id
+                  }
+                }
+              })
+            )
+              .then(hits => {
+                ReactDOM.render(
+                  <PlaceDisplay id={data[0]["_id"]} data={data[0]._source} />,
                   document.getElementById("testator_none")
                 );
 

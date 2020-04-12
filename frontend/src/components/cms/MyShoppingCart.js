@@ -26,7 +26,7 @@ import {
   downloadZipFiles,
   generatePDF,
   generateZipPDF,
-  generateTestatorHTML
+  generateTestatorHTML,
 } from "../../utils/functions";
 import {
   Button,
@@ -44,13 +44,13 @@ import {
   CircularProgress,
   FormControlLabel,
   Breadcrumbs,
-  Link
+  Link,
 } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import Footer from "../Footer";
 
 // Up to top page click
-window.onscroll = function() {
+window.onscroll = function () {
   scrollFunction();
 };
 
@@ -84,7 +84,7 @@ function stableSort(array, cmp) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilizedThis.map(el => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 }
 
 function getSorting(order, orderBy) {
@@ -94,7 +94,7 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "title", numeric: false, disablePadding: false, label: "Titre" }
+  { id: "title", numeric: false, disablePadding: false, label: "Titre" },
 ];
 
 function EnhancedTableHead(props) {
@@ -104,7 +104,7 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    title
+    title,
   } = props;
 
   const title_ = {
@@ -112,7 +112,7 @@ function EnhancedTableHead(props) {
     myTestators: "Testateur",
     myPlaces: "Lieu",
     myUnits: "Unité militaire",
-    mySearches: "Recherche"
+    mySearches: "Recherche",
   };
   return (
     <TableHead>
@@ -142,7 +142,7 @@ function EnhancedTableHead(props) {
             />
           </TableCell>
         </Tooltip>
-        {headCells.map(headCell => (
+        {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
@@ -165,17 +165,17 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
-const EnhancedTableToolbar = props => {
+const EnhancedTableToolbar = (props) => {
   const { numSelected, actionButton, title } = props;
   const title_ = {
     myWills: "Les testaments",
     myTestators: "Les testateurs",
     myPlaces: "Les lieux",
     myUnits: "Les unités militaires",
-    mySearches: "Mes recherches"
+    mySearches: "Mes recherches",
   };
   return (
     <Toolbar className="toolBar" id={title}>
@@ -218,9 +218,9 @@ const EnhancedTableToolbar = props => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   actionButton: PropTypes.element.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
-const AlertMessage = props => {
+const AlertMessage = (props) => {
   const { openAlert, handleClose, message } = props;
 
   return (
@@ -231,7 +231,7 @@ const AlertMessage = props => {
       onClose={handleClose}
       autoHideDuration={3000}
       ContentProps={{
-        "aria-describedby": "message-id"
+        "aria-describedby": "message-id",
       }}
       message={<span id="message-id">{message}</span>}
     ></Snackbar>
@@ -241,7 +241,7 @@ const AlertMessage = props => {
 AlertMessage.propTypes = {
   openAlert: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };
 
 export default class MyShoppingCart extends Component {
@@ -253,7 +253,7 @@ export default class MyShoppingCart extends Component {
         myTestators: "asc",
         myPlaces: "asc",
         myUnits: "asc",
-        mySearches: "asc"
+        mySearches: "asc",
       },
       orderBy: "title",
       selected: {
@@ -261,55 +261,56 @@ export default class MyShoppingCart extends Component {
         myTestators: [],
         myPlaces: [],
         myUnits: [],
-        mySearches: []
+        mySearches: [],
       },
       data: {
         myWills: [],
         myTestators: [],
         myPlaces: [],
         myUnits: [],
-        mySearches: []
+        mySearches: [],
       },
       open: false,
       openAlert: false,
       mess: "",
       type: null,
-      isLoading: false
+      isLoading: false,
     };
     this.userToken = getUserToken();
     this.handleExportTestator = this.handleExportTestator.bind(this);
+    this.handleExportPlace = this.handleExportPlace.bind(this);
     this.handleRemoveWill = this.handleRemoveWill.bind(this);
     this.handleDialogConfirm = this.handleDialogConfirm.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
   }
 
-  handleRequestSort = title => {
-    return function(property) {
+  handleRequestSort = (title) => {
+    return function (property) {
       const isDesc =
         this.state.orderBy === property && this.state.order[title] === "desc";
       let order_ = this.state.order;
       order_[title] = isDesc ? "asc" : "desc";
       this.setState({
         order: order_,
-        orderBy: property
+        orderBy: property,
       });
     }.bind(this);
   };
 
   handleSelectAllClick = (data, title) => {
-    return function(event) {
+    return function (event) {
       let selected_ = this.state.selected;
       if (event.target.checked) {
         selected_[title] =
           title === "mySearches"
-            ? data.map(n => n["label"])
-            : data.map(n => n["_id"]);
+            ? data.map((n) => n["label"])
+            : data.map((n) => n["_id"]);
 
         //localStorage.setItem("favorisItems", selected_);
         this.setState({
           selected: selected_,
-          type: title
+          type: title,
         });
 
         return;
@@ -317,17 +318,13 @@ export default class MyShoppingCart extends Component {
         selected_[title] = [];
         //localStorage.setItem("favorisItems", selected_);
         this.setState({
-          selected: selected_
+          selected: selected_,
         });
       }
     }.bind(this);
   };
 
   handleClick = (name, title) => {
-    console.log("this.state.selected :", this.state.selected);
-    console.log("name :", name);
-    console.log("title :", title);
-
     const selectedIndex = this.state.selected[title].indexOf(name);
     let newSelected = [];
 
@@ -345,23 +342,23 @@ export default class MyShoppingCart extends Component {
     }
     let selected_ = this.state.selected;
     selected_[title] = newSelected;
-    //localStorage.setItem("favorisItems", selected_);
+    localStorage.setItem("favorisItems", JSON.stringify(selected_));
     this.setState({
       selected: selected_,
-      type: title
+      type: title,
     });
   };
 
   handleRemoveWill(title) {
     this.setState({
       open: true,
-      type: title
+      type: title,
     });
   }
 
   handleDialogClose() {
     this.setState({
-      open: false
+      open: false,
     });
   }
 
@@ -370,21 +367,21 @@ export default class MyShoppingCart extends Component {
     myBackups_[this.state.type] =
       this.state.type === "mySearches"
         ? myBackups_[this.state.type].filter(
-            item => !this.state.selected[this.state.type].includes(item.label)
+            (item) => !this.state.selected[this.state.type].includes(item.label)
           )
         : myBackups_[this.state.type].filter(
-            item => !this.state.selected[this.state.type].includes(item)
+            (item) => !this.state.selected[this.state.type].includes(item)
           );
 
     let newItem = {
       email: this.userToken.email,
-      myBackups: myBackups_
+      myBackups: myBackups_,
     };
 
-    updateMyListWills(newItem).then(res => {
+    updateMyListWills(newItem).then((res) => {
       if (res.status === 200) {
         this.setState({
-          open: false
+          open: false,
         });
         localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         document.location.reload();
@@ -393,7 +390,7 @@ export default class MyShoppingCart extends Component {
         this.setState({
           open: false,
           openAlert: true,
-          mess: err
+          mess: err,
         });
       }
     });
@@ -404,7 +401,7 @@ export default class MyShoppingCart extends Component {
   }
 
   handleDisplayWill = (row, title) => {
-    return function(e) {
+    return function (e) {
       let uri_component = "testament";
       switch (title) {
         case "myWills":
@@ -444,18 +441,16 @@ export default class MyShoppingCart extends Component {
     };
   };
 
-  handleCompareWill = title => {
-    window.open(
+  handleCompareWill = (title) => {
+    window.location.href =
       getParamConfig("web_url") +
-        "/compare/" +
-        this.state.selected[title].join("+"),
-      "_blank"
-    );
+      "/compare/" +
+      this.state.selected[title].join("+");
   };
 
   handleExportWill() {
     const myBackups_ = JSON.parse(localStorage.myBackups);
-    const myWills_ = myBackups_.myWills.filter(item =>
+    const myWills_ = myBackups_.myWills.filter((item) =>
       this.state.selected[this.state.type].includes(item)
     );
 
@@ -465,7 +460,7 @@ export default class MyShoppingCart extends Component {
         "will_" + myWills_[0] + ".xml"
       );
     } else if (myWills_.length > 1) {
-      let urls = myWills_.map(item => {
+      let urls = myWills_.map((item) => {
         const url = getParamConfig("web_url") + "/files/will_" + item + ".xml";
         return url;
       });
@@ -475,21 +470,21 @@ export default class MyShoppingCart extends Component {
 
   handleExportTestator() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     const myBackups_ = JSON.parse(localStorage.myBackups);
-    const myTestators_ = myBackups_.myTestators.filter(item =>
+    const myTestators_ = myBackups_.myTestators.filter((item) =>
       this.state.selected[this.state.type].includes(item)
     );
-    let output_filename = myTestators_.map(id => "testateur_" + id);
+    let output_filename = myTestators_.map((id) => "testateur_" + id);
     generateTestatorHTML(myTestators_)
-      .then(outputHTML => {
+      .then((outputHTML) => {
         if (outputHTML.length === 1) {
           const inputItem = {
             outputHtml: outputHTML[0],
-            filename: "Projet_TdP_" + output_filename[0]
+            filename: "Projet_TdP_" + output_filename[0],
           };
-          generatePDF(inputItem).then(res => {
+          generatePDF(inputItem).then((res) => {
             if (res.status === 200) {
               downloadFile(
                 getParamConfig("web_url") +
@@ -499,44 +494,101 @@ export default class MyShoppingCart extends Component {
                 output_filename[0] + ".pdf"
               );
               this.setState({
-                isLoading: false
+                isLoading: false,
               });
             } else {
               const err = res.err ? res.err : "Connexion au serveur a échoué !";
               console.log(err);
               this.setState({
-                isLoading: false
+                isLoading: false,
               });
             }
           });
         } else if (outputHTML.length > 1) {
           generateZipPDF(outputHTML, output_filename)
-            .then(res => {
-              downloadZipFiles(res, "testateurs.zip");
+            .then((res) => {
+              downloadZipFiles(res, "Projet_TdP_testateurs.zip");
               this.setState({
-                isLoading: false
+                isLoading: false,
               });
             })
-            .catch(e => {
+            .catch((e) => {
               this.setState({
-                isLoading: false
+                isLoading: false,
               });
               console.log(e);
             });
         }
       })
-      .catch(e => console.log("error :" + e));
+      .catch((e) => console.log("error :" + e));
+  }
+
+  handleExportPlace() {
+    this.setState({
+      isLoading: true,
+    });
+    const myBackups_ = JSON.parse(localStorage.myBackups);
+    const myPlaces_ = myBackups_.myPlaces.filter((item) =>
+      this.state.selected[this.state.type].includes(item)
+    );
+    let output_filename = myPlaces_.map((id) => "lieu_" + id);
+    generateTestatorHTML(myPlaces_)
+      .then((outputHTML) => {
+        if (outputHTML.length === 1) {
+          const inputItem = {
+            outputHtml: outputHTML[0],
+            filename: "Projet_TdP_" + output_filename[0],
+          };
+          generatePDF(inputItem).then((res) => {
+            if (res.status === 200) {
+              downloadFile(
+                getParamConfig("web_url") +
+                  "/outputPDF/" +
+                  output_filename[0] +
+                  ".pdf",
+                output_filename[0] + ".pdf"
+              );
+              this.setState({
+                isLoading: false,
+              });
+            } else {
+              const err = res.err ? res.err : "Connexion au serveur a échoué !";
+              console.log(err);
+              this.setState({
+                isLoading: false,
+              });
+            }
+          });
+        } else if (outputHTML.length > 1) {
+          generateZipPDF(outputHTML, output_filename)
+            .then((res) => {
+              downloadZipFiles(res, "Projet_TdP_lieux.zip");
+              this.setState({
+                isLoading: false,
+              });
+            })
+            .catch((e) => {
+              this.setState({
+                isLoading: false,
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch((e) => console.log("error :" + e));
   }
 
   setDefaultView(data, title, actionButton) {
-    const isSelected = name => this.state.selected[title].indexOf(name) !== -1;
+    const isSelected = (name) =>
+      this.state.selected[title].indexOf(name) !== -1;
     const title_norm = {
       myWills: "l'édition du testament",
       myTestators: "la notice du testateur",
       myPlaces: "la notice du lieu",
       myUnits: "la notice de l'unité militaire",
-      mySearches: "la recherche"
+      mySearches: "la recherche",
     };
+    console.log("this.state.selected :", this.state.selected);
     return (
       <TableContainer component={Paper} className="paper">
         <EnhancedTableToolbar
@@ -581,7 +633,7 @@ export default class MyShoppingCart extends Component {
                 >
                   {title === "mySearches" ? (
                     <TableCell
-                      onClick={envent => this.handleClick(row.label, title)}
+                      onClick={(envent) => this.handleClick(row.label, title)}
                       role="checkbox"
                       padding="checkbox"
                     >
@@ -592,7 +644,7 @@ export default class MyShoppingCart extends Component {
                     </TableCell>
                   ) : (
                     <TableCell
-                      onClick={event => this.handleClick(row["_id"], title)}
+                      onClick={(event) => this.handleClick(row["_id"], title)}
                       role="checkbox"
                       padding="checkbox"
                     >
@@ -642,9 +694,9 @@ export default class MyShoppingCart extends Component {
 
   componentDidMount() {
     let data_ = this.state.data;
-    /*const favorisItems_ = Boolean(localStorage.favorisItems)
-      ? JSON.parse(localStorage.myBackups)
-      : {};*/
+    const favorisItems_ = Boolean(localStorage.favorisItems)
+      ? JSON.parse(localStorage.favorisItems)
+      : null;
     const myBackups_ = Boolean(localStorage.myBackups)
       ? JSON.parse(localStorage.myBackups)
       : {};
@@ -654,24 +706,24 @@ export default class MyShoppingCart extends Component {
         JSON.stringify({
           query: {
             ids: {
-              values: myBackups_.myWills
-            }
-          }
+              values: myBackups_.myWills,
+            },
+          },
         })
       )
-        .then(data => {
-          data_["myWills"] = data.map(item => {
+        .then((data) => {
+          data_["myWills"] = data.map((item) => {
             const output = {
               _id: item["_id"],
-              title: item._source["will_identifier.name"]
+              title: item._source["will_identifier.name"],
             };
             return output;
           });
           this.setState({
-            data: data_
+            data: data_,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error :", error);
         });
     }
@@ -681,25 +733,25 @@ export default class MyShoppingCart extends Component {
         JSON.stringify({
           query: {
             ids: {
-              values: myBackups_.myTestators
-            }
-          }
+              values: myBackups_.myTestators,
+            },
+          },
         })
       )
-        .then(data => {
-          data_["myTestators"] = data.map(item => {
+        .then((data) => {
+          data_["myTestators"] = data.map((item) => {
             const output = {
               _id: item["_id"],
-              title: item._source["persName.fullProseForm"]
+              title: item._source["persName.fullProseForm"],
             };
             return output;
           });
 
           this.setState({
-            data: data_
+            data: data_,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error :", error);
         });
     }
@@ -709,25 +761,25 @@ export default class MyShoppingCart extends Component {
         JSON.stringify({
           query: {
             ids: {
-              values: myBackups_.myPlaces
-            }
-          }
+              values: myBackups_.myPlaces,
+            },
+          },
         })
       )
-        .then(data => {
-          data_["myPlaces"] = data.map(item => {
+        .then((data) => {
+          data_["myPlaces"] = data.map((item) => {
             const output = {
               _id: item["_id"],
-              title: item._source["city"]
+              title: item._source["city"],
             };
             return output;
           });
 
           this.setState({
-            data: data_
+            data: data_,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error :", error);
         });
     }
@@ -737,25 +789,25 @@ export default class MyShoppingCart extends Component {
         JSON.stringify({
           query: {
             ids: {
-              values: myBackups_.myUnits
-            }
-          }
+              values: myBackups_.myUnits,
+            },
+          },
         })
       )
-        .then(data => {
-          data_["myUnits"] = data.map(item => {
+        .then((data) => {
+          data_["myUnits"] = data.map((item) => {
             const output = {
               _id: item["_id"],
-              title: item._source["unit"]
+              title: item._source["unit"],
             };
             return output;
           });
 
           this.setState({
-            data: data_
+            data: data_,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error :", error);
         });
     }
@@ -764,22 +816,22 @@ export default class MyShoppingCart extends Component {
         ? myBackups_.mySearches
         : [];
       this.setState({
-        data: data_
+        data: data_,
       });
     }
-    /*if (Object.keys(favorisItems_).length > 0) {
+    if (Boolean(favorisItems_)) {
       this.setState({
-        selected: favorisItems_
+        selected: favorisItems_,
       });
-    }*/
+    }
   }
 
-  topFunction = function() {
+  topFunction = function () {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   };
 
-  exportRender = function(title) {
+  exportRender = function (title) {
     let output = null;
     switch (title) {
       case "myWills":
@@ -880,7 +932,7 @@ export default class MyShoppingCart extends Component {
     return output;
   };
 
-  actionButton = function(title) {
+  actionButton = function (title) {
     return (
       <Grid
         id={"actionBt_" + title}
@@ -899,7 +951,7 @@ export default class MyShoppingCart extends Component {
                     ? false
                     : true
                 }
-                onClick={event => this.handleRemoveWill(title)}
+                onClick={(event) => this.handleRemoveWill(title)}
                 aria-label="delete"
               >
                 <DeleteIcon />
@@ -921,7 +973,7 @@ export default class MyShoppingCart extends Component {
                         ? false
                         : true
                     }
-                    onClick={event => this.handleCompareWill(event, "myWills")}
+                    onClick={(event) => this.handleCompareWill("myWills")}
                     aria-label="compare"
                   >
                     <CompareIcon />
@@ -933,11 +985,7 @@ export default class MyShoppingCart extends Component {
             <Grid item>
               <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
                 <span>
-                  <IconButton
-                    onClick={this.handleCompareWill}
-                    aria-label="compare"
-                    disabled
-                  >
+                  <IconButton aria-label="compare" disabled>
                     <CompareIcon />
                   </IconButton>
                 </span>

@@ -4,23 +4,84 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Grid
+  Grid,
+  IconButton,
 } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import PlaceFilter from "./PlaceFilter";
+import ClearIcon from "@material-ui/icons/Clear";
 
 export default class CustumerDataSearch extends Component {
   constructor() {
     super();
     this.state = {
-      displayMore: false
+      displayMore: false,
+      testator: "",
+      unit: "",
+      occupation: "",
+      institution: "",
+      notoriale: "",
+      cote: "",
     };
+
     this.handleClick = this.handleClick.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+    this.handleTestatorChange = this.handleTestatorChange.bind(this);
+    this.handleUnitChange = this.handleUnitChange.bind(this);
+    this.handleOccupationChange = this.handleOccupationChange.bind(this);
+    this.handleNotorialeChange = this.handleNotorialeChange.bind(this);
+    this.handleCoteChange = this.handleCoteChange.bind(this);
+    this.handleInstitutionChange = this.handleInstitutionChange.bind(this);
   }
   handleClick() {
     this.setState({
-      displayMore: !this.state.displayMore
+      displayMore: !this.state.displayMore,
+    });
+  }
+
+  handleClear(value) {
+    return function (event) {
+      this.setState({
+        testator: value,
+      });
+    }.bind(this);
+  }
+
+  handleTestatorChange(value) {
+    console.log("value :", value);
+    this.setState({
+      testator: value,
+    });
+  }
+
+  handleUnitChange(value) {
+    this.setState({
+      unit: value,
+    });
+  }
+
+  handleCoteChange(value) {
+    this.setState({
+      cote: value,
+    });
+  }
+
+  handleInstitutionChange(value) {
+    this.setState({
+      institution: value,
+    });
+  }
+
+  handleNotorialeChange(value) {
+    this.setState({
+      notoriale: value,
+    });
+  }
+
+  handleOccupationChange(value) {
+    this.setState({
+      occupation: value,
     });
   }
 
@@ -57,7 +118,7 @@ export default class CustumerDataSearch extends Component {
       representant: "représentant",
       represantant: "représantant",
       facon: "façon",
-      ingenieur: "ingénieur"
+      ingenieur: "ingénieur",
     };
     return (
       <ExpansionPanel>
@@ -68,45 +129,58 @@ export default class CustumerDataSearch extends Component {
         >
           <Grid container direction="column" spacing={2}>
             <Grid
-              onClick={event => event.stopPropagation()}
-              onFocus={event => event.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
+              onFocus={(event) => event.stopPropagation()}
               container
               direction="column"
               spacing={2}
             >
-              <Grid item>
-                <SingleDropdownList
-                  className="datasearch"
-                  react={{
-                    and: [
-                      "texte",
-                      "cote",
-                      "date_redaction",
-                      "date_naissance",
-                      "date_deces",
-                      "institution",
-                      "contributeur",
-                      "collection",
-                      "lieu",
-                      "notoriale",
-                      "profession",
-                      "unite"
-                    ]
-                  }}
-                  componentId="nom_testateur"
-                  dataField="testator.name.keyword"
-                  size={1000}
-                  sortBy="asc"
-                  showCount={true}
-                  autosuggest={true}
-                  placeholder="Nom du testateur"
-                  URLParams={true}
-                  showSearch={true}
-                  searchPlaceholder="Saisir un nom de testateur"
-                  innerClass={{
-                    list: "list"
-                  }}
-                />
+              <Grid item container direction="row">
+                <Grid item xs={10}>
+                  <SingleDropdownList
+                    className="datasearch"
+                    react={{
+                      and: [
+                        "texte",
+                        "cote",
+                        "date_redaction",
+                        "date_naissance",
+                        "date_deces",
+                        "institution",
+                        "contributeur",
+                        "collection",
+                        "lieu",
+                        "notoriale",
+                        "profession",
+                        "unite",
+                      ],
+                    }}
+                    componentId="nom_testateur"
+                    dataField="testator.name.keyword"
+                    value={this.state.testator}
+                    size={1000}
+                    sortBy="asc"
+                    showCount={true}
+                    autosuggest={true}
+                    placeholder="Nom du testateur"
+                    URLParams={true}
+                    showSearch={true}
+                    searchPlaceholder="Saisir un nom de testateur"
+                    onChange={this.handleTestatorChange}
+                    innerClass={{
+                      list: "list",
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    id="clearTestator"
+                    onClick={(event) => this.handleTestatorChange("")}
+                    title="Supprimer le filtre"
+                  >
+                    <ClearIcon style={{ color: "red" }} />
+                  </IconButton>
+                </Grid>
               </Grid>
 
               <Grid item>
@@ -128,200 +202,265 @@ export default class CustumerDataSearch extends Component {
 
         <ExpansionPanelDetails>
           <Grid container justify="center" direction="column" spacing={1}>
-            <Grid item>
-              <SingleDropdownList
-                className="datasearch"
-                react={{
-                  and: [
-                    "texte",
-                    "date_redaction",
-                    "date_naissance",
-                    "date_deces",
-                    "institution",
-                    "contributeur",
-                    "nom_testateur",
-                    "collection",
-                    "lieu",
-                    "notoriale",
-                    "unite",
-                    "cote"
-                  ]
-                }}
-                componentId="profession"
-                dataField="testator.occupation.no_accent"
-                sortBy="asc"
-                size={500}
-                showCount={true}
-                autosuggest={true}
-                placeholder="Profession"
-                URLParams={true}
-                showSearch={true}
-                searchPlaceholder="Saisir une profession"
-                renderItem={(label, count, isSelected) => {
-                  let label_ = "";
-                  label.split(" ").forEach(item => {
-                    if (item.length === 1) {
-                      item = item.replace("a", "à");
-                    } else {
-                      for (let [key, value] of Object.entries(
-                        terms_normalized
-                      )) {
-                        item = item.replace(key, value);
+            <Grid item container direction="row">
+              <Grid item xs={10}>
+                <SingleDropdownList
+                  className="datasearch"
+                  react={{
+                    and: [
+                      "texte",
+                      "date_redaction",
+                      "date_naissance",
+                      "date_deces",
+                      "institution",
+                      "contributeur",
+                      "nom_testateur",
+                      "collection",
+                      "lieu",
+                      "notoriale",
+                      "unite",
+                      "cote",
+                    ],
+                  }}
+                  componentId="profession"
+                  dataField="testator.occupation.no_accent"
+                  value={this.state.occupation}
+                  sortBy="asc"
+                  size={500}
+                  showCount={true}
+                  autosuggest={true}
+                  placeholder="Profession"
+                  URLParams={true}
+                  showSearch={true}
+                  searchPlaceholder="Saisir une profession"
+                  onChange={this.handleOccupationChange}
+                  renderItem={(label, count, isSelected) => {
+                    let label_ = "";
+                    label.split(" ").forEach((item) => {
+                      if (item.length === 1) {
+                        item = item.replace("a", "à");
+                      } else {
+                        for (let [key, value] of Object.entries(
+                          terms_normalized
+                        )) {
+                          item = item.replace(key, value);
+                        }
                       }
-                    }
 
-                    label_ += item + " ";
-                  });
-                  return (
-                    <div>
-                      {label_}
-                      <span
-                        style={{
-                          marginLeft: 5
-                        }}
-                      >
-                        ({count})
-                      </span>
-                    </div>
-                  );
-                }}
-                innerClass={{
-                  list: "list"
-                }}
-              />
+                      label_ += item + " ";
+                    });
+                    return (
+                      <div>
+                        {label_}
+                        <span
+                          style={{
+                            marginLeft: 5,
+                          }}
+                        >
+                          ({count})
+                        </span>
+                      </div>
+                    );
+                  }}
+                  innerClass={{
+                    list: "list",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                  id="clearOccupation"
+                  onClick={(event) => this.handleOccupationChange("")}
+                  title="Supprimer le filtre"
+                >
+                  <ClearIcon style={{ color: "red" }} />
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item>
-              <SingleDropdownList
-                className="datasearch"
-                react={{
-                  and: [
-                    "texte",
-                    "date_redaction",
-                    "date_naissance",
-                    "date_deces",
-                    "institution",
-                    "contributeur",
-                    "nom_testateur",
-                    "collection",
-                    "lieu",
-                    "notoriale",
-                    "profession",
-                    "cote"
-                  ]
-                }}
-                componentId="unite"
-                dataField="testator.affiliation.keyword"
-                size={1000}
-                sortBy="count"
-                showCount={true}
-                autosuggest={true}
-                placeholder="Unité militaire"
-                URLParams={true}
-                showSearch={true}
-                searchPlaceholder="Saisir une unité militaire"
-                innerClass={{
-                  list: "list"
-                }}
-              />
+            <Grid item container direction="row">
+              <Grid item xs={10}>
+                <SingleDropdownList
+                  className="datasearch"
+                  react={{
+                    and: [
+                      "texte",
+                      "date_redaction",
+                      "date_naissance",
+                      "date_deces",
+                      "institution",
+                      "contributeur",
+                      "nom_testateur",
+                      "collection",
+                      "lieu",
+                      "notoriale",
+                      "profession",
+                      "cote",
+                    ],
+                  }}
+                  componentId="unite"
+                  dataField="testator.affiliation.keyword"
+                  value={this.state.unit}
+                  size={1000}
+                  sortBy="count"
+                  showCount={true}
+                  autosuggest={true}
+                  placeholder="Unité militaire"
+                  URLParams={true}
+                  showSearch={true}
+                  searchPlaceholder="Saisir une unité militaire"
+                  onChange={this.handleUnitChange}
+                  innerClass={{
+                    list: "list",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                  id="clearUnit"
+                  onClick={(event) => this.handleUnitChange("")}
+                  title="Supprimer le filtre"
+                >
+                  <ClearIcon style={{ color: "red" }} />
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item>
-              <SingleDropdownList
-                className="datasearch"
-                react={{
-                  and: [
-                    "texte",
-                    "cote",
-                    "nom_testateur",
-                    "date_redaction",
-                    "date_naissance",
-                    "date_deces",
-                    "contributeur",
-                    "collection",
-                    "lieu",
-                    "notoriale",
-                    "profession",
-                    "unite"
-                  ]
-                }}
-                componentId="institution"
-                dataField="will_identifier.institution.keyword"
-                size={1000}
-                sortBy="count"
-                showCount={true}
-                autosuggest={true}
-                placeholder="Institution de conservation"
-                URLParams={true}
-                showSearch={false}
-              />
+            <Grid item container direction="row">
+              <Grid item xs={10}>
+                <SingleDropdownList
+                  className="datasearch"
+                  react={{
+                    and: [
+                      "texte",
+                      "cote",
+                      "nom_testateur",
+                      "date_redaction",
+                      "date_naissance",
+                      "date_deces",
+                      "contributeur",
+                      "collection",
+                      "lieu",
+                      "notoriale",
+                      "profession",
+                      "unite",
+                    ],
+                  }}
+                  componentId="institution"
+                  dataField="will_identifier.institution.keyword"
+                  value={this.state.institution}
+                  size={1000}
+                  sortBy="count"
+                  showCount={true}
+                  autosuggest={true}
+                  placeholder="Institution de conservation"
+                  onChange={this.handleInstitutionChange}
+                  URLParams={true}
+                  showSearch={false}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                  id="clearInstitution"
+                  onClick={(event) => this.handleInstitutionChange("")}
+                  title="Supprimer le filtre"
+                >
+                  <ClearIcon style={{ color: "red" }} />
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item>
-              <SingleDropdownList
-                className="datasearch"
-                react={{
-                  and: [
-                    "texte",
-                    "date_redaction",
-                    "date_naissance",
-                    "date_deces",
-                    "institution",
-                    "contributeur",
-                    "nom_testateur",
-                    "collection",
-                    "lieu",
-                    "notoriale",
-                    "profession",
-                    "unite"
-                  ]
-                }}
-                componentId="cote"
-                dataField="will_identifier.cote.keyword"
-                size={1000}
-                sortBy="asc"
-                showCount={false}
-                autosuggest={true}
-                placeholder="Cote du testament"
-                URLParams={true}
-                showSearch={true}
-                searchPlaceholder="Saisir une cote"
-                innerClass={{
-                  list: "list"
-                }}
-              />
+            <Grid item container direction="row">
+              <Grid item xs={10}>
+                <SingleDropdownList
+                  className="datasearch"
+                  react={{
+                    and: [
+                      "texte",
+                      "date_redaction",
+                      "date_naissance",
+                      "date_deces",
+                      "institution",
+                      "contributeur",
+                      "nom_testateur",
+                      "collection",
+                      "lieu",
+                      "notoriale",
+                      "profession",
+                      "unite",
+                    ],
+                  }}
+                  componentId="cote"
+                  dataField="will_identifier.cote.keyword"
+                  value={this.state.cote}
+                  size={1000}
+                  sortBy="asc"
+                  showCount={false}
+                  autosuggest={true}
+                  placeholder="Cote du testament"
+                  URLParams={true}
+                  showSearch={true}
+                  searchPlaceholder="Saisir une cote"
+                  onChange={this.handleCoteChange}
+                  innerClass={{
+                    list: "list",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                  id="clearCote"
+                  onClick={(event) => this.handleCoteChange("")}
+                  title="Supprimer le filtre"
+                >
+                  <ClearIcon style={{ color: "red" }} />
+                </IconButton>
+              </Grid>
             </Grid>
 
-            <Grid item>
-              <SingleDropdownList
-                className="datasearch"
-                react={{
-                  and: [
-                    "texte",
-                    "date_redaction",
-                    "date_naissance",
-                    "date_deces",
-                    "institution",
-                    "contributeur",
-                    "nom_testateur",
-                    "collection",
-                    "lieu",
-                    "profession",
-                    "unite",
-                    "cote"
-                  ]
-                }}
-                componentId="notoriale"
-                dataField="will_provenance.keyword"
-                size={1000}
-                sortBy="count"
-                showCount={true}
-                autosuggest={true}
-                placeholder="Étude notariale"
-                URLParams={true}
-                showSearch={true}
-                searchPlaceholder="Saisir une étude notariale"
-                innerClass={{
-                  list: "list"
-                }}
-              />
+            <Grid item container direction="row">
+              <Grid item xs={10}>
+                <SingleDropdownList
+                  className="datasearch"
+                  react={{
+                    and: [
+                      "texte",
+                      "date_redaction",
+                      "date_naissance",
+                      "date_deces",
+                      "institution",
+                      "contributeur",
+                      "nom_testateur",
+                      "collection",
+                      "lieu",
+                      "profession",
+                      "unite",
+                      "cote",
+                    ],
+                  }}
+                  componentId="notoriale"
+                  dataField="will_provenance.keyword"
+                  value={this.state.notoriale}
+                  size={1000}
+                  sortBy="count"
+                  showCount={true}
+                  autosuggest={true}
+                  placeholder="Étude notariale"
+                  URLParams={true}
+                  showSearch={true}
+                  searchPlaceholder="Saisir une étude notariale"
+                  onChange={this.handleNotorialeChange}
+                  innerClass={{
+                    list: "list",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                  id="clearNotoriale"
+                  onClick={(event) => this.handleNotorialeChange("")}
+                  title="Supprimer le filtre"
+                >
+                  <ClearIcon style={{ color: "red" }} />
+                </IconButton>
+              </Grid>
             </Grid>
           </Grid>
         </ExpansionPanelDetails>

@@ -229,8 +229,7 @@ class NavBar extends Component {
                 to="/recherche"
                 onClick={this.handleListItemClick}
               >
-                {" "}
-                Recherche{" "}
+                Recherche
               </Link>
               <Link
                 id="explore"

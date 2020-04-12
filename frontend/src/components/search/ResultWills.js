@@ -11,7 +11,7 @@ import {
   SnackbarContent,
   Link,
   Tooltip,
-  Button
+  Button,
 } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -19,7 +19,7 @@ import Divider from "@material-ui/core/Divider";
 import {
   getParamConfig,
   getUserToken,
-  updateMyListWills
+  updateMyListWills,
 } from "../../utils/functions";
 import InfoIcon from "@material-ui/icons/Info";
 
@@ -46,7 +46,7 @@ export default class ResultWills extends React.Component {
       displayType: null,
       anchorEl: null,
       message: "",
-      myWills: []
+      myWills: [],
     };
     this.userToken = getUserToken();
     this.displayMore = this.displayMore.bind(this);
@@ -63,7 +63,7 @@ export default class ResultWills extends React.Component {
     if (nextProps.data !== prevState.curData && nextProps.data !== undefined) {
       return {
         curData: nextProps.data,
-        anchorEl: null
+        anchorEl: null,
       };
     }
     return null;
@@ -71,12 +71,12 @@ export default class ResultWills extends React.Component {
 
   handleOpenMenu(event) {
     this.setState({
-      anchorEl: event.currentTarget
+      anchorEl: event.currentTarget,
     });
   }
 
   displayMore(item, page) {
-    return function(e) {
+    return function (e) {
       let url_param = item["_id"];
 
       url_param += page ? "/" + page["type"] + "_" + page["id"] : "";
@@ -87,20 +87,20 @@ export default class ResultWills extends React.Component {
   }
 
   handleAddShoppingWill(id) {
-    return function(e) {
+    return function (e) {
       let myWills_ = this.state.myWills;
       myWills_.push(id);
       let myBackups_ = JSON.parse(localStorage.myBackups);
       myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myBackups: myBackups_
+        myBackups: myBackups_,
       };
 
-      updateMyListWills(newItem).then(res => {
+      updateMyListWills(newItem).then((res) => {
         if (res.status === 200) {
           this.setState({
-            myWills: myWills_
+            myWills: myWills_,
           });
           localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
@@ -109,18 +109,18 @@ export default class ResultWills extends React.Component {
   }
 
   handleremoveShoppingWill(id) {
-    return function(e) {
-      let myWills_ = this.state.myWills.filter(item => item !== id);
+    return function (e) {
+      let myWills_ = this.state.myWills.filter((item) => item !== id);
       let myBackups_ = JSON.parse(localStorage.myBackups);
       myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myBackups: myBackups_
+        myBackups: myBackups_,
       };
-      updateMyListWills(newItem).then(res => {
+      updateMyListWills(newItem).then((res) => {
         if (res.status === 200) {
           this.setState({
-            myWills: myWills_
+            myWills: myWills_,
           });
           localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
@@ -128,25 +128,25 @@ export default class ResultWills extends React.Component {
     }.bind(this);
   }
 
-  handleClose = function() {
+  handleClose = function () {
     this.setState({
       openDialog: false,
       openAlert: false,
       willPage: null,
       cur_page: 0,
-      anchorEl: null
+      anchorEl: null,
     });
   };
 
   handleClickWill(will) {
-    return function(e) {
+    return function (e) {
       let styleTitle_ = this.state.styleTitle;
       let count_ = this.state.count;
       let chipData_ = this.state.chipData;
       if (Boolean(styleTitle_[will["_id"]])) {
         styleTitle_[will["_id"]] = false;
         count_ -= 1;
-        chipData_ = chipData_.filter(item => item["id"] !== will["_id"]);
+        chipData_ = chipData_.filter((item) => item["id"] !== will["_id"]);
       } else {
         if (count_ < 3) {
           styleTitle_[will["_id"]] = true;
@@ -154,11 +154,11 @@ export default class ResultWills extends React.Component {
           chipData_.push({
             will: will["will_pages"],
             id: will["_id"],
-            name: will["testator.name"]
+            name: will["testator.name"],
           });
         } else {
           this.setState({
-            openAlert: true
+            openAlert: true,
           });
         }
       }
@@ -166,7 +166,7 @@ export default class ResultWills extends React.Component {
       this.setState({
         styleTitle: styleTitle_,
         count: count_,
-        chipData: chipData_
+        chipData: chipData_,
       });
     }.bind(this);
   }
@@ -177,15 +177,15 @@ export default class ResultWills extends React.Component {
 
     this.setState({
       chipData: this.state.chipData.filter(
-        chip => chip["id"] !== chipToDelete["id"]
+        (chip) => chip["id"] !== chipToDelete["id"]
       ),
       count: this.state.count - 1,
-      styleTitle: styleTitle_
+      styleTitle: styleTitle_,
     });
   }
 
   handleCompareClick() {
-    const url_ids = this.state.chipData.map(item => item["id"]);
+    const url_ids = this.state.chipData.map((item) => item["id"]);
     localStorage.setItem("willCompare", JSON.stringify(this.state.styleTitle));
     localStorage.setItem("chipData", JSON.stringify(this.state.chipData));
     window.location.href =
@@ -193,18 +193,26 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidUpdate() {
-    if (localStorage.uriSearch !== document.location.href) {
-      if (document.location.href.split("?")[1]) {
-        localStorage.setItem("uriSearch", document.location.href);
+    const search_uri = document.location.href;
+
+    if (localStorage.uriSearch !== search_uri) {
+      if (search_uri.split("?")[1]) {
+        localStorage.setItem("uriSearch", search_uri);
       } else {
         localStorage.removeItem("uriSearch");
+        localStorage.removeItem("willsSearch");
       }
     }
-
+    if (
+      search_uri.split("?")[1] &&
+      JSON.stringify(localStorage.willsSearch) !== this.state.curData
+    ) {
+      localStorage.setItem("willsSearch", JSON.stringify(this.state.curData));
+    }
     if (this.state.chipData !== undefined) {
       let chip = (
         <div id="chipWill">
-          {this.state.chipData.map(data => {
+          {this.state.chipData.map((data) => {
             const name = data["name"].split(" ");
             const username =
               name[0].length > 2 ? name[0] : name[0] + " " + name[1];
@@ -213,7 +221,7 @@ export default class ResultWills extends React.Component {
               <Chip
                 key={data["id"]}
                 label={forename[0] + ". " + username}
-                onDelete={e => this.handleDelete(data)}
+                onDelete={(e) => this.handleDelete(data)}
               />
             );
           })}
@@ -237,7 +245,7 @@ export default class ResultWills extends React.Component {
         ? myBackups_["myWills"]
         : [];
       this.setState({
-        myWills: myWills_
+        myWills: myWills_,
       });
     }
 
@@ -249,7 +257,7 @@ export default class ResultWills extends React.Component {
       this.setState({
         styleTitle: willCompare_,
         count: chipData_.length,
-        chipData: chipData_
+        chipData: chipData_,
       });
     }
 
@@ -264,12 +272,12 @@ export default class ResultWills extends React.Component {
       if (item.inner_hits) {
         const hits_size = item.inner_hits.will_pages.hits.hits.length;
 
-        item.inner_hits.will_pages.hits.hits.sort(function(a, b) {
+        item.inner_hits.will_pages.hits.hits.sort(function (a, b) {
           return b._source["page_type"]["type"].localeCompare(
             a._source["page_type"]["type"]
           );
         });
-        item.inner_hits.will_pages.hits.hits.sort(function(a, b) {
+        item.inner_hits.will_pages.hits.hits.sort(function (a, b) {
           return a._source["page_type"]["id"] - b._source["page_type"]["id"];
         });
         descriptions = item.inner_hits.will_pages.hits.hits.map((hit, i) => {
@@ -303,7 +311,7 @@ export default class ResultWills extends React.Component {
                     component="span"
                     className="typoText"
                     dangerouslySetInnerHTML={{
-                      __html: page
+                      __html: page,
                     }}
                   />
                 );
@@ -322,7 +330,7 @@ export default class ResultWills extends React.Component {
       }
 
       const isAdded = Boolean(this.userToken)
-        ? this.state.myWills.findIndex(el => el === item["_id"])
+        ? this.state.myWills.findIndex((el) => el === item["_id"])
         : -1;
 
       let will_date = Boolean(item["will_contents.will_date"])
@@ -339,9 +347,6 @@ export default class ResultWills extends React.Component {
         </p>
       );
 
-      /* title_testator += (
-        <span> Boolean(will_date) ? " rédigé le " + will_date : ""; </span>
-      );*/
       return (
         <div className="resultWills" key={j}>
           <ListItem alignItems="flex-start" component="div">
@@ -472,7 +477,7 @@ export default class ResultWills extends React.Component {
         onClose={this.handleClose}
         autoHideDuration={5000}
         ContentProps={{
-          "aria-describedby": "message-id"
+          "aria-describedby": "message-id",
         }}
       >
         <SnackbarContent
@@ -492,7 +497,7 @@ export default class ResultWills extends React.Component {
               onClick={this.handleClose}
             >
               <CloseIcon className="icon" />
-            </IconButton>
+            </IconButton>,
           ]}
         />
       </Snackbar>
@@ -507,10 +512,17 @@ export default class ResultWills extends React.Component {
                 style={{ cursor: "hand" }}
                 interactive
               >
-                <Button id="btCompare" aria-label="Compare" size="small">
-                  <CompareIcon />
-                  Comparer les testaments
-                </Button>
+                <span>
+                  <Button
+                    id="btCompare"
+                    aria-label="Compare"
+                    size="small"
+                    disabled={this.state.count > 0 ? false : true}
+                  >
+                    <CompareIcon />
+                    Comparer les testaments
+                  </Button>
+                </span>
               </Tooltip>
             </Grid>
             <Grid item>

@@ -566,7 +566,7 @@ export default class WillDisplay extends Component {
         <div className="willDisplay">
           <Grid container direction="column" justify="flex-start">
             <Grid container direction="row">
-              <Grid item xs={this.props.resultList ? 4 : 0}>
+              <Grid item xs={this.props.resultList ? 4 : 1}>
                 {this.props.resultList}
               </Grid>
               <Grid item xs={this.props.resultList ? 8 : 12}>

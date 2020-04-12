@@ -3,7 +3,7 @@ import {
   EditorState,
   convertToRaw,
   convertFromHTML,
-  ContentState
+  ContentState,
 } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
@@ -14,35 +14,16 @@ import {
   Button,
   Typography,
   Grid,
-  InputAdornment,
   IconButton,
   NativeSelect,
   Paper,
   Dialog,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  InputLabel,
 } from "@material-ui/core";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import CloseIcon from "@material-ui/icons/Close";
 
-function uploadImageCallBack(file) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.imgur.com/3/image");
-    xhr.setRequestHeader("Authorization", "Client-ID XXXXX");
-    const data = new FormData();
-    data.append("image", file);
-    xhr.send(data);
-    xhr.addEventListener("load", () => {
-      const response = JSON.parse(xhr.responseText);
-      resolve(response);
-    });
-    xhr.addEventListener("error", () => {
-      const error = JSON.parse(xhr.responseText);
-      reject(error);
-    });
-  });
-}
+import CloseIcon from "@material-ui/icons/Close";
 
 export default class EditPost extends Component {
   constructor(props) {
@@ -68,62 +49,65 @@ export default class EditPost extends Component {
       label: null,
       in_image: null,
       url_image: "",
-      type: props.data._source["type"],
       message: "",
       openAlert: false,
-      openDialog: false
+      openDialog: false,
+      order: props.data._source["order"],
     };
+
+    this.type_title = ["Article", "Actualité", "A propos"];
   }
 
-  handleTypeChange = event => {
+  handleOrderChange = (event) => {
     this.setState({
-      type: event.target.value
-    });
-  };
-  onEditorStateResumeChange = editStateSummary => {
-    this.setState({
-      editStateSummary: editStateSummary
+      order: parseInt(event.target.value, 10),
     });
   };
 
-  onEditorStateDetailChange = editStateDetail => {
+  onEditorStateResumeChange = (editStateSummary) => {
     this.setState({
-      editStateDetail: editStateDetail
+      editStateSummary: editStateSummary,
     });
   };
 
-  handleFileChange = event => {
+  onEditorStateDetailChange = (editStateDetail) => {
+    this.setState({
+      editStateDetail: editStateDetail,
+    });
+  };
+
+  handleFileChange = (event) => {
     if (event.target.files[0]) {
       const reader = new FileReader();
       const in_file = event.target.files[0];
       const image_name = event.target.files[0]["name"];
-      reader.onloadend = function(e) {
+      reader.onloadend = function (e) {
         this.setState({
           in_image: e.target.result,
           url_image: image_name,
           out_image: "",
           fileInput: in_file,
-          label: ""
+          label: "",
         });
       }.bind(this);
       reader.readAsDataURL(event.target.files[0]);
     }
   };
 
-  handleChangeText = e => {
+  handleChangeText = (e) => {
     this.setState({
       url_image: e.target.value,
-      in_image: null
+      in_image: null,
     });
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     const detail_raw = this.state.editStateDetail.hasOwnProperty("blocks")
@@ -133,69 +117,101 @@ export default class EditPost extends Component {
       ? this.state.editStateSummary
       : convertToRaw(this.state.editStateSummary.getCurrentContent());
 
-    const found_detail = detail_raw["blocks"].find(item => {
+    const found_detail = detail_raw["blocks"].find((item) => {
       return item["text"].trim().length > 0;
     });
 
-    const found_resume = resume_raw["blocks"].find(item => {
+    const found_resume = resume_raw["blocks"].find((item) => {
       return item["text"].trim().length > 0;
     });
 
+    const cur_order = parseInt(this.props.data._source["order"], 10);
+    const new_order = parseInt(this.state.order, 10);
     if (this.state.title) {
       const today = new Date();
-      const item = {
-        id: this.props.data["_id"],
-        title: this.state.title,
-        summary: Boolean(found_resume) ? draftToHtml(resume_raw) : "",
-        detail: Boolean(found_detail) ? draftToHtml(detail_raw) : "",
-        type: parseInt(this.state.type, 10),
-        author: this.state.author,
-        created: today
+
+      let ids = [this.props.data["_id"]];
+      let doc = [
+        {
+          title: this.state.title,
+          summary: Boolean(found_resume) ? draftToHtml(resume_raw) : "",
+          detail: Boolean(found_detail) ? draftToHtml(detail_raw) : "",
+          type: parseInt(this.props.data._source["type"], 10),
+          author: this.state.author,
+          created: today,
+          order: new_order,
+        },
+      ];
+      if ([1, 3].includes(parseInt(this.props.data._source["type"], 10))) {
+        doc[0]["order"] = new_order;
+
+        if (cur_order > new_order) {
+          this.props.favorisList
+            .slice(new_order - 1, cur_order - 1)
+            .forEach((item) => ids.push(item._id));
+
+          for (let i = 0; i < ids.length - 1; i++) {
+            doc.push({ order: new_order + i + 1 });
+          }
+        } else {
+          this.props.favorisList
+            .slice(cur_order, new_order)
+            .forEach((item) => ids.push(item._id));
+
+          for (let i = 0; i < ids.length - 1; i++) {
+            doc.push({
+              order: cur_order + i,
+            });
+          }
+        }
+      }
+      const req = {
+        id: ids,
+        doc: doc,
       };
 
-      updatePost(item).then(res => {
+      updatePost(req).then((res) => {
         if (res.status === 200) {
           this.setState({
             openAlert: true,
-            message: res.mess
+            message: res.mess,
           });
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
         } else {
           this.setState({
             openAlert: true,
-            message: res.err
+            message: res.err,
           });
         }
       });
     }
   };
 
-  handleAlertClose = event => {
+  handleAlertClose = (event) => {
     this.setState({
       openAlert: false,
-      message: ""
+      message: "",
     });
+    document.location.reload();
   };
 
-  handleDisplay = event => {
+  handleDisplay = (event) => {
     this.setState({
-      openDialog: true
+      openDialog: true,
     });
   };
 
-  handleClose = event => {
+  handleClose = (event) => {
     this.setState({
-      openDialog: false
+      openDialog: false,
     });
   };
 
-  convertToHtml = object => {
+  convertToHtml = (object) => {
     const obj_raw = object.hasOwnProperty("blocks")
       ? object
       : convertToRaw(object.getCurrentContent());
 
-    const found_obj = obj_raw["blocks"].find(item => {
+    const found_obj = obj_raw["blocks"].find((item) => {
       return item["text"].trim().length > 0;
     });
     return Boolean(found_obj) ? draftToHtml(obj_raw) : "";
@@ -204,16 +220,19 @@ export default class EditPost extends Component {
   componentDidMount() {
     this.setState({
       author: this.props.data._source["author"],
-      title: this.props.data._source["title"]
+      title: this.props.data._source["title"],
     });
   }
 
   render() {
-    let src_img = null;
-    if (this.state.in_image) {
-      src_img = this.state.in_image;
-    } else if (this.state.url_image) {
-      src_img = this.state.url_image;
+    let option = [];
+
+    for (let i = 1; i < this.props.favorisList.length + 1; i++) {
+      option.push(
+        <option value={i} key={i}>
+          {i}
+        </option>
+      );
     }
 
     return (
@@ -255,74 +274,58 @@ export default class EditPost extends Component {
                 />
               </Grid>
               <Grid item>
-                <NativeSelect
-                  id="type"
-                  className="type"
-                  variant="outlined"
-                  value={this.state.type}
-                  name="type"
-                  onChange={this.handleTypeChange}
-                >
-                  <option value={1}>Article</option>
-                  <option value={2}>Actualité</option>
-                  <option value={3}>A propos</option>
-                </NativeSelect>
+                <Typography>
+                  {
+                    this.type_title[
+                      parseInt(this.props.data._source["type"], 10) - 1
+                    ]
+                  }
+                </Typography>
               </Grid>
             </Grid>
-
-            <TextField
-              id="title"
-              variant="outlined"
-              fullWidth
-              label="Titre"
-              type="title"
-              name="title"
-              autoFocus
-              value={this.state.title}
-              onChange={this.onChange}
-              className="textField"
-            />
-
-            <input
-              accept="image/*"
-              className="input"
-              id="contained-button-file"
-              type="file"
-              onChange={this.handleFileChange}
-            />
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item xs={6}>
                 <TextField
-                  id="outlined-full-width"
-                  label="Image"
-                  placeholder="Copie url image ici"
-                  margin="normal"
+                  id="title"
                   variant="outlined"
-                  onChange={this.handleChangeText}
-                  name="file"
-                  value={this.state.url_image}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <label htmlFor="contained-button-file">
-                          <Button component="span" className="button">
-                            <CloudUploadIcon className="rightIcon" />
-                          </Button>
-                        </label>
-                      </InputAdornment>
-                    )
-                  }}
+                  fullWidth
+                  label="Titre"
+                  type="title"
+                  name="title"
+                  autoFocus
+                  value={this.state.title}
+                  onChange={this.onChange}
+                  className="textField"
                 />
               </Grid>
-
-              <Grid item>
-                {src_img ? (
-                  <img src={src_img} id="img" alt="toto" className="img" />
-                ) : (
-                  ""
-                )}
-              </Grid>
+              {[1, 3].includes(
+                parseInt(this.props.data._source["type"], 10)
+              ) ? (
+                <Grid item>
+                  <InputLabel id="order-select-label">
+                    Ordre d'affichage
+                  </InputLabel>
+                  <NativeSelect
+                    id="order"
+                    className="order"
+                    variant="outlined"
+                    value={this.state.order}
+                    name="order"
+                    onChange={this.handleOrderChange}
+                  >
+                    {option}
+                  </NativeSelect>
+                </Grid>
+              ) : (
+                ""
+              )}
             </Grid>
+
             <div>
               <Typography className="title">Résumé</Typography>
               <Editor
@@ -333,9 +336,8 @@ export default class EditPost extends Component {
                 onChange={this.onEditorStateResumeChange}
                 toolbar={{
                   image: {
-                    uploadCallback: uploadImageCallBack,
-                    alt: { present: true, mandatory: true }
-                  }
+                    alt: { present: true, mandatory: true },
+                  },
                 }}
               />
             </div>
@@ -349,9 +351,8 @@ export default class EditPost extends Component {
                 onChange={this.onEditorStateDetailChange}
                 toolbar={{
                   image: {
-                    uploadCallback: uploadImageCallBack,
-                    alt: { present: true, mandatory: true }
-                  }
+                    alt: { present: true, mandatory: true },
+                  },
                 }}
               />
             </div>
@@ -392,10 +393,11 @@ export default class EditPost extends Component {
           handleClose={this.handleAlertClose}
         />
         <Dialog
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
+          aria-labelledby="simple-modal-dialog"
           open={this.state.openDialog}
           onClose={this.handleClose}
+          fullWidth={true}
+          maxWidth="md"
         >
           <DialogTitle id="dialog-display-post">
             <IconButton aria-label="close" onClick={this.handleClose}>
@@ -404,7 +406,7 @@ export default class EditPost extends Component {
           </DialogTitle>
 
           <DialogContent>
-            <Grid container direction="column" alignItems="center" spacing={3}>
+            <Grid container direction="column" spacing={2}>
               <Grid item>
                 <Paper>
                   <Typography>Titre : {this.state.title}</Typography>
@@ -415,7 +417,7 @@ export default class EditPost extends Component {
                   <Typography>Résumé :</Typography>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: this.convertToHtml(this.state.editStateSummary)
+                      __html: this.convertToHtml(this.state.editStateSummary),
                     }}
                   ></div>
                 </Paper>
@@ -425,7 +427,7 @@ export default class EditPost extends Component {
                   <Typography>Détail :</Typography>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: this.convertToHtml(this.state.editStateDetail)
+                      __html: this.convertToHtml(this.state.editStateDetail),
                     }}
                   ></div>
                 </Paper>

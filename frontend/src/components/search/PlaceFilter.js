@@ -7,8 +7,10 @@ import {
   ListItemIcon,
   ListItemText,
   ListItem,
-  Snackbar
+  Snackbar,
+  IconButton,
 } from "@material-ui/core";
+import ClearIcon from "@material-ui/icons/Clear";
 
 class PlaceFilter extends React.Component {
   constructor(props) {
@@ -18,11 +20,14 @@ class PlaceFilter extends React.Component {
       will_place: true,
       death_place: true,
       residence_place: true,
-      openAlert: false
+      openAlert: false,
+      noResults: false,
+      place: "",
     };
     this.handChange = this.handChange.bind(this);
     this.customQuery = this.customQuery.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handlePlaceChange = this.handlePlaceChange.bind(this);
   }
 
   handChange(name) {
@@ -30,17 +35,17 @@ class PlaceFilter extends React.Component {
       this.state.birth_place,
       this.state.death_place,
       this.state.residence_place,
-      this.state.will_place
-    ].filter(item => item);
+      this.state.will_place,
+    ].filter((item) => item);
 
-    return function(event) {
+    return function (event) {
       if (selectedItem.length === 1 && !event.target.checked) {
         this.setState({
-          openAlert: true
+          openAlert: true,
         });
       } else {
         this.setState({
-          [name]: event.target.checked
+          [name]: event.target.checked,
         });
       }
     }.bind(this);
@@ -48,11 +53,17 @@ class PlaceFilter extends React.Component {
 
   handleClose() {
     this.setState({
-      openAlert: false
+      openAlert: false,
     });
   }
 
-  customQuery = function(value, props) {
+  handlePlaceChange(value) {
+    this.setState({
+      place: value,
+    });
+  }
+
+  customQuery = function (value, props) {
     let fields_ = [];
     if (this.state.birth_place) {
       fields_.push("will_contents.birth_place_norm");
@@ -72,9 +83,9 @@ class PlaceFilter extends React.Component {
           multi_match: {
             query: value,
             fields: fields_,
-            operator: "and"
-          }
-        }
+            operator: "and",
+          },
+        },
       };
     }
   };
@@ -92,7 +103,7 @@ class PlaceFilter extends React.Component {
                     onChange={this.handChange("birth_place")}
                     value="birth_place"
                     inputProps={{
-                      "aria-label": "primary checkbox"
+                      "aria-label": "primary checkbox",
                     }}
                   />
                 </ListItemIcon>
@@ -105,7 +116,7 @@ class PlaceFilter extends React.Component {
                     onChange={this.handChange("residence_place")}
                     value="residence_place"
                     inputProps={{
-                      "aria-label": "primary checkbox"
+                      "aria-label": "primary checkbox",
                     }}
                   />
                 </ListItemIcon>
@@ -118,7 +129,7 @@ class PlaceFilter extends React.Component {
                     onChange={this.handChange("will_place")}
                     value="will_place"
                     inputProps={{
-                      "aria-label": "primary checkbox"
+                      "aria-label": "primary checkbox",
                     }}
                   />
                 </ListItemIcon>
@@ -131,7 +142,7 @@ class PlaceFilter extends React.Component {
                     onChange={this.handChange("death_place")}
                     value="death_place"
                     inputProps={{
-                      "aria-label": "primary checkbox"
+                      "aria-label": "primary checkbox",
                     }}
                   />
                 </ListItemIcon>
@@ -139,39 +150,53 @@ class PlaceFilter extends React.Component {
               </ListItem>
             </List>
           </Grid>
-          <Grid item xs={6}>
-            <SingleDropdownList
-              className="datasearch"
-              react={{
-                and: [
-                  "texte",
-                  "date_redaction",
-                  "institution",
-                  "contributeur",
-                  "nom_testateur",
-                  "collection",
-                  "notoriale",
-                  "profession",
-                  "unite",
-                  "cote"
-                ]
-              }}
-              componentId="lieu"
-              dataField="will_contents.place.keyword"
-              size={2000}
-              sortBy="asc"
-              showCount={false}
-              autosuggest={true}
-              placeholder="Lieu"
-              URLParams={true}
-              loader="En chargement ..."
-              showSearch={true}
-              searchPlaceholder="Saisir un nom de lieu"
-              innerClass={{
-                list: "list"
-              }}
-              customQuery={this.customQuery}
-            />
+          <Grid item xs={6} container direction="row">
+            <Grid item xs={10}>
+              <SingleDropdownList
+                className="datasearch"
+                react={{
+                  and: [
+                    "texte",
+                    "date_redaction",
+                    "date_naissance",
+                    "date_deces",
+                    "institution",
+                    "contributeur",
+                    "nom_testateur",
+                    "collection",
+                    "profession",
+                    "notoriale",
+                    "unite",
+                    "cote",
+                  ],
+                }}
+                componentId="lieu"
+                dataField="will_contents.place.keyword"
+                value={this.state.place}
+                size={2000}
+                sortBy="asc"
+                showCount={false}
+                autosuggest={true}
+                placeholder="Lieu"
+                URLParams={true}
+                showSearch={true}
+                searchPlaceholder="Saisir un nom de lieu"
+                customQuery={this.customQuery}
+                onChange={this.handlePlaceChange}
+                innerClass={{
+                  list: "list",
+                }}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton
+                id="clearPlace"
+                onClick={(event) => this.handlePlaceChange("")}
+                title="Supprimer le filtre"
+              >
+                <ClearIcon style={{ color: "red" }} />
+              </IconButton>
+            </Grid>
           </Grid>
         </Grid>
         <Snackbar
@@ -180,7 +205,7 @@ class PlaceFilter extends React.Component {
           onClose={this.handleClose}
           autoHideDuration={3000}
           ContentProps={{
-            "aria-describedby": "message-id"
+            "aria-describedby": "message-id",
           }}
           message={
             <span id="message-id">Au moins une case doit être cochée !</span>

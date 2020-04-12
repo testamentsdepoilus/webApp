@@ -51,3 +51,7 @@
 .testators .testatorSearch {
   margin: 2em 0 2em 0;
 }
+
+.testators .typoSurname {
+  font-variant-caps: small-caps;
+}

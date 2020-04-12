@@ -4,7 +4,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
-  getTotalHits
+  getTotalHits,
 } from "../utils/functions";
 import {
   Breadcrumbs,
@@ -13,7 +13,7 @@ import {
   Typography,
   Grid,
   MenuList,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 
 import Footer from "./Footer";
@@ -23,7 +23,7 @@ class Articles extends Component {
     super(props);
     this.state = {
       data: [],
-      selectedId: ""
+      selectedId: "",
     };
     this.handleMoreClick = this.handleMoreClick.bind(this);
     this.defaultQuery = this.defaultQuery.bind(this);
@@ -31,18 +31,13 @@ class Articles extends Component {
   }
 
   handleListItemClick(event) {
-    const itemFind = this.state.data.find(function(item) {
-      return item["_id"] === event.target.id;
-    });
-
     this.setState({
       selectedId: event.target.id,
-      item: itemFind ? itemFind._source : this.state.item
     });
   }
 
   handleMoreClick(item) {
-    return function(e) {
+    return function (e) {
       document.location.href =
         getParamConfig("web_url") + "/articles/" + item["_id"];
     };
@@ -52,21 +47,13 @@ class Articles extends Component {
     return {
       query: {
         term: {
-          type: 1
-        }
-      }
+          type: 1,
+        },
+      },
     };
   }
 
-  componentDidUpdate() {
-    const url = document.location.href;
-    const idx = url.lastIndexOf("articles/");
-    if (idx === -1 && Boolean(this.state.item)) {
-      this.setState({
-        item: null
-      });
-    }
-  }
+  componentDidUpdate() {}
 
   componentDidMount() {
     const url = document.location.href;
@@ -74,7 +61,7 @@ class Articles extends Component {
     getTotalHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
     )
-      .then(res => {
+      .then((res) => {
         const total = typeof res === "object" ? res.value : res;
         getHitsFromQuery(
           getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
@@ -82,13 +69,13 @@ class Articles extends Component {
             size: total,
             query: {
               term: {
-                type: 1
-              }
+                type: 1,
+              },
             },
-            sort: [{ created: { order: "desc" } }]
+            sort: [{ order: { order: "asc" } }],
           })
         )
-          .then(data => {
+          .then((data) => {
             if (idx !== -1) {
               const id_query = url.substring(idx + 9).split("/");
               getHitsFromQuery(
@@ -98,33 +85,33 @@ class Articles extends Component {
                 JSON.stringify({
                   query: {
                     term: {
-                      _id: id_query[0]
-                    }
-                  }
+                      _id: id_query[0],
+                    },
+                  },
                 })
               )
-                .then(hits => {
+                .then((hits) => {
                   this.setState({
                     data: data,
                     selectedId:
-                      hits.length > 0 ? hits[0]["_id"] : data[0]["_id"]
+                      hits.length > 0 ? hits[0]["_id"] : data[0]["_id"],
                   });
                 })
-                .catch(error => {
+                .catch((error) => {
                   console.log("error: ", error);
                 });
             } else {
               this.setState({
                 data: data,
-                selectedId: data.length > 0 ? data[0]["_id"] : ""
+                selectedId: data.length > 0 ? data[0]["_id"] : "",
               });
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log("error: ", error);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error: ", error);
       });
   }
@@ -134,31 +121,29 @@ class Articles extends Component {
       this.state.selectedId === ""
         ? this.state.data[0]
         : this.state.data.find(
-            function(item) {
+            function (item) {
               return item["_id"] === this.state.selectedId;
             }.bind(this)
           );
 
-    const currLink = !Boolean(this.state.item) ? (
+    const currLink = !Boolean(curItem) ? (
       <Link
         id="articles"
-        key={1}
+        key={0}
         color="textPrimary"
         component={RouterLink}
         to="/articles"
       >
-        {" "}
-        L'état de la recherche{" "}
+        L'état de la recherche
       </Link>
     ) : (
       [
-        <Typography key={2} color="textPrimary">
-          {" "}
-          L'état de la recherche{" "}
+        <Typography key={1} color="textPrimary">
+          L'état de la recherche
         </Typography>,
         <Typography key={2} color="textPrimary">
-          {this.state.item["title"]}
-        </Typography>
+          {curItem._source["title"]}
+        </Typography>,
       ]
     );
     const navLink = (
@@ -184,7 +169,7 @@ class Articles extends Component {
       <Paper className="menu_articles">
         <MenuList>
           {this.state.data.map((item, i) => (
-            <MenuItem key={i}>
+            <MenuItem key={i * 10}>
               <Link
                 id={item["_id"]}
                 className={
@@ -203,56 +188,60 @@ class Articles extends Component {
     );
 
     const date = Boolean(curItem) ? new Date(curItem._source["created"]) : null;
-    return [
-      Boolean(curItem) ? (
-        <div className="articles">
-          {navLink}
+    return (
+      <div>
+        {Boolean(curItem) ? (
+          <div className="articles">
+            {navLink}
 
-          <h2>ETAT DE LA RECHERCHE</h2>
-          <Grid container direction="row" spacing={2}>
-            <Grid item xs={2}>
-              {menuArticles}
-            </Grid>
-            <Grid item xs={10}>
-              <div className="detail">
-                <Paper className="item" key={0}>
-                  <h1 className="title_article">{curItem._source["title"]} </h1>
-                  <Paper className="head">
-                    <Grid
-                      container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="center"
-                    >
-                      <Grid item>{curItem._source["author"]}</Grid>
-                      <Grid item>
-                        {Boolean(date)
-                          ? "Mise à jour le " +
-                            date.toLocaleDateString() +
-                            " à " +
-                            date.toLocaleTimeString()
-                          : ""}
+            <h2>ETAT DE LA RECHERCHE</h2>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={2}>
+                {menuArticles}
+              </Grid>
+              <Grid item xs={10}>
+                <div className="detail">
+                  <Paper className="item" key={0}>
+                    <h1 className="title_article">
+                      {curItem._source["title"]}{" "}
+                    </h1>
+                    <Paper className="head">
+                      <Grid
+                        container
+                        direction="row"
+                        justify="space-between"
+                        alignItems="center"
+                      >
+                        <Grid item>{curItem._source["author"]}</Grid>
+                        <Grid item>
+                          {Boolean(date)
+                            ? "Mise à jour le " +
+                              date.toLocaleDateString() +
+                              " à " +
+                              date.toLocaleTimeString()
+                            : ""}
+                        </Grid>
                       </Grid>
-                    </Grid>
+                    </Paper>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          curItem._source["detail"] !== ""
+                            ? curItem._source["detail"]
+                            : curItem._source["summary"],
+                      }}
+                    ></div>
                   </Paper>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        curItem._source["detail"] !== ""
-                          ? curItem._source["detail"]
-                          : curItem._source["summary"]
-                    }}
-                  ></div>
-                </Paper>
-              </div>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
-      ) : (
-        <Typography variant="h4">Articles introuvables !</Typography>
-      ),
-      <Footer />
-    ];
+          </div>
+        ) : (
+          <Typography variant="h4">Articles introuvables !</Typography>
+        )}
+        <Footer />
+      </div>
+    );
   }
 }
 

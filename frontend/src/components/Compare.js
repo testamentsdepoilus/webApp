@@ -7,7 +7,7 @@ import {
   Typography,
   Grid,
   Tooltip,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
@@ -19,7 +19,7 @@ class Compare extends Component {
     super(props);
     this.state = {
       data: [],
-      ids_term: ""
+      ids_term: "",
     };
   }
   handleBackUp(e) {
@@ -37,27 +37,27 @@ class Compare extends Component {
           JSON.stringify({
             query: {
               ids: {
-                values: ids
-              }
-            }
+                values: ids,
+              },
+            },
           })
         )
-          .then(data => {
-            const dataFilter = data.map(will => {
+          .then((data) => {
+            const dataFilter = data.map((will) => {
               return {
                 will: will._source["will_pages"],
                 id: will["_id"],
                 forename: will._source["testator.forename"],
-                surname: will._source["testator.surname"]
+                surname: will._source["testator.surname"],
               };
             });
 
             this.setState({
               data: dataFilter,
-              ids_term: ids_term_
+              ids_term: ids_term_,
             });
           })
-          .catch(error => {
+          .catch((error) => {
             console.log("error :", error);
           });
       }

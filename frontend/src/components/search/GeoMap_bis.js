@@ -24,12 +24,18 @@ export default class GeoMap extends React.Component {
     this.state = {
       birth_data: [],
       death_data: [],
+      residence_data: [],
+      will_data: [],
       checkedA: false,
       checkedB: true,
+      checkedC: false,
+      checkedD: false,
       count: 0
     };
     this.handleCheckA = this.handleCheckA.bind(this);
     this.handleCheckB = this.handleCheckB.bind(this);
+    this.handleCheckC = this.handleCheckC.bind(this);
+    this.handleCheckD = this.handleCheckD.bind(this);
     this.blueIcon = L.icon({
       iconUrl:
         "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png",
@@ -57,16 +63,36 @@ export default class GeoMap extends React.Component {
     });
   }
 
+  handleCheckC(event) {
+    this.setState({
+      checkedC: event.target.checked,
+      count: 0
+    });
+  }
+
+  handleCheckD(event) {
+    this.setState({
+      checkedD: event.target.checked,
+      count: 0
+    });
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     if (
       JSON.stringify(nextProps.birth_data) !==
         JSON.stringify(prevState.birth_data) ||
       JSON.stringify(nextProps.death_data) !==
-        JSON.stringify(prevState.death_data)
+        JSON.stringify(prevState.death_data) ||
+      JSON.stringify(nextProps.residence_data) !==
+        JSON.stringify(prevState.residence_data) ||
+      JSON.stringify(nextProps.will_data) !==
+        JSON.stringify(prevState.will_data)
     ) {
       return {
         birth_data: nextProps.birth_data,
         death_data: nextProps.death_data,
+        residence_data: nextProps.residence_data,
+        will_data: nextProps.will_data,
         count: 0
       };
     }
@@ -75,101 +101,262 @@ export default class GeoMap extends React.Component {
 
   componentDidUpdate() {
     if (this.state.count === 0) {
-      let element = (
-        <Grid container direction="column" justify="center" alignItems="center">
-          <Grid item container direction="row" alignItems="center">
-            <Grid item>
-              <span>Lieu de naissance</span>
+      let element =
+        this.props.page === "home" ? (
+          <span>Lieu de décès</span>
+        ) : (
+          <Grid
+            container
+            direction="column"
+            justify="flex-end"
+            alignItems="flex-start"
+          >
+            <Grid item container direction="row" alignItems="center">
+              <Grid item>
+                <span>Lieu de naissance</span>
+              </Grid>
+              <Grid item>
+                <Checkbox
+                  checked={this.state.checkedA}
+                  onChange={this.handleCheckA}
+                  value="checked"
+                  inputProps={{
+                    "aria-label": "primary checkbox"
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item>
+            <Grid item container direction="row" alignItems="center">
+              <Grid item>
+                <span>Lieu de résidence</span>
+              </Grid>
+              <Grid item>
+                <Checkbox
+                  checked={this.state.checkedC}
+                  onChange={this.handleCheckC}
+                  value="checked"
+                  inputProps={{
+                    "aria-label": "primary checkbox"
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Grid item>
+                <span>Lieu de rédaction</span>
+              </Grid>
+              <Grid item>
+                <Checkbox
+                  checked={this.state.checkedD}
+                  onChange={this.handleCheckD}
+                  value="checked"
+                  inputProps={{
+                    "aria-label": "primary checkbox"
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Grid item>
+                <span>Lieu de décès</span>
+              </Grid>
+              <Grid item></Grid>
               <Checkbox
-                checked={this.state.checkedA}
-                onChange={this.handleCheckA}
-                value="checked"
+                checked={this.state.checkedB}
+                onChange={this.handleCheckB}
+                value="checkedB"
                 inputProps={{
                   "aria-label": "primary checkbox"
                 }}
               />
             </Grid>
           </Grid>
-          <Grid item container direction="row" alignItems="center">
-            <Grid item>
-              <span>Lieu de décès</span>
-            </Grid>
-            <Grid item></Grid>
-            <Checkbox
-              checked={this.state.checkedB}
-              onChange={this.handleCheckB}
-              value="checkedB"
-              inputProps={{
-                "aria-label": "primary checkbox"
-              }}
-            />
-          </Grid>
-        </Grid>
-      );
+        );
 
       ReactDOM.render(element, document.getElementById("legend"));
       this.markers.clearLayers();
-      Object.values(this.state.birth_data).forEach((point, i) => {
-        if (
-          Boolean(point[0]["will_contents.birth_place"]) &&
-          this.state.checkedA
-        ) {
-          let marker = L.marker(point[0]["will_contents.birth_place"]);
-          let contents = [];
+      if (this.props.page !== "home") {
+        Object.values(this.state.birth_data).forEach((point, i) => {
+          if (
+            Boolean(point[0]["will_contents.birth_place"]) &&
+            this.state.checkedA
+          ) {
+            let marker = L.marker(point[0]["will_contents.birth_place"]);
+            let contents = [];
 
-          contents.push(
-            <Link
-              key={0}
-              href={
-                getParamConfig("web_url") +
-                "/place/" +
-                point[0]["will_contents.birth_place_ref"]
-              }
-              target="_blank"
-            >
-              <h4>{point[0]["will_contents.birth_place_norm"]}</h4>
-            </Link>
-          );
-          if (point.length === 1) {
             contents.push(
-              <h4 key={1}>Lieu de naissance du testateur suivant :</h4>
+              <Link
+                key={0}
+                href={
+                  getParamConfig("web_url") +
+                  "/place/" +
+                  point[0]["will_contents.birth_place_ref"]
+                }
+                target="_blank"
+              >
+                <h4>{point[0]["will_contents.birth_place_norm"]}</h4>
+              </Link>
             );
-          } else if (point.length > 1) {
-            contents.push(
-              <h4 key={1}>Lieu de naissance des testateurs suivants :</h4>
-            );
-          }
-          let myList = [];
-          point.forEach((item, i) => {
-            myList.push(
-              <li key={i}>
-                <Link
-                  href={
-                    getParamConfig("web_url") +
-                    "/testateur/" +
-                    item["testator.ref"]
-                  }
-                  target="_blank"
-                >
-                  {item["testator.forename"]}{" "}
-                  <span style={{ fontVariantCaps: "small-caps" }}>
-                    {item["testator.surname"]}
-                  </span>
-                </Link>
-              </li>
-            );
-          });
-          if (myList.length > 0) {
-            contents.push(<ul key={i * 10}>{myList}</ul>);
-          }
+            if (point.length === 1) {
+              contents.push(
+                <h4 key={1}>Lieu de naissance du testateur suivant :</h4>
+              );
+            } else if (point.length > 1) {
+              contents.push(
+                <h4 key={1}>Lieu de naissance des testateurs suivants :</h4>
+              );
+            }
+            let myList = [];
+            point.forEach((item, i) => {
+              myList.push(
+                <li key={i}>
+                  <Link
+                    href={
+                      getParamConfig("web_url") +
+                      "/testateur/" +
+                      item["testator.ref"]
+                    }
+                    target="_blank"
+                  >
+                    {item["testator.forename"]}{" "}
+                    <span style={{ fontVariantCaps: "small-caps" }}>
+                      {item["testator.surname"]}
+                    </span>
+                  </Link>
+                </li>
+              );
+            });
+            if (myList.length > 0) {
+              contents.push(<ul key={i * 10}>{myList}</ul>);
+            }
 
-          const popupContent = <div className="map-popup">{contents}</div>;
-          marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
-          this.markers.addLayer(marker);
-        }
-      });
+            const popupContent = <div className="map-popup">{contents}</div>;
+            marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+            this.markers.addLayer(marker);
+          }
+        });
+
+        Object.values(this.state.residence_data).forEach((point, i) => {
+          if (
+            Boolean(point[0]["will_contents.residence_geo"]) &&
+            this.state.checkedC
+          ) {
+            let marker = L.marker(point[0]["will_contents.residence_geo"]);
+            let contents = [];
+
+            contents.push(
+              <Link
+                key={0}
+                href={
+                  getParamConfig("web_url") +
+                  "/place/" +
+                  point[0]["will_contents.residence_ref"]
+                }
+                target="_blank"
+              >
+                <h4>{point[0]["will_contents.residence_norm"]}</h4>
+              </Link>
+            );
+            if (point.length === 1) {
+              contents.push(
+                <h4 key={1}>Lieu de résidence du testateur suivant :</h4>
+              );
+            } else if (point.length > 1) {
+              contents.push(
+                <h4 key={1}>Lieu de résidence des testateurs suivants :</h4>
+              );
+            }
+            let myList = [];
+            point.forEach((item, i) => {
+              myList.push(
+                <li key={i}>
+                  <Link
+                    href={
+                      getParamConfig("web_url") +
+                      "/testateur/" +
+                      item["testator.ref"]
+                    }
+                    target="_blank"
+                  >
+                    {item["testator.forename"]}{" "}
+                    <span style={{ fontVariantCaps: "small-caps" }}>
+                      {item["testator.surname"]}
+                    </span>
+                  </Link>
+                </li>
+              );
+            });
+            if (myList.length > 0) {
+              contents.push(<ul key={i * 10}>{myList}</ul>);
+            }
+
+            const popupContent = <div className="map-popup">{contents}</div>;
+            marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+            this.markers.addLayer(marker);
+          }
+        });
+
+        Object.values(this.state.will_data).forEach((point, i) => {
+          if (
+            Boolean(point[0]["will_contents.will_place"]) &&
+            this.state.checkedD
+          ) {
+            let marker = L.marker(point[0]["will_contents.will_place"]);
+            let contents = [];
+
+            contents.push(
+              <Link
+                key={0}
+                href={
+                  getParamConfig("web_url") +
+                  "/place/" +
+                  point[0]["will_contents.will_place_ref"]
+                }
+                target="_blank"
+              >
+                <h4>{point[0]["will_contents.will_place_norm"]}</h4>
+              </Link>
+            );
+            if (point.length === 1) {
+              contents.push(
+                <h4 key={1}>Lieu de rédaction du testateur suivant :</h4>
+              );
+            } else if (point.length > 1) {
+              contents.push(
+                <h4 key={1}>Lieu de rédaction des testateurs suivants :</h4>
+              );
+            }
+            let myList = [];
+            point.forEach((item, i) => {
+              myList.push(
+                <li key={i}>
+                  <Link
+                    href={
+                      getParamConfig("web_url") +
+                      "/testateur/" +
+                      item["testator.ref"]
+                    }
+                    target="_blank"
+                  >
+                    {item["testator.forename"]}{" "}
+                    <span style={{ fontVariantCaps: "small-caps" }}>
+                      {item["testator.surname"]}
+                    </span>
+                  </Link>
+                </li>
+              );
+            });
+            if (myList.length > 0) {
+              contents.push(<ul key={i * 10}>{myList}</ul>);
+            }
+
+            const popupContent = <div className="map-popup">{contents}</div>;
+            marker.bindPopup(ReactDOMServer.renderToStaticMarkup(popupContent));
+            this.markers.addLayer(marker);
+          }
+        });
+      }
+
       Object.values(this.state.death_data).forEach((point, i) => {
         if (
           Boolean(point[0]["will_contents.death_place"]) &&

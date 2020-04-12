@@ -6,7 +6,6 @@ import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
 import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
 import ImageIIF from "../utils/ImageIIIF";
-import { createPage } from "../components/WillDisplay";
 
 import Footer from "./Footer";
 
@@ -33,10 +32,28 @@ function createPageMenu(pages, idx, handleClick) {
       style={{ marginTop: 20, marginBottom: 20 }}
       aria-label="Breadcrumb"
     >
-      {" "}
-      {menu}{" "}
+      {menu}
     </Breadcrumbs>
   );
+}
+
+function createPage(page, idx, type, nextPage) {
+  let output = (
+    <div>
+      <Paper className={type}>
+        {
+          <div
+            dangerouslySetInnerHTML={{
+              __html: page[idx][type],
+            }}
+          />
+        }
+        {idx < page.length - 1 ? nextPage : null}
+      </Paper>
+    </div>
+  );
+
+  return output;
 }
 
 class WillCompare extends Component {
@@ -44,7 +61,7 @@ class WillCompare extends Component {
     super(props);
     this.state = {
       idx: [0, 0, 0],
-      type: "image"
+      type: "image",
     };
 
     this.handlePageClick = this.handlePageClick.bind(this);
@@ -52,12 +69,12 @@ class WillCompare extends Component {
   }
 
   handlePageClick(i) {
-    return function(event) {
+    return function (event) {
       if (event.target.getAttribute("value") !== this.state.idx) {
         let idx_ = this.state.idx;
         idx_[i] = event.target.getAttribute("value");
         this.setState({
-          idx: idx_
+          idx: idx_,
         });
       }
     }.bind(this);
@@ -66,7 +83,7 @@ class WillCompare extends Component {
   handleMenuClick(event) {
     const types = ["image", "transcription", "edition"];
     this.setState({
-      type: types[event.target.getAttribute("value")]
+      type: types[event.target.getAttribute("value")],
     });
   }
 
@@ -81,7 +98,6 @@ class WillCompare extends Component {
     } else {
       cur_idx = 0;
     }*/
-
     //document.getElementById(String(cur_idx)).focus();
     let lbCollection = document.getElementsByClassName("lb");
     for (let item of lbCollection) {
@@ -135,11 +151,13 @@ class WillCompare extends Component {
   componentDidUpdate() {
     if (document.getElementById("newLine_lb") === null) {
       let lbCollection = document.getElementsByClassName("lb");
+      let i = 0;
       for (let item of lbCollection) {
         item.before(
           createElementFromHTML(
             ReactDOMServer.renderToStaticMarkup(
               <NewLine
+                key={i++}
                 titleAccess="changement de ligne"
                 color="primary"
                 style={{ cursor: "help" }}
@@ -154,11 +172,13 @@ class WillCompare extends Component {
       let spaceHorCollection = document.getElementsByClassName(
         "space_vertical"
       );
+      let i = 0;
       for (let item of spaceHorCollection) {
         item.append(
           createElementFromHTML(
             ReactDOMServer.renderToStaticMarkup(
               <SpaceLineIcon
+                key={15 * i++}
                 titleAccess="Marque un espace vertical"
                 color="primary"
                 style={{ cursor: "help" }}
@@ -173,11 +193,13 @@ class WillCompare extends Component {
       let spaceHorCollection = document.getElementsByClassName(
         "space_horizental"
       );
+      let i = 0;
       for (let item of spaceHorCollection) {
         item.append(
           createElementFromHTML(
             ReactDOMServer.renderToStaticMarkup(
               <SpaceBarIcon
+                key={100 * i++}
                 titleAccess="Marque un espace horizontal"
                 color="primary"
                 style={{ cursor: "help" }}
@@ -258,20 +280,19 @@ class WillCompare extends Component {
                 return (
                   <Grid item key={i * 100} sm={12 / totalItem}>
                     <Grid
-                      key={i * 10}
                       container
                       justify="center"
                       alignItems="center"
                       direction="column"
                       spacing={2}
                     >
-                      <Grid key={1} item>
+                      <Grid item>
                         <Typography className="title">
                           {hit["forename"] + " "}
                           <span className="typoSurname">{hit["surname"]}</span>
                         </Typography>
                       </Grid>
-                      <Grid key={2} item>
+                      <Grid item>
                         {createPageMenu(
                           hit["will"],
                           this.state.idx[i],
@@ -280,7 +301,7 @@ class WillCompare extends Component {
                       </Grid>
                     </Grid>
 
-                    <Grid key={3} item>
+                    <Grid item>
                       {this.state.type === "image" ? (
                         <div className="image">
                           <Paper>
@@ -309,7 +330,12 @@ class WillCompare extends Component {
       </div>
     );
 
-    return [output, <Footer />];
+    return (
+      <div>
+        {output}
+        <Footer />
+      </div>
+    );
   }
 }
 

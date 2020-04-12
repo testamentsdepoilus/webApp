@@ -4,7 +4,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
-  getTotalHits
+  getTotalHits,
 } from "../utils/functions";
 import {
   Breadcrumbs,
@@ -13,7 +13,7 @@ import {
   Typography,
   Grid,
   MenuList,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 
 import Footer from "./Footer";
@@ -23,7 +23,7 @@ class About extends Component {
     super(props);
     this.state = {
       data: [],
-      selectedId: ""
+      selectedId: "",
     };
     this.handleListItemClick = this.handleListItemClick.bind(this);
   }
@@ -34,7 +34,7 @@ class About extends Component {
     });*/
 
     this.setState({
-      selectedId: event.target.id
+      selectedId: event.target.id,
     });
   }
 
@@ -44,7 +44,7 @@ class About extends Component {
 
     getTotalHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
-    ).then(res => {
+    ).then((res) => {
       const total = typeof res === "object" ? res.value : res;
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
@@ -52,13 +52,13 @@ class About extends Component {
           size: total,
           query: {
             term: {
-              type: 3
-            }
+              type: 3,
+            },
           },
-          sort: [{ created: { order: "desc" } }]
+          sort: [{ order: { order: "asc" } }],
         })
       )
-        .then(data => {
+        .then((data) => {
           if (idx !== -1) {
             const id_query = url.substring(idx + 8).split("/");
             getHitsFromQuery(
@@ -66,28 +66,28 @@ class About extends Component {
               JSON.stringify({
                 query: {
                   term: {
-                    _id: id_query[0]
-                  }
-                }
+                    _id: id_query[0],
+                  },
+                },
               })
             )
-              .then(hits => {
+              .then((hits) => {
                 this.setState({
                   data: data,
-                  selectedId: hits.length > 0 ? hits[0]["_id"] : data[0]["_id"]
+                  selectedId: hits.length > 0 ? hits[0]["_id"] : data[0]["_id"],
                 });
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log("error: ", error);
               });
           } else {
             this.setState({
               data: data,
-              selectedId: data.length > 0 ? data[0]["_id"] : ""
+              selectedId: data.length > 0 ? data[0]["_id"] : "",
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error: ", error);
         });
     });
@@ -98,7 +98,7 @@ class About extends Component {
       this.state.selectedId === ""
         ? this.state.data[0]
         : this.state.data.find(
-            function(item) {
+            function (item) {
               return item["_id"] === this.state.selectedId;
             }.bind(this)
           );
@@ -111,12 +111,11 @@ class About extends Component {
         component={RouterLink}
         to="/apropos"
       >
-        {" "}
-        A propos{" "}
+        A propos
       </Link>,
       <Typography key={2} color="textPrimary">
         {curItem ? curItem._source["title"] : null}
-      </Typography>
+      </Typography>,
     ];
 
     const navBar = (
@@ -162,56 +161,58 @@ class About extends Component {
 
     const date = Boolean(curItem) ? new Date(curItem._source["created"]) : null;
 
-    return [
-      Boolean(curItem) ? (
-        <div className="about">
-          {navBar}
+    return (
+      <div>
+        {Boolean(curItem) ? (
+          <div className="about">
+            {navBar}
 
-          <h2>À PROPOS</h2>
-          <Grid container direction="row" spacing={2}>
-            <Grid item xs={2}>
-              {menuAbout}
-            </Grid>
-            <Grid item xs={10}>
-              <div className="detail">
-                <Paper className="item" key={0}>
-                  <h1 className="title">{curItem._source["title"]} </h1>
-                  <Paper className="head">
-                    <Grid
-                      container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="center"
-                    >
-                      <Grid item>{curItem._source["author"]}</Grid>
-                      <Grid item>
-                        {Boolean(date)
-                          ? "Mise à jour le " +
-                            date.toLocaleDateString() +
-                            " à " +
-                            date.toLocaleTimeString()
-                          : ""}
+            <h2>À PROPOS</h2>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={2}>
+                {menuAbout}
+              </Grid>
+              <Grid item xs={10}>
+                <div className="detail">
+                  <Paper className="item" key={0}>
+                    <h1 className="title">{curItem._source["title"]} </h1>
+                    <Paper className="head">
+                      <Grid
+                        container
+                        direction="row"
+                        justify="space-between"
+                        alignItems="center"
+                      >
+                        <Grid item>{curItem._source["author"]}</Grid>
+                        <Grid item>
+                          {Boolean(date)
+                            ? "Mise à jour le " +
+                              date.toLocaleDateString() +
+                              " à " +
+                              date.toLocaleTimeString()
+                            : ""}
+                        </Grid>
                       </Grid>
-                    </Grid>
+                    </Paper>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          curItem._source["detail"] !== ""
+                            ? curItem._source["detail"]
+                            : curItem._source["summary"],
+                      }}
+                    ></div>
                   </Paper>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        curItem._source["detail"] !== ""
-                          ? curItem._source["detail"]
-                          : curItem._source["summary"]
-                    }}
-                  ></div>
-                </Paper>
-              </div>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
-      ) : (
-        <Typography variant="h4">A props</Typography>
-      ),
-      <Footer />
-    ];
+          </div>
+        ) : (
+          <Typography variant="h4">À PROPOS</Typography>
+        )}
+        <Footer />
+      </div>
+    );
   }
 }
 

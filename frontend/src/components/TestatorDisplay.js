@@ -294,7 +294,7 @@ export default class TestatorDisplay extends Component {
       output = (
         <div className="testatorDisplay">
           <Grid container direction="row">
-            <Grid item xs={this.props.resultList ? 4 : 0}>
+            <Grid item xs={this.props.resultList ? 4 : 1}>
               {this.props.resultList}
             </Grid>
             <Grid item xs={this.props.resultList ? 8 : 12}>

@@ -19,7 +19,7 @@ import {
   getHits,
   getParamConfig,
   removePost,
-  updatePost
+  updatePost,
 } from "../../utils/functions";
 import {
   Button,
@@ -36,7 +36,7 @@ import {
   Grid,
   Fab,
   Breadcrumbs,
-  Link
+  Link,
 } from "@material-ui/core";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import NewPost from "./NewPost";
@@ -46,7 +46,7 @@ import { Link as RouterLink } from "react-router-dom";
 import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 
 // Up to top page click
-window.onscroll = function() {
+window.onscroll = function () {
   scrollFunction();
 };
 
@@ -80,7 +80,7 @@ function stableSort(array, cmp) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilizedThis.map(el => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 }
 
 function getSorting(order, orderBy) {
@@ -95,8 +95,8 @@ const headCells = [
     id: "author",
     numeric: false,
     disablePadding: false,
-    label: "Auteur"
-  }
+    label: "Auteur",
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -106,9 +106,9 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort
+    onRequestSort,
   } = props;
-  const createSortHandler = property => event => {
+  const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
@@ -123,7 +123,7 @@ function EnhancedTableHead(props) {
             inputProps={{ "aria-label": "select all desserts" }}
           />
         </TableCell>
-        {headCells.map(headCell => (
+        {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
@@ -157,10 +157,10 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
 };
 
-const EnhancedTableToolbar = props => {
+const EnhancedTableToolbar = (props) => {
   const { numSelected, handleAddNewPost, handleRemovePost, title } = props;
 
   return (
@@ -226,9 +226,9 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   handleAddNewPost: PropTypes.func.isRequired,
   handleRemovePost: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
-const AlertMessage = props => {
+const AlertMessage = (props) => {
   const { openAlert, handleClose, message } = props;
 
   return (
@@ -239,7 +239,7 @@ const AlertMessage = props => {
       onClose={handleClose}
       autoHideDuration={3000}
       ContentProps={{
-        "aria-describedby": "message-id"
+        "aria-describedby": "message-id",
       }}
       message={<span id="message-id">{message}</span>}
     ></Snackbar>
@@ -249,7 +249,7 @@ const AlertMessage = props => {
 AlertMessage.propTypes = {
   openAlert: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };
 
 export default class Manage extends Component {
@@ -259,7 +259,7 @@ export default class Manage extends Component {
       order: {
         articles: "asc",
         news: "asc",
-        about: "asc"
+        about: "asc",
       },
       orderBy: "title",
       selected: { articles: [], news: [], about: [] },
@@ -272,31 +272,31 @@ export default class Manage extends Component {
       news: [],
       articles: [],
       about: [],
-      type: null
+      type: null,
     };
   }
 
-  handleRequestSort = title => {
-    return function(event, property) {
+  handleRequestSort = (title) => {
+    return function (event, property) {
       const isDesc =
         this.state.orderBy === property && this.state.order[title] === "desc";
       let order_ = this.state.order;
       order_[title] = isDesc ? "asc" : "desc";
       this.setState({
         order: order_,
-        orderBy: property
+        orderBy: property,
       });
     }.bind(this);
   };
 
   handleSelectAllClick = (data, title) => {
-    return function(event) {
+    return function (event) {
       let selected_ = this.state.selected;
       if (event.target.checked) {
-        selected_[title] = data.map(n => n["_id"]);
+        selected_[title] = data.map((n) => n["_id"]);
 
         this.setState({
-          selected: selected_
+          selected: selected_,
         });
 
         return;
@@ -304,7 +304,7 @@ export default class Manage extends Component {
         selected_[title] = [];
 
         this.setState({
-          selected: selected_
+          selected: selected_,
         });
       }
     }.bind(this);
@@ -331,82 +331,82 @@ export default class Manage extends Component {
     const type_ = { articles: 1, news: 2, about: 3 };
     this.setState({
       selected: selected_,
-      type: type_[title]
+      type: type_[title],
     });
   };
 
   handleChangePage = (event, newPage) => {
     this.setState({
-      page: newPage
+      page: newPage,
     });
   };
 
-  handleAddNewPost = event => {
+  handleAddNewPost = (event) => {
     const type_ = { articles: 1, news: 2, about: 3 };
     this.setState({
       choice: 0,
-      type: type_[event.currentTarget.value]
+      type: type_[event.currentTarget.value],
     });
   };
 
-  handleBackToManager = event => {
+  handleBackToManager = (event) => {
     document.location.reload();
   };
 
-  handleRemovePost = event => {
+  handleRemovePost = (event) => {
     const type_ = { articles: 1, news: 2, about: 3 };
     this.setState({
       open: true,
-      type: type_[event.currentTarget.value]
+      type: type_[event.currentTarget.value],
     });
   };
 
-  handleDialogClose = event => {
+  handleDialogClose = (event) => {
     this.setState({
-      open: false
+      open: false,
     });
   };
 
-  handleDialogConfirm = event => {
+  handleDialogConfirm = (event) => {
     const type_ = ["articles", "news", "about"];
-    removePost(this.state.selected[type_[this.state.type - 1]]).then(res => {
+    removePost(this.state.selected[type_[this.state.type - 1]]).then((res) => {
       if (res.status === 200) {
         this.setState({
           open: false,
           openAlert: true,
-          mess: res.mess
+          mess: res.mess,
         });
       } else {
         this.setState({
           open: false,
           openAlert: true,
-          mess: res.err
+          mess: res.err,
         });
       }
     });
   };
 
-  handleAlertClose = event => {
+  handleAlertClose = (event) => {
     document.location.reload();
   };
 
-  handleUpdatePost = data => {
-    return function(e) {
+  handleUpdatePost = (data) => {
+    return function (e) {
       this.setState({
         choice: 1,
-        editData: data
+        editData: data,
       });
     }.bind(this);
   };
 
-  handleSelectItem = title => {
-    return function(event) {
+  handleSelectItem = (title) => {
+    return function (event) {
       if (Boolean(this.state.selectedItem[title])) {
         const item = {
-          id: this.state.selectedItem[title],
-          selected: false
+          id: [this.state.selectedItem[title]],
+          doc: [{ selected: false }],
         };
-        updatePost(item).then(res => {
+        updatePost(item).then((res) => {
           if (res.status === 200) {
             console.log("Mise à jour avec succees");
           } else {
@@ -415,10 +415,10 @@ export default class Manage extends Component {
         });
       }
       const item = {
-        id: event.target.value,
-        selected: true
+        id: [event.target.value],
+        doc: [{ selected: true }],
       };
-      updatePost(item).then(res => {
+      updatePost(item).then((res) => {
         if (res.status === 200) {
           console.log("Mise à jour avec succees");
         } else {
@@ -429,13 +429,14 @@ export default class Manage extends Component {
       let selectedItem_ = this.state.selectedItem;
       selectedItem_[title] = event.target.value;
       this.setState({
-        selectedItem: selectedItem_
+        selectedItem: selectedItem_,
       });
     }.bind(this);
   };
 
   setDefaultView(data, title) {
-    const isSelected = name => this.state.selected[title].indexOf(name) !== -1;
+    const isSelected = (name) =>
+      this.state.selected[title].indexOf(name) !== -1;
 
     return (
       <div>
@@ -478,7 +479,7 @@ export default class Manage extends Component {
                     selected={isItemSelected}
                   >
                     <TableCell
-                      onClick={event =>
+                      onClick={(event) =>
                         this.handleClick(event, row["_id"], title)
                       }
                       role="checkbox"
@@ -487,7 +488,7 @@ export default class Manage extends Component {
                       <Checkbox
                         checked={isItemSelected}
                         inputProps={{
-                          "aria-labelledby": labelId
+                          "aria-labelledby": labelId,
                         }}
                       />
                     </TableCell>
@@ -532,8 +533,8 @@ export default class Manage extends Component {
   componentDidMount() {
     getHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
-    ).then(data => {
-      data.forEach(item => {
+    ).then((data) => {
+      data.forEach((item) => {
         switch (parseInt(item._source["type"], 10)) {
           case 1:
             this.state.articles.push(item);
@@ -548,21 +549,31 @@ export default class Manage extends Component {
             break;
         }
       });
+
+      this.state.articles.sort(function (a, b) {
+        return a._source["order"] - b._source["order"];
+      });
+
       let idx = this.state.articles.findIndex(
-        item => item._source["selected"] === true
+        (item) => item._source["selected"] === true
       );
       let selectedItem_ = this.state.selectedItem;
       if (idx > -1) {
         selectedItem_["articles"] = this.state.articles[idx]._id;
       }
       idx = this.state.news.findIndex(
-        item => item._source["selected"] === true
+        (item) => item._source["selected"] === true
       );
       if (idx > -1) {
         selectedItem_["news"] = this.state.news[idx]._id;
       }
+
+      this.state.about.sort(function (a, b) {
+        return a._source["order"] - b._source["order"];
+      });
+
       idx = this.state.about.findIndex(
-        item => item._source["selected"] === true
+        (item) => item._source["selected"] === true
       );
       if (idx > -1) {
         selectedItem_["about"] = this.state.about[idx]._id;
@@ -571,12 +582,12 @@ export default class Manage extends Component {
         articles: this.state.articles,
         news: this.state.news,
         about: this.state.about,
-        selectedItem: selectedItem_
+        selectedItem: selectedItem_,
       });
     });
   }
 
-  topFunction = function() {
+  topFunction = function () {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   };
@@ -624,6 +635,11 @@ export default class Manage extends Component {
             backButton={backButton}
             type={this.state.type}
             alertMessage={AlertMessage}
+            favorisList={
+              parseInt(this.state.type, 10) === 1
+                ? this.state.articles
+                : this.state.about
+            }
           />
         );
         break;
@@ -633,6 +649,11 @@ export default class Manage extends Component {
             backButton={backButton}
             alertMessage={AlertMessage}
             data={this.state.editData}
+            favorisList={
+              parseInt(this.state.editData._source["type"], 10) === 1
+                ? this.state.articles
+                : this.state.about
+            }
           />
         );
         break;

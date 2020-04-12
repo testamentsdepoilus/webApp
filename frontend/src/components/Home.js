@@ -614,7 +614,6 @@ class Home extends Component {
                     componentId="mapSearch"
                     react={{
                       and: [
-                        "date_naissance",
                         "date_redaction",
                         "date_deces",
                         "lieu_deces",
@@ -623,16 +622,12 @@ class Home extends Component {
                     }}
                     defaultQuery={() => ({
                       _source: [
-                        "will_contents.birth_place",
                         "testator.forename",
                         "testator.surname",
                         "testator.ref",
                         "will_contents.death_place",
                         "will_contents.death_date",
-                        "will_contents.birth_date",
-                        "will_contents.birth_place_norm",
                         "will_contents.death_place_norm",
-                        "will_contents.birth_place_ref",
                         "will_contents.death_place_ref"
                       ],
                       size: 1000,
@@ -643,26 +638,14 @@ class Home extends Component {
                     render={({ data }) => {
                       let birth_data = {};
                       let death_data = {};
+                      let testators = data.map(item => item["testator.ref"]);
+                      let data_ = data.filter((item, index) => {
+                        return (
+                          testators.indexOf(item["testator.ref"]) === index
+                        );
+                      });
 
-                      data.forEach(item => {
-                        if (Boolean(item["will_contents.birth_place_ref"])) {
-                          if (
-                            Boolean(
-                              birth_data[item["will_contents.birth_place_ref"]]
-                            )
-                          ) {
-                            birth_data[
-                              item["will_contents.birth_place_ref"]
-                            ].push(item);
-                          } else {
-                            birth_data[
-                              item["will_contents.birth_place_ref"]
-                            ] = [];
-                            birth_data[
-                              item["will_contents.birth_place_ref"]
-                            ].push(item);
-                          }
-                        }
+                      data_.forEach(item => {
                         if (Boolean(item["will_contents.death_place_ref"])) {
                           if (
                             Boolean(
@@ -687,6 +670,7 @@ class Home extends Component {
                         <GeoMap
                           birth_data={birth_data}
                           death_data={death_data}
+                          page="home"
                         />
                       );
                     }}

@@ -25,10 +25,21 @@
 
 .places .pagination {
   position: relative;
-  bottom: 6em;
+  bottom: 5em;
 }
 
 .places .sortResult {
   margin: 0 0 2em 5em;
   font-weight: 600;
+}
+
+.places .selectList {
+  width: 15em;
+  float: right;
+  position: relative;
+  bottom: 2em;
+}
+
+.places .placeSearch {
+  margin: 2em 0 2em 0;
 }

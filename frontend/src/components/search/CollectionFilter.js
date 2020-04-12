@@ -11,9 +11,7 @@ const CollectionFilter = () => (
         "date",
         "contributeur",
         "institution",
-        "lieu_redaction",
-        "lieu_naissance",
-        "lieu_deces",
+        "lieu",
         "notoriale",
         "profession",
         "unite"

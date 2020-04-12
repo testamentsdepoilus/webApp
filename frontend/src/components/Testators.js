@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   ReactiveBase,
   ReactiveList,
-  SingleDropdownList
+  SingleDropdownList,
 } from "@appbaseio/reactivesearch";
 
 import {
@@ -14,7 +14,7 @@ import {
   Link,
   Typography,
   Grid,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
 import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
@@ -22,7 +22,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
-  equalsArray
+  equalsArray,
 } from "../utils/functions";
 import TestatorDisplay from "./TestatorDisplay";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -36,7 +36,7 @@ class Testators extends Component {
       order: "asc",
       value: 1,
       testator_name: "",
-      cur_list: []
+      cur_list: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClear = this.handleClear.bind(this);
@@ -44,67 +44,68 @@ class Testators extends Component {
   }
 
   handleClear(value) {
-    return function(event) {
+    return function (event) {
       this.setState({
-        testator_name: value
+        testator_name: value,
       });
     }.bind(this);
   }
 
   handleValueChange(value) {
     this.setState({
-      testator_name: value
+      testator_name: value,
     });
   }
+
   handleChange(event) {
     switch (event.target.value) {
       case 1:
         this.setState({
           value: event.target.value,
           field: "persName.norm.keyword",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
           field: "persName.norm.keyword",
-          order: "desc"
+          order: "desc",
         });
         break;
       case 3:
         this.setState({
           value: event.target.value,
           field: "birth.date",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 4:
         this.setState({
           value: event.target.value,
           field: "birth.date",
-          order: "desc"
+          order: "desc",
         });
         break;
       case 5:
         this.setState({
           value: event.target.value,
           field: "death.date",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 6:
         this.setState({
           value: event.target.value,
           field: "death.date",
-          order: "desc"
+          order: "desc",
         });
         break;
       default:
         this.setState({
           value: event.target.value,
           field: "persName.norm.keyword",
-          order: "asc"
+          order: "asc",
         });
         break;
     }
@@ -153,14 +154,23 @@ class Testators extends Component {
                     showCount={false}
                     autosuggest={true}
                     placeholder="Nom du testateur"
-                    loader="En chargement ..."
                     showSearch={true}
                     searchPlaceholder="Saisir un nom de testateur"
                     onChange={this.handleValueChange}
                     URLParams={true}
+                    renderItem={(label, count, isSelected) => (
+                      <div>
+                        {label.split("+")[1][0].toUpperCase() +
+                          label.split("+")[1].slice(1) +
+                          " "}
+                        <span className="typoSurname">
+                          {label.split("+")[0]}
+                        </span>
+                      </div>
+                    )}
                     innerClass={{
                       list: "list",
-                      select: "select"
+                      select: "select",
                     }}
                   />
                 </Grid>
@@ -179,7 +189,7 @@ class Testators extends Component {
           <div className="testators_result">
             <ReactiveList
               react={{
-                and: ["testatorId"]
+                and: ["testatorId"],
               }}
               className="testators"
               dataField={this.state.field}
@@ -188,18 +198,18 @@ class Testators extends Component {
               pagination={true}
               paginationAt="top"
               size={1}
-              pages={5}
+              pages={10}
               sortBy={this.state.order}
               showEndPage={false}
               URLParams={false}
               innerClass={{
                 resultsInfo: "resultsInfo",
-                pagination: "pagination"
+                pagination: "pagination",
               }}
-              renderResultStats={function(stats) {
+              renderResultStats={function (stats) {
                 return `${stats.numberOfResults} testateurs`;
               }}
-              render={function(res) {
+              render={function (res) {
                 return res.data.map((item, j) => {
                   window.history.replaceState(
                     getParamConfig("web_url"),
@@ -207,7 +217,7 @@ class Testators extends Component {
                     getParamConfig("web_url") + "/testateur/" + item["_id"]
                   );
                   const curPage_ =
-                    Math.floor(res.resultStats.currentPage / 5) * 5;
+                    Math.floor(res.resultStats.currentPage / 10) * 10;
                   let sort_ = {};
                   sort_[this.state.field] = { order: this.state.order };
                   getHitsFromQuery(
@@ -216,18 +226,18 @@ class Testators extends Component {
                       getParamConfig("es_index_testators"),
                     JSON.stringify({
                       from: curPage_,
-                      size: 5,
-                      sort: [sort_]
+                      size: 10,
+                      sort: [sort_],
                     })
                   )
-                    .then(data => {
+                    .then((data) => {
                       if (!equalsArray(data, this.state.cur_list)) {
                         this.setState({
-                          cur_list: data
+                          cur_list: data,
                         });
                       }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                       console.log("error :", error);
                     });
                   const resultList = (

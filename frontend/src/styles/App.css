@@ -29,7 +29,7 @@
 
 /*Legend specific*/
 .legend {
-  padding: 6px 8px;
+  padding: 1px 2px;
   font: 14px Arial, Helvetica, sans-serif;
   background: white;
   background: rgba(255, 255, 255, 0.8);
@@ -40,21 +40,21 @@
 }
 .legend h5 {
   text-align: center;
-  font-size: 16px;
-  margin: 2px 12px 8px;
+  font-size: 0.8em;
+  margin: 2px 6px 8px;
   color: #777;
 }
 
 .legend span {
   position: relative;
-  bottom: 3px;
+  font-size: 0.8em;
 }
 
 .legend img {
   width: 1em;
   height: 1.1em;
   float: left;
-  margin: 0 8px 0 0;
+  margin: 0 4px 0 0;
   opacity: 0.8;
 }
 
