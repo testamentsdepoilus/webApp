@@ -1,15 +1,13 @@
 import React, { Component } from "react";
+
 import {
-  Typography,
   List,
   ListItem,
   Grid,
   Breadcrumbs,
   Link
 } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
 import { getUserToken, getParamConfig } from "../../utils/functions";
-import Footer from "../Footer";
 
 class Profile extends Component {
   constructor() {
@@ -36,7 +34,11 @@ class Profile extends Component {
   render() {
     return (
       <div>
-        <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+          <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
+                aria-label="Breadcrumb"
+                className="breadcrumbs"
+              >
           <Link
             id="home"
             key={0}
@@ -46,49 +48,34 @@ class Profile extends Component {
             Accueil
           </Link>
 
-          <Link
-            id="espace"
-            key={1}
-            color="inherit"
-            component={RouterLink}
-            to="/espace"
-          >
+          <div>
             Mon espace
-          </Link>
-          <Link
-            id="profile"
-            key={1}
-            color="inherit"
-            component={RouterLink}
-            to="/espace/profile"
-          >
-            Mon profil
-          </Link>
+          </div>
+          <div>Mon profil</div>
         </Breadcrumbs>
-        <div className="profile">
+
+        <h1 className="heading"><i className="fas fa-user"></i> Mon profil</h1>
+
+        <div className="profile bg-white paddingContainer">
           <Grid container direction="column" justify="center">
-            <Grid item>
-              <Typography variant="h4"> Mon profil :</Typography>
-            </Grid>
             <Grid item>
               <List>
                 <ListItem>
-                  Nom :{" "}
-                  <Typography variant="h5">{this.state.first_name}</Typography>
+                   <div className="fontWeightMedium">Nom :&nbsp;{" "} </div>
+                  <div>{this.state.first_name}</div>
                 </ListItem>
                 <ListItem>
-                  Prénom :{" "}
-                  <Typography variant="h5">{this.state.last_name}</Typography>
+                  <div className="fontWeightMedium">Prénom :&nbsp;{" "} </div>
+                  <div>{this.state.last_name}</div>
                 </ListItem>
                 <ListItem>
-                  Adresse mail :{" "}
-                  <Typography variant="h5">{this.state.email}</Typography>
+                  <div className="fontWeightMedium">Adresse mail :&nbsp;{" "}</div>
+                  <div>{this.state.email}</div>
                 </ListItem>
               </List>
             </Grid>
           </Grid>
         </div>
-        <Footer />
       </div>
     );
   }

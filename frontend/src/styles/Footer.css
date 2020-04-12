@@ -1,35 +1,32 @@
-.root_footer {
-  position: relative;
-  text-align: center;
-  margin-top: 2em;
-  bottom: 0;
+footer{
+    background-color: white;
+    box-shadow: inset 0 7px 9px -7px rgba(0,0,0,0.4);
+    margin-top: 70px;
+    padding-top: 20px;
+}
+footer .footerContainer {
+  max-width: 1280px;
+  margin:auto; 
+  color:#B91918;
+  align-items: center;
+}
+footer .footerContainer a{
+  color:#1F8299;
+  font-size:0.98rem;
+}
+footer .footerContainer a:hover{
+  color:#8094B1;
+
+}
+footer .footer_menu{
+  align-items: center;
+}
+footer .footerContainer img{
+  max-width: 80px;
 }
 
-.root_footer .menu_footer {
-  margin-right: 2em;
+footer .footerLogos > div > div{
+  display: inline-block;
+  max-width: 120px;
 }
 
-.root_footer .link {
-  text-decoration: none;
-  font-size: 1rem;
-  padding-left: 15;
-  color: #212121;
-  font-weight: 500;
-  font-family: -apple-system;
-}
-
-.root_footer .link:hover {
-  color: #0091ea;
-  font-weight: 600;
-  background-color: #eceff1;
-}
-
-.root_footer .link:active {
-  color: #0091ea;
-  font-weight: 600;
-}
-
-.root_footer img {
-  max-width: 5em;
-  max-height: 5em;
-}

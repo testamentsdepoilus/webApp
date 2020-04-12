@@ -1,17 +1,17 @@
 import React, { Component } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 import {
   TextField,
   Button,
   Grid,
   Breadcrumbs,
   Link,
-  Typography,
   Dialog,
   DialogTitle,
   DialogContent
 } from "@material-ui/core";
 import { getParamConfig, updateMDP } from "../../utils/functions";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
 const jwt = require("jsonwebtoken");
 
@@ -108,28 +108,30 @@ class ResetMDP extends Component {
 
   render() {
     return (
-      <div className="resetMDP">
+      <div className="lostPassWord">
         <div className="menu">
           <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="Breadcrumb"
-          >
-            <Link
-              id="home"
-              key={0}
-              color="inherit"
-              href={getParamConfig("web_url") + "/accueil"}
-            >
-              Accueil
-            </Link>
+                separator={<i className="fas fa-caret-right"></i>}
+                aria-label="Breadcrumb"
+                className="breadcrumbs"
+              >
+                <Link
+                  id="home"
+                  key={0}
+                  color="inherit"
+                  component={RouterLink}
+                   href={getParamConfig("web_url") + "/accueil"}
+                >
+                  Accueil
+                </Link>
+               
+                <typography>Réinitialisation du mot de passe</typography>
+           </Breadcrumbs>
 
-            <Typography color="textPrimary">
-              Réinitialisation du mot de passe
-            </Typography>
-          </Breadcrumbs>
         </div>
-        <Grid container direction="row" justify="space-evenly" spacing={2}>
-          <Grid item>
+        <div className="bg-white paddingContainer">
+            <h1 className="heading"><i class="fas fa-unlock-alt"></i> Réinitialisation du mot de passe</h1>
+
             <p>
               Saisissez un nouveau mot de passe pour <b> {this.state.email}</b>
             </p>
@@ -137,17 +139,13 @@ class ResetMDP extends Component {
               Nous allons envoyer à cette adresse un lien vous permettant de
               réinitialiser facilement votre mot de passe.
             </p>
-          </Grid>
-          <Grid item>
             <form className="form" noValidate onSubmit={this.onSubmit}>
               <Grid
                 container
                 direction="column"
-                justify="center"
-                alignItems="center"
                 spacing={1}
               >
-                <Grid item>
+                <Grid>
                   <TextField
                     id="password"
                     variant="outlined"
@@ -160,9 +158,10 @@ class ResetMDP extends Component {
                     onChange={this.onChange}
                     value={this.state.password}
                     error={this.state.isError}
+                    className="input"
                   />
                 </Grid>
-                <Grid item>
+                <Grid>
                   <TextField
                     id="password-confirme"
                     variant="outlined"
@@ -175,14 +174,13 @@ class ResetMDP extends Component {
                     onChange={this.onChange}
                     value={this.state.passConfirme}
                     error={this.state.isError}
+                    className="input"
                   />
                 </Grid>
-                <Grid item>
+                <Grid>
                   <Button
                     id="btValidate"
-                    variant="contained"
-                    color="primary"
-                    className="submit"
+                      className="button submit fontWeightMedium plain bg-secondaryLight"
                     type="submit"
                   >
                     Valider
@@ -190,8 +188,8 @@ class ResetMDP extends Component {
                 </Grid>
               </Grid>
             </form>
-          </Grid>
-        </Grid>
+        </div>
+
         <Dialog
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"

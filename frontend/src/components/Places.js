@@ -3,16 +3,13 @@ import { Link as RouterLink } from "react-router-dom";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 
 import {
-  Paper,
+  Box,
   Select,
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography,
-  Grid
 } from "@material-ui/core";
 import "../styles/Testator.css";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   equalsArray,
@@ -20,7 +17,6 @@ import {
 } from "../utils/functions";
 
 import PlaceDisplay from "./PlaceDisplay";
-import Footer from "./Footer";
 
 class Places extends Component {
   constructor(props) {
@@ -94,17 +90,16 @@ class Places extends Component {
 
   render() {
     return (
-      <div className="places">
+      <div className="notices places">
         <ReactiveBase
           app={getParamConfig("es_index_places")}
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+        <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
                 aria-label="Breadcrumb"
+                className="breadcrumbs"
               >
                 <Link
                   id="home"
@@ -115,25 +110,14 @@ class Places extends Component {
                 >
                   Accueil
                 </Link>
-                <Typography color="textPrimary">Les lieux</Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
+                <div>Les lieux</div>
+        </Breadcrumbs>
 
-          <div className="placeSearch">
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-            >
-              <Grid item>
-                <h2>Découvrir les lieux</h2>
-              </Grid>
-            </Grid>
-          </div>
-
-          <div className="places_result">
+        <Box className="headingBar bg-gray" display="flex" justifyContent="space-between">
+          <h2 className="card-title bg-primaryMain"><i className="far fa-address-book"></i> Découvrir les lieux</h2>
+        </Box>
+        
+        <div className="places_result">
             <ReactiveList
               dataField={this.state.field}
               componentId="place"
@@ -142,7 +126,7 @@ class Places extends Component {
               pagination={true}
               paginationAt="top"
               size={1}
-              pages={5}
+              pages={10}
               sortBy={this.state.order}
               showEndPage={false}
               renderResultStats={function(stats) {
@@ -150,7 +134,7 @@ class Places extends Component {
               }}
               URLParams={false}
               innerClass={{
-                resultsInfo: "resultsInfo",
+                resultsInfo: "countResults",
                 pagination: "pagination"
               }}
               render={function(res) {
@@ -161,7 +145,7 @@ class Places extends Component {
                     getParamConfig("web_url") + "/place/" + item["_id"]
                   );
                   const curPage_ =
-                    Math.floor(res.resultStats.currentPage / 5) * 5;
+                    Math.floor(res.resultStats.currentPage / 10) * 10;
                   let sort_ = {};
                   sort_[this.state.field] = { order: this.state.order };
                   getHitsFromQuery(
@@ -170,7 +154,7 @@ class Places extends Component {
                       getParamConfig("es_index_places"),
                     JSON.stringify({
                       from: curPage_,
-                      size: 5,
+                      size: 10,
                       sort: [sort_]
                     })
                   )
@@ -186,57 +170,56 @@ class Places extends Component {
                     });
 
                   const resultList = (
-                    <div className="resultList">
-                      <div className="sortResult">
-                        Trier par :
-                        <Select
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1}>commune (A-Z)</MenuItem>
-                          <MenuItem value={2}>commune (Z-A)</MenuItem>
-                          <MenuItem value={3}>région (A-Z)</MenuItem>
-                          <MenuItem value={4}>région (Z-A)</MenuItem>
-                          <MenuItem value={5}>pays (A-Z)</MenuItem>
-                          <MenuItem value={6}>pays (Z-A)</MenuItem>
-                        </Select>
+                  <div className="leftColumn bg-gray">
+                      <Box display="flex" justifyContent="flex-end" width="100%">
+                        <Box display="flex" className="sort_results">
+                          <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
+                          <Select className="select" value={this.state.value} onChange={this.handleChange}>
+                            <MenuItem className="sortBy" value={1}>commune (A-Z)</MenuItem>
+                            <MenuItem className="sortBy" value={2}>commune (Z-A)</MenuItem>
+                            <MenuItem className="sortBy" value={3}>région <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+                            <MenuItem className="sortBy" value={4}>région <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+                            <MenuItem className="sortBy" value={5}>pays <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+                            <MenuItem className="sortBy" value={6}>pays <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+                          </Select>
+                        </Box>
+                      </Box>
+                      <div className="resultList">                
+                        <ul>
+                          {this.state.cur_list.map((item, i) =>
+                            Boolean(
+                              res.resultStats.currentPage === curPage_ + i
+                            ) ? (
+                              <li key={item["_id"]} className="active">
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source["city"]}
+                              </li>
+                            ) : (
+                              <li key={item["_id"]}>
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source["city"]}
+                              </li>
+                            )
+                          )}
+                        </ul>
                       </div>
-                      <ul>
-                        {this.state.cur_list.map((item, i) =>
-                          Boolean(
-                            res.resultStats.currentPage === curPage_ + i
-                          ) ? (
-                            <li key={item["_id"]} className="li_active">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["city"]}
-                            </li>
-                          ) : (
-                            <li key={item["_id"]} className="li">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["city"]}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
+                  </div>
                   );
                   return (
-                    <div className="placesResult" key={j}>
+                    <div key={j}>
                       <PlaceDisplay
                         id={item["_id"]}
                         data={item}
                         resultList={resultList}
                       />
-
-                      <Footer />
                     </div>
                   );
                 });
               }.bind(this)}
             ></ReactiveList>
-          </div>
+        </div>
         </ReactiveBase>
       </div>
     );

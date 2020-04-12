@@ -11,25 +11,19 @@ import {
   getHitsFromQuery
 } from "../utils/functions";
 import GeoMap from "./search/GeoMap_bis";
-import ClearIcon from "@material-ui/icons/Clear";
 
 import {
   ListItem,
   ListItemText,
   Tooltip,
   Link,
-  Divider,
   Grid,
+  Box,
   Paper,
-  Typography,
-  IconButton,
-  GridListTile,
-  GridList
+  Button,
 } from "@material-ui/core";
 import DateFilter from "./search/DateFilter";
-import MoreIcon from "@material-ui/icons/More";
 
-import Footer from "./Footer";
 
 class Home extends Component {
   constructor(props) {
@@ -58,7 +52,7 @@ class Home extends Component {
 
     if (Boolean(total[0]["testaments"])) {
       return (
-        <div className="statsResults">
+        <div className="countResults">
           {stats.numberOfResults} testaments sur {total[0]["testaments"]}{" "}
           correspondent à votre recherche
         </div>
@@ -253,26 +247,21 @@ class Home extends Component {
       });
   }
   render() {
-    const date_news = Boolean(this.state.selectedNews)
-      ? new Date(this.state.selectedNews._source["created"])
-      : null;
-    const date_article = Boolean(this.state.selectedArticle)
-      ? new Date(this.state.selectedArticle._source["created"])
-      : null;
+ 
     return (
       <div className="home">
-        <Grid container direction="row" spacing={1}>
-          <Grid item xs={4}>
-            <Grid container direction="column" spacing={2}>
-              <Grid item>
+        <Grid container direction="row" spacing={5}>
+          <Grid item xs={12} lg={4}  className="rech_actu_viz">
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={12} md={4} lg={12} id="etat_recherche">
                 {Boolean(this.state.selectedArticle) ? (
-                  <Paper className="item">
-                    <h2 className="card_title">État de la recherche</h2>
-                    <Typography className="title">
+                  <Paper className="card">
+                    <h2 className="card-title"><i className="fas fa-bullhorn"></i> État de la recherche</h2>
+                    <h3>
                       {" "}
                       {this.state.selectedArticle._source["title"]}{" "}
-                    </Typography>
-                    <div
+                    </h3>
+                    <div className="content"
                       dangerouslySetInnerHTML={{
                         __html:
                           this.state.selectedArticle._source["summary"] !== ""
@@ -280,46 +269,23 @@ class Home extends Component {
                             : this.state.selectedArticle._source["detail"]
                       }}
                     ></div>
-                    <Paper className="foot">
-                      <Grid
-                        container
-                        direction="row"
-                        justify="space-between"
-                        alignItems="center"
-                      >
-                        <Grid item>
-                          {this.state.selectedArticle._source["author"]}
-                        </Grid>
-                        <Grid item>
-                          {"Mise à jour le "}
-                          {date_article.toLocaleDateString()}
-                          {" à "}
-                          {date_article.toLocaleTimeString()}
-                        </Grid>
-                        <Grid item>
-                          <IconButton
-                            aria-label="More"
-                            onClick={this.handleMoreArticleClick}
-                          >
-                            <MoreIcon className="icon" />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </Paper>
+                   <Box display="flex" justifyContent="flex-end">
+                    <Button className="button outlined secondary-light"  aria-label="Lire la suite" onClick={this.handleMoreArticleClick}>Lire la suite</Button>
+                   </Box>
                   </Paper>
                 ) : (
                   ""
                 )}
               </Grid>
-              <Grid item>
+              <Grid item xs={12} md={4} lg={12} id="actualites">
                 {Boolean(this.state.selectedNews) ? (
-                  <Paper className="item">
-                    <h2 className="card_title">Actualités</h2>
-                    <Typography className="title">
+                  <Paper className="card">
+                    <h2 className="card-title"><i className="far fa-newspaper"></i> Actualités</h2>
+                    <h3>
                       {" "}
                       {this.state.selectedNews._source["title"]}{" "}
-                    </Typography>
-                    <div
+                    </h3>
+                    <div className="content"
                       dangerouslySetInnerHTML={{
                         __html:
                           this.state.selectedNews._source["summary"] !== ""
@@ -327,101 +293,78 @@ class Home extends Component {
                             : this.state.selectedNews._source["detail"]
                       }}
                     ></div>
-                    <Paper className="foot">
-                      <Grid
-                        container
-                        direction="row"
-                        justify="space-between"
-                        alignItems="center"
-                      >
-                        <Grid item>
-                          {this.state.selectedNews._source["author"]}
-                        </Grid>
-                        <Grid item>
-                          {"Mise à jour le "}
-                          {date_news.toLocaleDateString()}
-                          {" à "}
-                          {date_news.toLocaleTimeString()}
-                        </Grid>
-                        <Grid item>
-                          <IconButton
-                            aria-label="More"
-                            onClick={this.handleMoreNewClick}
-                          >
-                            <MoreIcon className="icon" />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </Paper>
+                    <Box display="flex" justifyContent="flex-end">
+                     <Button className="button outlined secondary-light" aria-label="Lire la suite" onClick={this.handleMoreNewClick}>Lire la suite</Button>
+                    </Box>
                   </Paper>
                 ) : (
                   ""
                 )}
               </Grid>
-              <Grid item>
-                <h2 className="card_title">Visualiser les données</h2>
-
+              <Grid item xs={12} md={4} lg={12} id="visualisation">
+               <Paper className="card">
+                <h2 className="card-title"><i className="far fa-chart-bar"></i> Visualiser les données</h2>
                 <iframe
                   className="chart"
                   id="chart"
                   title="visualisation"
                   src="http://patrimeph.ensea.fr/kibana7/app/kibana#/visualize/edit/ff5975f0-6530-11ea-8a32-c183c080aac8?embed=true&_g=()"
-                ></iframe>
+                  ></iframe>
+               </Paper>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={8}>
-            <Grid item>
-              <div className="images">
-                <h2 className="card_title">Testaments à la une</h2>
-                <GridList cols={4}>
+
+          <Grid item xs={12} lg={8}>
+            <Grid item id="random_wills">
+              <Paper className="card">
+                <h2 className="card-title"><i className="fas fa-folder-open"></i> Testaments au hasard</h2>
+                 <Grid container direction="row"  spacing={0} className="random_wills">                  
                   {this.state.images.map(tile => (
-                    <GridListTile key={tile._id}>
+                  
+                    <Grid className="card" key={tile._id}  item xs={12} sm={6} md={3}>
                       <a
                         href={
                           getParamConfig("web_url") + "/testament/" + tile._id
                         }
                       >
-                        <img
+                        <img 
                           src={
                             tile._source["will_pages"][0]["picture_url"] +
                             "/full/full/0/default.jpg"
                           }
                           alt={tile._source["will_pages"][0]["picture_url"]}
-                          className="image"
                         />
                       </a>
-                    </GridListTile>
+                      <div>
+                        <a className="testatorName"
+                        href={
+                          getParamConfig("web_url") + "/testament/" + tile._id
+                        }
+                        >Prénom <span className="smallcaps">Nom du testateur</span></a>
+                        <div>Minute XXXXXXX</div>
+                        <div>Cote XXXXX</div>
+                      </div>
+                    </Grid>
                   ))}
-                </GridList>
-              </div>
+                </Grid>
+              </Paper>
             </Grid>
-            <div className="search">
+            <Box className="bg-light-gray" mt={2.5}>
               <ReactiveBase
                 app={getParamConfig("es_index_wills")}
                 url={getParamConfig("es_host")}
                 type="_doc"
               >
-                <Grid container direction="row" spacing={1}>
-                  <Grid item xs={6}>
-                    <div>
-                      <Paper className="menuFilter">
-                        <Grid
-                          container
-                          direction="column"
-                          justify="center"
-                          alignItems="center"
-                          spacing={2}
-                        >
-                          <Grid item>
-                            <h2 className="card_title">
-                              Rechercher un testament
-                            </h2>
-                          </Grid>
-                          <Grid item container direction="row" spacing={1}>
-                            <Grid item xs={10}>
-                              <SingleDropdownList
-                                className="datasearch"
+                <Grid container direction="row"  spacing={0}>
+                  <Grid className="card searchForm" item xs={12} md={6}>
+                          <h2 className="card-title"><i className="fas fa-search"></i> Rechercher un testament</h2>
+
+                          <Box mb={0.7} mt={1.5}><label>Nom du testateur</label></Box>
+                          <Box display="flex" justifyContent="space-between" alignItems="center" spacing={2}>
+                            <Box width="90%">
+                               <SingleDropdownList
+                                className="select"
                                 react={{
                                   and: [
                                     "date_redaction",
@@ -436,38 +379,33 @@ class Home extends Component {
                                 sortBy="asc"
                                 showCount={false}
                                 autosuggest={true}
-                                placeholder="Nom du testateur"
                                 URLParams={true}
-                                loader="En chargement ..."
+                                loader="Chargement en cours..."
                                 showSearch={true}
-                                searchPlaceholder="Saisir un nom de testateur"
+                                placeholder="Saisissez un nom de testateur"
+                                searchPlaceholder="Saisissez un nom de testateur"
                                 innerClass={{
                                   list: "list"
                                 }}
                                 onChange={this.handleNameChange}
                               />
-                            </Grid>
-                            <Grid item xs={2}>
-                              <IconButton
+                            </Box>
+                            <Button
                                 id="testator_name"
                                 value="testator_name"
                                 onClick={this.handleClear("testator_name")}
                                 title="Supprimer le filtre"
+                                // className="d-none" pour masquer ou "d-inline-flex" pour afficher
                               >
-                                <ClearIcon style={{ color: "red" }} />
-                              </IconButton>
-                            </Grid>
-                          </Grid>
-                          <Grid
-                            item
-                            container
-                            direction="row"
-                            alignItems="center"
-                            spacing={1}
-                          >
-                            <Grid item xs={10}>
+                               <i className="fas fa-times"></i>
+                              </Button>
+                          </Box>
+
+                          <Box mb={0.7} mt={3}><label>Lieu de décès</label></Box>
+                          <Box display="flex" justifyContent="space-between" alignItems="center" spacing={2}>
+                            <Box width="90%">
                               <SingleDropdownList
-                                className="datasearch"
+                                className="select"
                                 react={{
                                   and: [
                                     "date_naissance",
@@ -483,49 +421,44 @@ class Home extends Component {
                                 sortBy="asc"
                                 showCount={false}
                                 autosuggest={true}
-                                placeholder="Lieu de décès"
+                                placeholder="Saisissez un nom de lieu"
                                 URLParams={true}
-                                loader="En chargement ..."
+                                loader="Chargement en cours..."
                                 showSearch={true}
-                                searchPlaceholder="Saisir un nom de lieu"
+                                searchPlaceholder="Saisissez un nom de lieu"
                                 innerClass={{
                                   list: "list"
                                 }}
                                 onChange={this.handlePlaceChange}
                               />
-                            </Grid>
-                            <Grid item xs={2}>
-                              <IconButton
+                            </Box>
+                            <Button
                                 id="place"
                                 value="place"
                                 onClick={this.handleClear("place")}
                                 title="Supprimer le filtre"
+                                // className="d-none" pour masquer ou "d-inline-flex" pour afficher
                               >
-                                <ClearIcon style={{ color: "red" }} />
-                              </IconButton>
-                            </Grid>
-                          </Grid>
-                          <Grid item>
-                            <DateFilter />
-                          </Grid>
-                          <Grid item>
+                               <i className="fas fa-times"></i>
+                              </Button>
+                          </Box>
+
+                           <DateFilter />
+
+                    
+                           <Box mt={2} display="flex" justifyContent="center">
                             <Link
                               href={getParamConfig("web_url") + "/recherche"}
-                              className="bt_plus"
+                              className="button moreCriteria outlined secondary-light bg-white text-primaryMain"
                             >
                               {" "}
-                              Plus de critères
+                              <i className="fas fa-plus-circle"></i> Plus de critères
                             </Link>
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                    </div>
+                           </Box>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item className="card searchResults" xs={12} md={6}>
                     {" "}
-                    <div className="result">
-                      <Paper>
-                        <ReactiveList
+                      <ReactiveList
                           react={{
                             and: [
                               "date_naissance",
@@ -535,7 +468,6 @@ class Home extends Component {
                               "lieu_deces"
                             ]
                           }}
-                          className="home"
                           dataField=""
                           componentId="searchResult"
                           stream={true}
@@ -543,7 +475,7 @@ class Home extends Component {
                           size={10}
                           showResultStats={true}
                           infiniteScroll={false}
-                          loader="Recherche en cours ..."
+                          loader="Recherche en cours..."
                           innerClass={{
                             resultsInfo: "resultsInfo",
                             pagination: "pagination"
@@ -573,10 +505,11 @@ class Home extends Component {
                               </p>
                             );
                             return (
-                              <div className="typography" key={res["_id"]}>
                                 <ListItem
+                                  key={res["_id"]}
                                   alignItems="flex-start"
                                   component="div"
+                                  className="resultLine"
                                 >
                                   <ListItemText
                                     primary={
@@ -588,10 +521,9 @@ class Home extends Component {
                                             res["_id"]
                                           }
                                           aria-label="More"
-                                          className="typoName"
                                         >
                                           {res["testator.forename"] + " "}
-                                          <span className="typoSurname">
+                                          <span className="smallcaps">
                                             {res["testator.surname"]}
                                           </span>
                                         </Link>
@@ -599,16 +531,13 @@ class Home extends Component {
                                     }
                                   />
                                 </ListItem>
-                                <Divider variant="inset" />
-                              </div>
                             );
                           }}
-                        />
-                      </Paper>
-                    </div>
+                      />
                   </Grid>
                 </Grid>
-                <Grid item>
+
+                <Box mt={2}>
                   <ReactiveComponent
                     className="mapSearch"
                     componentId="mapSearch"
@@ -691,12 +620,11 @@ class Home extends Component {
                       );
                     }}
                   />
-                </Grid>
+                </Box>
               </ReactiveBase>
-            </div>
+            </Box>
           </Grid>
         </Grid>
-        <Footer />
       </div>
     );
   }

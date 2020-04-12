@@ -1,49 +1,177 @@
-.nav_root {
-  background: #eceff1;
+header{
+  margin-bottom: 50px;
+}
+
+header .headerContainer{
+  max-width: 1280px;
+  margin:auto; 
   color: white;
-  position: static;
-  font-family: -apple-system;
   font-size: 1rem;
 }
-
-.nav_root .titre_site {
-  width: 100%;
-  height: 100%;
+header #home img{
+  display: block;
+}
+header .site-title {
+  font-size: 1.7rem ;
+  padding-left:15px;
+}
+header .site-title a {
+  color:#2E5D81;
+}
+header .site-subtitle a {
+  color:white;
 }
 
-.nav_root .menu {
-  padding: 10px 0px 10px 10px;
+header .site-title .small{
+    font-size: 1.2rem;
+    margin-left: -2px;
+    margin-right: -2px;
 }
 
-.nav_root .link {
-  text-transform: none;
-  color: #212121;
-  font-weight: 500;
+header .site-subtitle {
+  color:white;
+  font-size: 1.1rem;
+  line-height: 1.3rem;
+  margin-left: 15px;
+  margin-top:4px;
+  margin-bottom: 10px;
+}
+header .site-subtitle a{
+  background-color: #B91918;
+  padding: 2px 8px 1px 8px;
 }
 
-.nav_root .link:hover {
-  text-decoration: none;
-  color: #0091ea;
-  font-weight: 600;
-}
-
-.nav_root .activedLink {
-  color: #0091ea;
-  font-weight: 600;
-}
-
-.logIn {
+header .collapse_mainNav{
+  text-align: center;
+  margin-top: 14px;
   position: absolute;
-  right: 5%;
+  right: 20px;
+}
+header .collapse_mainNav button{
+  background-color: #2E5D81;
+}
+header .collapse_mainNav button:hover{
+  background-color: #8DB2C2;
 }
 
-.userLogin {
-  background-color: #bbdefb;
+header #main_nav{
+  justify-content: space-between;
+  padding-top: 5px;
+  padding-bottom: 0px;
+  margin-top: 15px;
 }
 
-.userLogout {
-  background-color: red;
+header #main_nav li {
+  background-color: #9D9C9C;
+  min-height: 20px;
+  padding:0;
 }
+header #main_nav li i {
+  padding-right: 5px;
+}
+
+header #main_nav li a{
+  color:white;
+  font-weight: bold;
+  padding-right: 22px;
+  padding-left: 22px;
+  font-size:1rem;
+  line-height: 1rem;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+
+
+header #main_nav li:hover,
+header #main_nav li:hover #search,
+header #main_nav li:hover #explore,
+header #main_nav li #userSpace:hover,
+header #main_nav li .active{
+  background-color: #B91918!important;
+}
+
+
+header #menu_secondary {
+ width: 280px;
+}
+header #menu_secondary ul{
+ padding: 0;
+ margin:0;
+}
+header #menu_secondary li{
+  background-color:#F0F0F0;
+  border-bottom: 1px solid white;
+  display: block;
+}
+header #menu_secondary li:hover,
+header #menu_secondary li .active{
+  background-color:#8DB2C2;
+}
+header #menu_secondary li:hover a,
+header #menu_secondary li .active{
+  color:white;
+}
+header #menu_secondary li a{
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  color:#1F8299;
+  line-height: 1.3rem;
+  display: block;
+  padding: 0px 5px 0px 5px;
+}
+header #menu_secondary li a:hover{
+  text-decoration: none;
+  color: white;
+}
+
+.closeButton {
+    position: absolute!important;
+    right: 5px!important;
+}
+.closeButton:hover {
+    background: transparent;
+}
+.closeButton .fas {
+  color:#1F8299;
+}
+.closeButton .fas:hover {
+  color:#B91918;
+}
+
+#userSpace_submenu .MuiPaper-root{
+ width: 137px;
+ margin-left: -1px;
+ background-color: transparent;
+}
+#userSpace_submenu ul{
+  border-left: 1px solid #1F8299;
+  border-right: 1px solid #1F8299;
+  border-bottom: 1px solid #1F8299;
+  margin: 1px 1px 1px 1px;
+  background-color: white;
+}
+#userSpace_submenu li{
+  display: block;
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+#userSpace_submenu li:hover{
+  background-color: #C7D7E1;
+
+}
+#userSpace_submenu li a,
+#userSpace_submenu li .logout{
+  color:#1F8299;
+  font-family: 'PT Sans', sans-serif!important;
+  font-size:0.95rem;
+
+}
+
+
 
 .closeButton {
   position: absolute;

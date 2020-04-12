@@ -8,12 +8,8 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 
 import {
   getHits,
@@ -34,16 +30,14 @@ import {
   MenuList,
   MenuItem,
   Grid,
-  Fab,
   Breadcrumbs,
-  Link
+  Link,
+  Box
 } from "@material-ui/core";
-import PostAddIcon from "@material-ui/icons/PostAdd";
 import NewPost from "./NewPost";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EditPost from "./EditPost";
 import { Link as RouterLink } from "react-router-dom";
-import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 
 // Up to top page click
 window.onscroll = function() {
@@ -173,48 +167,46 @@ const EnhancedTableToolbar = props => {
       >
         <Grid item>
           <Tooltip id={title} title="Ajouter un nouveau post">
-            <IconButton
+            <Button
+              className="button iconButton"
               onClick={handleAddNewPost}
               value={title}
               aria-label="add"
             >
-              <PostAddIcon className="addBt" />
-            </IconButton>
+              <i className="fas fa-2x fa-file-medical"></i>
+            </Button>
           </Tooltip>
+           <h2 className="card-title bg-dark-gray text-white fontWeightMedium" id="tableTitle">{title}</h2>
         </Grid>
-        <Grid item>
-          <Typography className="title" variant="h6" id="tableTitle">
-            {title}
-          </Typography>
-        </Grid>
+
         <Grid item>
           {numSelected > 0 ? (
             <Grid container direction="row" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography
-                  className="selectTitle"
+                  className="fontWeightRegular"
                   color="inherit"
-                  variant="subtitle1"
                 >
-                  {numSelected} sélectionnés
+                  {numSelected} sélectionné(s)
                 </Typography>
               </Grid>
               <Grid item>
                 <Tooltip title="Suppression de contenu">
-                  <IconButton
+                  <Button
+                    className="button plain primaryMain"
                     value={title}
                     onClick={handleRemovePost}
                     aria-label="delete"
                   >
-                    <DeleteIcon />
-                  </IconButton>
+                    <i className="fas fa-sm fa-trash-alt"></i>
+                  </Button>
                 </Tooltip>
               </Grid>
             </Grid>
           ) : (
-            <IconButton disabled aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
+            <Button className="button plain primaryMain" disabled aria-label="delete">
+              <i className="fas fa-sm fa-trash-alt"></i>
+            </Button>
           )}
         </Grid>
       </Grid>
@@ -439,7 +431,7 @@ export default class Manage extends Component {
 
     return (
       <div>
-        <TableContainer component={Paper} className="paper">
+        <TableContainer className="tableContainer">
           <EnhancedTableToolbar
             numSelected={this.state.selected[title].length}
             handleAddNewPost={this.handleAddNewPost}
@@ -502,12 +494,13 @@ export default class Manage extends Component {
                     <TableCell align="left">{row._source["author"]}</TableCell>
                     <TableCell align="center">
                       <Tooltip title="Mise à jour du contenu">
-                        <IconButton
+                        <Button
+                          className="button iconButton"
                           onClick={this.handleUpdatePost(row)}
                           aria-label="update"
                         >
-                          <EditIcon />
-                        </IconButton>
+                          <i className="fas fa-pen"></i>
+                        </Button>
                       </Tooltip>
                     </TableCell>
                     <TableCell align="center">
@@ -582,26 +575,26 @@ export default class Manage extends Component {
   };
   render() {
     const menu = (
-      <Paper className="menu">
+      <div className="leftMenu bg-gray">
         <MenuList>
-          <MenuItem key={1}>
-            <a href="#articles_div" className="link">
-              Articles
+          <MenuItem className="bg-dark-gray" key={1}>
+            <a className="text-white" href="#articles_div">
+              État de la recherche
             </a>
           </MenuItem>
-          <MenuItem key={2}>
+          <MenuItem className="bg-dark-gray" key={2}>
             {" "}
-            <a href="#news_div" className="link">
-              News
+            <a className="text-white" href="#news_div">
+              Actualités
             </a>
           </MenuItem>
-          <MenuItem key={3}>
-            <a href="#about_div" className="link">
-              A propos
+          <MenuItem className="bg-dark-gray" key={3}>
+            <a className="text-white" href="#about_div">
+              À  propos
             </a>
           </MenuItem>
         </MenuList>
-      </Paper>
+      </div>
     );
 
     const backButton = (
@@ -638,8 +631,13 @@ export default class Manage extends Component {
         break;
       case 2:
         this.curView = (
-          <div className="manage_root">
-            <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+          <div className="manage_root cms">
+
+            <Breadcrumbs
+              separator={<i className="fas fa-caret-right"></i>}
+              aria-label="Breadcrumb"
+              className="breadcrumbs"
+             >
               <Link
                 id="home"
                 key={0}
@@ -658,21 +656,17 @@ export default class Manage extends Component {
               >
                 Mon espace
               </Link>
-              <Link
-                id="cms"
-                key={1}
-                color="inherit"
-                component={RouterLink}
-                to="/espace/cms"
-              >
-                Gestion de contenu
-              </Link>
+                <div>Gestion de contenu</div>
             </Breadcrumbs>
-            <Grid container direction="row" justify="center" spacing={2}>
-              <Grid item xs={4}>
+
+            <h1 className="heading"><i className="far fa-edit"></i> Gestion de contenu</h1>
+
+
+            <Grid container direction="row" justify="center" spacing={0}>
+              <Grid item xs={12} md={2}>
                 {menu}
               </Grid>
-              <Grid item xs={8}>
+              <Grid className="bg-white" item xs={12} md={10}>
                 <section id="articles_div">
                   {this.setDefaultView(this.state.articles, "articles")}
                 </section>
@@ -699,18 +693,18 @@ export default class Manage extends Component {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Souhaitez-vous vraiment supprimer les éléments sélectionnés
+                  Souhaitez-vous vraiment supprimer les éléments sélectionnés ?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button
                   autoFocus
                   onClick={this.handleDialogClose}
-                  color="primary"
+                  className="button plain primaryMain"
                 >
                   Annuler
                 </Button>
-                <Button onClick={this.handleDialogConfirm} color="primary">
+                <Button onClick={this.handleDialogConfirm} className="button plain bg-danger">
                   Supprimer
                 </Button>
               </DialogActions>
@@ -720,21 +714,21 @@ export default class Manage extends Component {
               openAlert={this.state.openAlert}
               handleClose={this.handleAlertClose}
             />
-            <Tooltip
-              title="Haut de page"
-              style={{ cursor: "hand" }}
-              interactive
+
+          <Box display="flex" justifyContent="flex-end">
+           <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
+            <Button
+              id="btTop"
+              onClick={this.topFunction}
+              aria-label="Remonter en haut de la page"
+              className="iconButton"
             >
-              <Fab
-                id="btTop"
-                onClick={this.topFunction}
-                aria-label="Top"
-                className="bootstrapRoot"
-                size="medium"
-              >
-                <ArrowUpIcon />
-              </Fab>
-            </Tooltip>
+             <i className="fas fa-level-up-alt"></i>
+            </Button>
+           </Tooltip>
+          </Box>
+
+
           </div>
         );
 

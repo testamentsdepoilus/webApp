@@ -8,18 +8,15 @@ import {
   downloadFile
 } from "../utils/functions";
 import {
-  Paper,
-  Typography,
   Grid,
   Link,
-  IconButton,
+  Button,
+  Box,
   Tooltip,
   Avatar,
   CircularProgress
 } from "@material-ui/core";
-import ExportIcon from "@material-ui/icons/SaveAltOutlined";
-import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
+
 
 export function ListWills(props) {
   const will_dates = props.data.map(item => {
@@ -43,50 +40,48 @@ export function ListWills(props) {
   if (props.data.length > 0) {
     return (
       <div id="listWills">
-        <Typography className="text">
-          Ce Poilus est l'auteur{" "}
+        <h2 className="fontWeightRegular"><i className="fab fa-stack-overflow"></i> Ce Poilu est l'auteur{" "}
           {props.data.length > 1
             ? " des testaments suivants :"
             : " du testament suivant :"}{" "}
-        </Typography>
-        <ul>
-          {props.data.map((will, i) => {
-            const will_uri =
-              getParamConfig("web_url") + "/testament/" + will["_id"];
-            return (
-              <li key={i}>
-                <Link href={will_uri} target="_blank">
-                  Testament
-                  {will_dates[i].length > 0
-                    ? " rédigé le " +
-                      will_dates[i][0][0] +
-                      " " +
-                      props.months[will_dates[i][0][1] - 1] +
-                      " " +
-                      will_dates[i][0][2]
-                    : ""}
-                  {will_dates[i].length === 2
-                    ? " et le " +
-                      will_dates[i][1][0] +
-                      " " +
-                      props.months[will_dates[i][1][1] - 1] +
-                      " " +
-                      will_dates[i][1][2]
-                    : ""}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        </h2>
+        <div>
+          <ul>
+            {props.data.map((will, i) => {
+              const will_uri =
+                getParamConfig("web_url") + "/testament/" + will["_id"];
+              return (
+                <li key={i}>
+                  <Link href={will_uri} target="_blank">
+                    Testament
+                    {will_dates[i].length > 0
+                      ? " rédigé le " +
+                        will_dates[i][0][0] +
+                        " " +
+                        props.months[will_dates[i][0][1] - 1] +
+                        " " +
+                        will_dates[i][0][2]
+                      : ""}
+                    {will_dates[i].length === 2
+                      ? " et le " +
+                        will_dates[i][1][0] +
+                        " " +
+                        props.months[will_dates[i][1][1] - 1] +
+                        " " +
+                        will_dates[i][1][2]
+                      : ""}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     );
   } else {
     return (
       <div id="listWills">
-        <Typography className="text">
-          {" "}
-          Le testament de ce Poilu sera accessible prochainement.
-        </Typography>
+        <h2 className="fontWeightRegular"><i className="fab fa-stack-overflow"></i>{" "}Le testament de ce Poilu sera accessible prochainement.</h2>
       </div>
     );
   }
@@ -292,291 +287,287 @@ export default class TestatorDisplay extends Component {
         : -1;
 
       output = (
-        <div className="testatorDisplay">
+        <div className="noticeDisplay">
           <Grid container direction="row">
-            <Grid item xs={this.props.resultList ? 4 : 0}>
-              {this.props.resultList}
+
+            <Grid item xs={this.props.resultList ? 12 : 0} sm={this.props.resultList ? 5 : 0} md={this.props.resultList ? 4 : 0}  lg={this.props.resultList ? 3 : 0}>
+                {this.props.resultList}
             </Grid>
-            <Grid item xs={this.props.resultList ? 8 : 12}>
-              <Grid container direction="column" justify="flex-start">
-                <Grid key={3} item>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="flex-end"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    <Grid item>
-                      <IconButton
-                        id="btExport"
-                        aria-label="Export"
-                        title="Exporter la notice du testateur"
-                        onClick={this.handleExportClick}
-                      >
-                        <ExportIcon fontSize="large" />
-                      </IconButton>
-                      {Boolean(this.state.isLoading) ? (
-                        <CircularProgress />
-                      ) : (
-                        ""
-                      )}
-                    </Grid>
-                    <Grid item>
-                      {Boolean(this.userToken) ? (
-                        isAdded === -1 ? (
-                          <Tooltip
-                            title="Ajouter au favoris"
-                            placement="bottom"
-                            style={{ cursor: "hand" }}
-                          >
-                            <IconButton
-                              onClick={this.handleAddShoppingWill(
-                                this.props.id
-                              )}
+
+            <Grid className="bg-white" item xs={this.props.resultList ? 12 : 12} sm={this.props.resultList ? 7 : 12} md={this.props.resultList ? 8 : 12} lg={this.props.resultList ? 9 : 12}>
+              <div className="containerNoticeInfo">
+               
+                  <Box className="d-flex" justifyContent="flex-end" key={3} >
+                          <div className="p-relative">
+                            <Button
+                              id="btExport"
+                              aria-label="Export"
+                              className="iconButton"
+                              title="Exporter la notice du testateur"
+                              onClick={this.handleExportClick}
                             >
-                              <AddShoppingCartIcon />
-                            </IconButton>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip
-                            title="Supprimer du favoris"
-                            placement="bottom"
-                            style={{ cursor: "hand" }}
-                          >
-                            <IconButton
-                              onClick={this.handleremoveShoppingWill(
-                                this.props.id
-                              )}
-                            >
-                              <RemoveShoppingCartIcon color="action" />
-                            </IconButton>
-                          </Tooltip>
-                        )
-                      ) : (
-                        <Tooltip
-                          title="Connectez-vous pour ajouter ce testament à vos favoris !"
-                          arrow={true}
-                        >
-                          <span>
-                            <IconButton aria-label="addShop" disabled>
-                              <AddShoppingCartIcon />
-                            </IconButton>
-                          </span>
-                        </Tooltip>
-                      )}
-                    </Grid>
-                  </Grid>
-                </Grid>
-                {Boolean(this.props.data["figure"]) ? (
-                  <Grid key={3} item>
-                    <Avatar
-                      alt="testator"
-                      src={this.props.data["figure"]}
-                      style={{
-                        width: "5em",
-                        height: "5em"
-                      }}
-                    />
-                  </Grid>
-                ) : null}
-                <Grid key={2} item>
-                  <Paper
+                              <i className="fa fa-lg fa-download" aria-hidden="true"></i>
+                            </Button>
+                            {Boolean(this.state.isLoading) ? (
+                            <CircularProgress className="spinner" color="secondary" />
+                             ) : (
+                            ""
+                             )}
+                           </div>
+
+                          {Boolean(this.userToken) ? (
+                            isAdded === -1 ? (
+                              <Tooltip
+                                title="Ajouter aux favoris"
+                                placement="bottom"
+                                style={{ cursor: "hand" }}
+                              >
+                                <Button 
+                                  className="iconButton"
+                                  onClick={this.handleAddShoppingWill(
+                                    this.props.id
+                                  )}
+                                >
+                                 <i className="fas fa-lg fa-briefcase"></i>
+                                </Button>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip
+                                title="Supprimer du panier"
+                                placement="bottom"
+                                style={{ cursor: "hand" }}
+                              >
+                                <Button
+                                  className="iconButton"
+                                  onClick={this.handleremoveShoppingWill(
+                                    this.props.id
+                                  )}
+                                >
+                                  <i className="fas fa-lg remove fa-briefcase"></i>
+                                </Button>
+                              </Tooltip>
+                            )
+                          ) : (
+                            <Tooltip title="Connectez-vous pour ajouter ce testateur à vos favoris !">
+                             <span>
+                                <Button className="iconButton disabled" aria-label="ajouter aux favoris" disabled>
+                                  <i className="fas fa-lg fa-briefcase"></i>
+                                </Button>
+                              </span>
+                            </Tooltip>
+                          )}
+                  </Box>
+                  
+                  <div key={2}  
                     ref={this.myRef}
                     id="testator_notice"
-                    className="testator_notice"
-                  >
-                    <div id="testator_info">
-                      <h1 className="item">
-                        {this.props.data["persName.fullIndexEntryForm.forename"]
-                          .toString()
-                          .replace(/,/g, " ") + " "}
-                        <span className="typoSurname">
-                          {
-                            this.props.data[
-                              "persName.fullIndexEntryForm.surname"
-                            ]
-                          }
-                        </span>{" "}
-                        {Boolean(birth_date) ? "(" + birth_date[2] : "("}
-                        {"-"}
-                        {death_date.length > 0
-                          ? death_date[0][2].trim() + ")"
-                          : ")"}
-                      </h1>
-                      <Typography className="text">
-                        {" "}
-                        Permalien dans l'édition numérique :{" "}
-                        <Link
-                          href={testator_uri}
-                          target="_blank"
-                          className="urlTestator"
-                        >
-                          {" "}
-                          {testator_uri}{" "}
-                        </Link>
-                      </Typography>
-                      <Typography className="text">
-                        {Boolean(this.props.data["residence.ref"]) ? (
-                          <Link
-                            href={
-                              getParamConfig("web_url") +
-                              "/place/" +
-                              this.props.data["residence.ref"]
+                    className="testator_notice">
+                    <div className="d-flex itemTitle">
+                        <i className="far fa-2x fa-address-book"></i>
+                        <h1 className="item">
+                           {this.props.data["persName.fullIndexEntryForm.forename"]
+                            .toString()
+                            .replace(/,/g, " ") + " "}
+                          <span className="smallcaps">
+                            {
+                              this.props.data[
+                                "persName.fullIndexEntryForm.surname"
+                              ]
                             }
-                            target="_blank"
-                          >
-                            {this.props.data["residence.name"]}
-                          </Link>
-                        ) : (
-                          this.props.data["residence.name"]
-                        )}
-                      </Typography>
-                      {Boolean(birth_date) ||
-                      Boolean(this.props.data["birth.place.name"]) ? (
-                        <Typography className="text">
-                          Né
-                          {Boolean(birth_date)
-                            ? " le " +
-                              birth_date[0] +
-                              " " +
-                              this.months[birth_date[1] - 1] +
-                              " " +
-                              birth_date[2]
-                            : ""}{" "}
-                          {Boolean(this.props.data["birth.place.name"]) ? (
-                            <Link
-                              href={
-                                getParamConfig("web_url") +
-                                "/place/" +
-                                this.props.data["birth.place.ref"]
-                              }
-                              target="_blank"
-                            >
-                              à {this.props.data["birth.place.name"]}
-                            </Link>
-                          ) : (
-                            ""
-                          )}
-                        </Typography>
-                      ) : (
-                        ""
-                      )}
-                      {Boolean(this.props.data["affiliation.orgName"]) ? (
-                        <Typography className="text">
-                          {this.props.data[
-                            "affiliation.name"
-                          ][0].toUpperCase() +
-                            this.props.data["affiliation.name"].slice(1)}
-                          {Boolean(this.props.data["affiliation.ref"]) ? (
-                            <Link
-                              href={
-                                getParamConfig("web_url") +
-                                "/armee/" +
-                                this.props.data["affiliation.ref"]
-                              }
-                              target="_blank"
-                            >
-                              {this.props.data["affiliation.orgName"]}
-                            </Link>
-                          ) : (
-                            this.props.data["affiliation.orgName"]
-                          )}
-                        </Typography>
-                      ) : (
-                        ""
-                      )}
-                      <Typography className="text">
-                        Mort pour la France le{" "}
-                        {death_date.length > 0
-                          ? death_date[0][0] +
-                            " " +
-                            this.months[death_date[0][1] - 1] +
-                            " " +
-                            death_date[0][2]
-                          : ""}{" "}
-                        {death_date.length === 2
-                          ? " ou le " +
-                            death_date[1][0] +
-                            " " +
-                            this.months[death_date[1][1] - 1] +
-                            " " +
-                            death_date[1][2]
-                          : ""}{" "}
-                        {Boolean(this.props.data["death.place.name"]) ? (
-                          <Link
-                            href={
-                              Boolean(this.props.data["death.place.ref"])
-                                ? getParamConfig("web_url") +
-                                  "/place/" +
-                                  this.props.data["death.place.ref"]
-                                : ""
-                            }
-                            target="_blank"
-                          >
-                            à {this.props.data["death.place.name"]}
-                          </Link>
+                          </span>{" "}
+                          {Boolean(birth_date) ? "(" + birth_date[2] : "("}
+                          {"-"}
+                          {death_date.length > 0
+                            ? death_date[0][2].trim() + ")"
+                            : ")"} 
+                        </h1>
+                    </div>
+
+                    <div className="noticeInfo">
+                      {Boolean(this.props.data["figure"]) ? (
+                          <Avatar
+                            alt="testator"
+                            src={this.props.data["figure"]}
+                            style={{
+                              width: "5em",
+                              height: "5em"
+                            }}
+                          />
+                      ) : null}
+                      <Box className="mainInfo">
+                          <div>
+                            <div className="permalien">
+                              {" "}
+                               <i className="fab fa-usb"></i> Permalien dans l'édition numérique :{" "}
+                              <Link
+                                href={testator_uri}
+                                target="_blank"
+                                className="urlTestator"
+                              >
+                                {" "}
+                                {testator_uri}{" "}
+                              </Link>
+                            </div>
+                            <div>
+                              {Boolean(this.props.data["residence.ref"]) ? (
+                                <Link
+                                  href={
+                                    getParamConfig("web_url") +
+                                    "/place/" +
+                                    this.props.data["residence.ref"]
+                                  }
+                                  target="_blank"
+                                >
+                                  {this.props.data["residence.name"]}
+                                </Link>
+                              ) : (
+                                this.props.data["residence.name"]
+                              )}
+                            </div>
+                            {Boolean(birth_date) ||
+                            Boolean(this.props.data["birth.place.name"]) ? (
+                              <div>
+                                Né
+                                {Boolean(birth_date)
+                                  ? " le " +
+                                    birth_date[0] +
+                                    " " +
+                                    this.months[birth_date[1] - 1] +
+                                    " " +
+                                    birth_date[2]
+                                  : ""}{" "}
+                                {Boolean(this.props.data["birth.place.name"]) ? (
+                                  <Link
+                                    href={
+                                      getParamConfig("web_url") +
+                                      "/place/" +
+                                      this.props.data["birth.place.ref"]
+                                    }
+                                    target="_blank"
+                                  >
+                                    à {this.props.data["birth.place.name"]}
+                                  </Link>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {Boolean(this.props.data["affiliation.orgName"]) ? (
+                              <div>
+                                {this.props.data[
+                                  "affiliation.name"
+                                ][0].toUpperCase() +
+                                  this.props.data["affiliation.name"].slice(1)}
+                                {Boolean(this.props.data["affiliation.ref"]) ? (
+                                  <Link
+                                    href={
+                                      getParamConfig("web_url") +
+                                      "/armee/" +
+                                      this.props.data["affiliation.ref"]
+                                    }
+                                    target="_blank"
+                                  >
+                                    {this.props.data["affiliation.orgName"]}
+                                  </Link>
+                                ) : (
+                                  this.props.data["affiliation.orgName"]
+                                )}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            <div>
+                              Mort pour la France le{" "}
+                              {death_date.length > 0
+                                ? death_date[0][0] +
+                                  " " +
+                                  this.months[death_date[0][1] - 1] +
+                                  " " +
+                                  death_date[0][2]
+                                : ""}{" "}
+                              {death_date.length === 2
+                                ? " ou le " +
+                                  death_date[1][0] +
+                                  " " +
+                                  this.months[death_date[1][1] - 1] +
+                                  " " +
+                                  death_date[1][2]
+                                : ""}{" "}
+                              {Boolean(this.props.data["death.place.name"]) ? (
+                                <Link
+                                  href={
+                                    Boolean(this.props.data["death.place.ref"])
+                                      ? getParamConfig("web_url") +
+                                        "/place/" +
+                                        this.props.data["death.place.ref"]
+                                      : ""
+                                  }
+                                  target="_blank"
+                                >
+                                  à {this.props.data["death.place.name"]}
+                                </Link>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                            {Boolean(this.props.data["occupation"]) ? (
+                              <div>
+                                Profession : {this.props.data["occupation"]}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </Box>
+
+                        {Boolean(this.props.data["note_history"]) ? (
+                          <div className="biographie">
+                            <h2 className="fontWeightRegular"><i className="fas fa-street-view"></i> Biographie</h2>
+                            <ul className="text">
+                              {this.props.data["note_history"]
+                                .split("*")
+                                .map((item, i) => {
+                                  item = item.trim();
+                                  if (item.length > 1) {
+                                    return (
+                                      <li key={i}>
+                                        {item[0].toUpperCase() + item.slice(1)}
+                                      </li>
+                                    );
+                                  } else {
+                                    return null;
+                                  }
+                                })}
+                            </ul>
+                          </div>
                         ) : (
                           ""
                         )}
-                      </Typography>
-                      {Boolean(this.props.data["occupation"]) ? (
-                        <Typography className="text">
-                          Profession : {this.props.data["occupation"]}
-                        </Typography>
-                      ) : (
-                        ""
-                      )}
 
-                      {Boolean(this.props.data["note_history"]) ? (
-                        <div>
-                          <Typography className="text">Biographie :</Typography>
-                          <ul className="text">
-                            {this.props.data["note_history"]
-                              .split("*")
-                              .map((item, i) => {
-                                item = item.trim();
-                                if (item.length > 1) {
-                                  return (
-                                    <li key={i}>
-                                      {item[0].toUpperCase() + item.slice(1)}
-                                    </li>
-                                  );
-                                } else {
-                                  return null;
-                                }
-                              })}
-                          </ul>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-
-                      {Boolean(this.props.data["bibl.author"]) ? (
-                        <div>
-                          <Typography className="text">
-                            Références bibliographiques :{" "}
-                          </Typography>
-                          <Typography className="text">
-                            {"-"} {this.props.data["bibl.author"]}.{" "}
-                            <Link
-                              href={this.props.data["bibl.uri"]}
-                              target="_blank"
-                            >
-                              {this.props.data["bibl.title"]}{" "}
-                            </Link>
-                          </Typography>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-
-                    <ListWills data={this.state.wills} months={this.months} />
-                  </Paper>
-                </Grid>
-              </Grid>
+                        {Boolean(this.props.data["bibl.author"]) ? (
+                          <div className="biblio">
+                            <h2 className="fontWeightRegular"><i className="fas fa-book"></i> Références bibliographiques{" "}</h2>
+                            <div>
+                              {"-"} {this.props.data["bibl.author"]}.{" "}
+                              <Link
+                                href={this.props.data["bibl.uri"]}
+                                target="_blank"
+                              >
+                                {this.props.data["bibl.title"]}{" "}
+                              </Link>
+                            </div>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      <ListWills data={this.state.wills} months={this.months} />
+                  </div>
+                </div>
+              </div>
             </Grid>
+
           </Grid>
         </div>
       );

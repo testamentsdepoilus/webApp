@@ -1,21 +1,16 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import {
   Breadcrumbs,
-  Paper,
+  Box,
   Link,
-  Typography,
   Grid,
-  IconButton,
+  Button,
   MenuList,
   MenuItem
 } from "@material-ui/core";
-import MoreIcon from "@material-ui/icons/More";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
-
-import Footer from "./Footer";
 
 const { ResultListWrapper } = ReactiveList;
 
@@ -120,16 +115,14 @@ class News extends Component {
       ? "/recherche?" + document.referrer.split("?")[1]
       : "/recherche";*/
     const currLink = !Boolean(this.state.item) ? (
-      <Link
+      <div
         id="news"
         key={1}
         color="textPrimary"
         component={RouterLink}
         to="/news"
-      >
-        {" "}
-        Actualités{" "}
-      </Link>
+      >Actualités{" "}
+      </div>
     ) : (
       [
         <Link
@@ -142,40 +135,42 @@ class News extends Component {
           {" "}
           Actualités{" "}
         </Link>,
-        <Typography key={2} color="textPrimary">
+        <div>
           {this.state.item["title"]}
-        </Typography>
+        </div>
       ]
     );
     const navBar = (
-      <Paper elevation={0}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="Breadcrumb"
-        >
-          <Link
-            id="home"
-            key={0}
-            color="inherit"
-            href={getParamConfig("web_url") + "/accueil"}
-          >
-            Accueil
-          </Link>
-          {currLink}
-        </Breadcrumbs>
-      </Paper>
+
+
+          <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
+                aria-label="Breadcrumb"
+                className="breadcrumbs"
+              >
+                <Link
+                  id="home"
+                  key={0}
+                  color="inherit"
+                  component={RouterLink}
+                   href={getParamConfig("web_url") + "/accueil"}
+                >
+                  Accueil
+                </Link>
+                {currLink}
+          </Breadcrumbs>
     );
 
     const menuNews = (
-      <Paper className="menu_news">
-        <Typography>Les dernières actualités :</Typography>
+      <div className="leftMenu bg-gray">
+        <h2 className="card-title bg-primaryMain text-uppercase"><i className="far fa-newspaper"></i> Actualités</h2>
         <MenuList>
           {this.state.lastNews.map((item, i) => (
             <MenuItem key={i}>
               <Link
                 id={item["_id"]}
                 className={
-                  this.state.selectedId === item["_id"] ? "activedLink" : "link"
+                  this.state.selectedId === item["_id"] ? "active" : ""
                 }
                 component={RouterLink}
                 to={"/news/" + item["_id"]}
@@ -186,7 +181,7 @@ class News extends Component {
             </MenuItem>
           ))}
         </MenuList>
-      </Paper>
+      </div>
     );
 
     const date = Boolean(this.state.item)
@@ -195,39 +190,26 @@ class News extends Component {
 
     return [
       Boolean(this.state.item) ? (
-        <div className="news">
+        <div className="content item">
           {navBar}
-
-          <h1 className="heading">ACTUALITES</h1>
           <Grid container direction="row" spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               {menuNews}
             </Grid>
-            <Grid item xs={8}>
-              <div className="detail">
-                <Paper className="item" key={0}>
-                  <Typography className="title">
-                    {" "}
-                    {this.state.item["title"]}{" "}
-                  </Typography>
-                  <Paper className="head">
-                    <Grid
-                      container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="center"
-                    >
-                      <Grid item>{this.state.item["author"]}</Grid>
-                      <Grid item>
+            <Grid item xs={9} className="typography">
+              <div className="bg-white" key={0}>
+                  <h1>{" "}{this.state.item["title"]}{" "}</h1>
+                  <Box className="bg-gray" display="flex" justifyContent="space-between">
+                    <div className="authors fontWeightMedium text-secondaryMain">{this.state.item["author"]}</div>
+                    <div className="date fontWeightMedium">
                         {Boolean(date)
-                          ? "Mise à jour le " +
-                            date.toLocaleDateString() +
-                            " à " +
-                            date.toLocaleTimeString()
-                          : ""}
-                      </Grid>
-                    </Grid>
-                  </Paper>
+                         ? "Mise à jour le " +
+                        date.toLocaleDateString() +
+                         " à " +
+                          date.toLocaleTimeString()
+                        : ""}
+                    </div>
+                  </Box>
                   <div
                     dangerouslySetInnerHTML={{
                       __html:
@@ -235,8 +217,8 @@ class News extends Component {
                           ? this.state.item["detail"]
                           : this.state.item["summary"]
                     }}
-                  ></div>
-                </Paper>
+                  >
+                  </div>
               </div>
             </Grid>
           </Grid>
@@ -247,10 +229,10 @@ class News extends Component {
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="news">
+          <div className="content blog">
             {navBar}
-            <h1 className="heading">ACTUALITES</h1>
-            <div className="list_news">
+            <h1 className="heading"><i className="far fa-newspaper"></i> Actualités</h1>
+            <div>
               <ReactiveList
                 dataField="created"
                 componentId="news_id"
@@ -260,66 +242,53 @@ class News extends Component {
                 size={5}
                 pages={10}
                 sortBy="desc"
+                className="listContainer"
                 showEndPage={false}
                 renderResultStats={function(stats) {
-                  return <h6>{stats.numberOfResults} actualités</h6>;
+                  return <div className="countNews fontWeightMedium">{stats.numberOfResults} actualités</div>;
                 }}
                 URLParams={false}
                 defaultQuery={this.defaultQuery}
               >
                 {({ data, error, loading }) => (
-                  <ResultListWrapper>
-                    {data.map((item, j) => {
-                      const date = new Date(item["created"]);
-                      return (
-                        <Paper className="item" key={j}>
-                          <Typography className="title">
-                            {" "}
-                            {item["title"]}{" "}
-                          </Typography>
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                item["summary"] !== ""
-                                  ? item["summary"]
-                                  : item["detail"]
-                            }}
-                          ></div>
-                          <Paper className="foot">
-                            <Grid
-                              container
-                              direction="row"
-                              justify="space-between"
-                              alignItems="center"
-                            >
-                              <Grid item>{item["author"]}</Grid>
-                              <Grid item>
-                                {"Mise à jour le "}
-                                {date.toLocaleDateString()}
-                                {" à "}
-                                {date.toLocaleTimeString()}
-                              </Grid>
-                              <Grid item>
-                                <IconButton
-                                  aria-label="More"
-                                  onClick={this.handleMoreClick(item)}
-                                >
-                                  <MoreIcon className="icon" />
-                                </IconButton>
-                              </Grid>
-                            </Grid>
-                          </Paper>
-                        </Paper>
-                      );
-                    })}
-                  </ResultListWrapper>
+                  <div>
+                    <ResultListWrapper className="list_news  bg-white">
+                      {data.map((item, j) => {
+                        const date = new Date(item["created"]);
+                        return (
+                          <div className="item" key={j}>
+                              <Box display="flex" justifyContent="flex-end" className="date bg-gray fontWeightMedium">
+                                {Boolean(date)
+                                ? "Mise à jour le " +
+                                  date.toLocaleDateString() +
+                                  " à " +
+                                  date.toLocaleTimeString()
+                                : ""}
+                              </Box>
+                              <h2 className="fontWeightRegular">{" "}{item["title"]}{" "}</h2>
+                              <div className="authors fontWeightMedium text-secondaryMain">{item["author"]}</div>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    item["summary"] !== ""
+                                      ? item["summary"]
+                                      : item["detail"]
+                                }}
+                              ></div>
+                              <Box display="flex" justifyContent="flex-end">
+                                <Button className="button outlined secondary-light" aria-label="Lire la suite" onClick={this.handleMoreClick(item)}> Lire la suite</Button>
+                              </Box>
+                          </div>
+                        );
+                      })}
+                    </ResultListWrapper>
+                  </div>
                 )}
               </ReactiveList>
             </div>
           </div>
         </ReactiveBase>
       ),
-      <Footer />
     ];
   }
 }

@@ -4,14 +4,13 @@ import { ReactiveBase, ReactiveComponent } from "@appbaseio/reactivesearch";
 import ContributorFilters from "./search/ContributorFilters";
 import Results from "./search/Results";
 import DateFilter from "./search/DateFilter";
-import { Grid, Paper, Breadcrumbs, Link, Typography } from "@material-ui/core";
+import { Grid, Box, Breadcrumbs, Link } from "@material-ui/core";
 import CustumerDataSearch from "./search/DataSearch";
 
 import { getParamConfig } from "../utils/functions";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as RouterLink } from "react-router-dom";
 import GeoMap from "./search/GeoMap_bis";
-import Footer from "./Footer";
+
 
 class Search extends Component {
   render() {
@@ -22,11 +21,10 @@ class Search extends Component {
         type="_doc"
       >
         <div className="search">
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+          <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
                 aria-label="Breadcrumb"
+                className="breadcrumbs"
               >
                 <Link
                   id="home"
@@ -37,28 +35,26 @@ class Search extends Component {
                 >
                   Accueil
                 </Link>
-                <Typography color="textPrimary">Recherche</Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
-          <h1 className="heading">RECHERCHE</h1>
+                <div>Rechercher</div>
+          </Breadcrumbs>
+         
+          <h1 className="heading"><i className="fas fa-search"></i> Rechercher</h1>
+         
           <Grid
             container
             justify="center"
-            alignItems="baseline"
             direction="row"
+            spacing={5}
           >
-            <Grid item xs="auto">
-              <div className="leftSidebar">
+            <Grid item xs={12} md={6} lg={4}>
+              <Box className="searchForm leftSidebar">
                 <CustumerDataSearch />
-                <Paper>
-                  <DateFilter />
-                </Paper>
+                <DateFilter />
+                <ContributorFilters />
+               
+              </Box>
 
-                <Paper>
-                  <ContributorFilters />
-                </Paper>
-                <ReactiveComponent
+               <ReactiveComponent
                   componentId="mapSearch"
                   react={{
                     and: [
@@ -150,15 +146,14 @@ class Search extends Component {
                     }
                   }}
                 />
-              </div>
             </Grid>
-            <Grid item xs={8}>
+            
+            <Grid item xs={12} md={6} lg={8}>
               <Results />
             </Grid>
           </Grid>
         </div>
       </ReactiveBase>,
-      <Footer />
     ];
   }
 }

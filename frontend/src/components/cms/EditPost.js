@@ -8,9 +8,14 @@ import {
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { updatePost } from "../../utils/functions";
+import { getParamConfig, updatePost } from "../../utils/functions";
+import { Link as RouterLink } from "react-router-dom";
+
 import {
   TextField,
+  Breadcrumbs,
+  Box,
+  Link,
   Button,
   Typography,
   Grid,
@@ -217,22 +222,37 @@ export default class EditPost extends Component {
     }
 
     return (
-      <div className="editPost">
-        <Paper className="paper">
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item>{this.props.backButton}</Grid>
-            <Grid item xs={6}>
-              <Typography className="header" id="postTitle">
-                Ajouter un nouveau post
-              </Typography>
-            </Grid>
-          </Grid>
+      <div className="editPost cms">
+            <Breadcrumbs
+              separator={<i className="fas fa-caret-right"></i>}
+              aria-label="Breadcrumb"
+              className="breadcrumbs"
+             >
+              <Link
+                id="home"
+                key={0}
+                color="inherit"
+                href={getParamConfig("web_url") + "/accueil"}
+              >
+                Accueil
+              </Link>
 
+              <Link
+                id="espace"
+                key={1}
+                color="inherit"
+                component={RouterLink}
+                to="/espace"
+              >
+                Mon espace
+              </Link>
+                <div>Gestion de contenus</div>
+            </Breadcrumbs>
+
+
+        <div className="bg-white paddingContainer">
+          <Box display="flex" justifyContent="flex-end">{this.props.backButton}</Box>
+          <h1 className="heading"><i class="fas fa-file-medical"></i> Modifier un contenu</h1>
           <form className="form" noValidate onSubmit={this.onSubmit}>
             <Grid
               container
@@ -251,13 +271,13 @@ export default class EditPost extends Component {
                   autoFocus
                   value={this.state.author}
                   onChange={this.onChange}
-                  className="textField"
+                  className="input"
                 />
               </Grid>
               <Grid item>
                 <NativeSelect
                   id="type"
-                  className="type"
+                  className="select"
                   variant="outlined"
                   value={this.state.type}
                   name="type"
@@ -280,7 +300,7 @@ export default class EditPost extends Component {
               autoFocus
               value={this.state.title}
               onChange={this.onChange}
-              className="textField"
+              className="input"
             />
 
             <input
@@ -324,7 +344,7 @@ export default class EditPost extends Component {
               </Grid>
             </Grid>
             <div>
-              <Typography className="title">Résumé</Typography>
+              <h2>Résumé</h2>
               <Editor
                 id="editSummary_id"
                 defaultEditorState={this.state.editStateSummary}
@@ -340,7 +360,7 @@ export default class EditPost extends Component {
               />
             </div>
             <div>
-              <Typography className="title">Contenu</Typography>
+              <h2>Contenu</h2>
               <Editor
                 id="editDetail_id"
                 defaultEditorState={this.state.editStateDetail}
@@ -360,13 +380,13 @@ export default class EditPost extends Component {
               direction="row"
               justify="space-evenly"
               alignItems="center"
+              className="submitButtons"
             >
               <Grid item>
                 <Button
                   id="btPublication"
                   variant="contained"
-                  color="primary"
-                  className="submit"
+                  className="submit button fontWeightMedium plain bg-secondaryMain"
                   type="submit"
                 >
                   Enregistrer
@@ -376,8 +396,7 @@ export default class EditPost extends Component {
                 <Button
                   id="btDisplay"
                   variant="contained"
-                  color="primary"
-                  className="submit"
+                  className="submit button fontWeightMedium plain bg-secondaryLight"
                   onClick={this.handleDisplay}
                 >
                   Visualiser
@@ -385,7 +404,7 @@ export default class EditPost extends Component {
               </Grid>
             </Grid>
           </form>
-        </Paper>
+        </div>
         <this.props.alertMessage
           message={this.state.message}
           openAlert={this.state.openAlert}

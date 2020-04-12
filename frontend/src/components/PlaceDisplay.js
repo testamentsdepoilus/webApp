@@ -9,19 +9,15 @@ import {
   downloadFile
 } from "../utils/functions";
 import {
-  Paper,
-  Typography,
+  Box,
   Grid,
   Link,
-  IconButton,
+  Button,
   Tooltip,
   CircularProgress
 } from "@material-ui/core";
 
 import GeoMap from "../utils/GeoMap";
-import ExportIcon from "@material-ui/icons/SaveAltOutlined";
-import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 
 export default class PlaceDisplay extends Component {
   constructor(props) {
@@ -360,88 +356,85 @@ export default class PlaceDisplay extends Component {
         ? this.state.myPlaces.findIndex(el => el === this.props.id)
         : -1;
       output = (
-        <div className="placeDisplay">
+
+        <div className="noticeDisplay">
           <Grid container direction="row">
-            <Grid item xs={this.props.resultList ? 4 : 0}>
-              {this.props.resultList}
+
+            <Grid item xs={this.props.resultList ? 12 : 0} sm={this.props.resultList ? 5 : 0} md={this.props.resultList ? 4 : 0}  lg={this.props.resultList ? 3 : 0}>
+                {this.props.resultList}
             </Grid>
-            <Grid item xs={this.props.resultList ? 8 : 12}>
-              <Grid container direction="column" justify="flex-start">
-                <Grid key={3} item>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="flex-end"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    <Grid item>
-                      <IconButton
-                        id="btExport"
-                        aria-label="Export"
-                        title="Exporter la notice des lieux"
-                        onClick={this.handleExportClick}
-                      >
-                        <ExportIcon fontSize="large" />
-                      </IconButton>
-                      {Boolean(this.state.isLoading) ? (
-                        <CircularProgress />
-                      ) : (
-                        ""
-                      )}
-                    </Grid>
-                    <Grid item>
-                      {Boolean(this.userToken) ? (
-                        isAdded === -1 ? (
-                          <Tooltip
-                            title="Ajouter aux favoris"
-                            placement="bottom"
-                            style={{ cursor: "hand" }}
-                          >
-                            <IconButton
-                              onClick={this.handleAddShoppingWill(
-                                this.props.id
-                              )}
+
+            <Grid className="bg-white" item xs={this.props.resultList ? 12 : 12} sm={this.props.resultList ? 7 : 12} md={this.props.resultList ? 8 : 12} lg={this.props.resultList ? 9 : 12}>
+             
+              <div className="containerNoticeInfo">
+                   <Box className="d-flex" justifyContent="flex-end" key={3} >
+                          <div className="p-relative">
+                            <Button
+                              id="btExport"
+                              aria-label="Export"
+                              className="iconButton"
+                              title="Exporter la notice du lieu"
+                              onClick={this.handleExportClick}
                             >
-                              <AddShoppingCartIcon />
-                            </IconButton>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip
-                            title="Supprimer du panier"
-                            placement="bottom"
-                            style={{ cursor: "hand" }}
-                          >
-                            <IconButton
-                              onClick={this.handleremoveShoppingWill(
-                                this.props.id
-                              )}
-                            >
-                              <RemoveShoppingCartIcon color="action" />
-                            </IconButton>
-                          </Tooltip>
-                        )
-                      ) : (
-                        <Tooltip
-                          title="Connectez-vous pour ajouter ce testament à vos favoris !"
-                          arrow={true}
-                        >
-                          <span>
-                            <IconButton aria-label="addShop" disabled>
-                              <AddShoppingCartIcon />
-                            </IconButton>
-                          </span>
-                        </Tooltip>
-                      )}
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid key={2} item>
-                  <div className="root_place">
-                    <Paper id="lieu_notice" className="lieu_notice">
-                      <Grid container direction="column" spacing={1}>
-                        <Grid item>
-                          <h1 className="item">
+                              <i className="fa fa-lg fa-download" aria-hidden="true"></i>
+                            </Button>
+                            {Boolean(this.state.isLoading) ? (
+                            <CircularProgress className="spinner" color="secondary" />
+                             ) : (
+                            ""
+                             )}
+                           </div>
+
+                          {Boolean(this.userToken) ? (
+                            isAdded === -1 ? (
+                              <Tooltip
+                                title="Ajouter aux favoris"
+                                placement="bottom"
+                                style={{ cursor: "hand" }}
+                              >
+                                <Button 
+                                  className="iconButton"
+                                  onClick={this.handleAddShoppingWill(
+                                    this.props.id
+                                  )}
+                                >
+                                 <i className="fas fa-lg fa-briefcase"></i>
+                                </Button>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip
+                                title="Supprimer du panier"
+                                placement="bottom"
+                                style={{ cursor: "hand" }}
+                              >
+                                <Button
+                                  className="iconButton"
+                                  onClick={this.handleremoveShoppingWill(
+                                    this.props.id
+                                  )}
+                                >
+                                  <i className="fas fa-lg remove fa-briefcase"></i>
+                                </Button>
+                              </Tooltip>
+                            )
+                          ) : (
+                            <Tooltip title="Connectez-vous pour ajouter ce lieu à vos favoris !">
+                             <span>
+                                <Button className="iconButton disabled" aria-label="ajouter aux favoris" disabled>
+                                  <i className="fas fa-lg fa-briefcase"></i>
+                                </Button>
+                              </span>
+                            </Tooltip>
+                          )}
+                  </Box>              
+
+                  <div key={2}  
+                    ref={this.myRef}
+                    id="lieu_notice"
+                    className="lieu_notice">
+                    <div className="d-flex itemTitle">
+                        <i className="fas fa-map-marker-alt"></i>
+                        <h1 className="item">
                             {this.props.data["city"]}
                             {" ("}
                             {Boolean(this.props.data["region"])
@@ -450,23 +443,23 @@ export default class PlaceDisplay extends Component {
                             {Boolean(this.props.data["country"])
                               ? this.props.data["country"] + ")"
                               : ""}
-                          </h1>
-                          <Typography className="text">
-                            Permalien dans l'édition numérique :{" "}
-                            <Link
-                              href={place_uri}
-                              target="_blank"
-                              className="urlPlace"
-                            >
-                              {place_uri}
-                            </Link>
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Grid container direction="row">
-                            <Grid item xs={6}>
+                        </h1>
+                    </div>
+
+                    <Grid container className="noticeInfo">
+                        <Grid item xs={12}  lg={7}>
+                              <div className="permalien">
+                                  <i className="fab fa-usb"></i>  Permalien dans l'édition numérique :{" "}
+                                  <Link
+                                    href={place_uri}
+                                    target="_blank"
+                                  >
+                                    {place_uri}
+                                  </Link>
+                              </div>
+
                               {Boolean(this.props.data["geo_ref"]) ? (
-                                <Typography className="text">
+                                <div>
                                   Voir ce lieu dans la base GeoNames :{" "}
                                   <Link
                                     href={this.props.data["geo_ref"]}
@@ -474,18 +467,16 @@ export default class PlaceDisplay extends Component {
                                   >
                                     {this.props.data["geo_ref"]}
                                   </Link>
-                                </Typography>
+                                </div>
                               ) : (
                                 ""
                               )}
                               {this.state.birth_hits.length > 0 ? (
                                 <div>
-                                  <Typography className="text">
                                     Lieu de naissance
                                     {this.state.birth_hits.length > 1
                                       ? " des Poilus suivants :"
                                       : " du Poilu suivant :"}{" "}
-                                  </Typography>
                                   <ul>
                                     {this.state.birth_hits.map((hit, i) => {
                                       let date = Boolean(
@@ -499,7 +490,7 @@ export default class PlaceDisplay extends Component {
                                         : null;
 
                                       return (
-                                        <li key={i} className="text">
+                                        <li key={i}>
                                           <Link
                                             href={
                                               getParamConfig("web_url") +
@@ -513,11 +504,7 @@ export default class PlaceDisplay extends Component {
                                             ]
                                               .toString()
                                               .replace(/,/g, " ") + " "}
-                                            <span
-                                              style={{
-                                                fontVariantCaps: "small-caps"
-                                              }}
-                                            >
+                                            <span className="smallcaps">
                                               {
                                                 hit._source[
                                                   "persName.fullIndexEntryForm.surname"
@@ -544,17 +531,14 @@ export default class PlaceDisplay extends Component {
                               )}
                               {this.state.residence_hits.length > 0 ? (
                                 <div>
-                                  <Typography className="text">
                                     Lieu de résidence
                                     {this.state.residence_hits.length > 1
                                       ? " des Poilus suivants :"
                                       : " du Poilu suivant :"}{" "}
-                                  </Typography>
-
                                   <ul>
                                     {this.state.residence_hits.map((hit, i) => {
                                       return (
-                                        <li key={i} className="text">
+                                        <li key={i}>
                                           <Link
                                             href={
                                               getParamConfig("web_url") +
@@ -568,11 +552,7 @@ export default class PlaceDisplay extends Component {
                                             ]
                                               .toString()
                                               .replace(/,/g, " ") + " "}
-                                            <span
-                                              style={{
-                                                fontVariantCaps: "small-caps"
-                                              }}
-                                            >
+                                            <span className="smallcaps">
                                               {
                                                 hit._source[
                                                   "persName.fullIndexEntryForm.surname"
@@ -590,13 +570,10 @@ export default class PlaceDisplay extends Component {
                               )}
                               {this.state.redaction_hits.length > 0 ? (
                                 <div>
-                                  <Typography className="text">
                                     Lieu de rédaction
                                     {this.state.redaction_hits.length > 1
                                       ? " des testaments suivants :"
                                       : " du testament suivant :"}{" "}
-                                  </Typography>
-
                                   <ul>
                                     {this.state.redaction_hits.map((hit, i) => {
                                       let will_date = [];
@@ -699,13 +676,10 @@ export default class PlaceDisplay extends Component {
 
                               {this.state.death_hits.length > 0 ? (
                                 <div>
-                                  <Typography className="text">
                                     Lieu de décès
                                     {this.state.death_hits.length > 1
                                       ? " des Poilus suivants :"
                                       : " du Poilu suivant :"}{" "}
-                                  </Typography>
-
                                   <ul>
                                     {this.state.death_hits.map((hit, i) => {
                                       let death_date = [];
@@ -749,11 +723,7 @@ export default class PlaceDisplay extends Component {
                                             ]
                                               .toString()
                                               .replace(/,/g, " ") + " "}
-                                            <span
-                                              style={{
-                                                fontVariantCaps: "small-caps"
-                                              }}
-                                            >
+                                            <span className="smallcaps">
                                               {
                                                 hit._source[
                                                   "persName.fullIndexEntryForm.surname"
@@ -789,18 +759,16 @@ export default class PlaceDisplay extends Component {
                               ) : (
                                 ""
                               )}
-                            </Grid>
-                            <Grid item xs={6}>
-                              <GeoMap data={this.props.data} />
-                            </Grid>
-                          </Grid>
                         </Grid>
-                      </Grid>
-                    </Paper>
+                        <Grid item xs={12}  lg={5}>
+                           <GeoMap data={this.props.data} />
+                        </Grid>
+                    </Grid>
                   </div>
-                </Grid>
-              </Grid>
+              </div>
+
             </Grid>
+
           </Grid>
         </div>
       );

@@ -3,25 +3,19 @@ import { Link as RouterLink } from "react-router-dom";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 import WillDisplay from "./WillDisplay";
 import {
-  Paper,
   Select,
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography,
-  Grid
+  Box,
 } from "@material-ui/core";
-import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
-import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 import "../styles/Wills.css";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
   equalsArray
 } from "../utils/functions";
 
-import Footer from "./Footer";
 
 class Wills extends Component {
   constructor(props) {
@@ -101,17 +95,17 @@ class Wills extends Component {
 
   render() {
     return (
-      <div className="wills">
+      <div className="notices wills">
         <ReactiveBase
           app={getParamConfig("es_index_wills")}
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+
+        <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
                 aria-label="Breadcrumb"
+                className="breadcrumbs"
               >
                 <Link
                   id="home"
@@ -122,22 +116,11 @@ class Wills extends Component {
                 >
                   Accueil
                 </Link>
-                <Typography color="textPrimary">Les testaments</Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
+                <div>Les testaments</div>
+        </Breadcrumbs>
 
-          <div className="willSearch">
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-            >
-              <Grid item>
-                <h2>Découvrir les testaments</h2>
-              </Grid>
-            </Grid>
+          <div className="headingBar bg-gray">
+            <h2 className="card-title bg-primaryMain"><i className="fab fa-stack-overflow"></i> Parcourir les testaments</h2>
           </div>
           <div className="wills_result">
             <ReactiveList
@@ -148,13 +131,13 @@ class Wills extends Component {
               pagination={true}
               paginationAt="top"
               size={1}
-              pages={5}
+              pages={10}
               sortBy={this.state.order}
               showEndPage={false}
               renderResultStats={this.handleRenderStats}
               URLParams={false}
               innerClass={{
-                resultsInfo: "resultsInfo",
+                resultsInfo: "countResults",
                 pagination: "pagination"
               }}
               render={function(res) {
@@ -166,7 +149,7 @@ class Wills extends Component {
                   );
 
                   const curPage_ =
-                    Math.floor(res.resultStats.currentPage / 5) * 5;
+                    Math.floor(res.resultStats.currentPage / 10) * 10;
                   let sort_ = {};
                   sort_[this.state.field] = { order: this.state.order };
                   getHitsFromQuery(
@@ -175,7 +158,7 @@ class Wills extends Component {
                       getParamConfig("es_index_wills"),
                     JSON.stringify({
                       from: curPage_,
-                      size: 5,
+                      size: 10,
                       sort: [sort_]
                     })
                   )
@@ -190,32 +173,28 @@ class Wills extends Component {
                       console.log("error :", error);
                     });
                   const resultList = (
-                    <div className="resultList">
-                      {" "}
-                      <div className="sortResult">
-                        Trier par :
-                        <Select
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
-                          <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
-                          <MenuItem value={3}>
-                            date de rédaction <TrendingUpIcon />
-                          </MenuItem>
-                          <MenuItem value={4}>
-                            date de rédaction <TrendingDownIcon />
-                          </MenuItem>
-                          <MenuItem value={5}>Cote (A-Z)</MenuItem>
-                          <MenuItem value={6}>Cote (Z-A)</MenuItem>
+                  <div className="leftColumn bg-gray">
+                    <Box display="flex" justifyContent="flex-end" width="100%">
+                      <Box display="flex" className="sort_results">
+                        <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
+                        <Select className="select" value={this.state.value} onChange={this.handleChange}>
+                          <MenuItem className="sortBy" value={1}>nom de famille (A-Z)</MenuItem>
+                          <MenuItem className="sortBy" value={2}>nom de famille (Z-A)</MenuItem>
+                          <MenuItem className="sortBy" value={3}>date de rédaction <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+                          <MenuItem className="sortBy" value={4}>date de rédaction <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+                          <MenuItem className="sortBy" value={5}>Cote (A-Z)</MenuItem>
+                          <MenuItem className="sortBy" value={6}>Cote (Z-A)</MenuItem>
                         </Select>
-                      </div>
+                      </Box>
+                    </Box>
+
+                    <div className="resultList">
                       <ul>
                         {this.state.cur_list.map((item, i) =>
                           Boolean(
                             res.resultStats.currentPage === curPage_ + i
                           ) ? (
-                            <li key={item["_id"]} className="li_active">
+                            <li key={item["_id"]} className="active">
                               {curPage_ + i + 1}
                               {". "}
                               {item._source["testator.forename"] + " "}
@@ -224,7 +203,7 @@ class Wills extends Component {
                               </span>
                             </li>
                           ) : (
-                            <li key={item["_id"]} className="li">
+                            <li key={item["_id"]}>
                               {curPage_ + i + 1}
                               {". "}
                               {item._source["testator.forename"] + " "}
@@ -236,6 +215,7 @@ class Wills extends Component {
                         )}
                       </ul>
                     </div>
+                  </div>
                   );
                   return (
                     <div>
@@ -244,7 +224,6 @@ class Wills extends Component {
                         data={item}
                         resultList={resultList}
                       />
-                      <Footer />
                     </div>
                   );
                 });

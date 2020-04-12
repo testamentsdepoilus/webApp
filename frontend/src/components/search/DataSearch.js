@@ -1,29 +1,12 @@
 import React, { Component } from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
 import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
   Grid
 } from "@material-ui/core";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import PlaceFilter from "./PlaceFilter";
 
 export default class CustumerDataSearch extends Component {
-  constructor() {
-    super();
-    this.state = {
-      displayMore: false
-    };
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick() {
-    this.setState({
-      displayMore: !this.state.displayMore
-    });
-  }
-
+  
   render() {
     const terms_normalized = {
       employe: "employé",
@@ -60,23 +43,17 @@ export default class CustumerDataSearch extends Component {
       ingenieur: "ingénieur"
     };
     return (
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-          onClick={this.handleClick}
-        >
-          <Grid container direction="column" spacing={2}>
+      <Grid>
+       
+          <Grid container direction="column" spacing={0}>
             <Grid
-              onClick={event => event.stopPropagation()}
-              onFocus={event => event.stopPropagation()}
               container
               direction="column"
               spacing={2}
             >
               <Grid item>
                 <SingleDropdownList
-                  className="datasearch"
+                  className="select"
                   react={{
                     and: [
                       "texte",
@@ -114,23 +91,13 @@ export default class CustumerDataSearch extends Component {
               </Grid>
             </Grid>
 
-            {!Boolean(this.state.displayMore) ? (
-              <Grid item title="Plus de critères">
-                <AddCircleOutlineIcon />
-              </Grid>
-            ) : (
-              <Grid item title="Moins de critères">
-                <RemoveCircleOutlineIcon title="Moins de critères" />
-              </Grid>
-            )}
           </Grid>
-        </ExpansionPanelSummary>
 
-        <ExpansionPanelDetails>
-          <Grid container justify="center" direction="column" spacing={1}>
+        
+          <Grid container justify="center" direction="column" spacing={2}>
             <Grid item>
               <SingleDropdownList
-                className="datasearch"
+                className="select"
                 react={{
                   and: [
                     "texte",
@@ -192,7 +159,7 @@ export default class CustumerDataSearch extends Component {
             </Grid>
             <Grid item>
               <SingleDropdownList
-                className="datasearch"
+                className="select"
                 react={{
                   and: [
                     "texte",
@@ -226,7 +193,7 @@ export default class CustumerDataSearch extends Component {
             </Grid>
             <Grid item>
               <SingleDropdownList
-                className="datasearch"
+                className="select"
                 react={{
                   and: [
                     "texte",
@@ -256,7 +223,7 @@ export default class CustumerDataSearch extends Component {
             </Grid>
             <Grid item>
               <SingleDropdownList
-                className="datasearch"
+                className="select"
                 react={{
                   and: [
                     "texte",
@@ -291,7 +258,7 @@ export default class CustumerDataSearch extends Component {
 
             <Grid item>
               <SingleDropdownList
-                className="datasearch"
+                className="select"
                 react={{
                   and: [
                     "texte",
@@ -324,8 +291,8 @@ export default class CustumerDataSearch extends Component {
               />
             </Grid>
           </Grid>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        
+      </Grid>
     );
   }
 }

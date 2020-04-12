@@ -1,35 +1,51 @@
-.willCompare .image {
-  padding: 2px;
-  font-size: 1rem;
-  color: #212121;
-  background-color: #fafafa;
-  text-align: justify;
-  width: 450px;
+
+.willCompare .containerColumns
+{
+ padding: 15px 8px 15px 8px;
+ display: block;
+}
+.willCompare .containerColumns > div{
+  max-width: 100%
 }
 
-.willCompare .typoSurname {
-  font-variant-caps: small-caps;
-}
 
-.willCompare .title {
-  font-size: 1.4rem;
-  font-style: oblique;
-  text-align: center;
+.willCompare .column
+{
+ padding: 26px 20px 30px 20px;
+ width: 100%;
+}
+.willCompare .column h2{
+  color:#1F8299;
+  font-size:1.2rem;
   font-weight: 600;
+  margin:0;
 }
 
-.willCompare .linkPage {
-  color: #212121;
-  font-size: 1rem;
-  font-weight: 400;
+
+.willCompare .column nav.will_pages ul{
+  list-style-type: none;
+  display: flex;
+  padding-left: 0px;
+  margin-top:20px;
+  margin-bottom: 30px;
+}
+.willCompare .column nav.will_pages li{
+  margin-right: 10px
+
+}
+.willCompare .column .MuiSvgIcon-colorPrimary,
+.willCompare .column .transcription .choice {
+    color: #1F8299;
+}
+.willCompare .column .transcription .choice .corr, 
+.willCompare .column .transcription .choice .expan {
+    background-color: #2E5D81;
+    border-radius: 4px;
+    padding: 5px 5px 5px 5px;
+    top: 110%;
+    left: 0%;
 }
 
-.willCompare .linkPage:hover {
-  color: #0091ea;
-}
-
-.willCompare .selectedLink {
-  font-weight: 600;
-  color: #0091ea;
-  font-size: 1rem;
+.willCompare .column  .edition {
+  line-height: 1.5rem;
 }

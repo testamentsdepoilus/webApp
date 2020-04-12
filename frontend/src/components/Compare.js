@@ -1,18 +1,15 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
-  Paper,
   Breadcrumbs,
   Link,
-  Typography,
   Grid,
   Tooltip,
-  IconButton
+  Button,
 } from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import WillCompare from "./WillCompare";
-import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
+
 
 class Compare extends Component {
   constructor(props) {
@@ -64,6 +61,7 @@ class Compare extends Component {
     }
   }
 
+
   render() {
     /*const prevLink = document.referrer.includes("recherche?")
       ? "/recherche?" + document.referrer.split("?")[1]
@@ -71,54 +69,48 @@ class Compare extends Component {
 
     return (
       <div className="compare">
+        <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
+                aria-label="Breadcrumb"
+                className="breadcrumbs"
+              >
+                <Link
+                  id="home"
+                  key={0}
+                  color="inherit"
+                  component={RouterLink}
+                  to="/accueil"
+                >
+                  Accueil
+                </Link>
+                <div>Comparer</div>
+        </Breadcrumbs>
+         
+        <h1 className="heading"><i className="remove fas fa-random"></i> Comparaison des testaments</h1>
+
         <Grid
           container
           direction="row"
-          justify="flex-start"
+          justify="flex-end"
           alignItems="center"
           spacing={2}
         >
           <Grid item>
             {document.referrer.length > 0 &&
             document.referrer !== document.location.href ? (
-              <Tooltip title="Revenir en arrière">
-                <IconButton onClick={this.handleBackUp} aria-label="back up">
-                  <ArrowBackIcon />
-                </IconButton>
+              <Tooltip title="Revenir à la recherche">
+                <Button className="button outlined secondary-light" id="btnBack" onClick={this.handleBackUp} aria-label="back up">
+                 <i className="fas fa-undo-alt"></i> Revenir à la recherche
+                </Button>
               </Tooltip>
             ) : null}
           </Grid>
-
-          <Grid item>
-            <div className="wills_menu">
-              <Paper elevation={0}>
-                <Breadcrumbs
-                  separator={<NavigateNextIcon fontSize="small" />}
-                  aria-label="Breadcrumb"
-                >
-                  <Link
-                    id="search"
-                    color="inherit"
-                    key={0}
-                    component={RouterLink}
-                    to="/accueil"
-                  >
-                    Accueil
-                  </Link>
-                  <Typography color="textPrimary" key={2}>
-                    Comparaison des testaments
-                  </Typography>
-                </Breadcrumbs>
-              </Paper>
-            </div>
-          </Grid>
         </Grid>
         <div>
-          <h1 className="heading">COMPARAISON DES TESTAMENTS</h1>
           {this.state.data.length > 0 ? (
             <WillCompare data={this.state.data} />
           ) : (
-            <h3>Pas de testaments à comparer</h3>
+            <div className="text-error">Pas de testaments à comparer</div>
           )}
         </div>
       </div>

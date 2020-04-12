@@ -3,15 +3,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 
 import {
-  Paper,
   Select,
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography,
-  Grid
+  Box,
 } from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
@@ -19,7 +16,6 @@ import {
 } from "../utils/functions";
 
 import UnitDisplay from "./UnitDisplay";
-import Footer from "./Footer";
 
 class Units extends Component {
   constructor(props) {
@@ -66,147 +62,137 @@ class Units extends Component {
 
   render() {
     return (
-      <div className="units">
+      <div className="notices units">
         <ReactiveBase
           app={getParamConfig("es_index_units")}
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="Breadcrumb"
-              >
-                <Link
-                  id="home"
-                  key={0}
-                  color="inherit"
-                  component={RouterLink}
-                  to="/accueil"
+
+          <Breadcrumbs
+                  separator={<i className="fas fa-caret-right"></i>}
+                  aria-label="Breadcrumb"
+                  className="breadcrumbs"
                 >
-                  Accueil
-                </Link>
-                <Typography color="textPrimary">
-                  Les unités militaires
-                </Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
+                  <Link
+                    id="home"
+                    key={0}
+                    color="inherit"
+                    component={RouterLink}
+                    to="/accueil"
+                  >
+                    Accueil
+                  </Link>
+                  <div>Les unités militaires</div>
+          </Breadcrumbs>
 
-          <div className="unitSearch">
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-            >
-              <Grid item>
-                <h2>Découvrir les unités militaires</h2>
-              </Grid>
-            </Grid>
-          </div>
+          <Box className="headingBar bg-gray" display="flex" justifyContent="space-between">
+            <h2 className="card-title bg-primaryMain"><i className="far fa-address-book"></i> Découvrir les unités militaires</h2>
+          </Box>
+
           <div className="units_result">
-            <ReactiveList
-              dataField={this.state.field}
-              componentId="unit"
-              className="units"
-              stream={true}
-              pagination={true}
-              paginationAt="top"
-              size={1}
-              pages={5}
-              sortBy={this.state.order}
-              showEndPage={false}
-              renderResultStats={function(stats) {
-                return `${stats.numberOfResults} unités militaires`;
-              }}
-              URLParams={false}
-              innerClass={{
-                resultsInfo: "resultsInfo",
-                pagination: "pagination"
-              }}
-              render={function(res) {
-                return res.data.map((item, j) => {
-                  window.history.replaceState(
-                    getParamConfig("web_url"),
-                    "armee",
-                    getParamConfig("web_url") + "/armee/" + item["_id"]
-                  );
-                  const curPage_ =
-                    Math.floor(res.resultStats.currentPage / 5) * 5;
-                  let sort_ = {};
-                  sort_[this.state.field] = { order: this.state.order };
-                  getHitsFromQuery(
-                    getParamConfig("es_host") +
-                      "/" +
-                      getParamConfig("es_index_units"),
-                    JSON.stringify({
-                      from: curPage_,
-                      size: 5,
-                      sort: [sort_]
-                    })
-                  )
-                    .then(data => {
-                      if (!equalsArray(data, this.state.cur_list)) {
-                        this.setState({
-                          cur_list: data
-                        });
-                      }
-                    })
-                    .catch(error => {
-                      console.log("error :", error);
-                    });
-                  const resultList = (
-                    <div className="resultList">
-                      {" "}
-                      <div className="sortResult">
-                        Trier par :
-                        <Select
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1}>unité (A-Z)</MenuItem>
-                          <MenuItem value={2}>unité (Z-A)</MenuItem>
-                        </Select>
-                      </div>
-                      <ul>
-                        {this.state.cur_list.map((item, i) =>
-                          Boolean(
-                            res.resultStats.currentPage === curPage_ + i
-                          ) ? (
-                            <li key={item["_id"]} className="li_active">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["unit"]}
-                            </li>
-                          ) : (
-                            <li key={item["_id"]} className="li">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["unit"]}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  );
-                  return (
-                    <div className="units" key={j}>
-                      <UnitDisplay
-                        id={item["_id"]}
-                        data={item}
-                        resultList={resultList}
-                      />
+              <ReactiveList
+                dataField={this.state.field}
+                componentId="unit"
+                className="units"
+                stream={true}
+                pagination={true}
+                paginationAt="top"
+                size={1}
+                pages={10}
+                sortBy={this.state.order}
+                showEndPage={false}
+                renderResultStats={function(stats) {
+                  return `${stats.numberOfResults} unités militaires`;
+                }}
+                URLParams={false}
+                innerClass={{
+                  resultsInfo: "countResults",
+                  pagination: "pagination"
+                }}
+                render={function(res) {
+                  return res.data.map((item, j) => {
+                    window.history.replaceState(
+                      getParamConfig("web_url"),
+                      "armee",
+                      getParamConfig("web_url") + "/armee/" + item["_id"]
+                    );
+                    const curPage_ =
+                      Math.floor(res.resultStats.currentPage / 10) * 10;
+                    let sort_ = {};
+                    sort_[this.state.field] = { order: this.state.order };
+                    getHitsFromQuery(
+                      getParamConfig("es_host") +
+                        "/" +
+                        getParamConfig("es_index_units"),
+                      JSON.stringify({
+                        from: curPage_,
+                        size: 10,
+                        sort: [sort_]
+                      })
+                    )
+                      .then(data => {
+                        if (!equalsArray(data, this.state.cur_list)) {
+                          this.setState({
+                            cur_list: data
+                          });
+                        }
+                      })
+                      .catch(error => {
+                        console.log("error :", error);
+                      });
+                    const resultList = (
 
-                      <Footer />
+                    <div className="leftColumn bg-gray">
+                        <Box display="flex" justifyContent="flex-end" width="100%">
+                          <Box display="flex" className="sort_results">
+                            <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
+                            <Select className="select" value={this.state.value} onChange={this.handleChange}>
+                              <MenuItem className="sortBy" value={1}>unité (A-Z)</MenuItem>
+                              <MenuItem className="sortBy" value={2}>unité (Z-A)</MenuItem>
+                            </Select>
+                          </Box>
+                        </Box>
+     
+                        <div className="resultList">
+                          <ul>
+                            {this.state.cur_list.map((item, i) =>
+                              Boolean(
+                                res.resultStats.currentPage === curPage_ + i
+                              ) ? (
+                                <li key={item["_id"]} className="active">
+                                  {curPage_ + i + 1}
+                                  {". "}
+                                  {item._source["unit"]}
+                                </li>
+                              ) : (
+                                <li key={item["_id"]}>
+                                  {curPage_ + i + 1}
+                                  {". "}
+                                  {item._source["unit"]}
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        </div>
                     </div>
-                  );
-                });
-              }.bind(this)}
-            ></ReactiveList>
+                    );
+                    return (
+                      <div className="units" key={j}>
+                        <UnitDisplay
+                          id={item["_id"]}
+                          data={item}
+                          resultList={resultList}
+                        />
+                      </div>
+                    );
+                  });
+                }.bind(this)}
+              ></ReactiveList>
           </div>
+
         </ReactiveBase>
+
       </div>
     );
   }

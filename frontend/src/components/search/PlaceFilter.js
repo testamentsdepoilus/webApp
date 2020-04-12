@@ -82,66 +82,10 @@ class PlaceFilter extends React.Component {
   render() {
     return (
       <div>
-        <Grid container alignItems="center" direction="row" spacing={1}>
-          <Grid item xs={6}>
-            <List>
-              <ListItem>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.birth_place}
-                    onChange={this.handChange("birth_place")}
-                    value="birth_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox"
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de naissance" />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.residence_place}
-                    onChange={this.handChange("residence_place")}
-                    value="residence_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox"
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de résidence" />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.will_place}
-                    onChange={this.handChange("will_place")}
-                    value="will_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox"
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de rédaction" />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.death_place}
-                    onChange={this.handChange("death_place")}
-                    value="death_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox"
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de décès" />
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item xs={6}>
+        <Grid container alignItems="center" direction="row" spacing={0}>
+          <Grid item xs={12}>
             <SingleDropdownList
-              className="datasearch"
+              className="select"
               react={{
                 and: [
                   "texte",
@@ -173,6 +117,67 @@ class PlaceFilter extends React.Component {
               customQuery={this.customQuery}
             />
           </Grid>
+          <Grid item xs={12}>
+            <List className="places_list">
+             
+              <ListItem className="checkbox">
+                <ListItemIcon>
+                  <Checkbox
+                    checked={this.state.birth_place}
+                    onChange={this.handChange("birth_place")}
+                    value="birth_place"
+                    inputProps={{
+                      "aria-label": "primary checkbox"
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText secondary="Lieu de naissance" />
+              </ListItem>
+
+              <ListItem className="checkbox">
+                <ListItemIcon>
+                  <Checkbox
+                    checked={this.state.death_place}
+                    onChange={this.handChange("death_place")}
+                    value="death_place"
+                    inputProps={{
+                      "aria-label": "primary checkbox"
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText secondary="Lieu de décès" />
+              </ListItem>              
+              
+              <ListItem className="checkbox">
+                <ListItemIcon>
+                  <Checkbox
+                    checked={this.state.residence_place}
+                    onChange={this.handChange("residence_place")}
+                    value="residence_place"
+                    inputProps={{
+                      "aria-label": "primary checkbox"
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText secondary="Lieu de résidence" />
+              </ListItem>
+              
+              <ListItem className="checkbox">
+                <ListItemIcon>
+                  <Checkbox
+                    checked={this.state.will_place}
+                    onChange={this.handChange("will_place")}
+                    value="will_place"
+                    inputProps={{
+                      "aria-label": "primary checkbox"
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText secondary="Lieu de rédaction" />
+              </ListItem>
+            </List>
+          </Grid>
+ 
         </Grid>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}

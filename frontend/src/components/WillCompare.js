@@ -1,41 +1,38 @@
 import React, { Component } from "react";
 import ReactDOMServer from "react-dom/server";
 import { createElementFromHTML } from "../utils/functions";
-import { Breadcrumbs, Paper, Link, Typography, Grid } from "@material-ui/core";
+import { Paper, Link, Grid, Box } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
 import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
 import ImageIIF from "../utils/ImageIIIF";
 import { createPage } from "../components/WillDisplay";
 
-import Footer from "./Footer";
 
 function createPageMenu(pages, idx, handleClick) {
   let menu = [];
   for (let i = 0; i < pages.length; i++) {
     menu.push(
-      <Link
+      <li><Link
         id={i}
         value={i}
         key={i}
         component="button"
         color="inherit"
         onClick={handleClick}
-        className={parseInt(idx, 10) === i ? "selectedLink" : "linkPage"}
+        className={parseInt(idx, 10) === i ? "button plain primaryLight active" : "button plain primaryLight"}
       >
         {pages[i]["page_type"].type} {pages[i]["page_type"].id}
-      </Link>
+     </Link> </li>
     );
   }
 
   return (
-    <Breadcrumbs
-      style={{ marginTop: 20, marginBottom: 20 }}
-      aria-label="Breadcrumb"
-    >
+    <nav className="will_pages"
+    ><ul>
       {" "}
       {menu}{" "}
-    </Breadcrumbs>
+    </ul></nav>
   );
 }
 
@@ -193,17 +190,10 @@ class WillCompare extends Component {
   render() {
     const totalItem = this.props.data.length;
     let output = (
-      <div className="willCompare">
-        <Grid
-          container
-          justify="center"
-          alignItems="center"
-          direction="column"
-          spacing={5}
-        >
-          <Grid item>
-            <Breadcrumbs aria-label="Breadcrumb">
-              <Link
+    <div className="willCompare">
+        <Box display="flex" alignItems="center">
+           <div className="bg-light-gray tabs"> 
+             <Link
                 id={0}
                 value={0}
                 component="button"
@@ -211,11 +201,12 @@ class WillCompare extends Component {
                 href="#"
                 onClick={this.handleMenuClick}
                 className={
-                  this.state.type === "image" ? "selectedLink" : "linkPage"
+                  this.state.type === "image" ? "active" : ""
                 }
               >
-                Image
+                <i className="far fa-object-group"></i> Image
               </Link>
+              |
               <Link
                 id={1}
                 value={1}
@@ -225,12 +216,13 @@ class WillCompare extends Component {
                 onClick={this.handleMenuClick}
                 className={
                   this.state.type === "transcription"
-                    ? "selectedLink"
-                    : "linkPage"
+                    ? "active"
+                    : ""
                 }
               >
-                Transcription
+               <i className="far fa-file-code"></i> Transcription
               </Link>
+              |
               <Link
                 id={2}
                 value={2}
@@ -239,51 +231,38 @@ class WillCompare extends Component {
                 href="#"
                 onClick={this.handleMenuClick}
                 className={
-                  this.state.type === "edition" ? "selectedLink" : "linkPage"
+                  this.state.type === "edition" ? "active" : ""
                 }
               >
-                Edition
+                <i className="far fa-file-alt"></i> Edition
               </Link>
-            </Breadcrumbs>
-          </Grid>
-          <Grid item>
-            <Grid
-              container
-              alignItems="flex-start"
-              justify="center"
-              direction="row"
-              spacing={2}
-            >
-              {this.props.data.map((hit, i) => {
-                return (
-                  <Grid item key={i * 100} sm={12 / totalItem}>
-                    <Grid
-                      key={i * 10}
-                      container
-                      justify="center"
-                      alignItems="center"
-                      direction="column"
-                      spacing={2}
-                    >
-                      <Grid key={1} item>
-                        <Typography className="title">
-                          {hit["forename"] + " "}
-                          <span className="typoSurname">{hit["surname"]}</span>
-                        </Typography>
-                      </Grid>
-                      <Grid key={2} item>
+            </div>
+        </Box>
+
+        <Grid
+          container
+          alignItems="flex-start"
+          justify="center"
+          direction="row"
+          spacing={3}
+          className="bg-light-gray containerColumns"
+          >
+          {this.props.data.map((hit, i) => {
+          return (
+            <Grid item className="d-flex" key={i * 100} sm={12} md={12 / totalItem}>
+              <div className="bg-white column" key={i * 10}  >
+                <div key={1}><h2>{hit["forename"] + " "}<span className="smallcaps">{hit["surname"]}</span></h2></div>
+                <div key={2}>
                         {createPageMenu(
                           hit["will"],
                           this.state.idx[i],
                           this.handlePageClick(i)
                         )}
-                      </Grid>
-                    </Grid>
-
-                    <Grid key={3} item>
+                </div>
+                <div key={3}>
                       {this.state.type === "image" ? (
                         <div className="image">
-                          <Paper>
+                          <Paper elevation={0}>
                             <ImageIIF
                               url={
                                 hit["will"][this.state.idx[i]]["picture_url"]
@@ -299,17 +278,16 @@ class WillCompare extends Component {
                           this.state.type
                         )
                       )}
-                    </Grid>
-                  </Grid>
-                );
-              })}
+                </div>                
+              </div>
             </Grid>
-          </Grid>
+             );
+            })}
         </Grid>
       </div>
     );
 
-    return [output, <Footer />];
+    return [output];
   }
 }
 

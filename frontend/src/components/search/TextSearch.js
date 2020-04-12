@@ -1,6 +1,6 @@
 import React from "react";
 import { DataSearch } from "@appbaseio/reactivesearch";
-import { Grid, Typography, MenuItem, Select } from "@material-ui/core";
+import { MenuItem, Select, Box } from "@material-ui/core";
 
 class TextSearch extends React.Component {
   constructor(props) {
@@ -68,40 +68,32 @@ class TextSearch extends React.Component {
   };
   render() {
     return (
-      <div className="textSearch">
-        <Grid container justify="center" direction="column" spacing={1}>
-          <Grid item>
-            <Grid container direction="row" spacing={1}>
-              <Grid item>
-                <Typography className="typoTitle">
-                  Effectuer une recherche dans
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Select
+    <Box >
+        <Box display="flex" className="containerSelectMode">
+            <Box><label className="fontWeightBold">Effectuer une recherche dans </label></Box>
+            <Box>
+               <Select
                   value={this.state.value}
                   onChange={this.handleChange}
                   className="select"
                   name="value"
-                >
-                  <MenuItem value="will_pages.transcription_text">
-                    transcription
-                  </MenuItem>
-                  <MenuItem value="will_pages.edition_text">édition</MenuItem>
-                </Select>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
+                 >
+                  <MenuItem className="selectMode" value="will_pages.transcription_text">transcription</MenuItem>
+                  <MenuItem className="selectMode" value="will_pages.edition_text">édition</MenuItem>
+              </Select>
+            </Box>
+        </Box>
+
+         <Box width="100%">
             <DataSearch
-              className="dataSearch"
+              className="input input_keywords"
               componentId="texte"
               dataField={[this.state.value]}
               queryFormat="or"
-              placeholder={"Saisir un mot, une expression …"}
+              placeholder={"Saisir un mot, une expression…"}
               filterLabel="recherche"
               autosuggest={true}
-              showIcon={false}
+              showIcon={true}
               customQuery={this.customQuery}
               URLParams={true}
               searchOperators={true}
@@ -109,9 +101,8 @@ class TextSearch extends React.Component {
                 input: "inputSearch"
               }}
             />
-          </Grid>
-        </Grid>
-      </div>
+         </Box>
+    </Box>
     );
   }
 }

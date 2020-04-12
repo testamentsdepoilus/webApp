@@ -7,26 +7,20 @@ import {
 } from "@appbaseio/reactivesearch";
 
 import {
-  Paper,
+  Box,
   Select,
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography,
-  Grid,
-  IconButton
+  Button,
 } from "@material-ui/core";
-import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
-import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+
 import {
   getParamConfig,
   getHitsFromQuery,
   equalsArray
 } from "../utils/functions";
 import TestatorDisplay from "./TestatorDisplay";
-import ClearIcon from "@material-ui/icons/Clear";
-import Footer from "./Footer";
 
 class Testators extends Component {
   constructor(props) {
@@ -112,17 +106,16 @@ class Testators extends Component {
 
   render() {
     return (
-      <div className="testators">
+      <div className="notices testators">
         <ReactiveBase
           app={getParamConfig("es_index_testators")}
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
+        <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
                 aria-label="Breadcrumb"
+                className="breadcrumbs"
               >
                 <Link
                   id="home"
@@ -133,19 +126,15 @@ class Testators extends Component {
                 >
                   Accueil
                 </Link>
-                <Typography color="textPrimary">Les testateurs</Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
+                <div>Les testateurs</div>
+        </Breadcrumbs>
 
-          <div className="testatorSearch">
-            <h2>Découvrir les testateurs</h2>
-            <div className="selectList">
-              <Grid container direction="row">
-                <Grid item xs={10}>
+        <Box className="headingBar bg-gray" display="flex" justifyContent="space-between">
+          <h2 className="card-title bg-primaryMain"><i className="far fa-address-book"></i> Découvrir les testateurs</h2>
+          <div className="selectList d-flex">
                   <SingleDropdownList
                     componentId="testatorId"
-                    className="testators"
+                    className="select selectName"
                     dataField="persName.norm.keyword"
                     value={this.state.testator_name}
                     size={1000}
@@ -155,7 +144,7 @@ class Testators extends Component {
                     placeholder="Nom du testateur"
                     loader="En chargement ..."
                     showSearch={true}
-                    searchPlaceholder="Saisir un nom de testateur"
+                    searchPlaceholder="Saisir un nom"
                     onChange={this.handleValueChange}
                     URLParams={true}
                     innerClass={{
@@ -163,20 +152,17 @@ class Testators extends Component {
                       select: "select"
                     }}
                   />
-                </Grid>
-                <Grid item xs={2}>
-                  <IconButton
+                  <Button
                     onClick={this.handleClear("")}
                     title="Supprimer le filtre"
+                    className="button iconButton"
                   >
-                    <ClearIcon style={{ color: "red" }} />
-                  </IconButton>
-                </Grid>
-              </Grid>
-            </div>
-          </div>
-
-          <div className="testators_result">
+                    <i className="fas fa-times"></i>
+                  </Button>
+           </div>
+        </Box>
+        
+        <div className="testators_result">
             <ReactiveList
               react={{
                 and: ["testatorId"]
@@ -188,12 +174,12 @@ class Testators extends Component {
               pagination={true}
               paginationAt="top"
               size={1}
-              pages={5}
+              pages={10}
               sortBy={this.state.order}
               showEndPage={false}
               URLParams={false}
               innerClass={{
-                resultsInfo: "resultsInfo",
+                resultsInfo: "countResults",
                 pagination: "pagination"
               }}
               renderResultStats={function(stats) {
@@ -207,7 +193,7 @@ class Testators extends Component {
                     getParamConfig("web_url") + "/testateur/" + item["_id"]
                   );
                   const curPage_ =
-                    Math.floor(res.resultStats.currentPage / 5) * 5;
+                    Math.floor(res.resultStats.currentPage / 10) * 10;
                   let sort_ = {};
                   sort_[this.state.field] = { order: this.state.order };
                   getHitsFromQuery(
@@ -216,7 +202,7 @@ class Testators extends Component {
                       getParamConfig("es_index_testators"),
                     JSON.stringify({
                       from: curPage_,
-                      size: 5,
+                      size: 10,
                       sort: [sort_]
                     })
                   )
@@ -231,80 +217,72 @@ class Testators extends Component {
                       console.log("error :", error);
                     });
                   const resultList = (
-                    <div className="resultList">
-                      <div className="sortResult">
-                        Trier par :
-                        <Select
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
-                          <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
-                          <MenuItem value={3}>
-                            date de naissance <TrendingUpIcon />
-                          </MenuItem>
-                          <MenuItem value={4}>
-                            date de naissance <TrendingDownIcon />
-                          </MenuItem>
-                          <MenuItem value={5}>
-                            date de décès <TrendingUpIcon />
-                          </MenuItem>
-                          <MenuItem value={6}>
-                            date de décès <TrendingDownIcon />
-                          </MenuItem>
-                        </Select>
+                  <div className="leftColumn bg-gray">
+                      <Box display="flex" justifyContent="flex-end" width="100%">
+                        <Box display="flex" className="sort_results">
+                          <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
+                          <Select className="select" value={this.state.value} onChange={this.handleChange}>
+                            <MenuItem className="sortBy" value={1}>nom de famille (A-Z)</MenuItem>
+                            <MenuItem className="sortBy" value={2}>nom de famille (Z-A)</MenuItem>
+                            <MenuItem className="sortBy" value={3}>date de naissance <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+                            <MenuItem className="sortBy" value={4}>date de naissance <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+                            <MenuItem className="sortBy" value={5}>date de décès <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+                            <MenuItem className="sortBy" value={6}>date de décès <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+                          </Select>
+                        </Box>
+                      </Box>
+                      <div className="resultList">
+                        <ul>
+                          {this.state.cur_list.map((item, i) =>
+                            Boolean(
+                              res.resultStats.currentPage === curPage_ + i
+                            ) ? (
+                              <li key={item["_id"]} className="active">
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source[
+                                  "persName.fullIndexEntryForm.forename"
+                                ]
+                                  .toString()
+                                  .replace(/,/g, " ") + " "}
+                                <span className="typoSurname">
+                                  {
+                                    item._source[
+                                      "persName.fullIndexEntryForm.surname"
+                                    ]
+                                  }
+                                </span>
+                              </li>
+                            ) : (
+                              <li key={item["_id"]}>
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source[
+                                  "persName.fullIndexEntryForm.forename"
+                                ]
+                                  .toString()
+                                  .replace(/,/g, " ") + " "}
+                                <span className="smallcaps">
+                                  {
+                                    item._source[
+                                      "persName.fullIndexEntryForm.surname"
+                                    ]
+                                  }
+                                </span>
+                              </li>
+                            )
+                          )}
+                        </ul>
                       </div>
-                      <ul>
-                        {this.state.cur_list.map((item, i) =>
-                          Boolean(
-                            res.resultStats.currentPage === curPage_ + i
-                          ) ? (
-                            <li key={item["_id"]} className="li_active">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source[
-                                "persName.fullIndexEntryForm.forename"
-                              ]
-                                .toString()
-                                .replace(/,/g, " ") + " "}
-                              <span className="typoSurname">
-                                {
-                                  item._source[
-                                    "persName.fullIndexEntryForm.surname"
-                                  ]
-                                }
-                              </span>
-                            </li>
-                          ) : (
-                            <li key={item["_id"]} className="li">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source[
-                                "persName.fullIndexEntryForm.forename"
-                              ]
-                                .toString()
-                                .replace(/,/g, " ") + " "}
-                              <span className="typoSurname">
-                                {
-                                  item._source[
-                                    "persName.fullIndexEntryForm.surname"
-                                  ]
-                                }
-                              </span>
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
+                  </div>
                   );
                   return (
-                    <div className="testators_results" key={j}>
+                    <div key={j}>
                       <TestatorDisplay
                         id={item["_id"]}
                         data={item}
                         resultList={resultList}
                       />
-                      <Footer />
                     </div>
                   );
                 });

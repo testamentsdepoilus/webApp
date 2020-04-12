@@ -1,0 +1,244 @@
+
+.cms .leftMenu{
+  padding: 20px 0px 20px 20px;
+  margin:0;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+}
+.cms .leftMenu ul{
+  padding:0;
+}
+.cms .leftMenu li{
+  margin-bottom: 12px;
+}
+.cms .leftMenu li:last-of-type{
+    margin-bottom: 0px;
+}
+.cms .leftMenu li:hover{
+    background-color: #8DB2C2;
+}
+.cms .leftMenu li a{
+ font-weight: 600;
+ font-size: 1rem;
+ line-height: 1.3rem;
+}
+.cms .leftMenu li a:hover{
+ color:white;
+}
+.cms .leftMenu li a i{
+ padding-right: 5px;
+}
+.cms.favoris .leftMenu .units_div a{
+  margin-left: -4px;
+}
+.cms.favoris .leftMenu .units_div svg{
+  width: 0.8em;
+  height: 0.8em;
+  padding-right: 8px;
+  font-size:1.3rem;
+}
+.cms.favoris .iconButton i{
+  font-size: 0.975rem;
+}
+.cms.manage_root  .button.plain i,
+.cms.favoris  .button.plain i{
+  padding-right: 0px!important;
+}
+.cms.favoris .button.plain.primaryMain:hover,
+.cms.favoris .button.plain.primaryLight:hover,
+.cms.favoris .button.plain.secondaryLight:hover,
+.cms.favoris .button.plain.secondaryMain:hover{
+  background-color: #B91918!important;
+}
+.cms.favoris table thead .MuiTableCell-paddingCheckbox{
+  width: 175px;
+}
+.cms.favoris table thead label.MuiFormControlLabel-root{
+  margin-left: 0px;
+}
+.cms.manage_root .iconButton i.fa-2x {
+font-size: 2em!important;
+}
+
+
+.cms .tableContainer{
+  padding-bottom: 30px;
+}
+.cms section{
+  padding: 10px 40px 40px 40px;
+}
+.cms .toolBar{
+  min-height: 20px;
+  padding: 0;
+}
+
+.cms table{
+  font-family: "Fira Sans";
+}
+.cms table th{
+}
+.cms table thead th:first-of-type{
+  width: auto;
+}
+.cms table .MuiTableCell-root{
+  padding: 3px 0px 3px 0px;
+}
+.cms table thead .MuiTableCell-root{
+  border-color:black;
+}
+.cms table tbody .MuiTableCell-root{
+  border-bottom:none;
+}
+.cms table tbody tr:hover{
+  background-color: #C7D7E1!important;
+}
+.cms table thead th{
+  font-weight: 700;
+}
+
+.cms table tbody th{
+  font-weight: 600;
+}
+.cms table .MuiTableSortLabel-root:hover{
+  color:#8DB2C2;
+}
+.cms table .MuiTableSortLabel-active{
+  color:#1F8299;
+}
+.cms table .MuiTableSortLabel-root:hover svg{
+    fill:#8DB2C2;
+}
+.cms table .MuiTableSortLabel-active svg{
+  fill:#1F8299;
+}
+.cms .labelCheckBox{
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cms .toolBar .button.plain{
+  line-height: 1.6rem;
+  margin-left: 10px;
+}
+
+.cms .visuallyHidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1;
+  margin: -1;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  top: 20;
+  width: 1;
+}
+
+
+
+.cms .bootstrapRoot {
+  display: none;
+  position: fixed;
+  bottom: 10;
+  right: 10;
+  box-shadow: none;
+  font-size: 1rem;
+  border: 1px solid;
+}
+
+.cms .bootstrapRoot:hover {
+  background-color: #bcaaa4;
+  border-color: #bcaaa4;
+}
+
+
+
+.cms .labelTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 1em;
+}
+
+
+.cms .highlight {
+  font-size: 1rem;
+  background-color: #e99ad1ab;
+}
+
+.cms .title {
+  color: #0d47a1;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+
+.cms .form {
+  max-width: 600px;
+  margin-top: 2rem;
+}
+.cms .login .form,
+.cms .register .form{
+  margin-top: 0rem;
+}
+.cms .input{
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.cms .form fieldset{
+  border-color:#8DB2C2;
+}
+.cms form h2 {
+  margin-top: 35px;
+  font-size: 1.2rem;
+}
+.cms form .rdw-editor-wrapper{
+  border: 1px solid #F0F0F0;
+}
+.cms form .rdw-editor-main{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.cms form .submitButtons{
+  margin-top: 30px;
+
+}
+.cms form .submit {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.cms button:focus{
+  background-color: #DADAD9!important;
+}
+.cms button.backBt{
+  border-color: #1F8299;
+  color:#1F8299;
+  border-style: solid;
+  border-width: 1px;
+  background-color: white;
+  text-transform: none;
+  box-shadow: none;
+}
+.cms button.backBt:hover{
+  border-color: #8DB2C2;
+  background-color:#DADAD9;
+}
+.cms input[type="file"]{
+  padding: 18.5px 14px;
+}
+.cms form #email-label, 
+.cms form #password-label,
+.cms form #standard-userName-input-label, 
+.cms form #standard-email-input-label, 
+.cms form #password-confirme-label {
+line-height: 16px;
+}
+.cms form #standard-userName-input, 
+.cms form #standard-email-input, 
+.cms form #password, 
+.cms form #password-confirme {
+  padding: 18.5px 14px;
+  height: 1.1875em;
+}
+.cms form input:-internal-autofill-selected {
+    background-color: #8CB2C2!important;
+}

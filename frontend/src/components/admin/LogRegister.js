@@ -1,11 +1,10 @@
 import React from "react";
 import Login from "./Login";
 import Register from "./Register";
-import { AppBar, Tabs, Tab, Typography, Box, Avatar } from "@material-ui/core";
+import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import { LockOutlined } from "@material-ui/icons";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,17 +38,15 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
     width: 500,
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(0)
   },
   avatar: {
     marginLeft: "auto",
     marginRight: "auto",
-    marginBottom: theme.spacing(5),
-    backgroundColor: theme.palette.primary.main
+    marginBottom: theme.spacing(0),
   }
 }));
 
@@ -68,18 +65,17 @@ export default function LogRegister() {
   };
 
   return !localStorage.usertoken ? (
-    <div className={classes.root}>
-      <Avatar className={classes.avatar}>
-        <LockOutlined />
-      </Avatar>
+    <div className="loginRegister cms">
+      <Box display="flex" justifyContent="center">
+        <i className="text-secondaryLight fas fa-3x fa-user-lock"></i>
+      </Box>
       <AppBar position="static" color="default">
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
           variant="fullWidth"
           aria-label="full width tabs example"
+          className="text-white fontWeightBold tabsLoginRegister"
         >
           <Tab label="Inscription" {...a11yProps(0)} />
           <Tab label="Connexion" {...a11yProps(1)} />

@@ -2,20 +2,15 @@ import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
-  Paper,
   Breadcrumbs,
   Link,
-  Typography,
-  Grid,
   Tooltip,
-  IconButton
+  Button,
+  Box,
 } from "@material-ui/core";
 
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
-import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
 import TestatorDisplay from "./TestatorDisplay";
-import Footer from "./Footer";
 
 class Testator extends Component {
   constructor(props) {
@@ -31,20 +26,15 @@ class Testator extends Component {
     if (this.state.data.length > 0) {
       return (
         <div className="testator_detail">
-          <Paper>
             <TestatorDisplay
               id={this.state.data[0]["_id"]}
               data={this.state.data[0]._source}
             />
-          </Paper>
-          <Footer />
         </div>
       );
     } else {
       return (
-        <div>
-          <h3>Pas de résultat</h3>
-        </div>
+         <div className="text-error">Pas de résultat</div>
       );
     }
   }
@@ -88,56 +78,47 @@ class Testator extends Component {
 
     const testator_link =
       this.state.data.length > 0 ? (
-        <Typography color="textPrimary" key={2}>
+        <div key={2}>
           {this.state.data[0]._source["persName.fullProseForm"]}
-        </Typography>
+        </div>
       ) : null;
 
     return (
-      <div>
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid item>
-            {document.referrer.length > 0 &&
-            document.referrer !== document.location.href ? (
-              <Tooltip title="Revenir en arrière">
-                <IconButton onClick={this.handleBackUp} aria-label="back up">
-                  <ArrowBackIcon />
-                </IconButton>
-              </Tooltip>
-            ) : null}
-          </Grid>
 
-          <Grid item>
-            <div className="testator_menu">
-              <Paper elevation={0}>
-                <Breadcrumbs
-                  separator={<NavigateNextIcon fontSize="small" />}
+      <div className="testator">
+        <Box className="d-block d-md-flex"  justifyContent="space-between"> 
+          <Breadcrumbs
+                  separator={<i className="fas fa-caret-right"></i>}
                   aria-label="Breadcrumb"
+                  className="breadcrumbs"
                 >
                   <Link
-                    id="search"
-                    color="inherit"
+                    id="home"
                     key={0}
+                    color="inherit"
                     component={RouterLink}
                     to="/accueil"
                   >
                     Accueil
                   </Link>
                   {testator_link}
-                </Breadcrumbs>
-              </Paper>
-            </div>
-          </Grid>
-        </Grid>
+          </Breadcrumbs>
+          <div>
+            {document.referrer.length > 0 &&
+            document.referrer !== document.location.href ? (
+              <Tooltip title="Revenir à la recherche">
+                <Button className="button outlined secondary-light" id="btnBack" onClick={this.handleBackUp} aria-label="page précédente">
+                 <i className="fas fa-undo-alt"></i> Revenir en arrière
+                </Button>
+              </Tooltip>
+            ) : null}
+          </div>
+       </Box>
 
         <div>{this.renderFunc()}</div>
+     
       </div>
+
     );
   }
 }
