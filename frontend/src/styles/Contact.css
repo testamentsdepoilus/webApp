@@ -1,0 +1,13 @@
+.contact .form {
+  max-width: 600px;
+  margin-top: 2rem;
+}
+
+.contact .input {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.contact .submit {
+  margin-top: 15px;
+}

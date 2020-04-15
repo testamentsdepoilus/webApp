@@ -1,22 +1,9 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import WillDisplay from "./WillDisplay";
-import {
-  Paper,
-  Breadcrumbs,
-  Link,
-  Typography,
-  Grid,
-  IconButton,
-  Tooltip,
-  Button
-} from "@material-ui/core";
+import { Breadcrumbs, Link, Button, Tooltip, Box } from "@material-ui/core";
 
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
-
-import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
-import Footer from "./Footer";
 
 class Will extends Component {
   constructor(props) {
@@ -24,7 +11,7 @@ class Will extends Component {
     this.state = {
       data: [],
       page: {},
-      idx: 0
+      idx: 0,
     };
 
     this.renderFunc = this.renderFunc.bind(this);
@@ -35,23 +22,16 @@ class Will extends Component {
   renderFunc() {
     if (this.state.data.length > 0) {
       return (
-        <div className="root" key={100}>
-          <Paper>
-            <WillDisplay
-              id={this.state.data[0]["_id"]}
-              data={this.state.data[0]._source}
-              cur_page={this.state.page}
-            />
-          </Paper>
-          <Footer />
+        <div key={100}>
+          <WillDisplay
+            id={this.state.data[0]["_id"]}
+            data={this.state.data[0]._source}
+            cur_page={this.state.page}
+          />
         </div>
       );
     } else {
-      return (
-        <div>
-          <h3>Pas de résultat</h3>
-        </div>
-      );
+      return <div className="text-error">Pas de résultat</div>;
     }
   }
 
@@ -72,7 +52,7 @@ class Will extends Component {
     );
     this.setState({
       idx: new_idx,
-      data: new_data
+      data: new_data,
     });
   }
 
@@ -92,7 +72,7 @@ class Will extends Component {
     );
     this.setState({
       idx: new_idx,
-      data: new_data
+      data: new_data,
     });
   }
 
@@ -105,7 +85,7 @@ class Will extends Component {
       let cur_idx = 0;
       if (localStorage.willsSearch) {
         const willsSearch = JSON.parse(localStorage.willsSearch);
-        const willsID = willsSearch.map(item => item._id);
+        const willsID = willsSearch.map((item) => item._id);
         cur_idx = willsID.indexOf(query_id);
       }
       getHitsFromQuery(
@@ -113,25 +93,25 @@ class Will extends Component {
         JSON.stringify({
           query: {
             term: {
-              _id: query_id
-            }
-          }
+              _id: query_id,
+            },
+          },
         })
       )
-        .then(data => {
+        .then((data) => {
           this.setState({
             data: data,
             page:
               url_query.length > 1
                 ? {
                     type: url_query[1].split("_")[0],
-                    id: parseInt(url_query[1].split("_")[1], 10)
+                    id: parseInt(url_query[1].split("_")[1], 10),
                   }
                 : {},
-            idx: cur_idx
+            idx: cur_idx,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error :", error);
         });
     }
@@ -140,63 +120,31 @@ class Will extends Component {
   render() {
     const will_link =
       this.state.data.length > 0 ? (
-        <Typography color="textPrimary" key={2}>
-          {this.state.data[0]._source["will_identifier.name"]}
-        </Typography>
+        <div key={2}>{this.state.data[0]._source["will_identifier.name"]}</div>
       ) : null;
 
     return (
-      <div>
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid item>
-            {document.referrer.length > 0 &&
-            document.referrer !== document.location.href ? (
-              <Tooltip title="Revenir en arrière">
-                <IconButton onClick={this.handleBackUp} aria-label="back up">
-                  <ArrowBackIcon />
-                </IconButton>
-              </Tooltip>
-            ) : null}
-          </Grid>
-
-          <Grid item>
-            <div className="wills_menu">
-              <Paper elevation={0}>
-                <Breadcrumbs
-                  separator={<NavigateNextIcon fontSize="small" />}
-                  aria-label="Breadcrumb"
-                >
-                  <Link
-                    id="search"
-                    color="inherit"
-                    key={0}
-                    component={RouterLink}
-                    to="/accueil"
-                  >
-                    Accueil
-                  </Link>
-                  {will_link}
-                </Breadcrumbs>
-              </Paper>
-            </div>
-          </Grid>
-        </Grid>
-        {localStorage.willsSearch &&
-        JSON.parse(localStorage.willsSearch).length > 1 ? (
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            spacing={4}
+      <div className="will">
+        <Box className="d-block d-md-flex" justifyContent="space-between">
+          <Breadcrumbs
+            separator={<i className="fas fa-caret-right"></i>}
+            aria-label="Breadcrumb"
+            className="breadcrumbs"
           >
-            <Grid item>
+            <Link
+              id="home"
+              key={0}
+              color="inherit"
+              component={RouterLink}
+              to="/accueil"
+            >
+              Accueil
+            </Link>
+            {will_link}
+          </Breadcrumbs>
+          {localStorage.willsSearch &&
+          JSON.parse(localStorage.willsSearch).length > 1 ? (
+            <div>
               <Button
                 id="prev"
                 color="primary"
@@ -206,8 +154,7 @@ class Will extends Component {
               >
                 Précédent
               </Button>
-            </Grid>
-            <Grid item>
+
               <Button
                 id="next"
                 color="primary"
@@ -220,11 +167,28 @@ class Will extends Component {
               >
                 Suivant
               </Button>
-            </Grid>
-          </Grid>
-        ) : (
-          ""
-        )}
+            </div>
+          ) : (
+            ""
+          )}
+
+          <div>
+            {document.referrer.length > 0 &&
+            document.referrer !== document.location.href ? (
+              <Tooltip title="Revenir à la recherche">
+                <Button
+                  className="button outlined secondary-light"
+                  id="btnBack"
+                  onClick={this.handleBackUp}
+                  aria-label="page précédente"
+                >
+                  <i className="fas fa-undo-alt"></i> Revenir en arrière
+                </Button>
+              </Tooltip>
+            ) : null}
+          </div>
+        </Box>
+
         <div>{this.renderFunc()}</div>
       </div>
     );

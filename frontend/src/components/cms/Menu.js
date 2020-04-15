@@ -59,23 +59,27 @@ class Menu extends Component {
 
   render() {
     return this.state.myData ? (
-      <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+     <Breadcrumbs
+              separator={<i className="fas fa-caret-right"></i>}
+              aria-label="Breadcrumb"
+              className="breadcrumbs"
+             >
         <Link
           id="profile"
           className={
-            this.state.selectedId === "profile" ? "activedLink" : "link"
+            this.state.selectedId === "profile" ? "active" : ""
           }
           component={RouterLink}
           to="/espace/profile"
           onClick={this.handleListItemClick}
         >
-          Mon profil
+          <div>Mon profil</div>
         </Link>
 
         <Link
           id="panier"
           className={
-            this.state.selectedId === "panier" ? "activedLink" : "link"
+            this.state.selectedId === "panier" ? "active" : ""
           }
           component={RouterLink}
           to="/espace/panier"
@@ -110,7 +114,7 @@ class Menu extends Component {
                 <Link
                   id="cms"
                   className={
-                    this.state.selectedId === "cms" ? "activedLink" : "link"
+                    this.state.selectedId === "cms" ? "active" : ""
                   }
                   component={RouterLink}
                   to="/espace/cms"
@@ -123,7 +127,7 @@ class Menu extends Component {
                 <Link
                   id="config"
                   className={
-                    this.state.selectedId === "config" ? "activedLink" : "link"
+                    this.state.selectedId === "config" ? "active" : ""
                   }
                   component={RouterLink}
                   to="/espace/config"

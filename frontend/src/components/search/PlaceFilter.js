@@ -8,9 +8,8 @@ import {
   ListItemText,
   ListItem,
   Snackbar,
-  IconButton,
+  Button,
 } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
 
 class PlaceFilter extends React.Component {
   constructor(props) {
@@ -93,10 +92,58 @@ class PlaceFilter extends React.Component {
   render() {
     return (
       <div>
-        <Grid container alignItems="center" direction="row" spacing={1}>
-          <Grid item xs={6}>
-            <List>
-              <ListItem>
+        <Grid container alignItems="center" direction="row" spacing={0}>
+          <Grid item xs={12} container direction="row">
+            <Grid item xs={10}>
+              <SingleDropdownList
+                className="select"
+                react={{
+                  and: [
+                    "texte",
+                    "date_redaction",
+                    "institution",
+                    "contributeur",
+                    "nom_testateur",
+                    "collection",
+                    "notoriale",
+                    "profession",
+                    "unite",
+                    "cote",
+                  ],
+                }}
+                componentId="lieu"
+                dataField="will_contents.place.keyword"
+                value={this.state.place}
+                size={2000}
+                sortBy="asc"
+                showCount={false}
+                autosuggest={true}
+                placeholder="Lieu"
+                URLParams={true}
+                loader="En chargement ..."
+                showSearch={true}
+                searchPlaceholder="Saisir un nom de lieu"
+                onChange={this.handlePlaceChange}
+                innerClass={{
+                  list: "list",
+                }}
+                customQuery={this.customQuery}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                id="clearPlace"
+                onClick={(event) => this.handlePlaceChange("")}
+                title="Supprimer le filtre"
+                className="button iconButton"
+              >
+                <i className="fas fa-times"></i>
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <List className="places_list">
+              <ListItem className="checkbox">
                 <ListItemIcon>
                   <Checkbox
                     checked={this.state.birth_place}
@@ -109,7 +156,22 @@ class PlaceFilter extends React.Component {
                 </ListItemIcon>
                 <ListItemText secondary="Lieu de naissance" />
               </ListItem>
-              <ListItem>
+
+              <ListItem className="checkbox">
+                <ListItemIcon>
+                  <Checkbox
+                    checked={this.state.death_place}
+                    onChange={this.handChange("death_place")}
+                    value="death_place"
+                    inputProps={{
+                      "aria-label": "primary checkbox",
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText secondary="Lieu de décès" />
+              </ListItem>
+
+              <ListItem className="checkbox">
                 <ListItemIcon>
                   <Checkbox
                     checked={this.state.residence_place}
@@ -122,7 +184,8 @@ class PlaceFilter extends React.Component {
                 </ListItemIcon>
                 <ListItemText secondary="Lieu de résidence" />
               </ListItem>
-              <ListItem>
+
+              <ListItem className="checkbox">
                 <ListItemIcon>
                   <Checkbox
                     checked={this.state.will_place}
@@ -149,54 +212,6 @@ class PlaceFilter extends React.Component {
                 <ListItemText secondary="Lieu de décès" />
               </ListItem>
             </List>
-          </Grid>
-          <Grid item xs={6} container direction="row">
-            <Grid item xs={10}>
-              <SingleDropdownList
-                className="datasearch"
-                react={{
-                  and: [
-                    "texte",
-                    "date_redaction",
-                    "date_naissance",
-                    "date_deces",
-                    "institution",
-                    "contributeur",
-                    "nom_testateur",
-                    "collection",
-                    "profession",
-                    "notoriale",
-                    "unite",
-                    "cote",
-                  ],
-                }}
-                componentId="lieu"
-                dataField="will_contents.place.keyword"
-                value={this.state.place}
-                size={2000}
-                sortBy="asc"
-                showCount={false}
-                autosuggest={true}
-                placeholder="Lieu"
-                URLParams={true}
-                showSearch={true}
-                searchPlaceholder="Saisir un nom de lieu"
-                customQuery={this.customQuery}
-                onChange={this.handlePlaceChange}
-                innerClass={{
-                  list: "list",
-                }}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <IconButton
-                id="clearPlace"
-                onClick={(event) => this.handlePlaceChange("")}
-                title="Supprimer le filtre"
-              >
-                <ClearIcon style={{ color: "red" }} />
-              </IconButton>
-            </Grid>
           </Grid>
         </Grid>
         <Snackbar

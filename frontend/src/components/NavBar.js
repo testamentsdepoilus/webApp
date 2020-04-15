@@ -1,22 +1,23 @@
 import React, { Component } from "react";
 import { Link as RouterLink, withRouter } from "react-router-dom";
+import MenuIcon from "@material-ui/icons/Menu";
+
 import {
   Link,
-  Breadcrumbs,
   Dialog,
   DialogContent,
   IconButton,
   DialogTitle,
   Grid,
-  Button,
+  Box,
   MenuList,
   MenuItem,
-  Menu
+  Menu,
+  Button,
 } from "@material-ui/core";
+
 import { getParamConfig, getUserToken } from "../utils/functions";
-import CloseIcon from "@material-ui/icons/Close";
 import LogRegister from "./admin/LogRegister";
-import PersonIcon from "@material-ui/icons/Person";
 
 class NavBar extends Component {
   constructor() {
@@ -27,7 +28,8 @@ class NavBar extends Component {
       anchorEl: null,
       anchorElExplor: null,
       open_mySpace: false,
-      anchorEl_mySpace: null
+      anchorEl_mySpace: null,
+      isMainNavVisible: false,
     };
     this.handleListItemClick = this.handleListItemClick.bind(this);
     this.tabLinks = [
@@ -40,7 +42,7 @@ class NavBar extends Component {
       "articles",
       "units",
       "explore",
-      "mySpace"
+      "mySpace",
     ];
     this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
@@ -53,21 +55,21 @@ class NavBar extends Component {
 
   handleListItemClick(event) {
     this.setState({
-      selectedId: event.target.id
+      selectedId: event.target.id,
     });
   }
 
   handleLoginClick() {
     //this.props.history.push("/login");
     this.setState({
-      open: true
+      open: true,
     });
   }
 
   handleOpenMySpace(event) {
     this.setState({
       open_mySpace: true,
-      anchorEl_mySpace: event.currentTarget
+      anchorEl_mySpace: event.currentTarget,
     });
   }
 
@@ -80,32 +82,40 @@ class NavBar extends Component {
     this.setState({
       open: false,
       open_mySpace: false,
-      anchorEl_mySpace: null
+      anchorEl_mySpace: null,
     });
   }
 
   handleExplorClick(event) {
     this.setState({
-      anchorElExplor: event.currentTarget
+      anchorElExplor: event.currentTarget,
     });
   }
 
   handleExplorClose() {
     this.setState({
-      anchorElExplor: null
+      anchorElExplor: null,
     });
   }
 
   componentDidMount() {
-    const findLink = this.tabLinks.find(link =>
+    const findLink = this.tabLinks.find((link) =>
       document.location.href.includes(link)
     );
     this.setState({
-      selectedId: findLink
+      selectedId: findLink,
     });
   }
 
+  toggleMainNav = () => {
+    this.setState((prevState) => ({
+      isMainNavVisible: !prevState.isMainNavVisible,
+    }));
+  };
+
   render() {
+    const { isMainNavVisible } = this.state;
+
     /* const userLogin = (
       <Styled>
         {({ classes }) => (
@@ -142,279 +152,363 @@ class NavBar extends Component {
     );*/
 
     return (
-      <div className="nav_root">
-        <Grid container direction="row" spacing={1}>
-          <Grid item xs={10}>
-            <Link id="home" component={RouterLink} to="/accueil">
+      <header>
+        <Grid className="headerContainer" container direction="row" spacing={0}>
+          <Grid
+            item
+            position="relative"
+            className="bg-white"
+            component={Box}
+            lg={2}
+            display={{ xs: "none", lg: "block", xl: "block" }}
+          >
+            <Link
+              id="home"
+              display="block"
+              component={RouterLink}
+              to="/accueil"
+            >
               <img
-                className="titre_site"
                 src={
                   getParamConfig("web_url") +
-                  "/images/Entete_titre-site-haut-300dpi.jpg"
+                  "/testaments-de-poilus/images/testaments-poilus-header.jpg"
                 }
-                alt="titre_site"
+                alt="Testaments de Poilus, édition numérique"
+                width="205"
+                height="107"
               />
             </Link>
-          </Grid>
-          <Grid item xs={2}>
-            <div className="menu_secondary">
-              <MenuList>
-                <MenuItem>
-                  {" "}
-                  <Link
-                    id="news"
-                    className={
-                      this.state.selectedId === "news" ? "activedLink" : "link"
-                    }
-                    component={RouterLink}
-                    to="/news"
-                    onClick={this.handleListItemClick}
-                  >
-                    {" "}
-                    Les actualités{" "}
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  {" "}
-                  <Link
-                    id="articles"
-                    className={
-                      this.state.selectedId === "articles"
-                        ? "activedLink"
-                        : "link"
-                    }
-                    component={RouterLink}
-                    to="/articles"
-                    onClick={this.handleListItemClick}
-                  >
-                    {" "}
-                    L'état de la recherche{" "}
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  {" "}
-                  <Link
-                    id="about"
-                    className={
-                      this.state.selectedId === "about" ? "activedLink" : "link"
-                    }
-                    component={RouterLink}
-                    to="/apropos"
-                    onClick={this.handleListItemClick}
-                  >
-                    {" "}
-                    À propos{" "}
-                  </Link>
-                </MenuItem>
-              </MenuList>
-            </div>
-          </Grid>
-        </Grid>
-
-        <Grid container direction="row" spacing={1}>
-          <Grid item xs={10}>
-            <Breadcrumbs
-              maxItems={10}
-              itemsAfterCollapse={3}
-              itemsBeforeCollapse={3}
-              aria-label="Breadcrumb"
-              className="menu"
+            <Box
+              bgcolor="error.main"
+              position="absolute"
+              top={0}
+              right={8}
+              fontWeight="fontWeightMedium"
+              pl={0.8}
+              pr={0.8}
+              pt={0.2}
+              pb={0.2}
+              id="19141918"
             >
-              <Link
-                id="search"
-                className={
-                  this.state.selectedId === "search" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/recherche"
-                onClick={this.handleListItemClick}
-              >
-                Recherche
-              </Link>
-              <Link
-                id="explore"
-                className={
-                  this.state.selectedId === "explore" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/explore"
-                onClick={this.handleListItemClick}
-              >
-                Explorer
-              </Link>
-              <Link
-                id="wills"
-                className={
-                  this.state.selectedId === "wills" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/testaments"
-                onClick={this.handleListItemClick}
-              >
-                Les testaments
-              </Link>
-              <Link
-                id="testators"
-                className={
-                  this.state.selectedId === "testators" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/testateurs"
-                onClick={this.handleListItemClick}
-              >
-                Les testateurs
-              </Link>
-              <Link
-                id="places"
-                className={
-                  this.state.selectedId === "places" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/places"
-                onClick={this.handleListItemClick}
-              >
-                Les lieux
-              </Link>
-              <Link
-                id="units"
-                className={
-                  this.state.selectedId === "units" ? "activedLink" : "link"
-                }
-                component={RouterLink}
-                to="/armees"
-                onClick={this.handleListItemClick}
-              >
-                Les unités militaires
-              </Link>
-            </Breadcrumbs>
+              1914-1918
+            </Box>
           </Grid>
-          <Grid item xs={2}>
-            <div className="logIn">
-              <Button
-                variant="contained"
-                className={this.usertoken ? "userLogout" : "userLogin"}
-                startIcon={<PersonIcon />}
-                onClick={
-                  this.usertoken
-                    ? this.handleOpenMySpace
-                    : this.handleLoginClick
-                }
-              >
-                Mon espace
-              </Button>
 
-              <Menu
-                id="simple-menu-explor"
-                anchorEl={this.state.anchorEl_mySpace}
-                keepMounted
-                open={Boolean(this.state.open_mySpace)}
-                onClose={this.handleClose}
-                elevation={0}
-                getContentAnchorEl={null}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center"
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center"
-                }}
+          <Grid item component={Box} className="bg-white" p={0} xs={12} lg={10}>
+            <Box display="flex" justifyContent="space-between">
+              <Box>
+                <Box
+                  display={{ xs: "block", md: "flex" }}
+                  alignItems="center"
+                  pt={0.82}
+                >
+                  <Box className="site-title" fontWeight="fontWeightBold">
+                    <Link id="home" component={RouterLink} to="/accueil">
+                      Testaments{" "}
+                      <span className="small" fontWeight="fontWeightMedium">
+                        de
+                      </span>{" "}
+                      Poilus
+                    </Link>
+                  </Box>
+                  <Box
+                    className="site-subtitle"
+                    display={{ xs: "block", sm: "inline-flex" }}
+                  >
+                    <Link id="home" component={RouterLink} to="/accueil">
+                      Édition numérique
+                    </Link>
+                  </Box>
+                </Box>
+              </Box>
+              <Box display={{ xs: "none", md: "block" }}>
+                <div id="menu_secondary">
+                  <ul>
+                    <li>
+                      {" "}
+                      <Link
+                        id="news"
+                        className={
+                          this.state.selectedId === "news" ? "active" : ""
+                        }
+                        component={RouterLink}
+                        to="/news"
+                        onClick={this.handleListItemClick}
+                      >
+                        {" "}
+                        Les actualités{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      {" "}
+                      <Link
+                        id="articles"
+                        className={
+                          this.state.selectedId === "articles" ? "active" : ""
+                        }
+                        component={RouterLink}
+                        to="/articles"
+                        onClick={this.handleListItemClick}
+                      >
+                        {" "}
+                        L'état de la recherche{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      {" "}
+                      <Link
+                        id="about"
+                        className={
+                          this.state.selectedId === "about" ? "active" : ""
+                        }
+                        component={RouterLink}
+                        to="/apropos"
+                        onClick={this.handleListItemClick}
+                      >
+                        {" "}
+                        À propos{" "}
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </Box>
+
+              <Grid
+                item
+                className="collapse_mainNav"
+                position="relative"
+                component={Box}
+                xs={2}
+                display={{ xs: "block", md: "none" }}
               >
-                <MenuItem onClick={this.handleClose}>
-                  <Link
-                    id="profile"
-                    className={
-                      this.state.selectedId === "profile"
-                        ? "activedLink"
-                        : "link"
-                    }
-                    component={RouterLink}
-                    to="/espace/profile"
-                  >
-                    Mon profil
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link
-                    id="panier"
-                    className={
-                      this.state.selectedId === "panier"
-                        ? "activedLink"
-                        : "link"
-                    }
-                    component={RouterLink}
-                    to="/espace/panier"
-                  >
-                    Mes favoris
-                  </Link>
-                </MenuItem>
-                {this.usertoken && this.usertoken.isAdmin ? (
-                  <div>
-                    <Button
+                <IconButton
+                  edge="start"
+                  onClick={this.toggleMainNav}
+                  color="inherit"
+                  aria-label="menu"
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Grid>
+            </Box>
+
+            <Grid container direction="row" spacing={0}>
+              <Grid item xs={12}>
+                <MenuList
+                  id="main_nav"
+                  className={isMainNavVisible ? "" : "d-none"}
+                >
+                  <MenuItem>
+                    <Link
+                      component={RouterLink}
+                      to="/recherche"
+                      onClick={this.handleListItemClick}
+                      id="search"
                       className={
-                        this.state.selectedId === "administration"
-                          ? "activedLink"
-                          : "link"
+                        this.state.selectedId === "search" ? "active" : ""
                       }
-                      onClick={this.handleExplorClick}
                     >
-                      Administration
-                    </Button>
+                      {" "}
+                      <i className="fas fa-search"></i> Rechercher{" "}
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <Link
+                      id="wills"
+                      component={RouterLink}
+                      to="/testaments"
+                      onClick={this.handleListItemClick}
+                      className={
+                        this.state.selectedId === "wills" ? "active" : ""
+                      }
+                    >
+                      Les testaments
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <Link
+                      id="testators"
+                      component={RouterLink}
+                      to="/testateurs"
+                      onClick={this.handleListItemClick}
+                      className={
+                        this.state.selectedId === "testators" ? "active" : ""
+                      }
+                    >
+                      Les testateurs
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <Link
+                      id="places"
+                      component={RouterLink}
+                      to="/places"
+                      onClick={this.handleListItemClick}
+                      className={
+                        this.state.selectedId === "places" ? "active" : ""
+                      }
+                    >
+                      Les lieux
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <Link
+                      id="units"
+                      component={RouterLink}
+                      to="/armees"
+                      onClick={this.handleListItemClick}
+                      className={
+                        this.state.selectedId === "units" ? "active" : ""
+                      }
+                    >
+                      Les unités militaires
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <Link
+                      id="explore"
+                      component={RouterLink}
+                      to="/explore"
+                      onClick={this.handleListItemClick}
+                      className={
+                        this.state.selectedId === "explore" ? "active" : ""
+                      }
+                    >
+                      <i className="far fa-eye"></i> Explorer
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem className="monEspace">
+                    <Link
+                      id="userSpace"
+                      className={this.usertoken ? "userLogout" : "userLogin"}
+                      onClick={
+                        this.usertoken
+                          ? this.handleOpenMySpace
+                          : this.handleLoginClick
+                      }
+                    >
+                      <i className="fas fa-sm fa-user"></i> Mon espace
+                    </Link>
+
                     <Menu
-                      id="simple-menu-explor"
-                      anchorEl={this.state.anchorElExplor}
+                      id="userSpace_submenu"
+                      anchorEl={this.state.anchorEl_mySpace}
                       keepMounted
-                      open={Boolean(this.state.anchorElExplor)}
-                      onClose={this.handleExplorClose}
+                      open={Boolean(this.state.open_mySpace)}
+                      onClose={this.handleClose}
                       elevation={0}
                       getContentAnchorEl={null}
                       anchorOrigin={{
                         vertical: "bottom",
-                        horizontal: "left"
+                        horizontal: "left",
                       }}
                       transformOrigin={{
-                        vertical: "center",
-                        horizontal: "right"
+                        vertical: "top",
+                        horizontal: "left",
                       }}
                     >
-                      <MenuItem onClick={this.handleExplorClose}>
+                      <MenuItem onClick={this.handleClose}>
                         <Link
-                          id="cms"
+                          id="profile"
                           className={
-                            this.state.selectedId === "cms"
-                              ? "activedLink"
-                              : "link"
+                            this.state.selectedId === "profile" ? "active" : ""
                           }
                           component={RouterLink}
-                          to="/espace/cms"
-                          onClick={this.handleListItemClick}
+                          to="/espace/profile"
                         >
-                          Gestion de contenu
+                          <i className="fas fa-cogs"></i> Mon profil
                         </Link>
                       </MenuItem>
-                      <MenuItem onClick={this.handleExplorClose}>
+                      <MenuItem onClick={this.handleClose}>
                         <Link
-                          id="config"
+                          id="panier"
                           className={
-                            this.state.selectedId === "config"
-                              ? "activedLink"
-                              : "link"
+                            this.state.selectedId === "panier" ? "active" : ""
                           }
                           component={RouterLink}
-                          to="/espace/config"
-                          onClick={this.handleListItemClick}
+                          to="/espace/panier"
                         >
-                          Configuration
+                          <i className="fas fa-briefcase"></i> Mes favoris
                         </Link>
+                      </MenuItem>
+                      {this.usertoken && this.usertoken.isAdmin ? (
+                        <div>
+                          <Button
+                            className={
+                              this.state.selectedId === "administration"
+                                ? "active"
+                                : ""
+                            }
+                            onClick={this.handleExplorClick}
+                          >
+                            Administration
+                          </Button>
+                          <Menu
+                            id="simple-menu-explor"
+                            anchorEl={this.state.anchorElExplor}
+                            keepMounted
+                            open={Boolean(this.state.anchorElExplor)}
+                            onClose={this.handleExplorClose}
+                            elevation={0}
+                            getContentAnchorEl={null}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "left",
+                            }}
+                            transformOrigin={{
+                              vertical: "center",
+                              horizontal: "right",
+                            }}
+                          >
+                            <MenuItem onClick={this.handleExplorClose}>
+                              <Link
+                                id="cms"
+                                className={
+                                  this.state.selectedId === "cms"
+                                    ? "active"
+                                    : ""
+                                }
+                                component={RouterLink}
+                                to="/espace/cms"
+                                onClick={this.handleListItemClick}
+                              >
+                                Gestion de contenu
+                              </Link>
+                            </MenuItem>
+                            <MenuItem onClick={this.handleExplorClose}>
+                              <Link
+                                id="config"
+                                className={
+                                  this.state.selectedId === "config"
+                                    ? "active"
+                                    : ""
+                                }
+                                component={RouterLink}
+                                to="/espace/config"
+                                onClick={this.handleListItemClick}
+                              >
+                                Configuration
+                              </Link>
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                      ) : null}
+                      <MenuItem onClick={this.handleLogoutClick}>
+                        <span className="logout">
+                          <i className="fas fa-sign-out-alt"></i> Déconnexion
+                        </span>
                       </MenuItem>
                     </Menu>
-                  </div>
-                ) : null}
-                <MenuItem onClick={this.handleLogoutClick}>
-                  DECONNEXION
-                </MenuItem>
-              </Menu>
-            </div>
+                  </MenuItem>
+                </MenuList>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 
@@ -425,20 +519,20 @@ class NavBar extends Component {
           onClose={this.handleClose}
         >
           <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-            <IconButton
+            <Button
               aria-label="close"
               className="closeButton"
               onClick={this.handleClose}
             >
-              <CloseIcon />
-            </IconButton>
+              <i className="fas fa-times"></i>
+            </Button>
           </DialogTitle>
 
           <DialogContent>
             <LogRegister />
           </DialogContent>
         </Dialog>
-      </div>
+      </header>
     );
   }
 }

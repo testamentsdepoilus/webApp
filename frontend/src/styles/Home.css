@@ -1,104 +1,120 @@
-.home {
-  padding: 1em;
-  display: block;
-  width: 90%;
-  margin: auto;
-  margin-top: 2em;
+
+.home{
+  padding-top: 60px;
+}
+.home h2.card-title{
+  background-color: #8094B1;
+}
+.home .card .content{
+  font-size: 1.075rem;
+  line-height: 1.5rem;
+}
+.home .card .content img{
+  display: none;
 }
 
-.home .result {
-  border: 1px solid;
-}
-
-.home .menuFilter {
-  padding: 1em;
-  flex-grow: 1em;
-}
-
-.home .bt_plus {
-  text-decoration: none;
-  box-shadow: none;
-  text-transform: none;
-  font-size: 1rem;
-  padding: 6px 12px;
-  border: 1px solid;
-  background-color: #81d4fa;
-  color: black;
-  border-color: #81d4fa;
-  margin-top: 2em;
-}
-.home .bt_plus:hover {
-  text-decoration: none;
-  background-color: #4fc3f7;
-  border-color: #4fc3f7;
-  box-shadow: none;
-}
-.home .bt_plus:active {
-  text-decoration: none;
-  box-shadow: none;
-  background-color: #4fc3f7;
-  border-color: #005cbf;
-}
-
-.home .chart {
+.home #visualisation iframe{
+  border: none;
+  margin-top:15px; 
   align-items: center;
   width: 100%;
   height: 20em;
 }
 
+
+.home #random_wills {
+  margin-bottom: 35px;
+}
+.home #random_wills img{
+ border: 1px solid #2E5D81;
+ width:auto;
+ height: 120px;
+ margin-bottom: 10px;
+ -moz-box-shadow: 4px 4px 7px 0px #cfcfcf;
+-webkit-box-shadow: 4px 4px 7px 0px #cfcfcf;
+-o-box-shadow: 4px 4px 7px 0px #cfcfcf;
+box-shadow: 4px 4px 7px 0px #cfcfcf;
+filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=134, Strength=7);
+}
+.home #random_wills .random_wills .card{
+  margin-bottom: 20px;
+}
+.home #random_wills .random_wills{
+  margin:20px -20px 0px -20px;
+}
+.home #random_wills .testatorName{
+  color:#1F8299;
+  font-weight: 600;
+  font-size:0.985rem;
+}
+.home #random_wills img:hover{
+   border-color: #8DB2C2;
+}
+.home #random_wills .testatorName:hover{
+  color:#8DB2C2;
+}
+
+.home .searchForm{
+  background-color: #DADAD9;
+}
+.home .searchForm label{
+  font-weight: 700;
+  font-size:0.89rem;
+  display: block;
+}
+.home .searchForm input,
+.home .searchForm .select div{
+  color: black!important;
+}
+.home .searchForm .moreCriteria{
+ padding: 4px 7px 4px 7px;
+ border-radius: 5px;
+ font-size: 0.9rem;
+ margin-top: 20px;
+}
+.home .searchForm .fontWeightLight{
+  font-size:0.975rem;
+}
+.home .searchForm svg.cancel-icon{
+  fill: #1f8399;
+}
+.home .searchForm i.fa-times:hover,
+.home .searchForm svg.cancel-icon:hover{
+  color:#8094B1!important;
+}
+.home .css-1py3auy{
+  font-family: 'Fira Sans', sans-serif!important;
+  font-size:1rem;
+}
+.home .e1hwwpu60{
+  border:none;
+}
+.home .searchResults .resultLine{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.home .searchResults .resultLine:nth-child(odd){
+ background-color: #DADAD9;
+}
+.home .searchResults .resultLine a{
+ font-weight: 600;
+ font-family: 'Fira Sans', sans-serif!important;
+ color:#1F8299;
+ font-size:1rem;
+}
+.home .searchResults .resultLine:hover{
+ background-color: #C6C6C5;
+}
+
+
+
+
 .home .euiButtonEmpty__text {
   display: none;
-}
-
-.home .images {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  overflow: hidden;
-}
-
-.home .image {
-  width: 10em;
-  height: 10em;
-  margin: 0 4em 0 4em;
-}
-
-.home .typography {
-  font-family: -apple-system;
-}
-
-.home .typoName {
-  font-size: 1rem;
-  font-style: oblique;
-  color: #424242;
-}
-
-.home .typoSurname {
-  font-weight: 600;
-  font-variant-caps: small-caps;
-}
-
-.home .item {
-  text-align: justify;
-}
-
-.home .foot {
-  font-size: 1rem;
-  margin: 1em;
-}
-
-.home .title {
-  color: #000000;
-  font-size: 1.5em;
 }
 
 .home .map-container {
   width: 100%;
   height: 30em;
   position: relative;
-}
-
-.home .statsResults {
-  border: 1px solid;
-  margin: auto;
 }

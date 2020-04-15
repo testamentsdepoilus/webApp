@@ -1,11 +1,14 @@
-.logRegister {
-  width: 500;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 1em;
+.loginRegister header{
+	box-shadow: none;
+	margin-bottom: 20px;
 }
-.logRegister .avatar {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 2em;
+
+.loginRegister .tabsLoginRegister button{
+	background-color: #8DB2C2;
+	color: white;
+}
+.loginRegister .tabsLoginRegister button.Mui-selected,
+.loginRegister .tabsLoginRegister button:focus{
+	background-color: #8DB2C2!important;
+	color: white;
 }

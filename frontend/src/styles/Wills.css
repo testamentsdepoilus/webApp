@@ -1,49 +1,50 @@
-.wills .menu {
-  margin: 0 0 1em 1em;
+.wills .headingBar{
+  padding: 0px 30px 0px 15px;
 }
 
-.wills .wills_order {
-  position: static;
-  float: right;
+.wills .countResults,
+.wills .sort_results{
+ padding-top: 20px;
+ font-family: 'PT Sans';
+}
+.wills .countResults{
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: black;
+  padding-left: 15px;
 }
 
-.wills .wills_result {
-  margin-top: 1em;
+.wills .sort_results .select .MuiInputBase-input{
+  padding-top: 0px;
+  padding-bottom: 0.001rem;
+}
+.wills .sort_results label {
+    font-size: 0.9rem;
+    font-family: 'PT Sans';
+    padding-right: 5px;
+    color: black;
+    font-weight: bold;
 }
 
-.wills ul {
+.wills .leftColumn {
+  padding: 15px 25px 5px 10px;
+  background-color: #F5F5F5;
+}
+.wills .leftColumn .resultList ul{
   list-style-type: none;
-  margin-top: 1em;
+  font-family: "Fira Sans";
+  color:black;
+  font-size: .975rem;
+  padding:0;
 }
-
-.wills .li {
-  margin-top: 1em;
-  font-size: 0.9rem;
+.wills .leftColumn .resultList ul li{
+  padding-top:6px;
+  padding-bottom: 6px;
 }
-
-.wills .li_active {
-  margin-top: 1em;
-  font-size: 0.9rem;
-  color: #0091ea;
-  font-weight: 600;
+.wills .leftColumn .resultList ul li:hover,
+.wills .leftColumn .resultList ul li.active{
+  color:#B91918;
 }
-
-.wills .typoSurname {
-  font-variant-caps: small-caps;
-}
-
-.wills .resultsInfo {
-  margin-left: 2em;
-  font-weight: 600;
-  font-size: 0.9em;
-}
-
-.wills .pagination {
-  position: relative;
-  bottom: 6em;
-}
-
-.wills .sortResult {
-  margin: 0 0 2em 0;
+.wills .leftColumn .resultList ul li.active{
   font-weight: 600;
 }

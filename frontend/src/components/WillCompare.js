@@ -1,39 +1,40 @@
 import React, { Component } from "react";
 import ReactDOMServer from "react-dom/server";
 import { createElementFromHTML } from "../utils/functions";
-import { Breadcrumbs, Paper, Link, Typography, Grid } from "@material-ui/core";
+import { Paper, Link, Grid, Box } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
 import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
 import ImageIIF from "../utils/ImageIIIF";
 
-import Footer from "./Footer";
-
 function createPageMenu(pages, idx, handleClick) {
   let menu = [];
   for (let i = 0; i < pages.length; i++) {
     menu.push(
-      <Link
-        id={i}
-        value={i}
-        key={i}
-        component="button"
-        color="inherit"
-        onClick={handleClick}
-        className={parseInt(idx, 10) === i ? "selectedLink" : "linkPage"}
-      >
-        {pages[i]["page_type"].type} {pages[i]["page_type"].id}
-      </Link>
+      <li>
+        <Link
+          id={i}
+          value={i}
+          key={i}
+          component="button"
+          color="inherit"
+          onClick={handleClick}
+          className={
+            parseInt(idx, 10) === i
+              ? "button plain primaryLight active"
+              : "button plain primaryLight"
+          }
+        >
+          {pages[i]["page_type"].type} {pages[i]["page_type"].id}
+        </Link>{" "}
+      </li>
     );
   }
 
   return (
-    <Breadcrumbs
-      style={{ marginTop: 20, marginBottom: 20 }}
-      aria-label="Breadcrumb"
-    >
-      {menu}
-    </Breadcrumbs>
+    <nav className="will_pages">
+      <ul>{menu}</ul>
+    </nav>
   );
 }
 
@@ -216,126 +217,104 @@ class WillCompare extends Component {
     const totalItem = this.props.data.length;
     let output = (
       <div className="willCompare">
+        <Box display="flex" alignItems="center">
+          <div className="bg-light-gray tabs">
+            <Link
+              id={0}
+              value={0}
+              component="button"
+              color="inherit"
+              href="#"
+              onClick={this.handleMenuClick}
+              className={this.state.type === "image" ? "active" : ""}
+            >
+              <i className="far fa-object-group"></i> Image
+            </Link>
+            |
+            <Link
+              id={1}
+              value={1}
+              component="button"
+              color="inherit"
+              href="#"
+              onClick={this.handleMenuClick}
+              className={this.state.type === "transcription" ? "active" : ""}
+            >
+              <i className="far fa-file-code"></i> Transcription
+            </Link>
+            |
+            <Link
+              id={2}
+              value={2}
+              component="button"
+              color="inherit"
+              href="#"
+              onClick={this.handleMenuClick}
+              className={this.state.type === "edition" ? "active" : ""}
+            >
+              <i className="far fa-file-alt"></i> Edition
+            </Link>
+          </div>
+        </Box>
+
         <Grid
           container
+          alignItems="flex-start"
           justify="center"
-          alignItems="center"
-          direction="column"
-          spacing={5}
+          direction="row"
+          spacing={3}
+          className="bg-light-gray containerColumns"
         >
-          <Grid item>
-            <Breadcrumbs aria-label="Breadcrumb">
-              <Link
-                id={0}
-                value={0}
-                component="button"
-                color="inherit"
-                href="#"
-                onClick={this.handleMenuClick}
-                className={
-                  this.state.type === "image" ? "selectedLink" : "linkPage"
-                }
+          {this.props.data.map((hit, i) => {
+            return (
+              <Grid
+                item
+                className="d-flex"
+                key={i * 100}
+                sm={12}
+                md={12 / totalItem}
               >
-                Image
-              </Link>
-              <Link
-                id={1}
-                value={1}
-                component="button"
-                color="inherit"
-                href="#"
-                onClick={this.handleMenuClick}
-                className={
-                  this.state.type === "transcription"
-                    ? "selectedLink"
-                    : "linkPage"
-                }
-              >
-                Transcription
-              </Link>
-              <Link
-                id={2}
-                value={2}
-                component="button"
-                color="inherit"
-                href="#"
-                onClick={this.handleMenuClick}
-                className={
-                  this.state.type === "edition" ? "selectedLink" : "linkPage"
-                }
-              >
-                Edition
-              </Link>
-            </Breadcrumbs>
-          </Grid>
-          <Grid item>
-            <Grid
-              container
-              alignItems="flex-start"
-              justify="center"
-              direction="row"
-              spacing={2}
-            >
-              {this.props.data.map((hit, i) => {
-                return (
-                  <Grid item key={i * 100} sm={12 / totalItem}>
-                    <Grid
-                      container
-                      justify="center"
-                      alignItems="center"
-                      direction="column"
-                      spacing={2}
-                    >
-                      <Grid item>
-                        <Typography className="title">
-                          {hit["forename"] + " "}
-                          <span className="typoSurname">{hit["surname"]}</span>
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        {createPageMenu(
-                          hit["will"],
-                          this.state.idx[i],
-                          this.handlePageClick(i)
-                        )}
-                      </Grid>
-                    </Grid>
-
-                    <Grid item>
-                      {this.state.type === "image" ? (
-                        <div className="image">
-                          <Paper>
-                            <ImageIIF
-                              url={
-                                hit["will"][this.state.idx[i]]["picture_url"]
-                              }
-                              id={hit["id"]}
-                            />
-                          </Paper>
-                        </div>
-                      ) : (
-                        createPage(
-                          hit["will"],
-                          this.state.idx[i],
-                          this.state.type
-                        )
-                      )}
-                    </Grid>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Grid>
+                <div className="bg-white column" key={i * 10}>
+                  <div key={1}>
+                    <h2>
+                      {hit["forename"] + " "}
+                      <span className="smallcaps">{hit["surname"]}</span>
+                    </h2>
+                  </div>
+                  <div key={2}>
+                    {createPageMenu(
+                      hit["will"],
+                      this.state.idx[i],
+                      this.handlePageClick(i)
+                    )}
+                  </div>
+                  <div key={3}>
+                    {this.state.type === "image" ? (
+                      <div className="image">
+                        <Paper elevation={0}>
+                          <ImageIIF
+                            url={hit["will"][this.state.idx[i]]["picture_url"]}
+                            id={hit["id"]}
+                          />
+                        </Paper>
+                      </div>
+                    ) : (
+                      createPage(
+                        hit["will"],
+                        this.state.idx[i],
+                        this.state.type
+                      )
+                    )}
+                  </div>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       </div>
     );
 
-    return (
-      <div>
-        {output}
-        <Footer />
-      </div>
-    );
+    return output;
   }
 }
 

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   TextField,
-  Typography,
   Button,
   Grid,
   InputAdornment,
@@ -101,124 +100,133 @@ class ConfigMail extends Component {
 
   render() {
     return (
-      <div className="configMail">
-        <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
-          <Link
-            id="home"
-            key={0}
-            color="inherit"
-            href={getParamConfig("web_url") + "/accueil"}
-          >
-            Accueil
-          </Link>
+      <div className="configMail cms">
 
-          <Link
-            id="espace"
-            key={1}
-            color="inherit"
-            component={RouterLink}
-            to="/espace"
-          >
-            Mon espace
-          </Link>
-          <Link
-            id="config"
-            key={1}
-            color="inherit"
-            component={RouterLink}
-            to="/espace/config"
-          >
-            Configuration
-          </Link>
-        </Breadcrumbs>
-        <div className="paper">
-          <Typography className="header" id="postTitle">
-            Configurer le serveur d'envoie du mail aux utilisateurs
-          </Typography>
+
+          <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
+                aria-label="Breadcrumb"
+                className="breadcrumbs"
+              >
+                <Link
+                  id="home"
+                  key={0}
+                  color="inherit"
+                  component={RouterLink}
+                   href={getParamConfig("web_url") + "/accueil"}
+                >
+                  Accueil
+                </Link>
+                <Link
+                  id="espace"
+                  key={1}
+                  color="inherit"
+                  component={RouterLink}
+                  to="/espace"
+                >
+                  Mon espace
+                </Link>
+                <div>Configuration</div>
+           </Breadcrumbs>
+
+
+
+
+        <div className="bg-white paddingContainer">
+          <h1>Configurer le serveur d'envoi du mail aux utilisateurs</h1>
           <form
             className="form"
             noValidate
             onSubmit={this.onSubmit}
             autoComplete="off"
           >
-            <TextField
-              id="standard-email-input"
-              variant="outlined"
-              required
-              fullWidth
-              className="textField"
-              label="Adresse email"
-              type="email"
-              name="email"
-              autoComplete="email"
-              onChange={this.onChange}
-              value={this.state.email}
-              error={this.state.isError[1]}
-            />
-
             <Grid
               container
+              direction="row"
+              justify="space-between"
               alignItems="center"
-              justify="space-evenly"
-              spacing={1}
             >
-              <Grid item xs>
+              <Grid item xs={12}>
                 <TextField
-                  id="password"
-                  variant="outlined"
+                  id="standard-email-input"
                   required
                   fullWidth
-                  label="Mot de passe"
-                  type={this.state.showPassword ? "text" : "password"}
-                  name="password"
-                  autoComplete="current-password"
+                  variant="outlined"
+                  className="input"
+                  label="Adresse email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
                   onChange={this.onChange}
-                  value={this.state.password}
-                  error={this.state.isError[2]}
+                  value={this.state.email}
+                  error={this.state.isError[1]}
                 />
-              </Grid>
-              <Grid item xs>
-                <TextField
-                  id="password-confirme"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Confirmation"
-                  type={this.state.showPassword ? "text" : "password"}
-                  name="passConfirme"
-                  autoComplete="current-password"
-                  onChange={this.onChange}
-                  value={this.state.passConfirme}
-                  error={this.state.isError[3]}
-                />{" "}
-              </Grid>
-              <Grid item xs={1}>
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Toggle password visibility"
-                    onClick={this.handleClickShowPassword}
+               </Grid>
+               <Grid item>
+                  <Grid
+                    container
+                    alignItems="center"
+                    justify="space-evenly"
+                    spacing={1}
                   >
-                    {this.state.showPassword ? (
-                      <Visibility />
-                    ) : (
-                      <VisibilityOff />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              </Grid>
+                    <Grid item xs>
+                      <TextField
+                        id="password"
+                        required
+                        className="input"
+                        variant="outlined"
+                        fullWidth
+                        label="Mot de passe"
+                        type={this.state.showPassword ? "text" : "password"}
+                        name="password"
+                        autoComplete="current-password"
+                        onChange={this.onChange}
+                        value={this.state.password}
+                        error={this.state.isError[2]}
+                      />
+                    </Grid>
+                    <Grid item xs>
+                      <TextField
+                        id="password-confirme"
+                        required
+                        className="input"
+                        variant="outlined"
+                        fullWidth
+                        label="Confirmation"
+                        type={this.state.showPassword ? "text" : "password"}
+                        name="passConfirme"
+                        autoComplete="current-password"
+                        onChange={this.onChange}
+                        value={this.state.passConfirme}
+                        error={this.state.isError[3]}
+                      />{" "}
+                    </Grid>
+                    <Grid item xs={1}>
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="Toggle password visibility"
+                          onClick={this.handleClickShowPassword}
+                        >
+                          {this.state.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    </Grid>
+                  </Grid>
+               </Grid>
             </Grid>
             <Button
-              variant="contained"
-              fullWidth
-              color="primary"
-              className="submit"
+              className="submit button fontWeightMedium plain bg-secondaryLight"
               type="submit"
             >
               Mettre à jour
             </Button>
           </form>
           {this.state.error ? (
-            <Typography className="errorText">{this.state.error}</Typography>
+            <div className="text-error">{this.state.error}</div>
           ) : (
             ""
           )}
@@ -239,7 +247,7 @@ class ConfigMail extends Component {
             </DialogTitle>
 
             <DialogContent>
-              <h5> Votre configuration a été bien mis à jour !</h5>
+              <div class="fontWeightBold text-primary"> Votre configuration a été bien mis à jour !</div>
             </DialogContent>
           </Dialog>
         </div>

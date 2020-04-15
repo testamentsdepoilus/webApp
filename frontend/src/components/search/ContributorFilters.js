@@ -1,7 +1,7 @@
 import React from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
-import ClearIcon from "@material-ui/icons/Clear";
-import { Grid, IconButton } from "@material-ui/core";
+
+import { Grid, Button } from "@material-ui/core";
 
 class ContributorFilters extends React.Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class ContributorFilters extends React.Component {
       <Grid container direction="row">
         <Grid item xs={10}>
           <SingleDropdownList
-            className="datasearch"
+            className="select"
             react={{
               and: [
                 "texte",
@@ -59,13 +59,14 @@ class ContributorFilters extends React.Component {
           />
         </Grid>
         <Grid item xs={2}>
-          <IconButton
+          <Button
             id="clearContributeur"
             onClick={(event) => this.handleContributeurChange("")}
             title="Supprimer le filtre"
+            className="button iconButton"
           >
-            <ClearIcon style={{ color: "red" }} />
-          </IconButton>
+            <i className="fas fa-times"></i>
+          </Button>
         </Grid>
       </Grid>
     );

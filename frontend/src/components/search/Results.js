@@ -2,7 +2,6 @@ import React from "react";
 import { ReactiveList, SelectedFilters } from "@appbaseio/reactivesearch";
 
 import {
-  Fab,
   Grid,
   Tooltip,
   IconButton,
@@ -14,7 +13,8 @@ import {
   Snackbar,
   SnackbarContent,
   Select,
-  MenuItem
+  MenuItem,
+  Box,
 } from "@material-ui/core";
 import {
   getTotalHits,
@@ -22,16 +22,11 @@ import {
   updateMyListWills,
   getUserToken
 } from "../../utils/functions";
-import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
 
 import ResultWills from "./ResultWills";
 import TextSearch from "./TextSearch";
-import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
-import SaveIcon from "@material-ui/icons/SaveOutlined";
 import InfoIcon from "@material-ui/icons/Info";
 import CloseIcon from "@material-ui/icons/Close";
-import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
-import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
 
 // Up to top page click
 
@@ -166,52 +161,45 @@ class Results extends React.Component {
   renderResultStats(stats) {
     if (Boolean(this.state.totalHits)) {
       return (
-        <div className="statsResults">
-          <div>
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Box className="countResults">
             {stats.numberOfResults} testaments sur {this.state.totalHits}{" "}
             correspondent à votre recherche
-          </div>
-          <div>
-            Trier par :{" "}
-            <Select value={this.state.value} onChange={this.handleChange}>
-              <MenuItem value={0}>pertinence</MenuItem>
-              <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
-              <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
-              <MenuItem value={3}>
-                date de rédaction <TrendingUpIcon />
-              </MenuItem>
-              <MenuItem value={4}>
-                date de rédaction <TrendingDownIcon />
-              </MenuItem>
-              <MenuItem value={5}>Cote (A-Z)</MenuItem>
-              <MenuItem value={6}>Cote (Z-A)</MenuItem>
+          </Box>
+          <Box display="flex" className="sort_results">
+             <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
+            <Select className="select" value={this.state.value} onChange={this.handleChange}>
+              <MenuItem className="sortBy" value={0}>pertinence</MenuItem>
+              <MenuItem className="sortBy" value={1}>nom de famille (A-Z)</MenuItem>
+              <MenuItem className="sortBy" value={2}>nom de famille (Z-A)</MenuItem>
+              <MenuItem className="sortBy" value={3}>date de rédaction <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+              <MenuItem className="sortBy" value={4}>date de rédaction <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+              <MenuItem className="sortBy" value={5}>Cote (A-Z)</MenuItem>
+              <MenuItem className="sortBy" value={6}>Cote (Z-A)</MenuItem>
             </Select>
-          </div>
-        </div>
+          </Box>
+        </Box>
+
       );
     } else {
       return (
-        <div className="statsResults">
-          <div>
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Box className="countResults">
             {stats.numberOfResults} testaments correspondent à votre recherche
-          </div>
-          <div>
-            Trier par :{" "}
-            <Select value={this.state.value} onChange={this.handleChange}>
-              <MenuItem value={0}>pertinence</MenuItem>
-              <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
-              <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
-              <MenuItem value={3}>
-                date de rédaction <TrendingUpIcon />
-              </MenuItem>
-              <MenuItem value={4}>
-                date de rédaction <TrendingDownIcon />
-              </MenuItem>
-              <MenuItem value={5}>Cote (A-Z)</MenuItem>
-              <MenuItem value={6}>Cote (Z-A)</MenuItem>
+          </Box>
+          <Box display="flex" className="sort_results">
+            <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
+            <Select className="select" value={this.state.value} onChange={this.handleChange}>
+              <MenuItem className="sortBy" value={0}>pertinence</MenuItem>
+              <MenuItem className="sortBy" value={1}>nom de famille (A-Z)</MenuItem>
+              <MenuItem className="sortBy" value={2}>nom de famille (Z-A)</MenuItem>
+              <MenuItem className="sortBy" value={3}>date de rédaction <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
+              <MenuItem className="sortBy" value={4}>date de rédaction <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
+              <MenuItem className="sortBy" value={5}>Cote (A-Z)</MenuItem>
+              <MenuItem className="sortBy" value={6}>Cote (Z-A)</MenuItem>
             </Select>
-          </div>
-        </div>
+          </Box>
+        </Box>
       );
     }
   }
@@ -309,31 +297,32 @@ class Results extends React.Component {
     const open_search = Boolean(this.state.anchorElSearch);
     const id_search = open_search ? "transitions-popper" : undefined;
     return (
-      <div className="results" key={0}>
+      <div key={0}>
         <div className="main-container">
           <div className="searchBar">
-            <Grid container direction="row" alignItems="center" spacing={1}>
-              <Grid item xs={8}>
-                <TextSearch />
+            <Grid container direction="row" spacing={0}>
+              <Grid className="searchByKwd" item xs={11}>
+                 <TextSearch />
               </Grid>
-              <Grid item xs={2}>
-                <Tooltip title="Aide à la recherche" interactive>
-                  <IconButton
-                    aria-describedby={id}
-                    onClick={this.handleHelpOpen}
-                    style={{ cursor: "help" }}
-                  >
-                    <HelpIcon />
-                  </IconButton>
-                </Tooltip>
+              <Grid item xs={1} className="d-flex align-items-center">
+               <Box display="flex" mb={1}>
+                 <Button
+                   className="iconButton"
+                   aria-describedby={id}
+                   onClick={this.handleHelpOpen}
+                   style={{ cursor: "help" }}
+                 >
+                  <i className="fas fa-question-circle"></i>
+                 </Button>
 
-                <Popper
+                 <Popper
+                  elevation={0}
                   id={id}
                   open={open}
                   anchorEl={this.state.anchorEl}
                   placement="bottom-end"
-                >
-                  <div className="searchHelp">
+                 >
+                  <div className="tooltip">
                     <p className="popperTitle">Aide à la recherche :</p>
                     <p>
                       Vous pouvez saisir un mot ou plusieurs mots séparés par
@@ -366,44 +355,45 @@ class Results extends React.Component {
                       mot qui le suit (armée NOT guerre ; armée -guerre).
                     </p>
                   </div>
-                </Popper>
-              </Grid>
-              <Grid item xs={2}>
-                {Boolean(this.userToken) ? (
+                 </Popper>
+
+                 {Boolean(this.userToken) ? (
                   <Tooltip
                     title="Sauvegarder la recherche dans mes favoris"
                     interactive
                     arrow={true}
                   >
-                    <IconButton
-                      aria-describedby="save"
-                      onClick={this.handleSearchOpen}
-                      style={{ cursor: "hand" }}
-                    >
-                      <SaveIcon />
-                    </IconButton>
+                       <Button
+                       className="iconButton"
+                       aria-describedby="save"
+                       onClick={this.handleSearchOpen}
+                       style={{ cursor: "hand" }}
+                      >
+                      <i className="far fa-save"></i>
+                     </Button>
                   </Tooltip>
-                ) : (
+                 ) : (
                   <Tooltip
                     title="Connectez-vous pour sauvegarder votre recherche !"
                     arrow={true}
                   >
-                    <span>
-                      <IconButton aria-describedby="save" disabled>
-                        <SaveIcon />
-                      </IconButton>
-                    </span>
+                    <Button
+                       className="disabled iconButton"
+                       aria-describedby="save"
+                      >
+                      <i className="far fa-save"></i>
+                    </Button>
                   </Tooltip>
-                )}
+                 )}
 
-                <Popper
+                 <Popper
                   id={id_search}
                   open={open_search}
                   anchorEl={this.state.anchorElSearch}
                   placement="bottom-end"
-                >
-                  <Container className="popper">
-                    <p className="popperTitle">Sauvegarder votre recherche :</p>
+                 >
+                  <Container className="saveSearchForm bg-mid-gray">
+                    <div className="fontWeightRegular label">Sauvegarder votre recherche</div>
                     <Grid
                       container
                       direction="row"
@@ -416,8 +406,9 @@ class Results extends React.Component {
                           id="input_search"
                           variant="outlined"
                           required
-                          label="Label"
+                          className="input"
                           name="label"
+                          placeholder="Donner un nom à votre recherche"
                           onChange={this.onChange}
                           value={this.state.label}
                         />
@@ -425,8 +416,8 @@ class Results extends React.Component {
                       <Grid item>
                         <Button
                           id="btSave"
-                          variant="contained"
-                          color="primary"
+                          color="secondary"
+                          className="submit button fontWeightMedium plain bg-secondaryLight"
                           onClick={this.handleSearchSave}
                         >
                           Sauvegarder
@@ -434,10 +425,12 @@ class Results extends React.Component {
                       </Grid>
                     </Grid>
                   </Container>
-                </Popper>
+                 </Popper>
+               </Box>
               </Grid>
             </Grid>
-            <SelectedFilters clearAllLabel="Effacer les critères de recherche" />
+
+            <SelectedFilters className="criteres_selected" clearAllLabel="Effacer les critères de recherche" />
           </div>
 
           {this.state.field === "" && this.state.order === "" ? (
@@ -459,18 +452,21 @@ class Results extends React.Component {
                   "unite"
                 ]
               }}
-              className="results"
+              className="searchResults"
               dataField=""
               componentId="searchResult"
               stream={false}
               pagination={true}
+              innerClass={{
+              pagination: "pagination"
+              }}              
               size={15}
               showResultStats={true}
               infiniteScroll={true}
               loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
               renderNoResults={function() {
-                return <p>Aucun résultat ne correspond à cette recherche.</p>;
+                return <p  className="noResult">Aucun résultat ne correspond à cette recherche.</p>;
               }}
             >
               {({ data, error, loading }) => <ResultWills data={data} />}
@@ -494,12 +490,16 @@ class Results extends React.Component {
                   "unite"
                 ]
               }}
+              className="searchResults"
               dataField={this.state.field}
               sortBy={this.state.order}
               componentId="searchResult"
               stream={false}
               pagination={true}
               size={15}
+              innerClass={{
+              pagination: "pagination"
+              }}  
               showResultStats={true}
               infiniteScroll={true}
               loader={<CircularProgress />}
@@ -511,38 +511,40 @@ class Results extends React.Component {
               {({ data, error, loading }) => <ResultWills data={data} />}
             </ReactiveList>
           )}
+          <Box display="flex" justifyContent="flex-end">
+           <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
+            <Button
+              id="btTop"
+              onClick={this.topFunction}
+              aria-label="Remonter en haut de la page"
+              className="iconButton"
+            >
+             <i className="fas fa-level-up-alt"></i>
+            </Button>
+           </Tooltip>
+          </Box>
         </div>
 
         <div>
-          <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
-            <Fab
-              id="btTop"
-              onClick={this.topFunction}
-              aria-label="Top"
-              className="topButton"
-              size="medium"
-            >
-              <ArrowUpIcon />
-            </Fab>
-          </Tooltip>
+        
+
           <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             key="topCenter"
             open={this.state.openAlert}
             onClose={this.handleSearchClose}
-            autoHideDuration={5000}
+            autoHideDuration={500000}
             ContentProps={{
               "aria-describedby": "message-id"
             }}
           >
             <SnackbarContent
-              className="info"
               aria-describedby="client-snackbar"
               message={
-                <span id="client-snackbar" className="message">
+                <Box display="flex" alignItems="center" id="client-snackbar">
                   <InfoIcon className="icon" />
-                  {this.state.message}
-                </span>
+                  <div>{this.state.message}</div>
+                </Box>
               }
               action={[
                 <IconButton

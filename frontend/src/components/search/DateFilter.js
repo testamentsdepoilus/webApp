@@ -1,22 +1,17 @@
 import React from "react";
 import { DateRange } from "@appbaseio/reactivesearch";
 import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
-  Typography,
   Grid,
-  IconButton,
+  Button,
+  Box,
   Popper
 } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import "moment/locale/fr";
 import MomentLocaleUtils, {
   formatDate,
   parseDate
 } from "react-day-picker/moment";
 import "react-day-picker/lib/style.css";
-import HelpIcon from "@material-ui/icons/HelpOutlineOutlined";
 
 class DateFilter extends React.Component {
   constructor(props) {
@@ -38,29 +33,17 @@ class DateFilter extends React.Component {
     const id = open ? "transitions-popper" : undefined;
     return (
       <div className="dateFilter">
-        <ExpansionPanel defaultExpanded>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="date"
-          >
-            <Grid container direction="row" alignItems="center" spacing={2}>
-              <Grid item xs={8}>
-                <Typography>Dates</Typography>
-              </Grid>
-              <Grid
-                item
-                xs={4}
-                onClick={event => event.stopPropagation()}
-                onFocus={event => event.stopPropagation()}
-              >
-                <IconButton
+      
+            <Box display="flex" justifyContent="space-between" alignItems="flex-end" spacing={2}>
+               <Box mb={0.6} mt={3}><label>Dates</label></Box>
+               <Button
                   aria-describedby={id}
                   onClick={this.handleHelpOpen}
                   style={{ cursor: "help" }}
+                  className="iconButton"
                 >
-                  <HelpIcon />
-                </IconButton>
+                 <i className="fas fa-question-circle"></i>
+                </Button>
 
                 <Popper
                   id={id}
@@ -68,25 +51,22 @@ class DateFilter extends React.Component {
                   anchorEl={this.state.anchorEl}
                   placement="bottom-end"
                 >
-                  <div className="dateHelp">
+                  <div className="tooltip">
                     <p>
                       Pour rechercher une date exacte, saisissez ou sélectionnez
-                      la même date dans les champs « date de début » et « date
-                      de fin ».
+                      la même date dans les champs « date de début » et « date
+                      de fin ».
                     </p>
                   </div>
                 </Popper>
-              </Grid>
-            </Grid>
-          </ExpansionPanelSummary>
+            </Box>
 
-          <ExpansionPanelDetails>
             <Grid container direction="column" spacing={1}>
               <Grid item>
+                <Box mb={0.7} mt={1}><label className="fontWeightLight">Date de naissance</label></Box>
                 <DateRange
                   componentId="date_naissance"
                   dataField="will_contents.birth_date"
-                  title="Date de naissance"
                   placeholder={{
                     start: "Début: JJ/MM/YYYY ",
                     end: "Fin: JJ/MM/YYYY"
@@ -109,10 +89,10 @@ class DateFilter extends React.Component {
                 />
               </Grid>
               <Grid item>
+                <Box mb={0.7} mt={2}><label className="fontWeightLight">Date de rédaction</label></Box>
                 <DateRange
                   componentId="date_redaction"
                   dataField="will_contents.will_date_range"
-                  title="Date de rédaction"
                   placeholder={{
                     start: "Début: JJ/MM/YYYY ",
                     end: "Fin: JJ/MM/YYYY"
@@ -135,10 +115,10 @@ class DateFilter extends React.Component {
                 />
               </Grid>
               <Grid item>
+                <Box mb={0.7} mt={2}><label className="fontWeightLight">Date de décès</label></Box>
                 <DateRange
                   componentId="date_deces"
                   dataField="will_contents.death_date"
-                  title="Date de décès"
                   placeholder={{
                     start: "Début: JJ/MM/YYYY",
                     end: "Fin: JJ/MM/YYYY"
@@ -161,8 +141,7 @@ class DateFilter extends React.Component {
                 />
               </Grid>
             </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+
       </div>
     );
   }

@@ -1,0 +1,349 @@
+#btnBack{
+  margin-bottom: 20px;
+}
+
+.noticeDisplay{
+  min-height: 600px;
+}
+
+.noticeDisplay .itemTitle{
+  margin-top: 10px;
+}
+.noticeDisplay .itemTitle i{
+  padding-right: 10px;
+  font-size: 1.8em;
+}
+.noticeDisplay .unit_notice .itemTitle svg{
+  margin-right: 12px;
+  margin-top: -6px;
+  width: 1.3em;
+  height: 1.3em;
+}
+.noticeDisplay h1.item{
+  color:black;
+  font-size:1.3rem;
+  line-height: 1.8rem;
+  font-weight: 600;
+  margin-top: 0px;
+}
+.noticeDisplay h1.item a{
+  color:#1F8299;
+}
+
+.noticeDisplay  .containerInfo #btExport{
+  margin-right: 12px;
+}
+.spinner{
+position: absolute;   
+top: -6px;  
+left: -6px;    
+z-index: 100000;
+}
+
+.exportBtn > div{
+    border:1px solid #1F8299;
+    border-radius: 0px;
+  padding:0!important;
+  margin:0!important;
+  display: block;
+}
+.exportBtn ul{
+  padding:0!important;
+  margin:0!important;
+  color: #1F8299;
+  display: block;
+}
+.exportBtn li{
+  padding:0!important;
+  margin:0!important;
+  display: block;
+}
+.exportBtn li:hover{
+  background-color: #C7D7E1;
+}
+.exportBtn button{
+  min-width: 50px;
+  text-align: left;
+  font-weight: 400;
+  border-radius: 0px;
+  margin:0;
+  padding:0px 2px 0px 2px;
+}
+.exportBtn button i{
+  padding-right: 5px;
+}
+.fa-briefcase{
+  padding-top: 1px;
+}
+.noticeDisplay .noticeInfo {
+  margin-top: 20px;
+  font-size:1rem;
+  line-height: 1.5rem;
+  font-family: "Fira Sans";
+}
+
+.noticeDisplay .noticeInfo div{
+  margin-bottom: 20px;
+}
+.noticeDisplay #testator_notice .noticeInfo  div{
+  margin-bottom: 4px;
+}
+
+.noticeDisplay .noticeInfo h2{
+ margin-top: 30px;
+ margin-bottom: 5px;
+}
+.noticeDisplay .noticeInfo h2 i{
+  padding-right: 5px;
+}
+.noticeDisplay .noticeInfo .mainInfo{
+  display: block;
+}
+.noticeDisplay #testator_notice .noticeInfo .photoTestateur {
+  width: 120px;
+  height: 100%;
+  border-radius: 0px;
+  margin-right:30px;
+  margin-bottom: 30px;
+  border: 1px solid #1F8299;
+}
+.noticeDisplay #testator_notice .noticeInfo .photoTestateur img{
+    height: 100%;
+    max-width: 100%
+}
+.noticeDisplay #testator_notice .noticeInfo .permalien{
+  margin-bottom: 20px;
+}
+.noticeDisplay .noticeInfo ul{
+ padding-left: 20px;
+ margin-top: 0px;
+}
+.noticeDisplay .noticeInfo li{
+ padding-left: 0px;
+}
+.noticeDisplay .noticeInfo a{
+  color:#1F8299;
+}
+.noticeDisplay .noticeInfo a:hover{
+  color:#8DB2C2;
+}
+
+.notices .pagination {
+  padding-bottom: 0px;
+}
+.notices .pagination a{
+  margin-bottom: 7px;
+  padding: 1px 3px;
+  font-size: 0.75rem;
+}
+
+.notices.testators .select {
+  margin-right: 10px;
+
+}
+.notices.testators .select > div {
+    color: black;
+}
+.notices.testators .select button{
+  height: 32px!important;
+  min-height: 32px!important;
+  background-color: white!important;
+}
+.notices.testators .select button:hover{
+ background-color: white!important
+}
+
+
+.noticeDisplay .containerNoticeInfo{
+  padding: 20px 20px 20px 20px;
+  display: block;
+}
+
+.noticeDisplay .tabs{
+  margin:auto;
+  display: inline-block;
+  margin-top: 20px;
+}
+.noticeDisplay .tabs{
+  color:#1F8299;
+  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.noticeDisplay .tabs .tab{
+  padding-left: 8px;
+  display: inline-block;
+}
+.noticeDisplay .tabs div.tab:not(:last-of-type):after{
+  content: '\|';
+  color: #B91918;
+}
+.noticeDisplay .tabs button{
+  font-family: 'Fira Sans';
+  color:#1F8299;
+  font-size: 0.9rem;  
+  padding-right: 0px!important;
+  padding-left: 0px!important;
+}
+.noticeDisplay .tab button.page_title:hover{
+  text-decoration: none;
+  color:#B91918;
+}
+.noticeDisplay .tabs button.permalink{
+  padding-right: 0px!important;
+  padding-left: 0px!important;
+}
+.noticeDisplay .tabs button.active,
+.noticeDisplay .tabs button.active i{
+  color:#B91918;
+  font-weight: 600;
+}
+.noticeDisplay .tab .permalink i{
+  font-size:0.8rem;
+  padding-left: 4px;
+  padding-right: 6px;
+  color: #2E5D81;
+}
+.noticeDisplay .tab button.permalink:hover i{
+  color:#B91918;
+}
+
+.permalienDialog > div > div{
+  font-size: 1rem;
+  padding: 10px 10px 10px 10px;
+}
+.permalienDialog input {
+  width:500px;
+  min-height:5px;
+  padding: 0px 5px 5px 5px;
+  border:none!important;
+  display: inline-block;
+}
+.permalienDialog .label {
+  font-weight: 600;
+}
+.permalienDialog .MuiInput-underline:before{
+ content:"";
+}
+
+
+
+
+.noticeDisplay .containerColumns
+{
+ padding: 15px 10px 15px 10px;
+ display: block;
+}
+.noticeDisplay .containerColumns > div{
+  max-width: 100%;
+    margin-top: 20px;
+}
+
+
+
+.noticeDisplay .containerColumns .columnTitle{
+  color:#2E5D81;
+  font-weight: 700;
+  font-size: 1.1rem;  
+  text-align: center; 
+  font-family: 'Fira Sans';
+  position: relative;
+  top:-60px;
+}
+.noticeDisplay .containerColumns .columnTitle i{
+  font-size: 1.175rem;
+  padding-right: 4px;
+}
+.noticeDisplay .containerColumns .columnContent{
+ margin: 12px 10px 70px 10px;
+ padding: 26px 30px 30px 30px;
+ width: 100%;
+ font-family: 'Fira Sans';
+}
+.noticeDisplay .columnContent  .edition {
+  line-height: 1.5rem;
+}
+.noticeDisplay .image {
+  max-width: 100%
+}
+
+
+.noticeDisplay .columnContent .MuiSvgIcon-colorPrimary,
+.noticeDisplay .columnContent .transcription .choice {
+    color: #1F8299;
+}
+
+.noticeDisplay .contributeursWill{
+  border-radius: 0px;
+  padding-top: 15px;
+  font-family: "Fira Sans";
+}
+.noticeDisplay .contributeursWill h2{
+ margin-bottom: 20px;
+}
+.noticeDisplay .contributeursWill > div{
+  padding-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.transcription .choice,
+.transcription .app {
+  position: relative;
+  border-bottom: 1px dotted black;
+}
+.noticeDisplay .nextPage span{
+  color:#1F8299;
+}
+
+.transcription .choice .corr,
+.transcription .choice .expan {
+  visibility: hidden;
+  width: auto;
+  border-radius: 4px;
+  padding: 5px 5px 5px 5px;
+  background-color: #2E5D81;
+  color: #fff;
+  top: 115%;
+  left: 0%;
+  text-align: center;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.transcription .app .note {
+  visibility: hidden;
+  width: 100%;
+  background-color: #2E5D81;
+  color: #fff;
+  border-radius: 6px;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 5px;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.transcription .choice:hover .corr,
+.transcription .app:hover .note,
+.transcription .choice:hover .expan,
+.transcription .choice:hover .sic .surplus {
+  visibility: visible;
+}
+
+.transcription .choice {
+  color: #2E5D81;
+}
+
+.transcription .lem {
+  color: #2E5D81;
+}
+
+.transcription .unclear {
+  color: #2E5D81;
+}
+
+

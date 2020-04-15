@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import {
   Container,
   TextField,
-  Typography,
   Button,
   Grid,
   InputAdornment,
   IconButton,
   Dialog,
   DialogTitle,
-  DialogContent
+  DialogContent,
+  Box,
 } from "@material-ui/core";
 import { register, getParamConfig } from "../../utils/functions";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -62,7 +62,7 @@ class Register extends Component {
         });
       } else if (this.state.password !== this.state.passConfirme) {
         this.setState({
-          error:
+          error: 
             "Les mots de passe saisies ne sont pas identiques, veuillez saisir le même mot de passe.",
           isError: [false, false, true, true]
         });
@@ -106,7 +106,7 @@ class Register extends Component {
   render() {
     return (
       <Container component="main" maxWidth="xs">
-        <div className="register">
+        <div className="register cms">
           <form
             className="form"
             noValidate
@@ -116,7 +116,7 @@ class Register extends Component {
             <TextField
               id="standard-userName-input"
               variant="outlined"
-              className="textField"
+              className="input"
               required
               fullWidth
               autoFocus
@@ -126,12 +126,13 @@ class Register extends Component {
               value={this.state.user_name}
               error={this.state.isError[0]}
             />
+
             <TextField
               id="standard-email-input"
               variant="outlined"
               required
               fullWidth
-              className="textField"
+              className="input"
               label="Adresse email"
               type="email"
               name="email"
@@ -151,6 +152,7 @@ class Register extends Component {
                 <TextField
                   id="password"
                   variant="outlined"
+                  className="input"
                   required
                   fullWidth
                   label="Mot de passe"
@@ -166,6 +168,7 @@ class Register extends Component {
                 <TextField
                   id="password-confirme"
                   variant="outlined"
+                  className="input"
                   required
                   fullWidth
                   label="Confirmation"
@@ -192,18 +195,23 @@ class Register extends Component {
                 </InputAdornment>
               </Grid>
             </Grid>
-            <Button
-              variant="contained"
-              fullWidth
-              color="primary"
-              className="submit"
+         
+
+           <Box pt={1} display="flex" justifyContent="flex-end">
+             <Button
+              className="submit button fontWeightMedium plain bg-secondaryLight"
               type="submit"
-            >
-              S'inscrire
-            </Button>
+             >
+               S'inscrire
+             </Button>
+            </Box>
+           
+
+
+
           </form>
           {this.state.error ? (
-            <Typography className="errorText">{this.state.error}</Typography>
+            <div className="text-error">{this.state.error}</div>
           ) : (
             ""
           )}

@@ -8,13 +8,12 @@ import {
   generateWillPDF,
   getUserToken,
   updateMyListWills,
-  getHitsFromQuery
+  getHitsFromQuery,
 } from "../utils/functions";
 import {
   Paper,
-  Typography,
+  Box,
   Grid,
-  IconButton,
   Button,
   TextField,
   Link,
@@ -23,40 +22,32 @@ import {
   MenuItem,
   Tooltip,
   CircularProgress,
-  Breadcrumbs
 } from "@material-ui/core";
 import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
 import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
 import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
 import ImageIIF from "../utils/ImageIIIF";
 import isEqual from "lodash/isEqual";
-import ExportIcon from "@material-ui/icons/SaveAltOutlined";
-import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
 import TestatorDisplay from "./TestatorDisplay";
 import ReactDOM from "react-dom";
-import InsertLinkIcon from "@material-ui/icons/InsertLinkOutlined";
 
 export function createPage(page, idx, type, nextPage) {
-  const listTypes = { transcription: "Transcription", edition: "Édition" };
   let output = (
     <div>
-      <Typography className="title">{listTypes[type]}</Typography>
-      <Paper className={type}>
-        {
-          <div
-            dangerouslySetInnerHTML={{
-              __html: page[idx][type]
-            }}
-          />
-        }
-        {idx < page.length - 1 ? nextPage : null}
-      </Paper>
+      {
+        <div
+          dangerouslySetInnerHTML={{
+            __html: page[idx][type],
+          }}
+        />
+      }
+      {idx < page.length - 1 ? nextPage : null}
     </div>
   );
 
   return output;
 }
+
 export default class WillDisplay extends Component {
   constructor(props) {
     super(props);
@@ -71,7 +62,7 @@ export default class WillDisplay extends Component {
       myWills: [],
       testator_notice: null,
       will_notice: null,
-      isLoading: false
+      isLoading: false,
     };
 
     this.months = [
@@ -86,7 +77,7 @@ export default class WillDisplay extends Component {
       "septembre",
       "octobre",
       "novembre",
-      "décembre"
+      "décembre",
     ];
     this.userToken = getUserToken();
     this.handlePageClick = this.handlePageClick.bind(this);
@@ -106,15 +97,15 @@ export default class WillDisplay extends Component {
     if (nextProps.id !== prevState.will_id) {
       return {
         will_id: nextProps.id,
-        idx: 0
+        idx: 0,
       };
     }
     return null;
   }
 
-  handleAlertClose = event => {
+  handleAlertClose = (event) => {
     this.setState({
-      open: false
+      open: false,
     });
   };
 
@@ -137,7 +128,7 @@ export default class WillDisplay extends Component {
 
     if (event.target.getAttribute("value") !== this.state.idx) {
       this.setState({
-        idx: event.target.getAttribute("value")
+        idx: event.target.getAttribute("value"),
       });
     }
   }
@@ -160,14 +151,14 @@ export default class WillDisplay extends Component {
       this.setState({
         copyLink: curLink,
         openModal: true,
-        anchorEl: Boolean(this.state.anchorEl) ? null : event.currentTarget
+        anchorEl: Boolean(this.state.anchorEl) ? null : event.currentTarget,
       });
     }
   }
 
   handleCloseModal() {
     this.setState({
-      openModal: false
+      openModal: false,
     });
   }
 
@@ -180,15 +171,15 @@ export default class WillDisplay extends Component {
 
   handleExportPDFClick() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
 
     const input_item = {
       data: this.props.data,
-      testator_data: this.state.testator_notice
+      testator_data: this.state.testator_notice,
     };
     generateWillPDF(input_item)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           downloadFile(
             getParamConfig("web_url") +
@@ -202,12 +193,12 @@ export default class WillDisplay extends Component {
           console.log("error :", err);
         }
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(e => {
+      .catch((e) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
     /*generateWillPDF(this.props.data, this.state.testator_notice)
@@ -224,37 +215,37 @@ export default class WillDisplay extends Component {
   handleNextPage(event) {
     document.documentElement.scrollTop = 0;
     this.setState({
-      idx: parseInt(this.state.idx, 10) + 1
+      idx: parseInt(this.state.idx, 10) + 1,
     });
   }
 
   handleExportClick(event) {
     this.setState({
-      anchorElMenu: event.currentTarget
+      anchorElMenu: event.currentTarget,
     });
   }
 
   handleExportClose() {
     this.setState({
-      anchorElMenu: null
+      anchorElMenu: null,
     });
   }
 
   handleAddShoppingWill(id) {
-    return function(e) {
+    return function (e) {
       let myWills_ = this.state.myWills;
       myWills_.push(id);
       let myBackups_ = JSON.parse(localStorage.myBackups);
       myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myBackups: myBackups_
+        myBackups: myBackups_,
       };
 
-      updateMyListWills(newItem).then(res => {
+      updateMyListWills(newItem).then((res) => {
         if (res.status === 200) {
           this.setState({
-            myWills: myWills_
+            myWills: myWills_,
           });
           localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
@@ -263,18 +254,18 @@ export default class WillDisplay extends Component {
   }
 
   handleremoveShoppingWill(id) {
-    return function(e) {
-      let myWills_ = this.state.myWills.filter(item => item !== id);
+    return function (e) {
+      let myWills_ = this.state.myWills.filter((item) => item !== id);
       let myBackups_ = JSON.parse(localStorage.myBackups);
       myBackups_["myWills"] = myWills_;
       const newItem = {
         email: this.userToken.email,
-        myBackups: myBackups_
+        myBackups: myBackups_,
       };
-      updateMyListWills(newItem).then(res => {
+      updateMyListWills(newItem).then((res) => {
         if (res.status === 200) {
           this.setState({
-            myWills: myWills_
+            myWills: myWills_,
           });
           localStorage.setItem("myBackups", JSON.stringify(myBackups_));
         }
@@ -287,48 +278,58 @@ export default class WillDisplay extends Component {
     let listMenu = {
       page: "Page",
       envelope: "Enveloppe",
-      codicil: "Codicille"
+      codicil: "Codicille",
     };
     for (let i = 0; i < pages.length; i++) {
       menu.push(
-        <Grid container direction="row" alignItems="center" key={i}>
-          <Grid>
-            <Link
-              id={will_id}
-              value={i}
-              component="button"
-              color="inherit"
-              onClick={handleClick}
-              className={parseInt(idx, 10) === i ? "selectedLink" : "linkPage"}
-            >
-              {listMenu[pages[i]["page_type"].type]} {pages[i]["page_type"].id}
-            </Link>
-          </Grid>
-          <Grid>
-            <IconButton
-              id={i}
-              onClick={handeOpenModal}
-              title={
-                listMenu[pages[i]["page_type"].type] +
-                " " +
-                pages[i]["page_type"].id +
-                " : " +
-                getParamConfig("web_url") +
-                "/testament/" +
-                will_id +
-                "/" +
-                listMenu[pages[i]["page_type"].type] +
-                "_" +
-                pages[i]["page_type"].id
-              }
-            >
-              <InsertLinkIcon id={i} />
-            </IconButton>
-          </Grid>
-        </Grid>
+        <div className="d-inline-block tab">
+          <Link
+            id={will_id}
+            value={i}
+            component="button"
+            color="inherit"
+            onClick={handleClick}
+            className={
+              parseInt(idx, 10) === i
+                ? "page_title active button"
+                : "page_title button"
+            }
+          >
+            {listMenu[pages[i]["page_type"].type]} {pages[i]["page_type"].id}
+          </Link>
+
+          <Button
+            id={i}
+            className={
+              parseInt(idx, 10) === i
+                ? "iconButton permalink active"
+                : "iconButton permalink"
+            }
+            onClick={handeOpenModal}
+            title={
+              listMenu[pages[i]["page_type"].type] +
+              " " +
+              pages[i]["page_type"].id +
+              " : " +
+              getParamConfig("web_url") +
+              "/testament/" +
+              will_id +
+              "/" +
+              listMenu[pages[i]["page_type"].type] +
+              "_" +
+              pages[i]["page_type"].id
+            }
+          >
+            <i id={i} className="fab fa-usb"></i>
+          </Button>
+        </div>
       );
     }
-    return <Breadcrumbs aria-label="Breadcrumb"> {menu} </Breadcrumbs>;
+    return (
+      <Box display="flex" alignItems="center">
+        <div className="bg-light-gray tabs">{menu}</div>
+      </Box>
+    );
   }
 
   componentDidUpdate() {
@@ -392,12 +393,12 @@ export default class WillDisplay extends Component {
       JSON.stringify({
         query: {
           term: {
-            _id: this.props.data["testator.ref"]
-          }
-        }
+            _id: this.props.data["testator.ref"],
+          },
+        },
       })
     )
-      .then(data => {
+      .then((data) => {
         ReactDOM.render(
           <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
           document.getElementById("testator_none")
@@ -408,23 +409,23 @@ export default class WillDisplay extends Component {
         ) {
           this.setState({
             testator_notice: document.getElementById("testator_notice")
-              .innerHTML
+              .innerHTML,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error :", error);
       });
   }
 
   componentDidMount() {
-    const cur_idx = this.props.data["will_pages"].findIndex(item => {
+    const cur_idx = this.props.data["will_pages"].findIndex((item) => {
       return isEqual(item["page_type"], this.props.cur_page);
     });
 
     if (cur_idx !== -1) {
       this.setState({
-        idx: cur_idx
+        idx: cur_idx,
       });
     }
     let lbCollection = document.getElementsByClassName("lb");
@@ -480,7 +481,7 @@ export default class WillDisplay extends Component {
         ? myBackups_["myWills"]
         : [];
       this.setState({
-        myWills: myWills_
+        myWills: myWills_,
       });
     }
 
@@ -489,12 +490,12 @@ export default class WillDisplay extends Component {
       JSON.stringify({
         query: {
           term: {
-            _id: this.props.data["testator.ref"]
-          }
-        }
+            _id: this.props.data["testator.ref"],
+          },
+        },
       })
     )
-      .then(data => {
+      .then((data) => {
         ReactDOM.render(
           <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
           document.getElementById("testator_none")
@@ -505,11 +506,11 @@ export default class WillDisplay extends Component {
         ) {
           this.setState({
             testator_notice: document.getElementById("testator_notice")
-              .innerHTML
+              .innerHTML,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error :", error);
       });
   }
@@ -517,10 +518,9 @@ export default class WillDisplay extends Component {
   render() {
     const nextPage = (
       <Button
-        color="primary"
+        className="nextPage"
         title="Page suivante"
         onClick={this.handleNextPage}
-        className="nextPage"
       >
         [...]
       </Button>
@@ -559,354 +559,364 @@ export default class WillDisplay extends Component {
       }
 
       const isAdded = Boolean(this.userToken)
-        ? this.state.myWills.findIndex(el => el === this.props.id)
+        ? this.state.myWills.findIndex((el) => el === this.props.id)
         : -1;
 
       output = (
-        <div className="willDisplay">
-          <Grid container direction="column" justify="flex-start">
-            <Grid container direction="row">
-              <Grid item xs={this.props.resultList ? 4 : 1}>
-                {this.props.resultList}
-              </Grid>
-              <Grid item xs={this.props.resultList ? 8 : 12}>
-                <Grid container direction="column" justify="flex-start">
-                  <Grid key={3} item>
-                    <Grid
-                      container
-                      direction="row"
-                      justify="flex-end"
-                      alignItems="center"
-                      spacing={1}
+        <div className="noticeDisplay">
+          <Grid container direction="row">
+            <Grid
+              item
+              xs={this.props.resultList ? 12 : 0}
+              sm={this.props.resultList ? 5 : 0}
+              md={this.props.resultList ? 4 : 0}
+              lg={this.props.resultList ? 3 : 0}
+            >
+              {this.props.resultList}
+            </Grid>
+            <Grid
+              className="bg-white"
+              item
+              xs={this.props.resultList ? 12 : 12}
+              sm={this.props.resultList ? 7 : 12}
+              md={this.props.resultList ? 8 : 12}
+              lg={this.props.resultList ? 9 : 12}
+            >
+              <div className="containerNoticeInfo">
+                <Box className="d-flex" justifyContent="flex-end" key={3}>
+                  <Button
+                    id="btExport"
+                    aria-label="Export"
+                    className="iconButton"
+                    title="Exporter le testament"
+                    onClick={this.handleExportClick}
+                  >
+                    <i className="fa fa-lg fa-download" aria-hidden="true"></i>
+                  </Button>
+                  <Menu
+                    className="exportBtn"
+                    anchorEl={this.state.anchorElMenu}
+                    keepMounted
+                    open={Boolean(this.state.anchorElMenu)}
+                    onClose={this.handleExportClose}
+                    elevation={0}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                  >
+                    <MenuItem
+                      className="d-block"
+                      onClick={this.handleExplorClose}
                     >
-                      <Grid item>
-                        <IconButton
-                          id="btExport"
-                          aria-label="Export"
-                          title="Exporter le testament"
-                          onClick={this.handleExportClick}
+                      <Button id="bt-tei" onClick={this.handleExportTEIClick}>
+                        <i className="fas fa-code"></i> TEI
+                      </Button>
+                    </MenuItem>
+                    <MenuItem
+                      className="d-block"
+                      onClick={this.handleExplorClose}
+                    >
+                      <Button id="bt-pdf" onClick={this.handleExportPDFClick}>
+                        <i className="far fa-file-pdf"></i> PDF
+                      </Button>
+                      {Boolean(this.state.isLoading) ? (
+                        <CircularProgress />
+                      ) : (
+                        ""
+                      )}
+                    </MenuItem>
+                  </Menu>
+
+                  {Boolean(this.userToken) ? (
+                    isAdded === -1 ? (
+                      <Tooltip
+                        title="Ajouter aux favoris"
+                        placement="bottom"
+                        style={{ cursor: "hand" }}
+                      >
+                        <Button
+                          className="iconButton"
+                          onClick={this.handleAddShoppingWill(this.props.id)}
                         >
-                          <ExportIcon />
-                        </IconButton>
-                        <Menu
-                          id="simple-menu-explor"
-                          anchorEl={this.state.anchorElMenu}
-                          keepMounted
-                          open={Boolean(this.state.anchorElMenu)}
-                          onClose={this.handleExportClose}
-                          elevation={0}
-                          getContentAnchorEl={null}
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center"
-                          }}
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center"
-                          }}
+                          <i className="fas fa-lg fa-briefcase"></i>
+                        </Button>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip
+                        title="Supprimer du panier"
+                        placement="bottom"
+                        style={{ cursor: "hand" }}
+                      >
+                        <Button
+                          className="iconButton"
+                          onClick={this.handleremoveShoppingWill(this.props.id)}
                         >
-                          <MenuItem onClick={this.handleExplorClose}>
-                            <Button
-                              id="bt-tei"
-                              onClick={this.handleExportTEIClick}
-                            >
-                              TEI
-                            </Button>
-                          </MenuItem>
-                          <MenuItem onClick={this.handleExplorClose}>
-                            <Button
-                              id="bt-pdf"
-                              onClick={this.handleExportPDFClick}
-                            >
-                              PDF
-                            </Button>
-                            {Boolean(this.state.isLoading) ? (
-                              <CircularProgress />
-                            ) : (
-                              ""
-                            )}
-                          </MenuItem>
-                        </Menu>
-                      </Grid>
-                      <Grid item>
-                        {Boolean(this.userToken) ? (
-                          isAdded === -1 ? (
-                            <Tooltip
-                              title="Ajouter aux favoris"
-                              placement="bottom"
-                              style={{ cursor: "hand" }}
-                            >
-                              <IconButton
-                                onClick={this.handleAddShoppingWill(
-                                  this.props.id
-                                )}
-                              >
-                                <AddShoppingCartIcon />
-                              </IconButton>
-                            </Tooltip>
-                          ) : (
-                            <Tooltip
-                              title="Supprimer du panier"
-                              placement="bottom"
-                              style={{ cursor: "hand" }}
-                            >
-                              <IconButton
-                                onClick={this.handleremoveShoppingWill(
-                                  this.props.id
-                                )}
-                              >
-                                <RemoveShoppingCartIcon color="action" />
-                              </IconButton>
-                            </Tooltip>
-                          )
-                        ) : (
-                          <Tooltip
-                            title="Connectez-vous pour ajouter ce testament à vos favoris !"
-                            arrow={true}
-                          >
-                            <span>
-                              <IconButton aria-label="addShop" disabled>
-                                <AddShoppingCartIcon />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                        )}
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid key={2} item>
-                    <Paper className="paper">
-                      <Grid container justify="flex-start" alignItems="center">
-                        <Grid item xs={6}>
-                          <h1 className="item">
-                            Testament de{" "}
+                          <i className="fas fa-lg remove fa-briefcase"></i>
+                        </Button>
+                      </Tooltip>
+                    )
+                  ) : (
+                    <Tooltip title="Connectez-vous pour ajouter ce testament à vos favoris !">
+                      <span>
+                        <Button
+                          className="iconButton disabled"
+                          aria-label="ajouter aux favoris"
+                          disabled
+                        >
+                          <i className="fas fa-lg fa-briefcase"></i>
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  )}
+                </Box>
+                <div key={2}>
+                  <div className="d-flex itemTitle">
+                    <i className="fab fa-2x fa-stack-overflow"></i>
+                    <h1 className="item">
+                      Testament de{" "}
+                      <Link
+                        href={
+                          getParamConfig("web_url") +
+                          "/testateur/" +
+                          this.props.data["testator.ref"]
+                        }
+                      >
+                        {this.props.data["testator.forename"] + " "}
+                        <span className="smallcaps">
+                          {this.props.data["testator.surname"]}
+                        </span>
+                      </Link>
+                    </h1>
+                  </div>
+
+                  <div className="noticeInfo">
+                    <div>
+                      Mort pour la France
+                      {Boolean(death_date)
+                        ? " le " +
+                          death_date[0] +
+                          " " +
+                          this.months[death_date[1] - 1] +
+                          " " +
+                          death_date[2]
+                        : ""}
+                      {Boolean(
+                        this.props.data["will_contents.death_place_norm"]
+                      ) ? (
+                        <div className="d-inline-block">
+                          {" "}
+                          <span className="text-error">&nbsp;|</span>{" "}
+                          {Boolean(
+                            this.props.data["will_contents.death_place_ref"]
+                          ) ? (
                             <Link
                               href={
                                 getParamConfig("web_url") +
-                                "/testateur/" +
-                                this.props.data["testator.ref"]
+                                "/place/" +
+                                this.props.data["will_contents.death_place_ref"]
                               }
+                              target="_blank"
                             >
-                              {this.props.data["testator.forename"] + " "}
-                              <span className="typoSurname">
-                                {this.props.data["testator.surname"]}
-                              </span>
+                              {
+                                this.props.data[
+                                  "will_contents.death_place_norm"
+                                ]
+                              }
                             </Link>
-                          </h1>
-                          <Typography>
-                            Mort pour la France
-                            {Boolean(death_date)
-                              ? " le " +
-                                death_date[0] +
-                                " " +
-                                this.months[death_date[1] - 1] +
-                                " " +
-                                death_date[2]
-                              : ""}
-                            {Boolean(
-                              this.props.data["will_contents.death_place_norm"]
-                            ) ? (
-                              <span>
-                                {" "}
-                                à{" "}
-                                {Boolean(
-                                  this.props.data[
-                                    "will_contents.death_place_ref"
-                                  ]
-                                ) ? (
-                                  <Link
-                                    href={
-                                      getParamConfig("web_url") +
-                                      "/place/" +
-                                      this.props.data[
-                                        "will_contents.death_place_ref"
-                                      ]
-                                    }
-                                    target="_blank"
-                                  >
-                                    {
-                                      this.props.data[
-                                        "will_contents.death_place_norm"
-                                      ]
-                                    }
-                                  </Link>
-                                ) : (
-                                  this.props.data[
-                                    "will_contents.death_place_norm"
-                                  ]
-                                )}
-                              </span>
-                            ) : (
-                              ""
-                            )}
-                          </Typography>
-                          {will_date.length > 0 ||
-                          Boolean(
-                            this.props.data["will_contents.will_place_norm"]
-                          ) ? (
-                            <Typography>
-                              {will_date.length === 1
-                                ? " Testament rédigé le " +
-                                  will_date[0][0] +
-                                  " " +
-                                  this.months[will_date[0][1] - 1] +
-                                  " " +
-                                  will_date[0][2]
-                                : will_date.length === 2
-                                ? "Date de rédaction : " +
-                                  will_date[0][0] +
-                                  " " +
-                                  this.months[will_date[0][1] - 1] +
-                                  " " +
-                                  will_date[0][2] +
-                                  " et " +
-                                  will_date[1][0] +
-                                  " " +
-                                  this.months[will_date[1][1] - 1] +
-                                  " " +
-                                  will_date[1][2]
-                                : ""}{" "}
-                              {Boolean(
-                                this.props.data["will_contents.will_place_norm"]
-                              ) ? (
-                                <span>
-                                  {" "}
-                                  à{" "}
-                                  {Boolean(
-                                    this.props.data[
-                                      "will_contents.will_place_ref"
-                                    ]
-                                  ) ? (
-                                    <Link
-                                      href={
-                                        getParamConfig("web_url") +
-                                        "/place/" +
-                                        this.props.data[
-                                          "will_contents.will_place_ref"
-                                        ]
-                                      }
-                                      target="_blank"
-                                    >
-                                      {
-                                        this.props.data[
-                                          "will_contents.will_place_norm"
-                                        ]
-                                      }
-                                    </Link>
-                                  ) : (
-                                    this.props.data[
-                                      "will_contents.will_place_norm"
-                                    ]
-                                  )}
-                                </span>
-                              ) : (
-                                ""
-                              )}
-                            </Typography>
                           ) : (
-                            ""
+                            this.props.data["will_contents.death_place_norm"]
                           )}
-                          <Typography>
-                            Cote aux{" "}
-                            {this.props.data["will_identifier.institution"]}
-                            {" : "}
-                            {this.props.data["will_identifier.cote"]}
-                          </Typography>
-                          <Typography>
-                            {this.props.data[
-                              "will_physDesc.support"
-                            ][0].toUpperCase() +
-                              this.props.data["will_physDesc.support"].slice(1)}
-                            , {this.props.data["will_physDesc.handDesc"]},{" "}
-                            {this.props.data["will_physDesc.dim"]["width"]}
-                            {
-                              this.props.data["will_physDesc.dim"]["unit"]
-                            } x {this.props.data["will_physDesc.dim"]["height"]}
-                            {this.props.data["will_physDesc.dim"]["unit"]}
-                          </Typography>
-                          <Grid container direction="row" spacing={1}>
-                            <Grid item>
-                              <Typography>
-                                {" "}
-                                Permalien dans l’édition numérique :{" "}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Link href={will_uri} target="_blank">
-                                {" "}
-                                {will_uri}{" "}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    {will_date.length > 0 ||
+                    Boolean(
+                      this.props.data["will_contents.will_place_norm"]
+                    ) ? (
+                      <div>
+                        {will_date.length === 1
+                          ? " Testament rédigé le " +
+                            will_date[0][0] +
+                            " " +
+                            this.months[will_date[0][1] - 1] +
+                            " " +
+                            will_date[0][2]
+                          : will_date.length === 2
+                          ? "Date de rédaction : " +
+                            will_date[0][0] +
+                            " " +
+                            this.months[will_date[0][1] - 1] +
+                            " " +
+                            will_date[0][2] +
+                            " et " +
+                            will_date[1][0] +
+                            " " +
+                            this.months[will_date[1][1] - 1] +
+                            " " +
+                            will_date[1][2]
+                          : ""}{" "}
+                        {Boolean(
+                          this.props.data["will_contents.will_place_norm"]
+                        ) ? (
+                          <span>
+                            {" "}
+                            à{" "}
+                            {Boolean(
+                              this.props.data["will_contents.will_place_ref"]
+                            ) ? (
+                              <Link
+                                href={
+                                  getParamConfig("web_url") +
+                                  "/place/" +
+                                  this.props.data[
+                                    "will_contents.will_place_ref"
+                                  ]
+                                }
+                                target="_blank"
+                              >
+                                {
+                                  this.props.data[
+                                    "will_contents.will_place_norm"
+                                  ]
+                                }
                               </Link>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid key={0} item>
-                {this.createPageMenu(
-                  this.props.id,
-                  this.props.data["will_pages"],
-                  cur_idx,
-                  this.handlePageClick,
-                  this.handleOpenModal
-                )}
-              </Grid>
-              <Grid key={1} item>
-                <Grid
-                  container
-                  justify="center"
-                  alignItems="flex-start"
-                  direction="row"
-                  spacing={2}
-                >
-                  <Grid key={10} item sm={4}>
-                    <Typography className="title">Image</Typography>
-                    <Paper className="paper">
-                      <ImageIIF
-                        url={
-                          this.props.data["will_pages"][cur_idx]["picture_url"]
-                        }
-                        id="willImage"
-                      />
-                    </Paper>
-                  </Grid>
-                  <Grid key={11} item sm={4}>
-                    {createPage(
-                      this.props.data["will_pages"],
-                      cur_idx,
-                      "transcription",
-                      nextPage
+                            ) : (
+                              this.props.data["will_contents.will_place_norm"]
+                            )}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    ) : (
+                      ""
                     )}
-                  </Grid>
-                  <Grid key={12} item sm={4}>
-                    {createPage(
-                      this.props.data["will_pages"],
-                      cur_idx,
-                      "edition",
-                      nextPage
-                    )}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h6">
-                Contributeurs et contributrices :
-              </Typography>
-              {this.props.data["contributions"].map((contributor, i) => {
-                return (
-                  <Typography key={i}>
-                    {" "}
-                    {contributor["resp"][0].toUpperCase() +
-                      contributor["resp"].substring(1)}{" "}
-                    : {contributor["persName"].join(", ")}
-                  </Typography>
-                );
-              })}
+                    <div>
+                      Cote aux {this.props.data["will_identifier.institution"]}
+                      {" : "}
+                      <span className="fontWeightBold">
+                        {this.props.data["will_identifier.cote"]}
+                      </span>
+                    </div>
+                    <div>
+                      {this.props.data[
+                        "will_physDesc.support"
+                      ][0].toUpperCase() +
+                        this.props.data["will_physDesc.support"].slice(1)}
+                      , {this.props.data["will_physDesc.handDesc"]},{" "}
+                      {this.props.data["will_physDesc.dim"]["width"]}
+                      {this.props.data["will_physDesc.dim"]["unit"]} x{" "}
+                      {this.props.data["will_physDesc.dim"]["height"]}
+                      {this.props.data["will_physDesc.dim"]["unit"]}
+                    </div>
+                    <div className="permalien">
+                      {" "}
+                      <i className="fab fa-usb"></i> Permalien dans l’édition
+                      numérique :{" "}
+                      <Link href={will_uri} target="_blank">
+                        {" "}
+                        {will_uri}{" "}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Grid>
           </Grid>
+
+          <div key={0}>
+            {this.createPageMenu(
+              this.props.id,
+              this.props.data["will_pages"],
+              cur_idx,
+              this.handlePageClick,
+              this.handleOpenModal
+            )}
+          </div>
+
+          <Grid
+            key={1}
+            container
+            alignItems="flex-start"
+            justify="center"
+            direction="row"
+            spacing={0}
+            className="bg-light-gray containerColumns"
+          >
+            <Grid className="d-flex" key={10} item sm={4}>
+              <div className="bg-white columnContent">
+                <div className="columnTitle">
+                  <i className="far fa-object-group"></i> Image
+                </div>
+
+                <div className="image">
+                  <Paper elevation={0}>
+                    <ImageIIF
+                      url={
+                        this.props.data["will_pages"][cur_idx]["picture_url"]
+                      }
+                      id="willImage"
+                    />
+                  </Paper>
+                </div>
+              </div>
+            </Grid>
+            <Grid className="d-flex" key={11} item sm={4}>
+              <div className="bg-white columnContent">
+                <div className="columnTitle">
+                  <i className="far fa-file-code"></i> Transcription
+                </div>
+
+                {createPage(
+                  this.props.data["will_pages"],
+                  cur_idx,
+                  "transcription",
+                  nextPage
+                )}
+              </div>
+            </Grid>
+            <Grid className="d-flex" key={12} item sm={4}>
+              <div className="bg-white columnContent">
+                <div className="columnTitle">
+                  <i className="far fa-file-alt"></i> Édition
+                </div>
+
+                {createPage(
+                  this.props.data["will_pages"],
+                  cur_idx,
+                  "edition",
+                  nextPage
+                )}
+              </div>
+            </Grid>
+          </Grid>
+
+          <div className="contributeursWill card bg-white">
+            <h2 className="card-title bg-primaryLight">
+              <i className="fas fa-child"></i> Les contributeurs
+            </h2>
+            {this.props.data["contributions"].map((contributor, i) => {
+              return (
+                <div key={i}>
+                  {" "}
+                  <span className="fontWeightMedium">
+                    {contributor["resp"][0].toUpperCase() +
+                      contributor["resp"].substring(1)}{" "}
+                    :
+                  </span>{" "}
+                  {contributor["persName"].join(", ")}
+                </div>
+              );
+            })}
+          </div>
 
           <Dialog
             aria-labelledby="simple-modal-title"
@@ -924,7 +934,10 @@ export default class WillDisplay extends Component {
                 spacing={1}
               >
                 <Grid item>
-                  <Typography className="label"> Permalien : </Typography>
+                  <div className="label">
+                    {" "}
+                    <i className="fab fa-usb"></i> Permalien :{" "}
+                  </div>
                 </Grid>
                 <Grid item xs>
                   <TextField
@@ -932,7 +945,7 @@ export default class WillDisplay extends Component {
                     defaultValue={this.state.copyLink}
                     fullWidth={true}
                     InputProps={{
-                      readOnly: true
+                      readOnly: true,
                     }}
                   />
                 </Grid>

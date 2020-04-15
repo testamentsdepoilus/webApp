@@ -1,20 +1,48 @@
-.textSearch {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 1em 0 2em 0;
+.searchByKwd .select,
+.sort_results .select{
+	color: #1f8399;
+	font-family: 'PT Sans';
+	font-weight: bold;
+	font-size:0.9rem;
 }
 
-.dataSearch .inputSearch {
-  border-radius: 22px;
-  border: 1px solid red;
+.searchByKwd .select svg,
+.sort_results .select svg{
+	fill: #B91918;
+}
+.searchByKwd .select:before,
+.searchByKwd .select:hover:before,
+.searchByKwd .MuiSelect-select:focus,
+.sort_results .select:before,
+.sort_results .select:hover:before,
+.sort_results .MuiSelect-select:focus,
+.button:focus,
+.button:hover:before {
+	border:none;
+	background: inherit!important;
 }
 
-.typoTitle {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #424242;
+li.selectMode,
+li.sortBy{
+  display: block;
+  padding-left: 6px;
+  padding-right: 6px;
+  font-size: 0.875rem;
 }
 
-.select {
-  height: 2em;
+.searchByKwd .select.MuiInput-underline::after,
+.sort_results .select.MuiInput-underline::after{
+    transform: inherit;
+    transition: inherit;
+    border-bottom: none;
+
+}
+.searchByKwd .select:hover,
+.searchByKwd .select:hover svg,
+.sort_results .select:hover,
+.sort_results .select:hover svg{
+	fill: #2E5D81;
+	color: #2E5D81;
+	border:none;
+	background: inherit;
 }

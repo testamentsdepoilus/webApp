@@ -1,14 +1,14 @@
 import React, { Component } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 import {
   TextField,
   Button,
   Grid,
   Breadcrumbs,
   Link,
-  Typography
 } from "@material-ui/core";
 import { getParamConfig } from "../../utils/functions";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { resetPassWord } from "../../utils/functions";
 
 class LostPassWord extends Component {
@@ -59,25 +59,28 @@ class LostPassWord extends Component {
   render() {
     return (
       <div className="lostPassWord">
-        <div className="menu">
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="Breadcrumb"
-          >
-            <Link
-              id="home"
-              key={0}
-              color="inherit"
-              href={getParamConfig("web_url") + "/accueil"}
-            >
-              Accueil
-            </Link>
 
-            <Typography color="textPrimary">Mot de passe oublié</Typography>
-          </Breadcrumbs>
-        </div>
+          <Breadcrumbs
+                separator={<i className="fas fa-caret-right"></i>}
+                aria-label="Breadcrumb"
+                className="breadcrumbs"
+              >
+                <Link
+                  id="home"
+                  key={0}
+                  color="inherit"
+                  component={RouterLink}
+                   href={getParamConfig("web_url") + "/accueil"}
+                >
+                  Accueil
+                </Link>
+               
+                <typography>Mot de passe oublié</typography>
+           </Breadcrumbs>
+
         {this.state.confirmed ? (
-          <div className="section_confirmation">
+          <div className="section_confirmation bg-white paddingContainer">
+
             <p>
               Un courriel de confirmation vous a été envoyé à{" "}
               <span style={{ fontWeight: 600 }}>{this.state.email}</span>
@@ -88,8 +91,9 @@ class LostPassWord extends Component {
             </p>
           </div>
         ) : (
-          <div>
+          <div class="bg-white paddingContainer">
             <div className="section_contenu">
+            <h1 className="heading"><i class="fas fa-unlock-alt"></i> Mot de passe oublié</h1>
               <p>Saisissez l'adresse mail associée à votre compte.</p>
               <p>
                 Nous allons envoyer à cette adresse un lien vous permettant de
@@ -98,23 +102,21 @@ class LostPassWord extends Component {
             </div>
             <div className="section_form">
               {this.state.error !== "" ? (
-                <p className="errorText">Erreur : {this.state.error}</p>
+                <p className="text-error">Erreur : {this.state.error}</p>
               ) : (
                 ""
               )}
               <form className="form" noValidate onSubmit={this.onSubmit}>
                 <Grid
                   container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
+                  direction="column"
                   spacing={1}
                 >
-                  <Grid item>
+                  <Grid>
                     <TextField
                       id="email"
                       variant="outlined"
-                      className="textField"
+                      className="input w-100"
                       required
                       label="Adresse email"
                       type="email"
@@ -126,12 +128,10 @@ class LostPassWord extends Component {
                       error={this.state.mailError}
                     />
                   </Grid>
-                  <Grid item>
+                  <Grid>
                     <Button
                       id="btValidate"
-                      variant="contained"
-                      color="primary"
-                      className="submit"
+                      className="button submit fontWeightMedium plain bg-secondaryLight"
                       type="submit"
                     >
                       Valider

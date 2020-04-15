@@ -7,16 +7,13 @@ import {
 } from "@appbaseio/reactivesearch";
 
 import {
-  Paper,
   Select,
   MenuItem,
   Breadcrumbs,
   Link,
-  Typography,
-  Grid,
-  IconButton,
+  Box,
+  Button,
 } from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
@@ -24,8 +21,6 @@ import {
 } from "../utils/functions";
 
 import UnitDisplay from "./UnitDisplay";
-import Footer from "./Footer";
-import ClearIcon from "@material-ui/icons/Clear";
 
 class Units extends Component {
   constructor(props) {
@@ -89,70 +84,70 @@ class Units extends Component {
 
   render() {
     return (
-      <div className="units">
+      <div className="notices units">
         <ReactiveBase
           app={getParamConfig("es_index_units")}
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="Breadcrumb"
-              >
-                <Link
-                  id="home"
-                  key={0}
-                  color="inherit"
-                  component={RouterLink}
-                  to="/accueil"
-                >
-                  Accueil
-                </Link>
-                <Typography color="textPrimary">
-                  Les unités militaires
-                </Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
+          <Breadcrumbs
+            separator={<i className="fas fa-caret-right"></i>}
+            aria-label="Breadcrumb"
+            className="breadcrumbs"
+          >
+            <Link
+              id="home"
+              key={0}
+              color="inherit"
+              component={RouterLink}
+              to="/accueil"
+            >
+              Accueil
+            </Link>
+            <div>Les unités militaires</div>
+          </Breadcrumbs>
 
-          <div className="unitSearch">
-            <h2>Découvrir les unités militaires</h2>
-            <div className="selectList">
-              <Grid container direction="row">
-                <Grid item xs={10}>
-                  <SingleDropdownList
-                    componentId="unitId"
-                    className="unit"
-                    dataField="unit.keyword"
-                    value={this.state.unit}
-                    size={1000}
-                    sortBy="asc"
-                    showCount={false}
-                    autosuggest={true}
-                    placeholder="Unité militaire"
-                    showSearch={true}
-                    searchPlaceholder="Saisir une unité militaire"
-                    onChange={this.handleValueChange}
-                    URLParams={true}
-                    innerClass={{
-                      list: "list",
-                      select: "select",
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <IconButton
-                    onClick={this.handleClear("")}
-                    title="Supprimer le filtre"
-                  >
-                    <ClearIcon style={{ color: "red" }} />
-                  </IconButton>
-                </Grid>
-              </Grid>
+          <Box
+            className="headingBar bg-gray"
+            display="flex"
+            justifyContent="space-between"
+          >
+            <h2 className="card-title bg-primaryMain">
+              <i className="far fa-address-book"></i> Découvrir les unités
+              militaires
+            </h2>
+
+            <div className="selectList d-flex">
+              <SingleDropdownList
+                componentId="unitId"
+                className="select selectName"
+                dataField="unit.keyword"
+                value={this.state.unit}
+                size={1000}
+                sortBy="asc"
+                showCount={false}
+                autosuggest={true}
+                placeholder="Unité militaire"
+                showSearch={true}
+                searchPlaceholder="Saisir une unité militaire"
+                onChange={this.handleValueChange}
+                URLParams={true}
+                innerClass={{
+                  list: "list",
+                  select: "select",
+                }}
+              />
+
+              <Button
+                onClick={this.handleClear("")}
+                title="Supprimer le filtre"
+                className="button iconButton"
+              >
+                <i className="fas fa-times"></i>
+              </Button>
             </div>
-          </div>
+          </Box>
+
           <div className="units_result">
             <ReactiveList
               react={{
@@ -173,7 +168,7 @@ class Units extends Component {
               }}
               URLParams={false}
               innerClass={{
-                resultsInfo: "resultsInfo",
+                resultsInfo: "countResults",
                 pagination: "pagination",
               }}
               render={function (res) {
@@ -208,39 +203,54 @@ class Units extends Component {
                       console.log("error :", error);
                     });
                   const resultList = (
-                    <div className="resultList">
-                      {" "}
-                      <div className="sortResult">
-                        Trier par :
-                        <Select
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1}>unité (A-Z)</MenuItem>
-                          <MenuItem value={2}>unité (Z-A)</MenuItem>
-                        </Select>
+                    <div className="leftColumn bg-gray">
+                      <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        width="100%"
+                      >
+                        <Box display="flex" className="sort_results">
+                          <Box>
+                            <label className="fontWeightBold">Trier par </label>
+                          </Box>
+                          <Select
+                            className="select"
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                          >
+                            <MenuItem className="sortBy" value={1}>
+                              unité (A-Z)
+                            </MenuItem>
+                            <MenuItem className="sortBy" value={2}>
+                              unité (Z-A)
+                            </MenuItem>
+                          </Select>
+                        </Box>
+                      </Box>
+                      <div className="resultList">
+                        <ul>
+                          {this.state.cur_list.map((item, i) =>
+                            Boolean(
+                              res.resultStats.currentPage === curPage_ + i
+                            ) ? (
+                              <li key={item["_id"]} className="active">
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source["unit"]}
+                              </li>
+                            ) : (
+                              <li key={item["_id"]}>
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source["unit"]}
+                              </li>
+                            )
+                          )}
+                        </ul>
                       </div>
-                      <ul>
-                        {this.state.cur_list.map((item, i) =>
-                          Boolean(
-                            res.resultStats.currentPage === curPage_ + i
-                          ) ? (
-                            <li key={item["_id"]} className="li_active">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["unit"]}
-                            </li>
-                          ) : (
-                            <li key={item["_id"]} className="li">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["unit"]}
-                            </li>
-                          )
-                        )}
-                      </ul>
                     </div>
                   );
+
                   return (
                     <div className="units" key={j}>
                       <UnitDisplay
@@ -248,8 +258,6 @@ class Units extends Component {
                         data={item}
                         resultList={resultList}
                       />
-
-                      <Footer />
                     </div>
                   );
                 });

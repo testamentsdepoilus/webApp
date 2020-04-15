@@ -1,0 +1,237 @@
+
+
+@media screen and (min-width: 600px) {
+
+footer .footerContainer img{
+  max-width: 100%;
+}
+.compare .tabs button{
+    font-size: 1.15rem;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.search .searchBar .containerSelectMode {
+  display: flex;
+}
+.search .searchByKwd .select{
+line-height: 1.1875em;
+}
+.search .searchBar label{
+ line-height: 1.805rem;
+}
+.notices .pagination a{
+    padding: 1px 7px;
+    font-size: 0.975rem;
+}
+.noticeDisplay #testator_notice .noticeInfo .mainInfo{
+  display: flex;
+}
+.noticeDisplay #testator_notice .noticeInfo .photoTestateur {
+  margin-bottom: 0px;
+}
+.list_news{
+  padding: 30px 30px 30px 30px;
+}
+
+}
+
+
+
+@media screen and (min-width: 600px) and (max-width: 959px) {
+ header .site-title {
+  font-size: 1.8rem ;
+  padding-right: 15px;
+  padding-left:25px;
+}
+header .site-subtitle {
+  font-size: 1.5rem;
+  line-height: 1.7rem;
+  margin-left: 25px;
+ }
+ .home #random_wills img{
+ height: 220px;
+ width: auto!important;
+}
+.mainContainer{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.search .leftSidebar ul.places_list {
+	display: flex!important;
+	justify-content: space-between;
+}
+.search .leftSidebar ul.places_list li{
+	display: inline-flex!important;
+	width:auto!important;
+}
+.notices #testator_notice .noticeInfo .mainInfo{
+  display: block!important;
+}
+.notices #testator_notice .noticeInfo .photoTestateur {
+  margin-bottom: 30px!important;
+}
+
+}
+
+
+@media screen and (min-width: 960px) and (max-width: 1279px) {
+ header .site-title {
+  font-size: 2.5rem ;
+  padding-left:15px;
+}
+.mainContainer{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.home #etat_recherche,
+.home #actualites,
+.home #visualisation{
+
+}
+
+.home .rech_actu_viz{
+	padding-bottom: 10px!important;
+}
+.home #etat_recherche .card,
+.home #actualites .card,
+.home #visualisation .card{
+  height: 350px;
+  margin-bottom: 0px!important;
+}
+header #main_nav{
+  margin-top: 10px!important;
+}
+}
+
+@media screen and (min-width: 960px) {
+.d-md-flex{
+  display: flex;
+}
+header #main_nav{
+  display: flex;
+}
+header .site-subtitle {
+  margin-bottom: 0px;
+}
+header #main_nav li #search,
+header #main_nav li #explore{
+  background-color:#2E5D81;
+  text-transform: uppercase;
+}
+header #main_nav li.monEspace{
+  background-color: #8CB2C2;
+}
+
+header #main_nav li.monEspace a{
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size:0.9rem;
+}
+header #main_nav li a{
+
+}
+header #main_nav li i {
+  padding-right: 0px;
+}
+
+ header .site-title {
+  padding-right: 15px;
+}
+header .site-title .small{
+    font-size: 1.9rem;
+}
+header .collapse_mainNav{
+  display: none!important;
+}
+header .site-subtitle {
+  font-size: 1.875rem;
+  line-height: 2rem;
+}
+.home #random_wills img{
+ height: 220px;
+}
+.home #random_wills .random_wills .card{
+  margin-bottom: 0px;
+}
+.search .leftSidebar ul.places_list li p{
+	font-size: 0.95rem;
+}
+.compare  .willCompare .containerColumns,
+.noticeDisplay .containerColumns{
+  display: flex;
+  align-items: stretch; 
+}
+.compare #btnBack{
+	margin-top: 0px;
+}
+.notices .pagination{
+  margin-top: -35px;
+  padding-bottom: 30px;
+}
+.notices .pagination a{
+  margin-bottom: 0px;
+}
+.notices .countResults{
+  position: absolute;
+  padding-top: 50px;
+}
+.noticeDisplay .containerColumns .columnContent{
+  margin-bottom: 10px;
+}
+.noticeDisplay .tabs button{
+    font-size: 1.15rem;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.noticeDisplay .noticeInfo {
+  margin-top: 30px;
+}
+.noticeDisplay .itemTitle{
+  margin-top: 0px;
+}
+.noticeDisplay .noticeInfo,
+.noticeDisplay .noticeInfo h2{
+  font-size:1.13rem;
+}
+.notices .leftColumn {
+  padding-left: 25px;
+}
+.noticeDisplay .containerNoticeInfo{
+  padding: 20px 35px 20px 35px;
+}
+#btnBack{
+  margin-bottom: 0px;
+}
+.explore iframe {
+  height:2600px;
+}
+}
+
+
+@media screen and (min-width: 1280px){
+header #main_nav{
+  margin-top: 0px!important;
+}
+header .site-title {
+  font-size: 3.685rem;
+  padding-left: 0px;
+}
+header .site-subtitle {
+	margin-left: 0px;
+	margin-top: 5px;
+}
+footer {
+  padding-top: 0px;
+}
+.mainContainer{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.search .searchResults .e1hwwpu60 > div{
+  display: flex;
+}
+
+
+
+}
+

@@ -23,12 +23,6 @@ import {
 } from "../../utils/functions";
 import InfoIcon from "@material-ui/icons/Info";
 
-import ListAddIcon from "@material-ui/icons/PlaylistAddOutlined";
-import ListAddCheckIcon from "@material-ui/icons/PlaylistAddCheckOutlined";
-import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCartOutlined";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCartOutlined";
-import CompareIcon from "@material-ui/icons/CompareOutlined";
-
 const listMenu = { page: "Page", envelope: "Enveloppe", codicil: "Codicille" };
 
 export default class ResultWills extends React.Component {
@@ -189,7 +183,7 @@ export default class ResultWills extends React.Component {
     localStorage.setItem("willCompare", JSON.stringify(this.state.styleTitle));
     localStorage.setItem("chipData", JSON.stringify(this.state.chipData));
     window.location.href =
-      getParamConfig("web_url") + "/compare/" + url_ids.join("+");
+      "http://localhost:3000/testaments-de-poilus/compare/" + url_ids.join("+");
   }
 
   componentDidUpdate() {
@@ -348,7 +342,7 @@ export default class ResultWills extends React.Component {
       );
 
       return (
-        <div className="resultWills" key={j}>
+        <div className="resultWill" key={j}>
           <ListItem alignItems="flex-start" component="div">
             <ListItemText
               primary={
@@ -357,7 +351,7 @@ export default class ResultWills extends React.Component {
                   direction="row"
                   justify="space-between"
                   alignItems="center"
-                  spacing={1}
+                  spacing={0}
                 >
                   <Grid item xs="auto">
                     <Tooltip title={title_testator} arrow={true}>
@@ -371,13 +365,13 @@ export default class ResultWills extends React.Component {
                         className="typoName"
                       >
                         {item["testator.forename"] + " "}
-                        <span className="typoSurname">
+                        <span className="smallcaps">
                           {item["testator.surname"]}
                         </span>
                       </Link>
                     </Tooltip>
                     {Boolean(will_date) ? (
-                      <Typography className="typoSubTitle">
+                      <Typography className="will_date">
                         Testament rédigé le {will_date}
                       </Typography>
                     ) : (
@@ -394,9 +388,9 @@ export default class ResultWills extends React.Component {
                             interactive
                             arrow={true}
                           >
-                            <IconButton>
-                              <ListAddCheckIcon color="action" />
-                            </IconButton>
+                            <Button className="iconButton">
+                              <i className="remove fas fa-random"></i>
+                            </Button>
                           </Tooltip>
                         ) : (
                           <Tooltip
@@ -405,9 +399,9 @@ export default class ResultWills extends React.Component {
                             interactive
                             arrow={true}
                           >
-                            <IconButton>
-                              <ListAddIcon />
-                            </IconButton>
+                            <Button className="iconButton">
+                              <i className="fas fa-random"></i>
+                            </Button>
                           </Tooltip>
                         )}
                       </Grid>
@@ -420,13 +414,14 @@ export default class ResultWills extends React.Component {
                               style={{ cursor: "hand" }}
                               arrow={true}
                             >
-                              <IconButton
+                              <Button
+                                className="iconButton"
                                 onClick={this.handleAddShoppingWill(
                                   item["_id"]
                                 )}
                               >
-                                <AddShoppingCartIcon />
-                              </IconButton>
+                                <i className="fas fa-briefcase"></i>
+                              </Button>
                             </Tooltip>
                           ) : (
                             <Tooltip
@@ -435,24 +430,30 @@ export default class ResultWills extends React.Component {
                               style={{ cursor: "hand" }}
                               arrow={true}
                             >
-                              <IconButton
+                              <Button
+                                className="iconButton"
                                 onClick={this.handleremoveShoppingWill(
                                   item["_id"]
                                 )}
                               >
-                                <RemoveShoppingCartIcon color="action" />
-                              </IconButton>
+                                <i className="remove fas fa-briefcase"></i>
+                              </Button>
                             </Tooltip>
                           )
                         ) : (
                           <Tooltip
                             title="Connectez-vous pour ajouter ce testament à vos favoris !"
                             arrow={true}
+                            style={{ cursor: "not-allowed" }}
                           >
                             <span>
-                              <IconButton aria-label="addShop" disabled>
-                                <AddShoppingCartIcon />
-                              </IconButton>
+                              <Button
+                                className="iconButton"
+                                aria-label="addShop"
+                                disabled
+                              >
+                                <i className="fas fa-briefcase"></i>
+                              </Button>
                             </span>
                           </Tooltip>
                         )}
@@ -464,7 +465,6 @@ export default class ResultWills extends React.Component {
               secondary={descriptions}
             />
           </ListItem>
-          <Divider variant="inset" />
         </div>
       );
     });
@@ -515,11 +515,12 @@ export default class ResultWills extends React.Component {
                 <span>
                   <Button
                     id="btCompare"
-                    aria-label="Compare"
+                    className="button plain primaryMain"
+                    aria-label="Comparer"
                     size="small"
                     disabled={this.state.count > 0 ? false : true}
                   >
-                    <CompareIcon />
+                    <i className="fas fa-random"></i>
                     Comparer les testaments
                   </Button>
                 </span>

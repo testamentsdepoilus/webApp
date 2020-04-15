@@ -7,16 +7,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import DeleteIcon from "@material-ui/icons/Delete";
-import ArrowUpIcon from "@material-ui/icons/KeyboardArrowUpOutlined";
-import VisibilityIcon from "@material-ui/icons/VisibilityOutlined";
-import ExportIcon from "@material-ui/icons/SaveAltOutlined";
-import CompareIcon from "@material-ui/icons/CompareOutlined";
 import {
   getParamConfig,
   updateMyListWills,
@@ -40,14 +33,13 @@ import {
   MenuList,
   MenuItem,
   TableContainer,
-  Fab,
   CircularProgress,
   FormControlLabel,
   Breadcrumbs,
   Link,
+  Box,
+  SvgIcon,
 } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
-import Footer from "../Footer";
 
 // Up to top page click
 window.onscroll = function () {
@@ -149,7 +141,7 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <Typography className="labelTitle">{title_[title]}</Typography>
+            <div>{title_[title]}</div>
           </TableCell>
         ))}
         <TableCell></TableCell>
@@ -186,23 +178,22 @@ const EnhancedTableToolbar = (props) => {
         alignItems="center"
       >
         <Grid item>
-          <h6 className="title" id="tableTitle">
+          <h2
+            className="card-title bg-dark-gray text-white fontWeightMedium"
+            id="tableTitle"
+          >
             {title_[title]}
-          </h6>
+          </h2>
         </Grid>
         <Grid item>
           {numSelected > 0 ? (
             <Grid container direction="row" alignItems="center" spacing={1}>
               <Grid item>
-                <Typography
-                  className="highlight"
-                  color="inherit"
-                  variant="subtitle1"
-                >
+                <div className="fontWeightRegular">
                   {numSelected === 1
                     ? numSelected + " sélectionné"
                     : numSelected + " sélectionnés"}
-                </Typography>
+                </div>
               </Grid>
               <Grid item>{actionButton}</Grid>
             </Grid>
@@ -244,7 +235,7 @@ AlertMessage.propTypes = {
   message: PropTypes.string.isRequired,
 };
 
-export default class MyShoppingCart extends Component {
+export default class MyFavoritesCart extends Component {
   constructor() {
     super();
     this.state = {
@@ -408,32 +399,32 @@ export default class MyShoppingCart extends Component {
           uri_component = "testament";
           window.open(
             getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
-            "_blank"
+            "_self"
           );
           break;
         case "myPlaces":
           uri_component = "place";
           window.open(
             getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
-            "_blank"
+            "_self"
           );
           break;
         case "myUnits":
           uri_component = "armee";
           window.open(
             getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
-            "_blank"
+            "_self"
           );
           break;
         case "myTestators":
           uri_component = "testateur";
           window.open(
             getParamConfig("web_url") + "/" + uri_component + "/" + row["_id"],
-            "_blank"
+            "_self"
           );
           break;
         case "mySearches":
-          window.open(row.url, "_blank");
+          window.open(row.url, "_self");
           break;
         default:
           break;
@@ -590,7 +581,7 @@ export default class MyShoppingCart extends Component {
     };
     console.log("this.state.selected :", this.state.selected);
     return (
-      <TableContainer component={Paper} className="paper">
+      <TableContainer className="tableContainer">
         <EnhancedTableToolbar
           numSelected={this.state.selected[title].length}
           actionButton={actionButton}
@@ -673,14 +664,15 @@ export default class MyShoppingCart extends Component {
                       {row.title.replace("Testament de", "")}
                     </TableCell>
                   )}
-                  <TableCell align="center">
+                  <TableCell align="right">
                     <Tooltip title={"Consulter " + title_norm[title]}>
-                      <IconButton
+                      <Button
+                        className="button iconButton"
                         onClick={this.handleDisplayWill(row, title)}
                         aria-label="display"
                       >
-                        <VisibilityIcon />
-                      </IconButton>
+                        <i className="far fa-eye"></i>
+                      </Button>
                     </Tooltip>
                   </TableCell>
                 </TableRow>
@@ -839,7 +831,8 @@ export default class MyShoppingCart extends Component {
           <Grid item>
             <Tooltip title="Exporter les testaments sélectionnés">
               <span>
-                <IconButton
+                <Button
+                  className="button iconButton plain primaryMain"
                   disabled={
                     Boolean(this.state.selected[title]) &&
                     this.state.selected[title].length > 0
@@ -849,8 +842,8 @@ export default class MyShoppingCart extends Component {
                   onClick={this.handleExportWill}
                   aria-label="export"
                 >
-                  <ExportIcon />
-                </IconButton>
+                  <i className="fas fa-sm fa-download"></i>
+                </Button>
               </span>
             </Tooltip>
           </Grid>
@@ -861,7 +854,8 @@ export default class MyShoppingCart extends Component {
           <Grid item>
             <Tooltip title="Exporter les notices sélectionnées">
               <span>
-                <IconButton
+                <Button
+                  className="button iconButton plain primaryMain"
                   disabled={
                     Boolean(this.state.selected[title]) &&
                     this.state.selected[title].length > 0
@@ -871,8 +865,8 @@ export default class MyShoppingCart extends Component {
                   onClick={this.handleExportPlace}
                   aria-label="export"
                 >
-                  <ExportIcon />
-                </IconButton>
+                  <i className="fas fa-sm fa-download"></i>
+                </Button>
               </span>
             </Tooltip>
           </Grid>
@@ -883,7 +877,8 @@ export default class MyShoppingCart extends Component {
           <Grid item>
             <Tooltip title="Exporter les notices sélectionnées">
               <span>
-                <IconButton
+                <Button
+                  className="button iconButton plain primaryMain"
                   disabled={
                     Boolean(this.state.selected[title]) &&
                     this.state.selected[title].length > 0
@@ -893,8 +888,8 @@ export default class MyShoppingCart extends Component {
                   onClick={this.handleExportUnit}
                   aria-label="export"
                 >
-                  <ExportIcon />
-                </IconButton>
+                  <i className="fas fa-sm fa-download"></i>
+                </Button>
               </span>
             </Tooltip>
           </Grid>
@@ -905,7 +900,8 @@ export default class MyShoppingCart extends Component {
           <Grid item>
             <Tooltip title="Exporter les notices sélectionnées">
               <span>
-                <IconButton
+                <Button
+                  className="button iconButton plain primaryMain"
                   disabled={
                     Boolean(this.state.selected[title]) &&
                     this.state.selected[title].length > 0
@@ -915,8 +911,8 @@ export default class MyShoppingCart extends Component {
                   onClick={this.handleExportTestator}
                   aria-label="export"
                 >
-                  <ExportIcon />
-                </IconButton>
+                  <i className="fas fa-sm fa-download"></i>
+                </Button>
               </span>
             </Tooltip>
             {Boolean(this.state.isLoading) ? <CircularProgress /> : ""}
@@ -944,7 +940,8 @@ export default class MyShoppingCart extends Component {
         <Grid item>
           <Tooltip title="Suppression des éléments sélectionnés">
             <span>
-              <IconButton
+              <Button
+                className="button iconButton plain primaryMain"
                 disabled={
                   Boolean(this.state.selected[title]) &&
                   this.state.selected[title].length > 0
@@ -954,8 +951,8 @@ export default class MyShoppingCart extends Component {
                 onClick={(event) => this.handleRemoveWill(title)}
                 aria-label="delete"
               >
-                <DeleteIcon />
-              </IconButton>
+                <i className="fas fa-sm fa-trash-alt"></i>
+              </Button>
             </span>
           </Tooltip>
         </Grid>
@@ -966,7 +963,8 @@ export default class MyShoppingCart extends Component {
             <Grid item>
               <Tooltip title="Comparer les testaments sélectionnés">
                 <span>
-                  <IconButton
+                  <Button
+                    className="button iconButton plain primaryMain"
                     disabled={
                       Boolean(this.state.selected[title]) &&
                       this.state.selected[title].length > 0
@@ -976,8 +974,8 @@ export default class MyShoppingCart extends Component {
                     onClick={(event) => this.handleCompareWill("myWills")}
                     aria-label="compare"
                   >
-                    <CompareIcon />
-                  </IconButton>
+                    <i className="fas fa-sm fa-random"></i>
+                  </Button>
                 </span>
               </Tooltip>
             </Grid>
@@ -985,9 +983,13 @@ export default class MyShoppingCart extends Component {
             <Grid item>
               <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
                 <span>
-                  <IconButton aria-label="compare" disabled>
-                    <CompareIcon />
-                  </IconButton>
+                  <Button
+                    className="button iconButton plain primaryMain"
+                    aria-label="compare"
+                    disabled
+                  >
+                    <i className="fas fa-sm fa-random"></i>
+                  </Button>
                 </span>
               </Tooltip>
             </Grid>
@@ -999,41 +1001,86 @@ export default class MyShoppingCart extends Component {
 
   render() {
     const menu = (
-      <Paper className="menu">
+      <div className="leftMenu bg-gray">
         <MenuList>
-          <MenuItem key={1}>
-            <a href="#wills_div" className="link">
-              Testaments
+          <MenuItem className="bg-dark-gray" key={1}>
+            <a className="text-white" href="#wills_div">
+              <i className="fa-sm fab fa-stack-overflow"></i>Les testaments
             </a>
           </MenuItem>
-          <MenuItem key={2}>
+          <MenuItem className="bg-dark-gray" key={2}>
             {" "}
-            <a href="#testators_div" className="link">
-              Testateurs
+            <a className="text-white" href="#testators_div">
+              <i className="fa-sm far fa-address-book"></i> Les testateurs
             </a>
           </MenuItem>
-          <MenuItem key={3}>
-            <a href="#places_div" className="link">
-              Lieux
+          <MenuItem className="bg-dark-gray" key={3}>
+            <a className="text-white" href="#places_div">
+              <i className="fa-sm fas fa-map-marker-alt"></i> Les lieux
             </a>
           </MenuItem>
-          <MenuItem key={4}>
-            <a href="#units_div" className="link">
-              Unités militaires
+          <MenuItem className="bg-dark-gray units_div" key={4}>
+            <a className="text-white" href="#units_div">
+              <SvgIcon>
+                <path
+                  className="st0"
+                  d="M18.4,18.8H6.6c-0.8,0-1.5-0.7-1.5-1.5c0-0.8,0.7-1.5,1.5-1.5h11.8c0.8,0,1.5,0.7,1.5,1.5
+                  C19.9,18.1,19.2,18.8,18.4,18.8 M18.4,14.5H6.6c-1.5,0-2.8,1.2-2.8,2.8S5,20,6.6,20h11.8c1.5,0,2.8-1.2,2.8-2.8
+                  S19.9,14.5,18.4,14.5"
+                />
+                <path
+                  className="st0"
+                  d="M7.1,16.5c0.4,0,0.7,0.3,0.7,0.7c0,0.4-0.3,0.7-0.7,0.7c-0.4,0-0.7-0.3-0.7-0.7C6.4,16.8,6.7,16.5,7.1,16.5"
+                />
+                <path
+                  className="st0"
+                  d="M9.3,16.5c0.4,0,0.7,0.3,0.7,0.7c0,0.4-0.3,0.7-0.7,0.7s-0.7-0.3-0.7-0.7C8.5,16.8,8.8,16.5,9.3,16.5"
+                />
+                <path
+                  className="st0"
+                  d="M11.4,16.5c0.4,0,0.7,0.3,0.7,0.7c0,0.4-0.3,0.7-0.7,0.7c-0.4,0-0.7-0.3-0.7-0.7C10.6,16.8,11,16.5,11.4,16.5"
+                />
+                <path
+                  className="st0"
+                  d="M13.5,16.5c0.4,0,0.7,0.3,0.7,0.7c0,0.4-0.3,0.7-0.7,0.7c-0.4,0-0.7-0.3-0.7-0.7
+                  C12.8,16.8,13.1,16.5,13.5,16.5"
+                />
+                <path
+                  className="st0"
+                  d="M15.6,16.5c0.4,0,0.7,0.3,0.7,0.7c0,0.4-0.3,0.7-0.7,0.7c-0.4,0-0.7-0.3-0.7-0.7
+                  C14.9,16.8,15.2,16.5,15.6,16.5"
+                />
+                <path
+                  className="st0"
+                  d="M17.8,16.5c0.4,0,0.7,0.3,0.7,0.7c0,0.4-0.3,0.7-0.7,0.7c-0.4,0-0.7-0.3-0.7-0.7C17,16.8,17.4,16.5,17.8,16.5"
+                />
+                <path
+                  className="st0"
+                  d="M18.8,12.5h-11l0.7-0.8H11h7.7V12.5z M12.3,9.9c0-0.7,0.6-1.3,1.3-1.3h2.8c0.7,0,1.3,0.6,1.3,1.3v0.5h-5.3V9.9
+                  z M20.1,12.5H20v-2.1h-1.2V9.9c0-1.4-1.1-2.5-2.5-2.5h-0.8V6.3h-1.2v1.1h-0.8c-0.6,0-1.2,0.2-1.6,0.6L4.1,4.4L3.6,5.5L11.2,9
+                  C11.1,9.3,11,9.6,11,9.9v0.5H7.8l-1.7,2.1H4.8c-1.5,0-2.8,1.2-2.8,2.8h1.2c0-0.8,0.7-1.5,1.5-1.5h15.4c0.8,0,1.5,0.7,1.5,1.5h1.2
+                  C22.9,13.7,21.7,12.5,20.1,12.5"
+                />
+              </SvgIcon>
+              Les unités militaires
             </a>
           </MenuItem>
-          <MenuItem key={5}>
-            <a href="#searches_div" className="link">
-              Mes recherches
+          <MenuItem className="bg-dark-gray" key={5}>
+            <a className="text-white" href="#searches_div">
+              <i className="fa-sm far fa-save"></i> Mes recherches
             </a>
           </MenuItem>
         </MenuList>
-      </Paper>
+      </div>
     );
 
     const defaultView = (
-      <div className="favoris">
-        <Breadcrumbs className="menuCMS" aria-label="Breadcrumb">
+      <div className="favoris cms">
+        <Breadcrumbs
+          separator={<i className="fas fa-caret-right"></i>}
+          aria-label="Breadcrumb"
+          className="breadcrumbs"
+        >
           <Link
             id="home"
             key={0}
@@ -1043,32 +1090,21 @@ export default class MyShoppingCart extends Component {
             Accueil
           </Link>
 
-          <Link
-            id="espace"
-            key={1}
-            color="inherit"
-            component={RouterLink}
-            to="/espace"
-          >
-            Mon espace
-          </Link>
-          <Link
-            id="favoris"
-            key={1}
-            color="inherit"
-            component={RouterLink}
-            to="/espace/panier"
-          >
-            Mes favoris
-          </Link>
+          <div>Mon espace</div>
+          <div>Mes favoris</div>
         </Breadcrumbs>
+
         <div id="testator_none" style={{ display: "none" }}></div>
-        <h1 className="heading">MES FAVORIS</h1>
-        <Grid container direction="row" justify="center" spacing={2}>
-          <Grid item xs={4}>
+
+        <h1 className="heading">
+          <i className="fas fa-briefcase"></i> Mes favoris
+        </h1>
+
+        <Grid container direction="row" justify="center" spacing={0}>
+          <Grid item xs={12} md={2}>
             {menu}
           </Grid>
-          <Grid item xs={8}>
+          <Grid className="bg-white" item xs={12} md={10}>
             <section id="wills_div">
               {this.setDefaultView(
                 this.state.data["myWills"],
@@ -1106,6 +1142,7 @@ export default class MyShoppingCart extends Component {
             </section>
           </Grid>
         </Grid>
+
         <Dialog
           open={this.state.open}
           onClose={this.handleDialogClose}
@@ -1120,10 +1157,16 @@ export default class MyShoppingCart extends Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={this.handleDialogClose} color="primary">
+            <Button
+              onClick={this.handleDialogClose}
+              className="button fontWeightMedium plain bg-secondaryMain"
+            >
               Annuler
             </Button>
-            <Button onClick={this.handleDialogConfirm} color="primary">
+            <Button
+              onClick={this.handleDialogConfirm}
+              className="button fontWeightMedium plain bg-secondaryLight"
+            >
               Supprimer
             </Button>
           </DialogActions>
@@ -1134,18 +1177,18 @@ export default class MyShoppingCart extends Component {
           handleClose={this.handleAlertClose}
         />
 
-        <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
-          <Fab
-            id="btTop"
-            onClick={this.topFunction}
-            aria-label="Top"
-            className="bootstrapRoot"
-            size="medium"
-          >
-            <ArrowUpIcon />
-          </Fab>
-        </Tooltip>
-        <Footer />
+        <Box display="flex" justifyContent="flex-end">
+          <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
+            <Button
+              id="btTop"
+              onClick={this.topFunction}
+              aria-label="Remonter en haut de la page"
+              className="iconButton"
+            >
+              <i className="fas fa-level-up-alt"></i>
+            </Button>
+          </Tooltip>
+        </Box>
       </div>
     );
 

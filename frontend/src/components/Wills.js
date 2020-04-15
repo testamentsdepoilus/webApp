@@ -2,26 +2,13 @@ import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 import WillDisplay from "./WillDisplay";
-import {
-  Paper,
-  Select,
-  MenuItem,
-  Breadcrumbs,
-  Link,
-  Typography,
-  Grid,
-} from "@material-ui/core";
-import TrendingUpIcon from "@material-ui/icons/TrendingUpOutlined";
-import TrendingDownIcon from "@material-ui/icons/TrendingDownOutlined";
+import { Select, MenuItem, Breadcrumbs, Link, Box } from "@material-ui/core";
 import "../styles/Wills.css";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {
   getParamConfig,
   getHitsFromQuery,
   equalsArray,
 } from "../utils/functions";
-
-import Footer from "./Footer";
 
 class Wills extends Component {
   constructor(props) {
@@ -101,43 +88,33 @@ class Wills extends Component {
 
   render() {
     return (
-      <div className="wills">
+      <div className="notices wills">
         <ReactiveBase
           app={getParamConfig("es_index_wills")}
           url={getParamConfig("es_host")}
           type="_doc"
         >
-          <div className="menu">
-            <Paper elevation={0}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="Breadcrumb"
-              >
-                <Link
-                  id="home"
-                  key={0}
-                  color="inherit"
-                  component={RouterLink}
-                  to="/accueil"
-                >
-                  Accueil
-                </Link>
-                <Typography color="textPrimary">Les testaments</Typography>
-              </Breadcrumbs>
-            </Paper>
-          </div>
-
-          <div className="willSearch">
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
+          <Breadcrumbs
+            separator={<i className="fas fa-caret-right"></i>}
+            aria-label="Breadcrumb"
+            className="breadcrumbs"
+          >
+            <Link
+              id="home"
+              key={0}
+              color="inherit"
+              component={RouterLink}
+              to="/accueil"
             >
-              <Grid item>
-                <h2>Découvrir les testaments</h2>
-              </Grid>
-            </Grid>
+              Accueil
+            </Link>
+            <div>Les testaments</div>
+          </Breadcrumbs>
+
+          <div className="headingBar bg-gray">
+            <h2 className="card-title bg-primaryMain">
+              <i className="fab fa-stack-overflow"></i> Parcourir les testaments
+            </h2>
           </div>
           <div className="wills_result">
             <ReactiveList
@@ -154,7 +131,7 @@ class Wills extends Component {
               renderResultStats={this.handleRenderStats}
               URLParams={false}
               innerClass={{
-                resultsInfo: "resultsInfo",
+                resultsInfo: "countResults",
                 pagination: "pagination",
               }}
               render={function (res) {
@@ -190,51 +167,72 @@ class Wills extends Component {
                       console.log("error :", error);
                     });
                   const resultList = (
-                    <div className="resultList">
-                      {" "}
-                      <div className="sortResult">
-                        Trier par :
-                        <Select
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                        >
-                          <MenuItem value={1}>nom de famille (A-Z)</MenuItem>
-                          <MenuItem value={2}>nom de famille (Z-A)</MenuItem>
-                          <MenuItem value={3}>
-                            date de rédaction <TrendingUpIcon />
-                          </MenuItem>
-                          <MenuItem value={4}>
-                            date de rédaction <TrendingDownIcon />
-                          </MenuItem>
-                          <MenuItem value={5}>Cote (A-Z)</MenuItem>
-                          <MenuItem value={6}>Cote (Z-A)</MenuItem>
-                        </Select>
+                    <div className="leftColumn bg-gray">
+                      <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        width="100%"
+                      >
+                        <Box display="flex" className="sort_results">
+                          <Box>
+                            <label className="fontWeightBold">Trier par </label>
+                          </Box>
+                          <Select
+                            className="select"
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                          >
+                            <MenuItem className="sortBy" value={1}>
+                              nom de famille (A-Z)
+                            </MenuItem>
+                            <MenuItem className="sortBy" value={2}>
+                              nom de famille (Z-A)
+                            </MenuItem>
+                            <MenuItem className="sortBy" value={3}>
+                              date de rédaction{" "}
+                              <i className="fas fa-long-arrow-alt-up"></i>
+                            </MenuItem>
+                            <MenuItem className="sortBy" value={4}>
+                              date de rédaction{" "}
+                              <i className="fas fa-long-arrow-alt-down"></i>
+                            </MenuItem>
+                            <MenuItem className="sortBy" value={5}>
+                              Cote (A-Z)
+                            </MenuItem>
+                            <MenuItem className="sortBy" value={6}>
+                              Cote (Z-A)
+                            </MenuItem>
+                          </Select>
+                        </Box>
+                      </Box>
+
+                      <div className="resultList">
+                        <ul>
+                          {this.state.cur_list.map((item, i) =>
+                            Boolean(
+                              res.resultStats.currentPage === curPage_ + i
+                            ) ? (
+                              <li key={item["_id"]} className="active">
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source["testator.forename"] + " "}
+                                <span className="typoSurname">
+                                  {item._source["testator.surname"]}
+                                </span>
+                              </li>
+                            ) : (
+                              <li key={item["_id"]}>
+                                {curPage_ + i + 1}
+                                {". "}
+                                {item._source["testator.forename"] + " "}
+                                <span className="typoSurname">
+                                  {item._source["testator.surname"]}
+                                </span>
+                              </li>
+                            )
+                          )}
+                        </ul>
                       </div>
-                      <ul>
-                        {this.state.cur_list.map((item, i) =>
-                          Boolean(
-                            res.resultStats.currentPage === curPage_ + i
-                          ) ? (
-                            <li key={item["_id"]} className="li_active">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["testator.forename"] + " "}
-                              <span className="typoSurname">
-                                {item._source["testator.surname"]}
-                              </span>
-                            </li>
-                          ) : (
-                            <li key={item["_id"]} className="li">
-                              {curPage_ + i + 1}
-                              {". "}
-                              {item._source["testator.forename"] + " "}
-                              <span className="typoSurname">
-                                {item._source["testator.surname"]}
-                              </span>
-                            </li>
-                          )
-                        )}
-                      </ul>
                     </div>
                   );
                   return (
@@ -244,7 +242,6 @@ class Wills extends Component {
                         data={item}
                         resultList={resultList}
                       />
-                      <Footer />
                     </div>
                   );
                 });

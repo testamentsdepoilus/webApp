@@ -3,16 +3,12 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   Breadcrumbs,
   Link,
-  Typography,
   Tooltip,
-  IconButton,
-  Grid
+  Button,
+  Box,
 } from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import UnitDisplay from "./UnitDisplay";
-import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
-import Footer from "./Footer";
 
 class Unit extends Component {
   constructor(props) {
@@ -32,14 +28,11 @@ class Unit extends Component {
             id={this.state.data[0]["_id"]}
             data={this.state.data[0]._source}
           />
-          <Footer />
         </div>
       );
     } else {
       return (
-        <div>
-          <h3>Pas de résultat</h3>
-        </div>
+         <div className="text-error">Pas de résultat</div>
       );
     }
   }
@@ -81,53 +74,50 @@ class Unit extends Component {
 
     const unit_link =
       this.state.data.length > 0 ? (
-        <Typography color="textPrimary" key={2}>
+        <div key={2}>
           {this.state.data[0]._source["unit"]}
-        </Typography>
+        </div>
       ) : null;
 
     return (
-      <div>
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid item>
+
+
+    
+      <div className="unit">
+
+        <Box className="d-block d-md-flex"  justifyContent="space-between"> 
+          <Breadcrumbs
+                  separator={<i className="fas fa-caret-right"></i>}
+                  aria-label="Breadcrumb"
+                  className="breadcrumbs"
+                >
+                  <Link
+                    id="home"
+                    key={0}
+                    color="inherit"
+                    component={RouterLink}
+                    to="/accueil"
+                  >
+                    Accueil
+                  </Link>
+                  {unit_link}
+          </Breadcrumbs>
+          <div>
             {document.referrer.length > 0 &&
             document.referrer !== document.location.href ? (
-              <Tooltip title="Revenir en arrière">
-                <IconButton onClick={this.handleBackUp} aria-label="back up">
-                  <ArrowBackIcon />
-                </IconButton>
+              <Tooltip title="Revenir à la recherche">
+                <Button className="button outlined secondary-light" id="btnBack" onClick={this.handleBackUp} aria-label="page précédente">
+                 <i className="fas fa-undo-alt"></i> Revenir en arrière
+                </Button>
               </Tooltip>
             ) : null}
-          </Grid>
+          </div>
+       </Box>
 
-          <Grid item>
-            <div className="unit_menu">
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="Breadcrumb"
-              >
-                <Link
-                  id="search"
-                  color="inherit"
-                  key={0}
-                  component={RouterLink}
-                  to="/accueil"
-                >
-                  Accueil
-                </Link>
-                {unit_link}
-              </Breadcrumbs>
-            </div>
-          </Grid>
-        </Grid>
         <div>{this.renderFunc()}</div>
+
       </div>
+
     );
   }
 }

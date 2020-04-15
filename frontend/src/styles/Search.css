@@ -1,13 +1,78 @@
-.search .menu {
-  margin: 0 0 1em 1em;
-}
 
 .search .leftSidebar {
-  border-right: 0.5em solid #bdbcc0;
-  text-align: center;
-  max-width: 24em;
+ padding: 44px 24px 24px 24px;
+ background-color: #DADAD9;
 }
 
-.search .leftSidebar > div {
-  margin-top: 1em;
+.search .leftSidebar ul.places_list {
+	columns: 2;
+	margin-top: 6px;
+	margin-bottom: 10px;
+	padding: 0;
+}
+.search .leftSidebar ul.places_list li{
+	padding: 0;
+	margin:0;
+}
+.search .leftSidebar ul.places_list li div{
+  min-width: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  font-family: 'Fira Sans', sans-serif!important;
+ }
+.search .leftSidebar ul.places_list li p{
+  color:black;
+  padding: 0;
+  margin:0;
+
+}
+.search .leftSidebar ul.places_list li svg{
+ font-size: 1.1rem;
+}
+.search .leftSidebar ul.places_list li .MuiButtonBase-root{
+	padding-right: 5px;
+	padding-left: 1px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+    margin: 0;
+}
+.search .leftSidebar ul.places_list li p{
+	font-family: 'PT Sans'!important;
+	font-size: 0.85rem;
+}
+
+.search .leftSidebar .select div{
+	color:black!important;
+}
+
+.search .leftSidebar .dateFilter .e1hwwpu60{
+	border:none;
+}
+.search .leftSidebar .dateFilter label{
+	font-weight: 700;
+	color:black;
+}
+.search .leftSidebar label{
+  font-weight: 700;
+  font-size:0.9rem;
+  display: block;
+}
+.search .leftSidebar .fontWeightLight{
+  font-size:0.975rem;
+}
+
+.search .leftSidebar  .dateFilter{
+	margin-bottom: 30px;
+}
+.search .leftSidebar svg.cancel-icon{
+	fill:#2E5D81;
+}
+.search .map-container {
+	margin-top: 30px;
+	z-index: 1;
+}
+.search .select button,
+.search  input:not([type="checkbox"]){
+height: 32px!important;
+min-height: 32px!important;
 }

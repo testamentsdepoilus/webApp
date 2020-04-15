@@ -1,168 +1,201 @@
 import React, { Component } from "react";
 import { getParamConfig } from "../utils/functions";
-import { Grid } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 
 class Footer extends Component {
   render() {
     return (
-      <footer className="root_footer">
-        <div id="menu" className="menu_footer">
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            spacing={1}
-          >
-            <Grid item>
-              <a href={getParamConfig("web_url") + "/contact"} className="link">
-                Contact
-              </a>
-            </Grid>
-            <Grid item>
-              <a href={getParamConfig("web_url") + "/apropos"} className="link">
+      <footer>
+        <Grid className="footerContainer" container direction="row">
+          <Grid item xs={12} lg={3} className="footer_menu">
+            <Box
+              display="flex"
+              id="footer_menu"
+              alignItems="center"
+              justifyContent="center"
+              spacing={0}
+            >
+              <address>
+                <a href="mailto:testaments-de-poilus@mail.com">Contact</a>
+              </address>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <a href={getParamConfig("web_url") + "/mentionslegales"}>
                 Mentions légales
               </a>
-            </Grid>
-            <Grid item>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
               <a
                 href={
                   getParamConfig("web_url") + "/apropos/MbCig24BcBbXesm0SnLM"
                 }
-                className="link"
               >
                 Crédits
               </a>
-            </Grid>
+            </Box>
           </Grid>
-        </div>
-        <div id="logo">
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <a
-                href="https://www.culture.gouv.fr"
-                target="_blank"
-                title="Site du Ministère de la Culture"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={
-                    getParamConfig("web_url") +
-                    "/images/ministreCulture_logo.jpg"
-                  }
-                  alt="logo"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a
-                href="http://www.sciences-patrimoine.org/"
-                target="_blank"
-                title="Site de la Fondation des Sciences du Patrimoine"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getParamConfig("web_url") + "/images/FDP_logo.png"}
-                  alt="logo"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <img
-                src={getParamConfig("web_url") + "/images/centenaire_logo.jpg"}
-                alt="logo"
-              />
-            </Grid>
-            <Grid item>
-              <a
-                href="http://www.archives-nationales.culture.gouv.fr"
-                target="_blank"
-                title="Site des archives nationales"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={
-                    getParamConfig("web_url") +
-                    "/images/archives-nationales_logo.png"
-                  }
-                  alt="logo"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a
-                href="http://archives.valdoise.fr"
-                target="_blank"
-                title="Site des archives départementales du Val-d'Oise"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getParamConfig("web_url") + "/images/valdoise_logo.png"}
-                  alt="logo"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a
-                href="https://archives.yvelines.fr"
-                target="_blank"
-                title="Site des archives départementales des Yvelines"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getParamConfig("web_url") + "/images/ad78_logo.jpg"}
-                  alt="logo"
-                />
-              </a>
-            </Grid>
 
-            <Grid item>
-              <a
-                href="https://www.u-cergy.fr"
-                target="_blank"
-                title="Site de l'université de Cergy-Pontoise"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getParamConfig("web_url") + "/images/cergy_logo.png"}
-                  alt="logo"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a
-                href="http://www.chartes.psl.eu"
-                target="_blank"
-                title="Site de l'École nationale des chartes"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getParamConfig("web_url") + "/images/enc_logo.png"}
-                  alt="logo"
-                />
-              </a>
-            </Grid>
-            <Grid item>
-              <a
-                href="https://www.univ-paris8.fr"
-                target="_blank"
-                title="Site de l'université Paris 8"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={getParamConfig("web_url") + "/images/paris-8_logo.jpg"}
-                  alt="logo"
-                />
-              </a>
-            </Grid>
+          <Grid className="footerLogos" item xs={12} lg={9}>
+            <Box
+              mt={1}
+              display={{ xs: "block", sm: "flex" }}
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={0}
+            >
+              <Box alignItems="center" p={1}>
+                <a
+                  href="https://www.culture.gouv.fr/"
+                  title="Site du Ministère de la Culture"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="Logo du Ministère de la culture et de la communication"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/ministere-culture.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="http://www.sciences-patrimoine.org/"
+                  title="Site de la Fondation des Sciences du Patrimoine"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="Logo de la Fondation des Sciences du patrimoine"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/fondation-sciences-patrimoine.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="https://centenaire.org/fr"
+                  title="Site de la Mission du centenaire 14-18"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="Logo de la Mission du Centenaire 14-18"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/centenaire.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="http://www.archives-nationales.culture.gouv.fr/"
+                  title="Site des Archives nationales"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="Logo des Archives nationales"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/archives-nationales.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="http://archives.valdoise.fr/"
+                  title="Site des archives départementales du Val-d'Oise"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="logo du Val-d'Oise le département - Archives nationales"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/val-d-oise-archives-departementales.png"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="https://www.archives.yvelines.fr/"
+                  title="Site des archives départementales des Yvelines"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="logo des Archives départementales des Yvelines"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/yvelines-ad.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="https://www.u-cergy.fr/"
+                  title="Site del'Université de Cergy-Pontoise"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="logo de l'Université de Cergy-Pontoise"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/univ-cergy.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="http://www.chartes.psl.eu"
+                  title="Site de l'École nationale des chartes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="logo de l'École nationale des chartes"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/enc.jpg"
+                    }
+                  />
+                </a>
+              </Box>
+
+              <Box alignItems="center" p={1}>
+                <a
+                  href="https://www.univ-paris8.fr/"
+                  title="Site de l'université Paris 8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    alt="logo de l'Université Paris 8 | Vincennes - Saint-Denis"
+                    src={
+                      getParamConfig("web_url") +
+                      "/testaments-de-poilus/images/logos/univ-paris8.png"
+                    }
+                  />
+                </a>
+              </Box>
+            </Box>
           </Grid>
-        </div>
+        </Grid>
       </footer>
     );
   }

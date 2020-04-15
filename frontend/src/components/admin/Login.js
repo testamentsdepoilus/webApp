@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import {
   Container,
   TextField,
-  Typography,
   Button,
   Link,
   InputAdornment,
+  Box,
   IconButton
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -113,19 +113,19 @@ class Login extends Component {
   render() {
     return (
       <Container maxWidth="xs">
-        <div className="login">
+        <div className="login cms">
           {this.state.error !== "" ? (
-            <Typography className="errorText">
+            <div className="text-error">
               Erreur : {this.state.error}
-            </Typography>
+            </div>
           ) : (
             ""
           )}
-          <form className="form" noValidate onSubmit={this.onSubmit}>
+          <form id="loginForm" noValidate className="form" onSubmit={this.onSubmit}>
             <TextField
               id="email"
               variant="outlined"
-              className="textField"
+              className="input"
               required
               fullWidth
               label="Adresse email"
@@ -140,7 +140,7 @@ class Login extends Component {
             <TextField
               id="password"
               variant="outlined"
-              className="textField"
+              className="input"
               required
               fullWidth
               label="Mots de passe"
@@ -167,23 +167,19 @@ class Login extends Component {
                 )
               }}
             />
-            <Button
+            <Box pt={1} display="flex" justifyContent="flex-end">
+             <Button
               id="btLogin"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className="submit"
+              className="submit button fontWeightMedium plain bg-secondaryLight"
               type="submit"
-            >
+             >
               Se connecter
-            </Button>
-
-            <Link
-              id="resetMDP"
-              href={getParamConfig("web_url") + "/lostPassWord"}
-            >
-              Mot de passe oublié ?
-            </Link>
+             </Button>
+            </Box>
+            <Box pt={1} display="flex" justifyContent="flex-end">
+             <Link id="resetMDP"
+              href={getParamConfig("web_url") + "/lostPassWord"} className="text-secondaryLight">Mot de passe oublié ?</Link>
+            </Box>
           </form>
         </div>
       </Container>

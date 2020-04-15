@@ -3,9 +3,13 @@ import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { publish, updatePost } from "../../utils/functions";
+import { publish, updatePost, getParamConfig } from "../../utils/functions";
+import { Link as RouterLink } from "react-router-dom";
 import {
   TextField,
+  Breadcrumbs,
+  Link,
+  Box,
   Button,
   Typography,
   Grid,
@@ -219,21 +223,40 @@ export default class NewPost extends Component {
     }
 
     return (
-      <div className="newPost">
-        <Paper className="paper">
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
+      <div className="newPost cms">
+        <Breadcrumbs
+          separator={<i className="fas fa-caret-right"></i>}
+          aria-label="Breadcrumb"
+          className="breadcrumbs"
+        >
+          <Link
+            id="home"
+            key={0}
+            color="inherit"
+            href={getParamConfig("web_url") + "/accueil"}
           >
-            <Grid item>{this.props.backButton}</Grid>
-            <Grid item xs={6}>
-              <Typography className="header" id="postTitle">
-                Ajouter un nouveau post
-              </Typography>
-            </Grid>
-          </Grid>
+            Accueil
+          </Link>
+
+          <Link
+            id="espace"
+            key={1}
+            color="inherit"
+            component={RouterLink}
+            to="/espace"
+          >
+            Mon espace
+          </Link>
+          <div>Gestion de contenus</div>
+        </Breadcrumbs>
+
+        <div className="bg-white paddingContainer">
+          <Box display="flex" justifyContent="flex-end">
+            {this.props.backButton}
+          </Box>
+          <h1 className="heading">
+            <i class="fas fa-file-medical"></i> Ajouter un nouveau post
+          </h1>
 
           <form className="form" noValidate onSubmit={this.onSubmit}>
             <Grid
@@ -253,7 +276,7 @@ export default class NewPost extends Component {
                   autoFocus
                   value={this.state.author}
                   onChange={this.onChange}
-                  className="textField"
+                  className="input"
                 />
               </Grid>
               <Grid item>
@@ -303,7 +326,7 @@ export default class NewPost extends Component {
               )}
             </Grid>
             <div>
-              <Typography className="title">Résumé</Typography>
+              <h2>Résumé</h2>
               <Editor
                 id="editorStateResume"
                 editorStateResume={this.state.editorStateResume}
@@ -318,7 +341,7 @@ export default class NewPost extends Component {
               />
             </div>
             <div>
-              <Typography className="title">Contenu</Typography>
+              <h2>Contenu</h2>
               <Editor
                 id="editorStateDetail"
                 editorStateDetail={this.state.editorStateDetail}
@@ -337,13 +360,14 @@ export default class NewPost extends Component {
               direction="row"
               justify="space-evenly"
               alignItems="center"
+              className="submitButtons"
             >
               <Grid item>
                 <Button
                   id="btPublication"
                   variant="contained"
                   color="primary"
-                  className="submit"
+                  className="submit button fontWeightMedium plain bg-secondaryMain"
                   type="submit"
                 >
                   Publier
@@ -354,7 +378,7 @@ export default class NewPost extends Component {
                   id="btDisplay"
                   variant="contained"
                   color="primary"
-                  className="submit"
+                  className="submit button fontWeightMedium plain bg-secondaryLight"
                   onClick={this.handleDisplay}
                 >
                   Visualiser
@@ -362,7 +386,7 @@ export default class NewPost extends Component {
               </Grid>
             </Grid>
           </form>
-        </Paper>
+        </div>
 
         <this.props.alertMessage
           message={this.state.message}
