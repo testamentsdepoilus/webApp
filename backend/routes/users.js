@@ -32,20 +32,21 @@ client.search(
     index: indexES,
     body: {
       query: {
-        match_all: {}
-      }
-    }
+        match_all: {},
+      },
+    },
   },
   (err, result) => {
     if (err) {
       console.log("ES connexion au serveur a échoué !");
     } else {
       hits = result.body.hits.hits;
-      const admin = hits.filter(hit => {
+      const admin = hits.filter((hit) => {
         return (
           hit._source["isAdmin"] === true && Boolean(hit._source["auth_config"])
         );
       });
+
       if (admin.length > 0) {
         auth = admin[0]._source["auth_config"];
       }
@@ -54,7 +55,7 @@ client.search(
 );
 
 /* POST register user listing. */
-router.post("/register", function(req, res, next) {
+router.post("/register", function (req, res, next) {
   const today = new Date();
   const userData = {
     first_name: req.body.first_name,
@@ -70,8 +71,8 @@ router.post("/register", function(req, res, next) {
       myTestators: [],
       myPlaces: [],
       myUnits: [],
-      mySearches: []
-    }
+      mySearches: [],
+    },
   };
   client.search(
     {
@@ -81,11 +82,11 @@ router.post("/register", function(req, res, next) {
           match: {
             email: {
               query: userData.email,
-              operator: "and"
-            }
-          }
-        }
-      }
+              operator: "and",
+            },
+          },
+        },
+      },
     },
     (err, result) => {
       if (err) {
@@ -97,7 +98,7 @@ router.post("/register", function(req, res, next) {
             userData.password = hash;
             try {
               let emailToken = jwt.sign(userData, process.env.SECRET_KEY, {
-                expiresIn: "1d"
+                expiresIn: "1d",
               });
 
               if (typeof auth === "object" && Object.keys(auth).length > 0) {
@@ -107,19 +108,19 @@ router.post("/register", function(req, res, next) {
                     secureConnection: true, // TLS requires secureConnection to be false
                     port: 465, // port for secure SMTP
                     tls: {
-                      rejectUnauthorized: false
+                      rejectUnauthorized: false,
                     },
                     auth: Boolean(auth.email)
                       ? {
                           user: auth.email,
-                          pass: simpleCrypto.decrypt(auth.password)
+                          pass: simpleCrypto.decrypt(auth.password),
                         }
-                      : {}
+                      : {},
                   })
                 );
 
                 // verify connection configuration
-                transporter.verify(function(error, success) {
+                transporter.verify(function (error, success) {
                   if (error) {
                     res.send({ status: 400, err: error });
                   } else {
@@ -138,28 +139,28 @@ router.post("/register", function(req, res, next) {
                       from: auth.email,
                       to: userData.email,
                       subject: "Validation d'inscription",
-                      html: html
+                      html: html,
                     };
 
-                    transporter.sendMail(mailOptions, function(err, info) {
+                    transporter.sendMail(mailOptions, function (err, info) {
                       if (err) {
                         res.send({ status: 400, err: err.message });
                       } else {
                         client.index(
                           {
                             index: indexES,
-                            body: userData
+                            body: userData,
                           },
                           (err, result) => {
                             if (err) {
                               res.send({
                                 status: 400,
-                                err: "ES Connexion au serveur a échoué !"
+                                err: "ES Connexion au serveur a échoué !",
                               });
                             } else {
                               res.send({
                                 status: 200,
-                                res: userData.email + " registered"
+                                res: userData.email + " registered",
                               });
                             }
                           }
@@ -173,13 +174,13 @@ router.post("/register", function(req, res, next) {
               } else {
                 res.send({
                   status: 400,
-                  err: "Merci de configurer le serveur d'envoie d'e-mail !"
+                  err: "Merci de configurer le serveur d'envoie d'e-mail !",
                 });
               }
             } catch (e) {
               res.send({
                 status: 400,
-                err: "catch : " + e
+                err: "catch : " + e,
               });
             }
           });
@@ -189,7 +190,7 @@ router.post("/register", function(req, res, next) {
             err:
               "L'utilisateur avec l'adresse e-mail (" +
               userData.email +
-              ") est déjà enregistré !"
+              ") est déjà enregistré !",
           });
         }
       }
@@ -207,11 +208,11 @@ router.post("/login", (req, res) => {
           match: {
             email: {
               query: req.body.email,
-              operator: "and"
-            }
-          }
-        }
-      }
+              operator: "and",
+            },
+          },
+        },
+      },
     },
     (err, result) => {
       if (err) {
@@ -225,14 +226,14 @@ router.post("/login", (req, res) => {
           ) {
             if (hits[0]._source["confirmed"]) {
               let token = jwt.sign(hits[0]._source, process.env.SECRET_KEY, {
-                expiresIn: 1440
+                expiresIn: 1440,
               });
               res.json({ status: 200, res: token });
             } else {
               res.json({
                 status: 400,
                 error:
-                  "Vérifier votre boîte mail et confirmer votre inscription !"
+                  "Vérifier votre boîte mail et confirmer votre inscription !",
               });
             }
           } else {
@@ -258,11 +259,11 @@ router.get("/confirmation/:token", async (req, res) => {
             match: {
               email: {
                 query: user.email,
-                operator: "and"
-              }
-            }
-          }
-        }
+                operator: "and",
+              },
+            },
+          },
+        },
       },
       (err, result) => {
         if (err) {
@@ -276,11 +277,11 @@ router.get("/confirmation/:token", async (req, res) => {
               id: hits[0]._id,
               body: {
                 doc: {
-                  confirmed: true
-                }
-              }
+                  confirmed: true,
+                },
+              },
             }),
-              err => {
+              (err) => {
                 if (err) {
                   isFailed = true;
                 }
@@ -288,7 +289,7 @@ router.get("/confirmation/:token", async (req, res) => {
             if (isFailed) {
               res.send({
                 status: 400,
-                err: "ES Connexion au serveur a échoué !" + err
+                err: "ES Connexion au serveur a échoué !" + err,
               });
             } else {
               res.redirect("http://patrimeph.ensea.fr/testaments-de-poilus");
@@ -303,7 +304,7 @@ router.get("/confirmation/:token", async (req, res) => {
 });
 
 /* POST update  */
-router.post("/updateMyListWills", function(req, res, next) {
+router.post("/updateMyListWills", function (req, res, next) {
   let data = {};
   switch (Object.keys(req.body)[1]) {
     case "myWills":
@@ -336,11 +337,11 @@ router.post("/updateMyListWills", function(req, res, next) {
           match: {
             email: {
               query: req.body.email,
-              operator: "and"
-            }
-          }
-        }
-      }
+              operator: "and",
+            },
+          },
+        },
+      },
     },
     (err, result) => {
       if (err) {
@@ -354,10 +355,10 @@ router.post("/updateMyListWills", function(req, res, next) {
             index: indexES,
             id: hits[0]._id,
             body: {
-              doc: data
-            }
+              doc: data,
+            },
           }),
-            err => {
+            (err) => {
               if (err) {
                 isFailed = true;
               }
@@ -366,12 +367,12 @@ router.post("/updateMyListWills", function(req, res, next) {
           if (isFailed) {
             res.send({
               status: 400,
-              err: "Connexion au serveur a échoué !" + err
+              err: "Connexion au serveur a échoué !" + err,
             });
           } else {
             res.send({
               status: 200,
-              mess: "Ajouter à la liste !"
+              mess: "Ajouter à la liste !",
             });
           }
         }
@@ -380,7 +381,7 @@ router.post("/updateMyListWills", function(req, res, next) {
   );
 });
 
-router.post("/updateConfigMail", function(req, res, next) {
+router.post("/updateConfigMail", function (req, res, next) {
   const email_root = req.body.email_root;
   const email = req.body.email;
   const password = req.body.password;
@@ -390,16 +391,16 @@ router.post("/updateConfigMail", function(req, res, next) {
       index: indexES,
       body: {
         query: {
-          match_all: {}
-        }
-      }
+          match_all: {},
+        },
+      },
     },
     (err, result) => {
       if (err) {
         res.send({ status: 400, error: "Connexion au serveur a échoué !" });
       } else {
         hits = result.body.hits.hits;
-        const idx = hits.findIndex(hit => {
+        const idx = hits.findIndex((hit) => {
           return hit._source["email"] === email_root;
         });
 
@@ -411,21 +412,21 @@ router.post("/updateConfigMail", function(req, res, next) {
               secureConnection: true, // TLS requires secureConnection to be false
               port: 465, // port for secure SMTP
               tls: {
-                rejectUnauthorized: false
+                rejectUnauthorized: false,
               },
               auth: {
                 user: email, // generated ethereal user
-                pass: password // generated ethereal password
-              }
+                pass: password, // generated ethereal password
+              },
             })
           );
 
           // verify connection configuration
-          transporter.verify(function(error, success) {
+          transporter.verify(function (error, success) {
             if (error) {
               res.send({
                 status: 400,
-                err: "Erreur avec authentification serveur :" + error
+                err: "Erreur avec authentification serveur :" + error,
               });
             } else {
               client.update({
@@ -435,12 +436,12 @@ router.post("/updateConfigMail", function(req, res, next) {
                   doc: {
                     auth_config: {
                       email: email,
-                      password: simpleCrypto.encrypt(password)
-                    }
-                  }
-                }
+                      password: simpleCrypto.encrypt(password),
+                    },
+                  },
+                },
               }),
-                err => {
+                (err) => {
                   if (err) {
                     isFailed = true;
                   }
@@ -449,16 +450,16 @@ router.post("/updateConfigMail", function(req, res, next) {
               if (isFailed) {
                 res.send({
                   status: 400,
-                  err: "Connexion au serveur a échoué !" + err
+                  err: "Connexion au serveur a échoué !" + err,
                 });
               } else {
                 auth = {
                   email: email,
-                  password: simpleCrypto.encrypt(password)
+                  password: simpleCrypto.encrypt(password),
                 };
                 res.send({
                   status: 200,
-                  mess: "Votre configuration a été bien mis à jour !"
+                  mess: "Votre configuration a été bien mis à jour !",
                 });
               }
             }
@@ -470,7 +471,7 @@ router.post("/updateConfigMail", function(req, res, next) {
 });
 
 /* reset user password. */
-router.post("/resetPassWord", function(req, res, next) {
+router.post("/resetPassWord", function (req, res, next) {
   client.search(
     {
       index: indexES,
@@ -479,11 +480,11 @@ router.post("/resetPassWord", function(req, res, next) {
           match: {
             email: {
               query: req.body.email,
-              operator: "and"
-            }
-          }
-        }
-      }
+              operator: "and",
+            },
+          },
+        },
+      },
     },
     (err, result) => {
       if (err) {
@@ -494,7 +495,7 @@ router.post("/resetPassWord", function(req, res, next) {
         if (hits.length === 0) {
           res.send({
             status: 400,
-            err: "L'adresse e-mail " + req.body.email + " n'est pas valide !"
+            err: "L'adresse e-mail " + req.body.email + " n'est pas valide !",
           });
         } else {
           try {
@@ -502,7 +503,7 @@ router.post("/resetPassWord", function(req, res, next) {
               { email: req.body.email },
               process.env.SECRET_KEY,
               {
-                expiresIn: "2h"
+                expiresIn: "2h",
               }
             );
 
@@ -513,19 +514,19 @@ router.post("/resetPassWord", function(req, res, next) {
                   secureConnection: true, // TLS requires secureConnection to be false
                   port: 465, // port for secure SMTP
                   tls: {
-                    rejectUnauthorized: false
+                    rejectUnauthorized: false,
                   },
                   auth: Boolean(auth.email)
                     ? {
                         user: auth.email,
-                        pass: simpleCrypto.decrypt(auth.password)
+                        pass: simpleCrypto.decrypt(auth.password),
                       }
-                    : {}
+                    : {},
                 })
               );
 
               // verify connection configuration
-              transporter.verify(function(error, success) {
+              transporter.verify(function (error, success) {
                 if (error) {
                   res.send({ status: 400, err: error });
                 } else {
@@ -547,16 +548,16 @@ router.post("/resetPassWord", function(req, res, next) {
                     to: req.body.email,
                     subject:
                       "Votre demande de réinitialisation de mot de passe",
-                    html: html
+                    html: html,
                   };
-                  transporter.sendMail(mailOptions, function(err, info) {
+                  transporter.sendMail(mailOptions, function (err, info) {
                     if (err) {
                       res.send({ status: 400, err: err.message });
                     } else {
                       res.send({
                         status: 200,
                         res:
-                          "Votre demande de réinitialisation de mot a été envoyé à votre adresse e-mail."
+                          "Votre demande de réinitialisation de mot a été envoyé à votre adresse e-mail.",
                       });
                     }
                   });
@@ -567,13 +568,13 @@ router.post("/resetPassWord", function(req, res, next) {
             } else {
               res.send({
                 status: 400,
-                err: "Merci de configurer le serveur d'envoie d'e-mail !"
+                err: "Merci de configurer le serveur d'envoie d'e-mail !",
               });
             }
           } catch (e) {
             res.send({
               status: 400,
-              err: "catch : " + e
+              err: "catch : " + e,
             });
           }
         }
@@ -594,11 +595,11 @@ router.post("/updateMDP", async (req, res) => {
             match: {
               email: {
                 query: user.email,
-                operator: "and"
-              }
-            }
-          }
-        }
+                operator: "and",
+              },
+            },
+          },
+        },
       },
       (err, result) => {
         if (err) {
@@ -615,11 +616,11 @@ router.post("/updateMDP", async (req, res) => {
                 id: hits[0]._id,
                 body: {
                   doc: {
-                    password: new_password
-                  }
-                }
+                    password: new_password,
+                  },
+                },
               }),
-                err => {
+                (err) => {
                   if (err) {
                     isFailed = true;
                   }
@@ -627,12 +628,12 @@ router.post("/updateMDP", async (req, res) => {
               if (isFailed) {
                 res.send({
                   status: 400,
-                  err: "ES Connexion au serveur a échoué !" + err
+                  err: "ES Connexion au serveur a échoué !" + err,
                 });
               } else {
                 res.send({
                   status: 200,
-                  mess: "Votre mot de passe a été bien mis à jour !"
+                  mess: "Votre mot de passe a été bien mis à jour !",
                 });
               }
             });

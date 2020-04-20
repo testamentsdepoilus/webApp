@@ -20,6 +20,11 @@ import {
   generatePDF,
   generateZipPDF,
   generateTestatorHTML,
+  generatePlaceHTML,
+  generateUnitHTML,
+  generateWillHTML,
+  generateWillPDF,
+  generateWillZipPDF,
 } from "../../utils/functions";
 import {
   Button,
@@ -39,6 +44,7 @@ import {
   Link,
   Box,
   SvgIcon,
+  Menu,
 } from "@material-ui/core";
 
 // Up to top page click
@@ -266,10 +272,18 @@ export default class MyFavoritesCart extends Component {
       mess: "",
       type: null,
       isLoading: false,
+      anchorElMenu: null,
     };
+    this.curDate = new Date();
+    this.curDate = this.curDate.toLocaleDateString("en-GB").replace(/\/+/g, "");
     this.userToken = getUserToken();
+    this.handleExportWill = this.handleExportWill.bind(this);
+    this.handleExportWillClose = this.handleExportWillClose.bind(this);
+    this.handleExportWillTEI = this.handleExportWillTEI.bind(this);
+    this.handleExportWillPDF = this.handleExportWillPDF.bind(this);
     this.handleExportTestator = this.handleExportTestator.bind(this);
     this.handleExportPlace = this.handleExportPlace.bind(this);
+    this.handleExportUnit = this.handleExportUnit.bind(this);
     this.handleRemoveWill = this.handleRemoveWill.bind(this);
     this.handleDialogConfirm = this.handleDialogConfirm.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -439,10 +453,25 @@ export default class MyFavoritesCart extends Component {
       this.state.selected[title].join("+");
   };
 
-  handleExportWill() {
+  handleExportWill(event) {
+    this.setState({
+      anchorElMenu: event.currentTarget,
+    });
+  }
+
+  handleExportWillClose() {
+    this.setState({
+      anchorElMenu: null,
+    });
+  }
+
+  handleExportWillTEI() {
+    this.setState({
+      isLoading: true,
+    });
     const myBackups_ = JSON.parse(localStorage.myBackups);
     const myWills_ = myBackups_.myWills.filter((item) =>
-      this.state.selected[this.state.type].includes(item)
+      this.state.selected["myWills"].includes(item)
     );
 
     if (myWills_.length === 1) {
@@ -450,13 +479,78 @@ export default class MyFavoritesCart extends Component {
         getParamConfig("web_url") + "/files/will_" + myWills_[0] + ".xml",
         "will_" + myWills_[0] + ".xml"
       );
+      this.setState({
+        isLoading: false,
+      });
     } else if (myWills_.length > 1) {
       let urls = myWills_.map((item) => {
         const url = getParamConfig("web_url") + "/files/will_" + item + ".xml";
         return url;
       });
-      downloadZipFiles(urls, "testaments.zip");
+      downloadZipFiles(urls, "Projet_TdP_testaments_" + this.curDate + ".zip");
+      this.setState({
+        isLoading: false,
+      });
     }
+  }
+
+  handleExportWillPDF() {
+    this.setState({
+      isLoading: true,
+    });
+    const myBackups_ = JSON.parse(localStorage.myBackups);
+    const myWills_ = myBackups_.myWills.filter((item) =>
+      this.state.selected["myWills"].includes(item)
+    );
+    let output_filename = myWills_.map((id) => "Projet_TdP_testament_" + id);
+    generateWillHTML(myWills_)
+      .then((output) => {
+        if (output.length === 1) {
+          generateWillPDF(output[0]).then((res) => {
+            if (res.status === 200) {
+              downloadFile(
+                getParamConfig("web_url") +
+                  "/outputPDF/" +
+                  output_filename[0] +
+                  ".pdf",
+                output_filename[0] + ".pdf"
+              );
+              this.setState({
+                isLoading: false,
+              });
+            } else {
+              const err = res.err ? res.err : "Connexion au serveur a échoué !";
+              console.log(err);
+              this.setState({
+                isLoading: false,
+              });
+            }
+          });
+        } else if (output.length > 1) {
+          generateWillZipPDF(output, output_filename)
+            .then((res) => {
+              downloadZipFiles(
+                res,
+                "Projet_TdP_testaments_" + this.curDate + ".zip"
+              );
+              this.setState({
+                isLoading: false,
+              });
+            })
+            .catch((e) => {
+              this.setState({
+                isLoading: false,
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch((e) => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log("error :" + e);
+      });
   }
 
   handleExportTestator() {
@@ -465,15 +559,17 @@ export default class MyFavoritesCart extends Component {
     });
     const myBackups_ = JSON.parse(localStorage.myBackups);
     const myTestators_ = myBackups_.myTestators.filter((item) =>
-      this.state.selected[this.state.type].includes(item)
+      this.state.selected["myTestators"].includes(item)
     );
-    let output_filename = myTestators_.map((id) => "testateur_" + id);
+    let output_filename = myTestators_.map(
+      (id) => "Projet_TdP_testateur_" + id
+    );
     generateTestatorHTML(myTestators_)
       .then((outputHTML) => {
         if (outputHTML.length === 1) {
           const inputItem = {
             outputHtml: outputHTML[0],
-            filename: "Projet_TdP_" + output_filename[0],
+            filename: output_filename[0],
           };
           generatePDF(inputItem).then((res) => {
             if (res.status === 200) {
@@ -498,7 +594,10 @@ export default class MyFavoritesCart extends Component {
         } else if (outputHTML.length > 1) {
           generateZipPDF(outputHTML, output_filename)
             .then((res) => {
-              downloadZipFiles(res, "Projet_TdP_testateurs.zip");
+              downloadZipFiles(
+                res,
+                "Projet_TdP_testateurs_" + this.curDate + ".zip"
+              );
               this.setState({
                 isLoading: false,
               });
@@ -511,7 +610,12 @@ export default class MyFavoritesCart extends Component {
             });
         }
       })
-      .catch((e) => console.log("error :" + e));
+      .catch((e) => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log("error :" + e);
+      });
   }
 
   handleExportPlace() {
@@ -520,15 +624,16 @@ export default class MyFavoritesCart extends Component {
     });
     const myBackups_ = JSON.parse(localStorage.myBackups);
     const myPlaces_ = myBackups_.myPlaces.filter((item) =>
-      this.state.selected[this.state.type].includes(item)
+      this.state.selected["myPlaces"].includes(item)
     );
-    let output_filename = myPlaces_.map((id) => "lieu_" + id);
-    generateTestatorHTML(myPlaces_)
+    let output_filename = myPlaces_.map((id) => "Projet_TdP_lieu_" + id);
+    generatePlaceHTML(myPlaces_)
       .then((outputHTML) => {
+        console.log(outputHTML);
         if (outputHTML.length === 1) {
           const inputItem = {
             outputHtml: outputHTML[0],
-            filename: "Projet_TdP_" + output_filename[0],
+            filename: output_filename[0],
           };
           generatePDF(inputItem).then((res) => {
             if (res.status === 200) {
@@ -553,7 +658,10 @@ export default class MyFavoritesCart extends Component {
         } else if (outputHTML.length > 1) {
           generateZipPDF(outputHTML, output_filename)
             .then((res) => {
-              downloadZipFiles(res, "Projet_TdP_lieux.zip");
+              downloadZipFiles(
+                res,
+                "Projet_TdP_lieux_" + this.curDate + ".zip"
+              );
               this.setState({
                 isLoading: false,
               });
@@ -566,7 +674,79 @@ export default class MyFavoritesCart extends Component {
             });
         }
       })
-      .catch((e) => console.log("error :" + e));
+      .catch((e) => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log("error :" + e);
+      });
+  }
+
+  handleExportUnit() {
+    this.setState({
+      isLoading: true,
+    });
+    const myBackups_ = JSON.parse(localStorage.myBackups);
+
+    const myUnits_ = myBackups_.myUnits.filter((item) =>
+      this.state.selected["myUnits"].includes(item)
+    );
+    let output_filename = myUnits_.map(
+      (id) => "Projet_TdP_unite_militaire_" + id
+    );
+    generateUnitHTML(myUnits_)
+      .then((outputHTML) => {
+        console.log(outputHTML);
+        if (outputHTML.length === 1) {
+          const inputItem = {
+            outputHtml: outputHTML[0],
+            filename: output_filename[0],
+          };
+          generatePDF(inputItem).then((res) => {
+            if (res.status === 200) {
+              downloadFile(
+                getParamConfig("web_url") +
+                  "/outputPDF/" +
+                  output_filename[0] +
+                  ".pdf",
+                output_filename[0] + ".pdf"
+              );
+              this.setState({
+                isLoading: false,
+              });
+            } else {
+              const err = res.err ? res.err : "Connexion au serveur a échoué !";
+              console.log(err);
+              this.setState({
+                isLoading: false,
+              });
+            }
+          });
+        } else if (outputHTML.length > 1) {
+          generateZipPDF(outputHTML, output_filename)
+            .then((res) => {
+              downloadZipFiles(
+                res,
+                "Projet_TdP_unites_militaires_" + this.curDate + ".zip"
+              );
+              this.setState({
+                isLoading: false,
+              });
+            })
+            .catch((e) => {
+              this.setState({
+                isLoading: false,
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch((e) => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log("error :" + e);
+      });
   }
 
   setDefaultView(data, title, actionButton) {
@@ -579,7 +759,7 @@ export default class MyFavoritesCart extends Component {
       myUnits: "la notice de l'unité militaire",
       mySearches: "la recherche",
     };
-    console.log("this.state.selected :", this.state.selected);
+
     return (
       <TableContainer className="tableContainer">
         <EnhancedTableToolbar
@@ -693,6 +873,7 @@ export default class MyFavoritesCart extends Component {
       ? JSON.parse(localStorage.myBackups)
       : {};
     if (Boolean(myBackups_.myWills)) {
+      localStorage.setItem("willsIds", JSON.stringify(myBackups_.myWills));
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
         JSON.stringify({
@@ -829,7 +1010,10 @@ export default class MyFavoritesCart extends Component {
       case "myWills":
         output = (
           <Grid item>
-            <Tooltip title="Exporter les testaments sélectionnés">
+            <Tooltip
+              placement="top"
+              title="Exporter les testaments sélectionnés"
+            >
               <span>
                 <Button
                   className="button iconButton plain primaryMain"
@@ -844,8 +1028,44 @@ export default class MyFavoritesCart extends Component {
                 >
                   <i className="fas fa-sm fa-download"></i>
                 </Button>
+                <Menu
+                  className="exportBtn"
+                  anchorEl={this.state.anchorElMenu}
+                  keepMounted
+                  open={Boolean(this.state.anchorElMenu)}
+                  onClose={this.handleExportWillClose}
+                  elevation={0}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                >
+                  <MenuItem className="d-block">
+                    <Button id="bt-tei" onClick={this.handleExportWillTEI}>
+                      <i className="fas fa-code"></i> TEI
+                    </Button>
+                  </MenuItem>
+                  <MenuItem className="d-block">
+                    <Button id="bt-pdf" onClick={this.handleExportWillPDF}>
+                      <i className="far fa-file-pdf"></i> PDF
+                    </Button>
+                  </MenuItem>
+                </Menu>
               </span>
             </Tooltip>
+            <Dialog
+              id="dialog_download"
+              aria-labelledby="simple-dialog-title"
+              open={this.state.isLoading}
+              maxWidth="md"
+            >
+              <CircularProgress />
+            </Dialog>
           </Grid>
         );
         break;
@@ -915,7 +1135,6 @@ export default class MyFavoritesCart extends Component {
                 </Button>
               </span>
             </Tooltip>
-            {Boolean(this.state.isLoading) ? <CircularProgress /> : ""}
           </Grid>
         );
         break;
@@ -1094,7 +1313,7 @@ export default class MyFavoritesCart extends Component {
           <div>Mes favoris</div>
         </Breadcrumbs>
 
-        <div id="testator_none" style={{ display: "none" }}></div>
+        <div id="notice_none" style={{ display: "none" }}></div>
 
         <h1 className="heading">
           <i className="fas fa-briefcase"></i> Mes favoris

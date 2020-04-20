@@ -11,6 +11,7 @@ import React from "react";
 import TestatorDisplay from "../components/TestatorDisplay";
 import ReactDOM from "react-dom";
 import PlaceDisplay from "../components/PlaceDisplay";
+import UnitDisplay from "../components/UnitDisplay";
 
 // Global declaration for jsPDF (needed before call html())
 window.html2canvas = html2canvas;
@@ -91,8 +92,8 @@ export function queryBuilderFunc(queryString) {
   return {
     simple_query_string: {
       query: queryString,
-      default_operator: "or"
-    }
+      default_operator: "or",
+    },
   };
 }
 
@@ -114,7 +115,7 @@ export function getHttpRequest(url, type = "POST", body = "", async = false) {
 
 function removeDups(names) {
   let unique = {};
-  names.forEach(function(i) {
+  names.forEach(function (i) {
     if (!unique[i]) {
       unique[i] = true;
     }
@@ -143,7 +144,7 @@ export function getTotalHits(host) {
 // Get total hits from host
 export function getHits(host, size = null) {
   return new Promise((resolve, reject) => {
-    getTotalHits(host).then(res => {
+    getTotalHits(host).then((res) => {
       const totalHits = size ? size : res;
       const total = typeof totalHits === "object" ? totalHits.value : totalHits;
 
@@ -193,15 +194,15 @@ export function getChilds(host, id) {
               parent_type: "question",
               query: {
                 term: {
-                  _id: id
-                }
-              }
-            }
+                  _id: id,
+                },
+              },
+            },
           },
-          { term: { texta: "answer" } }
-        ]
-      }
-    }
+          { term: { texta: "answer" } },
+        ],
+      },
+    },
   };
   var url = host + "/_search";
   //var query = host+"/_search?pretty ";
@@ -218,11 +219,11 @@ export function getSuggestions(host, field) {
     getHttpRequest(
       host + "/_search?filter_path=" + field + "&size=" + totalHits
     )
-  ).hits.hits.map(item => item._source.entities_hashtags_text);
+  ).hits.hits.map((item) => item._source.entities_hashtags_text);
   let array = [];
-  hashtags.forEach(function(i) {
+  hashtags.forEach(function (i) {
     if (i.length > 0) {
-      i.forEach(function(j) {
+      i.forEach(function (j) {
         array.push(j);
       });
     }
@@ -274,7 +275,7 @@ export function createStyled(styles, options) {
   }
   Styled.propTypes = {
     children: PropTypes.func.isRequired,
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
   };
   return withStyles(styles, options)(Styled);
 }
@@ -337,13 +338,13 @@ export function htmlSubstring(s, n) {
 }
 
 // Register post function
-export const register = async newUser => {
+export const register = async (newUser) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/users/register", {
       email: newUser.email,
       user_name: newUser.user_name,
-      password: newUser.password
+      password: newUser.password,
     });
     return res.data;
   } catch (err) {
@@ -352,12 +353,12 @@ export const register = async newUser => {
 };
 
 // login post function
-export const login = async user => {
+export const login = async (user) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/users/login", {
       email: user.email,
-      password: user.password
+      password: user.password,
     });
 
     return res.data;
@@ -367,7 +368,7 @@ export const login = async user => {
 };
 
 // publish post function
-export const publish = async item => {
+export const publish = async (item) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/cms/publish", item);
@@ -378,11 +379,11 @@ export const publish = async item => {
 };
 
 // remove post function
-export const removePost = async item => {
+export const removePost = async (item) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/cms/removePost", {
-      ids: item
+      ids: item,
     });
     return res.data;
   } catch (err) {
@@ -391,7 +392,7 @@ export const removePost = async item => {
 };
 
 // update post function
-export const updatePost = async item => {
+export const updatePost = async (item) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/cms/updatePost", item);
@@ -402,7 +403,7 @@ export const updatePost = async item => {
 };
 
 // update post function
-export const updateMyListWills = async item => {
+export const updateMyListWills = async (item) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/users/updateMyListWills", item);
@@ -412,13 +413,13 @@ export const updateMyListWills = async item => {
   }
 };
 
-export const updateConfigMail = async item => {
+export const updateConfigMail = async (item) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/users/updateConfigMail", {
       email_root: item.email_root,
       email: item.email,
-      password: item.password
+      password: item.password,
     });
     return res.data;
   } catch (err) {
@@ -426,8 +427,9 @@ export const updateConfigMail = async item => {
   }
 };
 
-export const generateWillPDF = async item => {
+export const generateWillPDF = async (item) => {
   try {
+    console.log("item :", item);
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/utils/generateWillPDF", item);
     return res.data;
@@ -436,7 +438,7 @@ export const generateWillPDF = async item => {
   }
 };
 
-export const generatePDF = async item => {
+export const generatePDF = async (item) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/utils/generatePDF", item);
@@ -528,8 +530,8 @@ export function selectText(node) {
 
 // convert content of url to data for JSZip
 function urlToPromise(url) {
-  return new Promise(function(resolve, reject) {
-    JSZipUtils.getBinaryContent(url, function(err, data) {
+  return new Promise(function (resolve, reject) {
+    JSZipUtils.getBinaryContent(url, function (err, data) {
       if (err) {
         reject(err);
       } else {
@@ -543,12 +545,12 @@ function urlToPromise(url) {
 // Create & download zip
 export function downloadZipFiles(urls, fileName) {
   let zip = new JSZip();
-  urls.forEach(url => {
+  urls.forEach((url) => {
     const file_name = url.slice(url.lastIndexOf("/") + 1);
     zip.file(file_name, urlToPromise(url));
   });
 
-  zip.generateAsync({ type: "blob" }).then(function(content) {
+  zip.generateAsync({ type: "blob" }).then(function (content) {
     FileSaver.saveAs(content, fileName);
   });
 }
@@ -556,7 +558,7 @@ export function downloadZipFiles(urls, fileName) {
 export function generateTestatorHTML(ids) {
   return new Promise(async (resolve, reject) => {
     try {
-      let output_html = ids.map(id => "");
+      let output_html = new Array(ids.length);
       await asyncForEach(ids, async (id, i) => {
         await getHitsFromQuery(
           getParamConfig("es_host") +
@@ -565,47 +567,22 @@ export function generateTestatorHTML(ids) {
           JSON.stringify({
             query: {
               term: {
-                _id: id
-              }
-            }
+                _id: id,
+              },
+            },
           })
         )
-          .then(async data => {
-            await getHitsFromQuery(
-              getParamConfig("es_host") +
-                "/" +
-                getParamConfig("es_index_wills"),
-              JSON.stringify({
-                _source: [
-                  "_id",
-                  "will_contents.will_date_range",
-                  "testator.ref"
-                ],
-                query: {
-                  term: {
-                    "testator.ref": data[0]._id
-                  }
-                }
-              })
-            )
-              .then(hits => {
-                ReactDOM.render(
-                  <TestatorDisplay
-                    id={data[0]["_id"]}
-                    data={data[0]._source}
-                  />,
-                  document.getElementById("testator_none")
-                );
+          .then((data) => {
+            ReactDOM.render(
+              <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
+              document.getElementById("notice_none")
+            );
 
-                output_html[i] = document.getElementById(
-                  "testator_notice"
-                ).innerHTML;
-              })
-              .catch(err => {
-                console.log("Erreur :", err);
-              });
+            output_html[i] = document.getElementById(
+              "testator_notice"
+            ).innerHTML;
           })
-          .catch(error => {
+          .catch((error) => {
             console.log("error :", error);
           });
       });
@@ -620,52 +597,128 @@ export function generateTestatorHTML(ids) {
 export function generatePlaceHTML(ids) {
   return new Promise(async (resolve, reject) => {
     try {
-      let output_html = ids.map(id => "");
+      let output_html = new Array(ids.length);
       await asyncForEach(ids, async (id, i) => {
         await getHitsFromQuery(
           getParamConfig("es_host") + "/" + getParamConfig("es_index_places"),
           JSON.stringify({
             query: {
               term: {
-                _id: id
-              }
-            }
+                _id: id,
+              },
+            },
           })
         )
-          .then(async data => {
-            await getHitsFromQuery(
-              getParamConfig("es_host") +
-                "/" +
-                getParamConfig("es_index_wills"),
-              JSON.stringify({
-                _source: ["_id", "will_contents.will_date_range", "place.ref"],
-                query: {
-                  term: {
-                    "place.ref": data[0]._id
-                  }
-                }
-              })
-            )
-              .then(hits => {
-                ReactDOM.render(
-                  <PlaceDisplay id={data[0]["_id"]} data={data[0]._source} />,
-                  document.getElementById("testator_none")
-                );
+          .then((data) => {
+            ReactDOM.render(
+              <PlaceDisplay id={data[0]["_id"]} data={data[0]._source} />,
+              document.getElementById("notice_none")
+            );
 
-                output_html[i] = document.getElementById(
-                  "testator_notice"
-                ).innerHTML;
-              })
-              .catch(err => {
-                console.log("Erreur :", err);
-              });
+            let map_div = document.getElementById("map-container");
+            map_div.style.display = "none";
+
+            output_html[i] = document.getElementById("lieu_notice").innerHTML;
           })
-          .catch(error => {
+          .catch((error) => {
             console.log("error :", error);
           });
       });
 
       resolve(output_html);
+    } catch (e) {
+      reject("error :" + e);
+    }
+  });
+}
+
+export function generateUnitHTML(ids) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let output_html = new Array(ids.length);
+      await asyncForEach(ids, async (id, i) => {
+        await getHitsFromQuery(
+          getParamConfig("es_host") + "/" + getParamConfig("es_index_units"),
+          JSON.stringify({
+            query: {
+              term: {
+                _id: id,
+              },
+            },
+          })
+        )
+          .then((data) => {
+            ReactDOM.render(
+              <UnitDisplay id={data[0]["_id"]} data={data[0]._source} />,
+              document.getElementById("notice_none")
+            );
+
+            output_html[i] = document.getElementById("unit_notice").innerHTML;
+          })
+          .catch((error) => {
+            console.log("error :", error);
+          });
+      });
+      resolve(output_html);
+    } catch (e) {
+      reject("error :" + e);
+    }
+  });
+}
+
+export function generateWillHTML(ids) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let output = new Array(ids.length);
+      await asyncForEach(ids, async (id, i) => {
+        await getHitsFromQuery(
+          getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+          JSON.stringify({
+            query: {
+              term: {
+                _id: id,
+              },
+            },
+          })
+        )
+          .then(async (data) => {
+            await getHitsFromQuery(
+              getParamConfig("es_host") +
+                "/" +
+                getParamConfig("es_index_testators"),
+              JSON.stringify({
+                query: {
+                  term: {
+                    _id: data[0]._source["testator.ref"],
+                  },
+                },
+              })
+            )
+              .then((hit_testator) => {
+                ReactDOM.render(
+                  <TestatorDisplay
+                    id={hit_testator[0]["_id"]}
+                    data={hit_testator[0]._source}
+                  />,
+                  document.getElementById("notice_none")
+                );
+                output[i] = {
+                  data: data[0]._source,
+                  testator_data: document.getElementById("notice_none")
+                    .innerHTML,
+                };
+              })
+              .catch((error) => {
+                console.log("error :", error);
+                reject("error :" + error);
+              });
+          })
+          .catch((error) => {
+            console.log("error :", error);
+            reject("error :" + error);
+          });
+      });
+      resolve(output);
     } catch (e) {
       reject("error :" + e);
     }
@@ -679,9 +732,9 @@ export function generateZipPDF(outputsHtml, pdfFilesname) {
       await asyncForEach(outputsHtml, async (outputHtml, i) => {
         const inputItem = {
           outputHtml: outputHtml,
-          filename: pdfFilesname[i]
+          filename: pdfFilesname[i],
         };
-        await generatePDF(inputItem).then(res => {
+        await generatePDF(inputItem).then((res) => {
           if (res.status === 200) {
             urls.push(
               getParamConfig("web_host") +
@@ -693,43 +746,33 @@ export function generateZipPDF(outputsHtml, pdfFilesname) {
             reject(res);
           }
         });
-
-        /*const opt = {
-          pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-          margin: 1,
-          filename: pdfFilesname[i] + ".pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-        };
-        const output_pdf = html2pdf()
-          .set(opt)
-          .from(outputHtml)
-          .toPdf()
-          .get("pdf")
-          .then(function(pdf) {
-            const totalPages = pdf.internal.getNumberOfPages();
-            const footer_ = footerPDF();
-            for (let i = 1; i <= totalPages; i++) {
-              pdf.setPage(i);
-              pdf.setFontSize(10);
-              pdf.setTextColor(150);
-              pdf.text(footer_, 0.5, pdf.internal.pageSize.getHeight() - 0.6);
-              pdf.text(
-                String(i) + "/" + String(totalPages),
-                pdf.internal.pageSize.getWidth() - 1,
-                pdf.internal.pageSize.getHeight() - 0.6
-              );
-            }
-          })
-          .output();
-
-        zip.file(pdfFilesname[i] + ".pdf", output_pdf);*/
       });
-      /* zip.generateAsync({ type: "blob" }).then(function(content) {
-        FileSaver.saveAs(content, filename);
-      });*/
 
+      resolve(urls);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+export function generateWillZipPDF(outputs, pdfFilesname) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let urls = [];
+      await asyncForEach(outputs, async (output, i) => {
+        await generateWillPDF(output).then((res) => {
+          if (res.status === 200) {
+            urls.push(
+              getParamConfig("web_host") +
+                "/outputPDF/" +
+                pdfFilesname[i] +
+                ".pdf"
+            );
+          } else {
+            reject(res);
+          }
+        });
+      });
       resolve(urls);
     } catch (e) {
       reject(e);
@@ -746,7 +789,7 @@ export function toDataUrl(src, callback = null, outputFormat = "image/jpg") {
     img.setAttribute("crossOrigin", "anonymous");
     img.setAttribute("Access-Control-Allow-Origin", "*");
 
-    img.onload = function() {
+    img.onload = function () {
       // Create an html canvas element
       var canvas = document.createElement("canvas");
       // Create a 2d context
@@ -820,11 +863,11 @@ export function imageLoader(url) {
   });
 }
 
-export const resetPassWord = async user => {
+export const resetPassWord = async (user) => {
   try {
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/users/resetPassWord", {
-      email: user.email
+      email: user.email,
     });
     console.log("res :", res);
     return res.data;
@@ -834,7 +877,7 @@ export const resetPassWord = async user => {
   }
 };
 
-export const updateMDP = async user => {
+export const updateMDP = async (user) => {
   try {
     const host = getParamConfig("web_host");
 

@@ -188,20 +188,21 @@ export default class ResultWills extends React.Component {
 
   componentDidUpdate() {
     const search_uri = document.location.href;
+    const willsIds = this.state.curData.map((item) => item._id);
 
     if (localStorage.uriSearch !== search_uri) {
       if (search_uri.split("?")[1]) {
         localStorage.setItem("uriSearch", search_uri);
       } else {
         localStorage.removeItem("uriSearch");
-        localStorage.removeItem("willsSearch");
+        localStorage.removeItem("willsIds");
       }
     }
     if (
       search_uri.split("?")[1] &&
-      JSON.stringify(localStorage.willsSearch) !== this.state.curData
+      JSON.stringify(localStorage.willsIds) !== willsIds
     ) {
-      localStorage.setItem("willsSearch", JSON.stringify(this.state.curData));
+      localStorage.setItem("willsIds", JSON.stringify(willsIds));
     }
     if (this.state.chipData !== undefined) {
       let chip = (

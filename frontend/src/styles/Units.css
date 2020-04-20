@@ -27,21 +27,10 @@
 
 .units .pagination {
   position: relative;
-  bottom: 5em;
+  bottom: 6em;
 }
 
 .units .sortResult {
   margin: 0 0 2em 5em;
   font-weight: 600;
-}
-
-.units .unitSearch {
-  margin: 2em 0 2em 0;
-}
-
-.units .selectList {
-  width: 15em;
-  float: right;
-  position: relative;
-  bottom: 2em;
 }

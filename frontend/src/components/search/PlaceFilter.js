@@ -160,20 +160,6 @@ class PlaceFilter extends React.Component {
               <ListItem className="checkbox">
                 <ListItemIcon>
                   <Checkbox
-                    checked={this.state.death_place}
-                    onChange={this.handChange("death_place")}
-                    value="death_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox",
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de décès" />
-              </ListItem>
-
-              <ListItem className="checkbox">
-                <ListItemIcon>
-                  <Checkbox
                     checked={this.state.residence_place}
                     onChange={this.handChange("residence_place")}
                     value="residence_place"

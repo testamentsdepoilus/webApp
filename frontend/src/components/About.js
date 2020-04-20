@@ -110,7 +110,7 @@ class About extends Component {
       >
         A propos
       </Link>,
-      <div>{curItem ? curItem._source["title"] : null}</div>,
+      <div key={2}>{curItem ? curItem._source["title"] : null}</div>,
     ];
 
     const navBar = (
@@ -124,7 +124,7 @@ class About extends Component {
           key={0}
           color="inherit"
           component={RouterLink}
-          href={getParamConfig("web_url") + "/accueil"}
+          to="/accueil"
         >
           Accueil
         </Link>
@@ -139,7 +139,7 @@ class About extends Component {
         </h2>
         <MenuList>
           {this.state.data.map((item, i) => (
-            <MenuItem key={i}>
+            <MenuItem key={i + 10}>
               <Link
                 id={item["_id"]}
                 className={

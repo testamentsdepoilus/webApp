@@ -158,7 +158,7 @@ class Testators extends Component {
                     {label.split("+")[1][0].toUpperCase() +
                       label.split("+")[1].slice(1) +
                       " "}
-                    <span className="typoSurname">{label.split("+")[0]}</span>
+                    <span className="smallcaps">{label.split("+")[0]}</span>
                   </div>
                 )}
                 innerClass={{

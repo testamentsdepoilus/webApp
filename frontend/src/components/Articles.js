@@ -131,7 +131,10 @@ class Articles extends Component {
         L'État de la recherche
       </Link>
     ) : (
-      [<div>L'état de la recherche</div>, <div>{curItem._source["title"]}</div>]
+      [
+        <div key={1}>L'état de la recherche</div>,
+        <div key={2}>{curItem._source["title"]}</div>,
+      ]
     );
     const navLink = (
       <Breadcrumbs
@@ -144,7 +147,7 @@ class Articles extends Component {
           key={0}
           color="inherit"
           component={RouterLink}
-          href={getParamConfig("web_url") + "/accueil"}
+          to="/accueil"
         >
           Accueil
         </Link>
@@ -186,36 +189,34 @@ class Articles extends Component {
           <Grid item xs={3}>
             {menuArticles}
           </Grid>
-          <Grid item xs={9}>
-            <div className="typography">
-              <div className="bg-white" key={0}>
-                <h1>{curItem._source["title"]} </h1>
-                <Box
-                  className="bg-gray"
-                  display="flex"
-                  justifyContent="space-between"
-                >
-                  <div className="authors fontWeightMedium text-secondaryMain">
-                    {curItem._source["author"]}
-                  </div>
-                  <div className="date fontWeightMedium">
-                    {Boolean(date)
-                      ? "Mise à jour le " +
-                        date.toLocaleDateString() +
-                        " à " +
-                        date.toLocaleTimeString()
-                      : ""}
-                  </div>
-                </Box>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      curItem._source["detail"] !== ""
-                        ? curItem._source["detail"]
-                        : curItem._source["summary"],
-                  }}
-                ></div>
-              </div>
+          <Grid item xs={9} className="typography">
+            <div className="bg-white" key={0}>
+              <h1>{curItem._source["title"]} </h1>
+              <Box
+                className="bg-gray"
+                display="flex"
+                justifyContent="space-between"
+              >
+                <div className="authors fontWeightMedium text-secondaryMain">
+                  {curItem._source["author"]}
+                </div>
+                <div className="date fontWeightMedium">
+                  {Boolean(date)
+                    ? "Mise à jour le " +
+                      date.toLocaleDateString() +
+                      " à " +
+                      date.toLocaleTimeString()
+                    : ""}
+                </div>
+              </Box>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html:
+                    curItem._source["detail"] !== ""
+                      ? curItem._source["detail"]
+                      : curItem._source["summary"],
+                }}
+              ></div>
             </div>
           </Grid>
         </Grid>

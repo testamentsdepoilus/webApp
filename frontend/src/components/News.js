@@ -134,18 +134,10 @@ class News extends Component {
         Actualités
       </div>
     ) : (
-      <div>
-        <Link
-          id="news"
-          key={1}
-          color="inherit"
-          component={RouterLink}
-          to="/news"
-        >
-          Actualités
-        </Link>
-        <div>{curItem._source["title"]}</div>
-      </div>
+      [
+        <div key={2}>Actualités</div>,
+        <div key={3}>{curItem._source["title"]}</div>,
+      ]
     );
     const navBar = (
       <Breadcrumbs
@@ -158,7 +150,7 @@ class News extends Component {
           key={0}
           color="inherit"
           component={RouterLink}
-          href={getParamConfig("web_url") + "/accueil"}
+          to="accueil"
         >
           Accueil
         </Link>

@@ -145,8 +145,15 @@ export default class CustumerDataSearch extends Component {
               showSearch={true}
               searchPlaceholder="Saisir un nom de testateur"
               onChange={this.handleTestatorChange}
+              renderItem={(label, count, isSelected) => (
+                <div>
+                  {label.split("+")[1] + " "}
+                  <span className="smallcaps">{label.split("+")[0]}</span>
+                </div>
+              )}
               innerClass={{
                 list: "list",
+                select: "select",
               }}
             />
           </Grid>
@@ -226,6 +233,7 @@ export default class CustumerDataSearch extends Component {
               }}
               innerClass={{
                 list: "list",
+                select: "select",
               }}
             />
           </Grid>
@@ -274,6 +282,7 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleUnitChange}
               innerClass={{
                 list: "list",
+                select: "select",
               }}
             />
           </Grid>
@@ -366,6 +375,7 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleCoteChange}
               innerClass={{
                 list: "list",
+                select: "select",
               }}
             />
           </Grid>
@@ -415,6 +425,7 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleNotorialeChange}
               innerClass={{
                 list: "list",
+                select: "select",
               }}
             />
           </Grid>

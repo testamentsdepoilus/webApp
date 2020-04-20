@@ -9,7 +9,7 @@ import {
   Link,
   Dialog,
   DialogTitle,
-  DialogContent
+  DialogContent,
 } from "@material-ui/core";
 import { getParamConfig, updateMDP } from "../../utils/functions";
 
@@ -25,7 +25,7 @@ class ResetMDP extends Component {
       passConfirme: "",
       showPassword: false,
       isError: false,
-      open: false
+      open: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -36,13 +36,13 @@ class ResetMDP extends Component {
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
-      error: ""
+      error: "",
     });
   }
 
-  handleClickShowPassword = e => {
+  handleClickShowPassword = (e) => {
     this.setState({
-      showPassword: !this.state.showPassword
+      showPassword: !this.state.showPassword,
     });
   };
 
@@ -55,29 +55,29 @@ class ResetMDP extends Component {
     if (!this.state.password) {
       this.setState({
         error: "Saisissez votre mot de passe !",
-        isError: true
+        isError: true,
       });
     } else if (this.state.password !== this.state.passConfirme) {
       this.setState({
         error:
           "Les mots de passe saisies ne sont pas identiques, veuillez saisir le même mot de passe.",
-        isError: true
+        isError: true,
       });
     } else {
       const user = {
         email: this.state.email_encode,
-        password: this.state.password
+        password: this.state.password,
       };
 
-      updateMDP(user).then(res => {
+      updateMDP(user).then((res) => {
         if (res.status === 200) {
           this.setState({
-            open: true
+            open: true,
           });
         } else {
           const err = res.error ? res.error : "Connexion au serveur a échoué !";
           this.setState({
-            error: err
+            error: err,
           });
         }
       });
@@ -96,13 +96,15 @@ class ResetMDP extends Component {
 
         this.setState({
           email_encode: email_encode,
-          email: email_decode.email
+          email: email_decode.email,
         });
       } catch (e) {
-        window.location.replace(getParamConfig("web_url"));
+        console.log("initMDP e :", e);
+        // window.location.replace(getParamConfig("web_url"));
       }
     } else {
-      window.location.replace(getParamConfig("web_url"));
+      console.log("initMDP idx :", idx);
+      // window.location.replace(getParamConfig("web_url"));
     }
   }
 
@@ -111,83 +113,80 @@ class ResetMDP extends Component {
       <div className="lostPassWord">
         <div className="menu">
           <Breadcrumbs
-                separator={<i className="fas fa-caret-right"></i>}
-                aria-label="Breadcrumb"
-                className="breadcrumbs"
-              >
-                <Link
-                  id="home"
-                  key={0}
-                  color="inherit"
-                  component={RouterLink}
-                   href={getParamConfig("web_url") + "/accueil"}
-                >
-                  Accueil
-                </Link>
-               
-                <typography>Réinitialisation du mot de passe</typography>
-           </Breadcrumbs>
+            separator={<i className="fas fa-caret-right"></i>}
+            aria-label="Breadcrumb"
+            className="breadcrumbs"
+          >
+            <Link
+              id="home"
+              key={0}
+              color="inherit"
+              component={RouterLink}
+              href={getParamConfig("web_url") + "/accueil"}
+            >
+              Accueil
+            </Link>
 
+            <typography>Réinitialisation du mot de passe</typography>
+          </Breadcrumbs>
         </div>
         <div className="bg-white paddingContainer">
-            <h1 className="heading"><i class="fas fa-unlock-alt"></i> Réinitialisation du mot de passe</h1>
+          <h1 className="heading">
+            <i class="fas fa-unlock-alt"></i> Réinitialisation du mot de passe
+          </h1>
 
-            <p>
-              Saisissez un nouveau mot de passe pour <b> {this.state.email}</b>
-            </p>
-            <p>
-              Nous allons envoyer à cette adresse un lien vous permettant de
-              réinitialiser facilement votre mot de passe.
-            </p>
-            <form className="form" noValidate onSubmit={this.onSubmit}>
-              <Grid
-                container
-                direction="column"
-                spacing={1}
-              >
-                <Grid>
-                  <TextField
-                    id="password"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Nouveau mot de passe"
-                    type={this.state.showPassword ? "text" : "password"}
-                    name="password"
-                    autoComplete="current-password"
-                    onChange={this.onChange}
-                    value={this.state.password}
-                    error={this.state.isError}
-                    className="input"
-                  />
-                </Grid>
-                <Grid>
-                  <TextField
-                    id="password-confirme"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Confirmer le nouveau mot de passe "
-                    type={this.state.showPassword ? "text" : "password"}
-                    name="passConfirme"
-                    autoComplete="current-password"
-                    onChange={this.onChange}
-                    value={this.state.passConfirme}
-                    error={this.state.isError}
-                    className="input"
-                  />
-                </Grid>
-                <Grid>
-                  <Button
-                    id="btValidate"
-                      className="button submit fontWeightMedium plain bg-secondaryLight"
-                    type="submit"
-                  >
-                    Valider
-                  </Button>
-                </Grid>
+          <p>
+            Saisissez un nouveau mot de passe pour <b> {this.state.email}</b>
+          </p>
+          <p>
+            Nous allons envoyer à cette adresse un lien vous permettant de
+            réinitialiser facilement votre mot de passe.
+          </p>
+          <form className="form" noValidate onSubmit={this.onSubmit}>
+            <Grid container direction="column" spacing={1}>
+              <Grid>
+                <TextField
+                  id="password"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Nouveau mot de passe"
+                  type={this.state.showPassword ? "text" : "password"}
+                  name="password"
+                  autoComplete="current-password"
+                  onChange={this.onChange}
+                  value={this.state.password}
+                  error={this.state.isError}
+                  className="input"
+                />
               </Grid>
-            </form>
+              <Grid>
+                <TextField
+                  id="password-confirme"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Confirmer le nouveau mot de passe "
+                  type={this.state.showPassword ? "text" : "password"}
+                  name="passConfirme"
+                  autoComplete="current-password"
+                  onChange={this.onChange}
+                  value={this.state.passConfirme}
+                  error={this.state.isError}
+                  className="input"
+                />
+              </Grid>
+              <Grid>
+                <Button
+                  id="btValidate"
+                  className="button submit fontWeightMedium plain bg-secondaryLight"
+                  type="submit"
+                >
+                  Valider
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
         </div>
 
         <Dialog

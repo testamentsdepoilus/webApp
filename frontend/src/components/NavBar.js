@@ -35,7 +35,7 @@ class NavBar extends Component {
     this.tabLinks = [
       "search",
       "wills",
-      "about",
+      "apropos",
       "testators",
       "places",
       "news",
@@ -75,7 +75,7 @@ class NavBar extends Component {
 
   handleLogoutClick() {
     localStorage.clear();
-    document.location.reload();
+    document.location.href = getParamConfig("web_url");
   }
 
   handleClose() {
@@ -171,7 +171,7 @@ class NavBar extends Component {
               <img
                 src={
                   getParamConfig("web_url") +
-                  "/testaments-de-poilus/images/testaments-poilus-header.jpg"
+                  "/images/testaments-poilus-header.jpg"
                 }
                 alt="Testaments de Poilus, édition numérique"
                 width="205"
@@ -231,8 +231,7 @@ class NavBar extends Component {
                         className={
                           this.state.selectedId === "news" ? "active" : ""
                         }
-                        component={RouterLink}
-                        to="/news"
+                        href={getParamConfig("web_url") + "/news"}
                         onClick={this.handleListItemClick}
                       >
                         {" "}
@@ -246,8 +245,7 @@ class NavBar extends Component {
                         className={
                           this.state.selectedId === "articles" ? "active" : ""
                         }
-                        component={RouterLink}
-                        to="/articles"
+                        href={getParamConfig("web_url") + "/articles"}
                         onClick={this.handleListItemClick}
                       >
                         {" "}
@@ -259,10 +257,9 @@ class NavBar extends Component {
                       <Link
                         id="about"
                         className={
-                          this.state.selectedId === "about" ? "active" : ""
+                          this.state.selectedId === "apropos" ? "active" : ""
                         }
-                        component={RouterLink}
-                        to="/apropos"
+                        href={getParamConfig("web_url") + "/apropos"}
                         onClick={this.handleListItemClick}
                       >
                         {" "}

@@ -610,18 +610,12 @@ export default class WillDisplay extends Component {
                       horizontal: "center",
                     }}
                   >
-                    <MenuItem
-                      className="d-block"
-                      onClick={this.handleExplorClose}
-                    >
+                    <MenuItem className="d-block">
                       <Button id="bt-tei" onClick={this.handleExportTEIClick}>
                         <i className="fas fa-code"></i> TEI
                       </Button>
                     </MenuItem>
-                    <MenuItem
-                      className="d-block"
-                      onClick={this.handleExplorClose}
-                    >
+                    <MenuItem className="d-block">
                       <Button id="bt-pdf" onClick={this.handleExportPDFClick}>
                         <i className="far fa-file-pdf"></i> PDF
                       </Button>

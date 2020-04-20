@@ -52,7 +52,7 @@ class Footer extends Component {
                     alt="Logo du Ministère de la culture et de la communication"
                     src={
                       getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/ministere-culture.jpg"
+                      "/images/logos/ministere-culture.jpg"
                     }
                   />
                 </a>
@@ -69,7 +69,7 @@ class Footer extends Component {
                     alt="Logo de la Fondation des Sciences du patrimoine"
                     src={
                       getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/fondation-sciences-patrimoine.jpg"
+                      "/images/logos/fondation-sciences-patrimoine.jpg"
                     }
                   />
                 </a>
@@ -85,8 +85,7 @@ class Footer extends Component {
                   <img
                     alt="Logo de la Mission du Centenaire 14-18"
                     src={
-                      getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/centenaire.jpg"
+                      getParamConfig("web_url") + "/images/logos/centenaire.jpg"
                     }
                   />
                 </a>
@@ -103,7 +102,7 @@ class Footer extends Component {
                     alt="Logo des Archives nationales"
                     src={
                       getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/archives-nationales.jpg"
+                      "/images/logos/archives-nationales.jpg"
                     }
                   />
                 </a>
@@ -120,7 +119,7 @@ class Footer extends Component {
                     alt="logo du Val-d'Oise le département - Archives nationales"
                     src={
                       getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/val-d-oise-archives-departementales.png"
+                      "/images/logos/val-d-oise-archives-departementales.png"
                     }
                   />
                 </a>
@@ -137,7 +136,7 @@ class Footer extends Component {
                     alt="logo des Archives départementales des Yvelines"
                     src={
                       getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/yvelines-ad.jpg"
+                      "/images/logos/yvelines-ad.jpg"
                     }
                   />
                 </a>
@@ -153,8 +152,7 @@ class Footer extends Component {
                   <img
                     alt="logo de l'Université de Cergy-Pontoise"
                     src={
-                      getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/univ-cergy.jpg"
+                      getParamConfig("web_url") + "/images/logos/univ-cergy.jpg"
                     }
                   />
                 </a>
@@ -169,10 +167,7 @@ class Footer extends Component {
                 >
                   <img
                     alt="logo de l'École nationale des chartes"
-                    src={
-                      getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/enc.jpg"
-                    }
+                    src={getParamConfig("web_url") + "/images/logos/enc.jpg"}
                   />
                 </a>
               </Box>
@@ -188,7 +183,7 @@ class Footer extends Component {
                     alt="logo de l'Université Paris 8 | Vincennes - Saint-Denis"
                     src={
                       getParamConfig("web_url") +
-                      "/testaments-de-poilus/images/logos/univ-paris8.png"
+                      "/images/logos/univ-paris8.png"
                     }
                   />
                 </a>

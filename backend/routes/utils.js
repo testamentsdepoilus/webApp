@@ -12,7 +12,7 @@ function footerPDF() {
     "Export réalisé depuis " +
     process.env.host +
     ", le " +
-    date.toLocaleDateString("fr-FR");
+    date.toLocaleDateString("en-GB");
   return footer;
 }
 
@@ -31,12 +31,12 @@ router.post("/generateWillPDF", async (req, res, next) => {
       "septembre",
       "octobre",
       "novembre",
-      "décembre"
+      "décembre",
     ];
     const listMenu = {
       page: "Page",
       envelope: "Enveloppe",
-      codicil: "Codicille"
+      codicil: "Codicille",
     };
 
     let outputHtml =
@@ -249,7 +249,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
         contents:
           '<img src="file://' +
           resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
-          '" alt="Xcel-RCM" width="100%" height="40" />'
+          '" alt="Xcel-RCM" width="100%" height="40" />',
       },
       footer: {
         height: "28mm",
@@ -260,27 +260,27 @@ router.post("/generateWillPDF", async (req, res, next) => {
             footerPDF() +
             '</span><img src="file://' +
             resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
-            '" alt="Xcel-RCM" width="100%" height="40" /></div>'
-        }
-      }
+            '" alt="Xcel-RCM" width="100%" height="40" /></div>',
+        },
+      },
     };
     pdf
       .create(outputHtml, options)
       .toFile(
-       "client/build/outputPDF/Projet_TdP_testament_" +
+        "client/build/outputPDF/Projet_TdP_testament_" +
           data["will_id"] +
           ".pdf",
-        function(err, result) {
+        function (err, result) {
           if (err) {
             res.send({
               status: 400,
-              err: "Error: " + e
+              err: "Error: " + e,
             });
             return console.log(err);
           }
           res.send({
             status: 200,
-            res: result
+            res: result,
           });
         }
       );
@@ -301,7 +301,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
     console.log("Error catch:", e);
     res.send({
       status: 400,
-      err: "Error: " + e
+      err: "Error: " + e,
     });
   }
 });
@@ -320,7 +320,6 @@ router.post("/generatePDF", async (req, res, next) => {
       resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
       '" alt="Xcel-RCM" height="30" style="display: none" />';
     outputHtml += req.body["outputHtml"] + "</div></body></html>";
-   ;
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
       orientation: "portrait", // portrait or landscape
@@ -332,7 +331,7 @@ router.post("/generatePDF", async (req, res, next) => {
         contents:
           '<img src="file://' +
           resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
-          '" alt="Xcel-RCM" width="100%" height="40" />'
+          '" alt="Xcel-RCM" width="100%" height="40" />',
       },
       footer: {
         height: "28mm",
@@ -343,26 +342,26 @@ router.post("/generatePDF", async (req, res, next) => {
             footer_html +
             '</span><img src="file://' +
             resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
-            '" alt="Xcel-RCM" width="100%" height="40" /></div>' // fallback value
-        }
-      }
+            '" alt="Xcel-RCM" width="100%" height="40" /></div>', // fallback value
+        },
+      },
     };
 
     pdf
       .create(outputHtml, options)
       .toFile(
-         "client/build/outputPDF/" + req.body["filename"] + ".pdf",
-        function(err, result) {
+        "client/build/outputPDF/" + req.body["filename"] + ".pdf",
+        function (err, result) {
           if (err) {
             res.send({
               status: 400,
-              err: "Error: " + e
+              err: "Error: " + e,
             });
             return console.log(err);
           }
           res.send({
             status: 200,
-            res: result
+            res: result,
           });
         }
       );
@@ -370,7 +369,7 @@ router.post("/generatePDF", async (req, res, next) => {
     console.log("Error catch:", e);
     res.send({
       status: 400,
-      err: "Error: " + e
+      err: "Error: " + e,
     });
   }
 });

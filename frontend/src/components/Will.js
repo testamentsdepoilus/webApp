@@ -41,39 +41,65 @@ class Will extends Component {
 
   handlePrev(e) {
     let new_idx = this.state.idx > 0 ? this.state.idx - 1 : 0;
-    const willsSearch = JSON.parse(localStorage.willsSearch);
-    let new_data = this.state.data;
-    new_data[0]._id = willsSearch[new_idx]._id;
-    new_data[0]._source = willsSearch[new_idx];
-    window.history.replaceState(
-      getParamConfig("web_url"),
-      "will",
-      getParamConfig("web_url") + "/testament/" + new_data[0]._id
-    );
-    this.setState({
-      idx: new_idx,
-      data: new_data,
-    });
+    const willsIds = JSON.parse(localStorage.willsIds);
+
+    getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+      JSON.stringify({
+        query: {
+          term: {
+            _id: willsIds[new_idx],
+          },
+        },
+      })
+    )
+      .then((data) => {
+        window.history.replaceState(
+          getParamConfig("web_url"),
+          "will",
+          getParamConfig("web_url") + "/testament/" + willsIds[new_idx]
+        );
+        this.setState({
+          data: data,
+          idx: new_idx,
+        });
+      })
+      .catch((error) => {
+        console.log("error :", error);
+      });
   }
 
   handleNext(e) {
-    const willsSearch = JSON.parse(localStorage.willsSearch);
+    const willsIds = JSON.parse(localStorage.willsIds);
     let new_idx =
-      this.state.idx < willsSearch.length - 1
+      this.state.idx < willsIds.length - 1
         ? this.state.idx + 1
         : this.state.idx;
-    let new_data = this.state.data;
-    new_data[0]._id = willsSearch[new_idx]._id;
-    new_data[0]._source = willsSearch[new_idx];
-    window.history.replaceState(
-      getParamConfig("web_url"),
-      "will",
-      getParamConfig("web_url") + "/testament/" + new_data[0]._id
-    );
-    this.setState({
-      idx: new_idx,
-      data: new_data,
-    });
+
+    getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
+      JSON.stringify({
+        query: {
+          term: {
+            _id: willsIds[new_idx],
+          },
+        },
+      })
+    )
+      .then((data) => {
+        window.history.replaceState(
+          getParamConfig("web_url"),
+          "will",
+          getParamConfig("web_url") + "/testament/" + willsIds[new_idx]
+        );
+        this.setState({
+          data: data,
+          idx: new_idx,
+        });
+      })
+      .catch((error) => {
+        console.log("error :", error);
+      });
   }
 
   componentDidMount() {
@@ -83,10 +109,11 @@ class Will extends Component {
       const url_query = url.substring(idx + 10).split("/");
       const query_id = url_query.length > 0 ? url_query[0] : "";
       let cur_idx = 0;
-      if (localStorage.willsSearch) {
-        const willsSearch = JSON.parse(localStorage.willsSearch);
-        const willsID = willsSearch.map((item) => item._id);
-        cur_idx = willsID.indexOf(query_id);
+      if (localStorage.willsIds) {
+        const willsIds = JSON.parse(localStorage.willsIds);
+        console.log(willsIds);
+
+        cur_idx = willsIds.indexOf(query_id);
       }
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
@@ -117,6 +144,10 @@ class Will extends Component {
     }
   }
 
+  componentWillUnmount() {
+    localStorage.removeItem("willsIds");
+  }
+
   render() {
     const will_link =
       this.state.data.length > 0 ? (
@@ -142,31 +173,30 @@ class Will extends Component {
             </Link>
             {will_link}
           </Breadcrumbs>
-          {localStorage.willsSearch &&
-          JSON.parse(localStorage.willsSearch).length > 1 ? (
+          {localStorage.willsIds &&
+          JSON.parse(localStorage.willsIds).length > 1 ? (
             <div>
-              <Button
-                id="prev"
-                color="primary"
-                variant="contained"
-                onClick={this.handlePrev}
-                disabled={this.state.idx === 0}
-              >
-                Précédent
-              </Button>
-
-              <Button
-                id="next"
-                color="primary"
-                variant="contained"
-                disabled={
-                  this.state.idx ===
-                  JSON.parse(localStorage.willsSearch).length - 1
-                }
-                onClick={this.handleNext}
-              >
-                Suivant
-              </Button>
+              <Tooltip title="Afficher le testatment précédent">
+                <Button
+                  id="prev"
+                  onClick={this.handlePrev}
+                  disabled={this.state.idx === 0}
+                >
+                  <i class="fas fa-caret-left"></i>
+                </Button>
+              </Tooltip>
+              <Tooltip title="Afficher le testatment suivant">
+                <Button
+                  id="next"
+                  disabled={
+                    this.state.idx ===
+                    JSON.parse(localStorage.willsIds).length - 1
+                  }
+                  onClick={this.handleNext}
+                >
+                  <i class="fas fa-caret-right"></i>
+                </Button>
+              </Tooltip>
             </div>
           ) : (
             ""
