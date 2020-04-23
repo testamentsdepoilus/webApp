@@ -21,7 +21,7 @@ class Explore extends Component {
                 >
                   Accueil
                 </Link>
-                <div>Explore</div>
+                <div>Explorer</div>
           </Breadcrumbs>
 
           <h1 className="heading"><i className="far fa-eye"></i> Explorer</h1>

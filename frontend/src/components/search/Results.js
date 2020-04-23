@@ -463,10 +463,10 @@ class Results extends React.Component {
               size={15}
               showResultStats={true}
               infiniteScroll={true}
-              loader={<CircularProgress />}
+              loader={<CircularProgress/>}
               renderResultStats={this.renderResultStats}
               renderNoResults={function() {
-                return <p  className="noResult">Aucun résultat ne correspond à cette recherche.</p>;
+                return <p className="text-error paddingContainer">Aucun résultat ne correspond à cette recherche.</p>;
               }}
             >
               {({ data, error, loading }) => <ResultWills data={data} />}

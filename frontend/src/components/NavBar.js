@@ -387,7 +387,8 @@ class NavBar extends Component {
                       onClick={
                         this.usertoken
                           ? this.handleOpenMySpace
-                          : this.handleLoginClick
+                          : this.handleOpenMySpace
+                          // : this.handleLoginClick
                       }
                     >
                       <i className="fas fa-sm fa-user"></i> Mon espace
@@ -434,68 +435,70 @@ class NavBar extends Component {
                           <i className="fas fa-briefcase"></i> Mes favoris
                         </Link>
                       </MenuItem>
+                      
                       {this.usertoken && this.usertoken.isAdmin ? (
-                        <div>
-                          <Button
-                            className={
-                              this.state.selectedId === "administration"
-                                ? "active"
-                                : ""
-                            }
-                            onClick={this.handleExplorClick}
-                          >
-                            Administration
-                          </Button>
-                          <Menu
-                            id="simple-menu-explor"
-                            anchorEl={this.state.anchorElExplor}
-                            keepMounted
-                            open={Boolean(this.state.anchorElExplor)}
-                            onClose={this.handleExplorClose}
-                            elevation={0}
-                            getContentAnchorEl={null}
-                            anchorOrigin={{
-                              vertical: "bottom",
-                              horizontal: "left",
-                            }}
-                            transformOrigin={{
-                              vertical: "center",
-                              horizontal: "right",
-                            }}
-                          >
-                            <MenuItem onClick={this.handleExplorClose}>
-                              <Link
-                                id="cms"
-                                className={
-                                  this.state.selectedId === "cms"
-                                    ? "active"
-                                    : ""
-                                }
-                                component={RouterLink}
-                                to="/espace/cms"
-                                onClick={this.handleListItemClick}
-                              >
-                                Gestion de contenu
-                              </Link>
-                            </MenuItem>
-                            <MenuItem onClick={this.handleExplorClose}>
-                              <Link
-                                id="config"
-                                className={
-                                  this.state.selectedId === "config"
-                                    ? "active"
-                                    : ""
-                                }
-                                component={RouterLink}
-                                to="/espace/config"
-                                onClick={this.handleListItemClick}
-                              >
-                                Configuration
-                              </Link>
-                            </MenuItem>
-                          </Menu>
-                        </div>
+                      <MenuItem>
+                            <Link
+                              className={
+                                this.state.selectedId === "administration"
+                                  ? "active"
+                                  : ""
+                              }
+                              onClick={this.handleExplorClick}
+                            >
+                             <i class="far fa-edit"></i> Administration
+                            </Link>
+                            <Menu
+                              id="admin_submenu"
+                              anchorEl={this.state.anchorElExplor}
+                              keepMounted
+                              open={Boolean(this.state.anchorElExplor)}
+                              onClose={this.handleExplorClose}
+                              elevation={0}
+                              getContentAnchorEl={null}
+                              anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "left",
+                              }}
+                              transformOrigin={{
+                                vertical: "center",
+                                horizontal: "right",
+                              }}
+                            >
+                              <MenuItem onClick={this.handleExplorClose}>
+                                <Link
+                                  id="cms"
+                                  className={
+                                    this.state.selectedId === "cms"
+                                      ? "active"
+                                      : ""
+                                  }
+                                  component={RouterLink}
+                                  to="/espace/cms"
+                                  onClick={this.handleListItemClick}
+                                >
+                                  Gestion de contenus
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={this.handleExplorClose}>
+                                <Link
+                                  id="config"
+                                  className={
+                                    this.state.selectedId === "config"
+                                      ? "active"
+                                      : ""
+                                  }
+                                  component={RouterLink}
+                                  to="/espace/config"
+                                  onClick={this.handleListItemClick}
+                                >
+                                  Configuration
+                                </Link>
+                              </MenuItem>
+                            </Menu>
+                      </MenuItem>
                       ) : null}
+
                       <MenuItem onClick={this.handleLogoutClick}>
                         <span className="logout">
                           <i className="fas fa-sign-out-alt"></i> Déconnexion

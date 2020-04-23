@@ -82,7 +82,7 @@ class Login extends Component {
               console.log("error :", error);
             });
         } else {
-          const err = res.error ? res.error : "Connexion au serveur a échoué !";
+          const err = res.error ? res.error : "La connexion au serveur a échoué !";
 
           this.setState({
             error: err
@@ -178,7 +178,7 @@ class Login extends Component {
             </Box>
             <Box pt={1} display="flex" justifyContent="flex-end">
              <Link id="resetMDP"
-              href={getParamConfig("web_url") + "/lostPassWord"} className="text-secondaryLight">Mot de passe oublié ?</Link>
+              href={getParamConfig("web_url") + "/lostPassWord"}>Mot de passe oublié ?</Link>
             </Box>
           </form>
         </div>

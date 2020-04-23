@@ -72,7 +72,7 @@ header #main_nav li i {
 
 header #main_nav li a{
   color:white;
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 22px;
   padding-left: 22px;
   font-size:1rem;
@@ -145,6 +145,14 @@ header #menu_secondary li a:hover{
  margin-left: -1px;
  background-color: transparent;
 }
+#admin_submenu .MuiPaper-root{
+  margin-left: -15px;
+
+}
+
+#admin_submenu ul{
+  background-color: white;
+}
 #userSpace_submenu ul{
   border-left: 1px solid #1F8299;
   border-right: 1px solid #1F8299;
@@ -152,25 +160,26 @@ header #menu_secondary li a:hover{
   margin: 1px 1px 1px 1px;
   background-color: white;
 }
-#userSpace_submenu li{
+#userSpace_submenu li,
+#admin_submenu li{
   display: block;
   padding-right: 16px;
   padding-left: 16px;
   padding-top: 3px;
   padding-bottom: 3px;
 }
-#userSpace_submenu li:hover{
+#userSpace_submenu li:hover,
+#admin_submenu li:hover{
   background-color: #C7D7E1;
 
 }
 #userSpace_submenu li a,
+#admin_submenu li a,
 #userSpace_submenu li .logout{
   color:#1F8299;
   font-family: 'PT Sans', sans-serif!important;
   font-size:0.95rem;
-
 }
-
 
 
 .closeButton {

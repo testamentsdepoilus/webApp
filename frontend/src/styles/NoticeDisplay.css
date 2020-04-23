@@ -67,6 +67,8 @@ z-index: 100000;
   font-weight: 400;
   border-radius: 0px;
   margin:0;
+  color: #1F8299;
+  font-family: "PT Sans", sans serif;
   padding:0px 2px 0px 2px;
 }
 .exportBtn button i{
@@ -137,21 +139,7 @@ z-index: 100000;
   font-size: 0.75rem;
 }
 
-.notices.testators .select {
-  margin-right: 10px;
 
-}
-.notices.testators .select > div {
-    color: black;
-}
-.notices.testators .select button{
-  height: 32px!important;
-  min-height: 32px!important;
-  background-color: white!important;
-}
-.notices.testators .select button:hover{
- background-color: white!important
-}
 
 
 .noticeDisplay .containerNoticeInfo{

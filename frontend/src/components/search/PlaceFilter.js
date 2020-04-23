@@ -9,6 +9,7 @@ import {
   ListItem,
   Snackbar,
   Button,
+  Box,
 } from "@material-ui/core";
 
 class PlaceFilter extends React.Component {
@@ -92,9 +93,8 @@ class PlaceFilter extends React.Component {
   render() {
     return (
       <div>
-        <Grid container alignItems="center" direction="row" spacing={0}>
-          <Grid item xs={12} container direction="row">
-            <Grid item xs={10}>
+         <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box flexGrow="1" flexShrink="1" pr={1}>
               <SingleDropdownList
                 className="select"
                 react={{
@@ -129,19 +129,18 @@ class PlaceFilter extends React.Component {
                 }}
                 customQuery={this.customQuery}
               />
-            </Grid>
-            <Grid item xs={2}>
-              <Button
+            </Box>
+            <Button
                 id="clearPlace"
                 onClick={(event) => this.handlePlaceChange("")}
                 title="Supprimer le filtre"
                 className="button iconButton"
               >
                 <i className="fas fa-times"></i>
-              </Button>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
+            </Button>
+         </Box>
+
+        <div>
             <List className="places_list">
               <ListItem className="checkbox">
                 <ListItemIcon>
@@ -198,8 +197,7 @@ class PlaceFilter extends React.Component {
                 <ListItemText secondary="Lieu de décès" />
               </ListItem>
             </List>
-          </Grid>
-        </Grid>
+         </div>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={this.state.openAlert}

@@ -5,16 +5,37 @@
 .notices .headingBar{
   padding: 0px 30px 0px 15px;
 }
-.notices.testators .headingBar .selectName{
+
+
+
+.notices .headingBar .select{
   display: flex;
   align-items: center;
+  margin-right: 10px;
 }
-.notices.testators .headingBar .selectName button{
+.notices .headingBar .select button{
   padding-left:7px;
   width: 200px;
 }
-.notices.testators .headingBar .selectName button:hover{
+.notices .headingBar .select button:hover{
   background-color: inherit;
+}
+.notices .headingBar .select > div {
+    color: black;
+}
+.notices .headingBar .select button{
+  height: 32px!important;
+  min-height: 32px!important;
+  background-color: white!important;
+}
+.notices .headingBar .select button:hover{
+ background-color: white!important
+}
+
+.notices.units .headingBar svg {
+    width: 0.675em;
+    height: 0.675em;
+    margin-right: 3px;
 }
 
 

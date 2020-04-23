@@ -14,7 +14,6 @@ import {
   Link,
   Button,
 } from "@material-ui/core";
-import "../styles/Testator.css";
 import {
   getParamConfig,
   equalsArray,
@@ -141,7 +140,7 @@ class Places extends Component {
             justifyContent="space-between"
           >
             <h2 className="card-title bg-primaryMain">
-              <i className="far fa-address-book"></i> Découvrir les lieux
+              <i className="fas fa-map-marker-alt"></i> Découvrir les lieux
             </h2>
 
             <div className="selectList d-flex">

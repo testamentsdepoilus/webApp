@@ -101,15 +101,9 @@ class About extends Component {
           );
 
     const currLink = [
-      <Link
-        id="about"
-        key={1}
-        color="inherit"
-        component={RouterLink}
-        to="/apropos"
-      >
-        A propos
-      </Link>,
+      <div>
+        À propos
+      </div>,
       <div key={2}>{curItem ? curItem._source["title"] : null}</div>,
     ];
 

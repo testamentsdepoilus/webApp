@@ -7,7 +7,6 @@ import {
   Box,
   Button,
 } from "@material-ui/core";
-import "../styles/Place.css";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import PlaceDisplay from "./PlaceDisplay";
 

@@ -41,7 +41,7 @@ function createPageMenu(pages, idx, handleClick) {
 function createPage(page, idx, type, nextPage) {
   let output = (
     <div>
-      <Paper className={type}>
+      <div className={type}>
         {
           <div
             dangerouslySetInnerHTML={{
@@ -50,7 +50,7 @@ function createPage(page, idx, type, nextPage) {
           />
         }
         {idx < page.length - 1 ? nextPage : null}
-      </Paper>
+      </div>
     </div>
   );
 

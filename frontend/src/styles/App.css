@@ -72,6 +72,7 @@ a:hover{
 }
 
 
+
 .bg-xlight-gray{
   background-color: #F5F5F5;
 }
@@ -239,6 +240,16 @@ form label{
   font-weight: bold;
 }
 
+/*spinner*/
+.MuiCircularProgress-root{
+  display: block;
+  margin:auto;
+  position: absolute;
+  left:45%;
+  top:30px;
+}
+
+
 nav.breadcrumbs {
  font-family: 'PT Sans'!important;
  font-size: 1.05rem!important;
@@ -267,7 +278,7 @@ h1.heading{
 
 .select button,
 input{
-  font-family: 'Fira Sans'!important;
+  font-family: 'PT Sans', sans-serif!important;
   width: 100%;
   font-weight: 600;
   background-color: white;
@@ -283,16 +294,27 @@ textarea{
 border-radius: 5px;
 border: 1px solid #9D9C9C!important;
 }
-input.MuiOutlinedInput-input{
+.MuiOutlinedInput-root input.MuiOutlinedInput-input{
   border:none!important;
   color:#1F8299!important;
+  height:20px!important;
+  min-height: 20px!important;
+  padding: 12.5px 14px!important;
 }
+
 
 .select button > div{
  color:#2E5D81;
-   font-family: 'Fira Sans';
+  font-family: 'PT Sans', sans-serif;
   font-weight: 600;
 }
+
+.select button,
+input:not([type="checkbox"]){
+height: 32px!important;
+min-height: 32px!important;
+}
+
 
 .select button span:before{
 width: 0;
@@ -361,6 +383,30 @@ i.fa-question-circle{
  color:#1f8399;
  font-size:1rem;
 }
+i.fa-question-circle{
+  width: 12px;
+}
+svg.cancel-icon{
+   flex-basis: 25px!important;
+  -webkit-flex-basis: 25px!important;
+}
+svg.cancel-icon path{
+  stroke-width: 20px;
+  stroke: #1f8399;
+}
+.DayPickerInput {
+  padding-right: 8px;
+}
+.DayPickerInput input{
+  color:black!important;
+  font-family: "PT Sans", sans-serif!important;
+  padding-right: 8px;
+}
+input::placeholder{
+  color:#8DB2C2;
+  font-weight: 400;
+  font-size: 1rem;
+}
 .searchForm button {
  min-width: 5px;
 }
@@ -388,7 +434,7 @@ i.fa-question-circle{
 
 
 .card{
- padding: 0px 24px 20px 24px;
+ padding: 6px 24px 20px 24px;
  margin-bottom: 20px;
  box-shadow: none;
  border-radius: 5px;
@@ -398,9 +444,12 @@ h2.card-title,
 h1.heading{
   display: inline-block;
   color:white;
-  padding: 4px 6px 4px 6px;
+  padding: 4px 10px 4px 10px;
   font-weight: 400;
   font-size: 0.985rem;
+}
+h2.card-title i{
+  padding-right: 3px;
 }
 .paddingContainer{
  padding: 30px 30px 30px 30px;
@@ -450,7 +499,7 @@ button:disabled{
   color: white;
   font-size: 0.975rem;
   display: inline-block;
-  font-family: 'Fira Sans';
+  font-family: 'PT Sans', sans-serif;
   min-width: 16px;
 }
 .button.plain.primaryMain{
@@ -523,7 +572,6 @@ button:disabled{
 
 .pagination{
   margin-top: 20px;
-  padding-bottom: 30px;
 }
 .pagination a[disabled=""]{
   display: none;
@@ -536,7 +584,7 @@ button:disabled{
   color: white;
   font-size: 0.975rem;
   display: inline-block;
-  font-family: 'Fira Sans';
+  font-family: 'PT Sans', sans-serif;
 }
 .pagination a:hover{
   background-color: #B91918;
@@ -576,7 +624,7 @@ button:disabled{
 
 /*Legend specific*/
 .legend {
-  padding: 6px 8px;
+  padding: 1px 2px;
   font: 14px Arial, Helvetica, sans-serif;
   background: white;
   background: rgba(255, 255, 255, 0.8);
@@ -587,21 +635,21 @@ button:disabled{
 }
 .legend h5 {
   text-align: center;
-  font-size: 16px;
-  margin: 2px 12px 8px;
+  font-size: 0.8em;
+  margin: 2px 6px 8px;
   color: #777;
 }
 
 .legend span {
   position: relative;
-  bottom: 3px;
+  font-size: 0.8em;
 }
 
 .legend img {
   width: 1em;
   height: 1.1em;
   float: left;
-  margin: 0 8px 0 0;
+  margin: 0 4px 0 0;
   opacity: 0.8;
 }
 

@@ -12,3 +12,11 @@
 	background-color: #8DB2C2!important;
 	color: white;
 }
+
+.login #resetMDP {
+  color: #1F8299;
+}
+.login #resetMDP:hover {
+  color: #8DB2C2;
+}
+

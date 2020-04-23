@@ -28,7 +28,7 @@
 .resultWill{
   color:#2E5D81;
 }
-.resultWill:hover a{
+.resultWill a:hover{
    color: #8DB2C2;
 }
 .resultWill .will_date {
@@ -61,6 +61,8 @@
 }
 .resultWill p {
   margin-top: 5px;
+  font-family: "Fira Sans", sans serif;
+  color:black;
 }
 .resultWill p a{
   margin-right: 8px;

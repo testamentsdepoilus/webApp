@@ -1,6 +1,6 @@
 
 .search .leftSidebar {
- padding: 44px 24px 24px 24px;
+ padding: 24px 24px 24px 24px;
  background-color: #DADAD9;
 }
 
@@ -45,6 +45,12 @@
 	color:black!important;
 }
 
+.search .leftSidebar  .dateFilter{
+	margin-top: 30px;
+	margin-bottom: 30px;
+	font-family: "PT Sans", sans-serif;
+}
+
 .search .leftSidebar .dateFilter .e1hwwpu60{
 	border:none;
 }
@@ -61,18 +67,14 @@
   font-size:0.975rem;
 }
 
-.search .leftSidebar  .dateFilter{
-	margin-bottom: 30px;
-}
+
 .search .leftSidebar svg.cancel-icon{
-	fill:#2E5D81;
+	fill:#1f8399;
 }
 .search .map-container {
 	margin-top: 30px;
 	z-index: 1;
 }
-.search .select button,
-.search  input:not([type="checkbox"]){
-height: 32px!important;
-min-height: 32px!important;
+.search .pagination{
+	padding-bottom: 30px;
 }

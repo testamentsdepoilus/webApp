@@ -37,16 +37,10 @@ function a11yProps(index) {
 }
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: 500,
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: theme.spacing(0)
-  },
   avatar: {
     marginLeft: "auto",
     marginRight: "auto",
-    marginBottom: theme.spacing(0),
+    marginBottom: theme.spacing(3),
   }
 }));
 
@@ -95,6 +89,6 @@ export default function LogRegister() {
       </SwipeableViews>
     </div>
   ) : (
-    <div className={classes.root}> Vous êtes connecté</div>
+    <div className="text-align-center"> Vous êtes connecté</div>
   );
 }

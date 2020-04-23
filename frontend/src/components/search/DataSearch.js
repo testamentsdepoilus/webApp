@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button, Box } from "@material-ui/core";
 import PlaceFilter from "./PlaceFilter";
 
 export default class CustumerDataSearch extends Component {
@@ -112,9 +112,10 @@ export default class CustumerDataSearch extends Component {
       ingenieur: "ingénieur",
     };
     return (
-      <Grid container direction="column" spacing={2}>
-        <Grid item container direction="row">
-          <Grid item xs={10}>
+      <div>
+
+        <Box display="flex" alignItems="center" justifyContent="space-between" mt={1} mb={2}>
+          <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
               react={{
@@ -150,31 +151,27 @@ export default class CustumerDataSearch extends Component {
                   {label.split("+")[1] + " "}
                   <span className="smallcaps">{label.split("+")[0]}</span>
                 </div>
-              )}
+              )}              
               innerClass={{
                 list: "list",
                 select: "select",
               }}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          </Box>
+          <Button
               id="clearTestator"
               onClick={(event) => this.handleTestatorChange("")}
               title="Supprimer le filtre"
               className="button iconButton"
             >
-              <i className="fas fa-times"></i>
-            </Button>
-          </Grid>
-        </Grid>
+            <i className="fas fa-times"></i>
+           </Button>
+        </Box>
 
-        <Grid item>
-          <PlaceFilter />
-        </Grid>
+        <PlaceFilter />
 
-        <Grid item container direction="row">
-          <Grid item xs={10}>
+        <Box display="flex" alignItems="center" justifyContent="space-between" mt={3} mb={2}>
+          <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
               react={{
@@ -236,20 +233,19 @@ export default class CustumerDataSearch extends Component {
                 select: "select",
               }}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          </Box>
+          <Button
               id="clearOccupation"
               onClick={(event) => this.handleOccupationChange("")}
               title="Supprimer le filtre"
               className="button iconButton"
             >
               <i className="fas fa-times"></i>
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item container direction="row">
-          <Grid item xs={10}>
+          </Button>
+        </Box>
+
+        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+          <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
               react={{
@@ -285,20 +281,19 @@ export default class CustumerDataSearch extends Component {
                 select: "select",
               }}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          </Box>
+          <Button
               id="clearUnit"
               onClick={(event) => this.handleUnitChange("")}
               title="Supprimer le filtre"
               className="button iconButton"
             >
               <i className="fas fa-times"></i>
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item container direction="row">
-          <Grid item xs={10}>
+          </Button>
+        </Box>
+
+        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+          <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
               react={{
@@ -329,20 +324,19 @@ export default class CustumerDataSearch extends Component {
               URLParams={true}
               showSearch={false}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          </Box>
+          <Button
               id="clearInstitution"
               onClick={(event) => this.handleInstitutionChange("")}
               title="Supprimer le filtre"
               className="button iconButton"
             >
               <i className="fas fa-times"></i>
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item container direction="row">
-          <Grid item xs={10}>
+         </Button>
+        </Box>
+
+        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+          <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
               react={{
@@ -378,21 +372,19 @@ export default class CustumerDataSearch extends Component {
                 select: "select",
               }}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          </Box>
+          <Button
               id="clearCote"
               onClick={(event) => this.handleCoteChange("")}
               title="Supprimer le filtre"
               className="button iconButton"
             >
               <i className="fas fa-times"></i>
-            </Button>
-          </Grid>
-        </Grid>
+          </Button>
+        </Box>
 
-        <Grid item container direction="row">
-          <Grid item xs={10}>
+        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+          <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
               react={{
@@ -428,19 +420,18 @@ export default class CustumerDataSearch extends Component {
                 select: "select",
               }}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          </Box>
+          <Button
               id="clearNotoriale"
               onClick={(event) => this.handleNotorialeChange("")}
               title="Supprimer le filtre"
               className="button iconButton"
             >
               <i className="fas fa-times"></i>
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
+          </Button>
+        </Box>
+
+      </div>
     );
   }
 }

@@ -29,4 +29,6 @@ footer .footerLogos > div > div{
   display: inline-block;
   max-width: 120px;
 }
-
+footer address {
+  font-style: normal;
+}

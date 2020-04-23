@@ -595,18 +595,18 @@ export default class Manage extends Component {
       <div className="leftMenu bg-gray">
         <MenuList>
           <MenuItem className="bg-dark-gray" key={1}>
-            <a className="text-white" href="#articles_div">
+            <a className="text-white" href="#articlesDiv">
               État de la recherche
             </a>
           </MenuItem>
           <MenuItem className="bg-dark-gray" key={2}>
             {" "}
-            <a className="text-white" href="#news_div">
+            <a className="text-white" href="#newsDiv">
               Actualités
             </a>
           </MenuItem>
           <MenuItem className="bg-dark-gray" key={3}>
-            <a className="text-white" href="#about_div">
+            <a className="text-white" href="#aboutDiv">
               À propos
             </a>
           </MenuItem>
@@ -682,6 +682,7 @@ export default class Manage extends Component {
               >
                 Mon espace
               </Link>
+              <div>Administration</div>
               <div>Gestion de contenu</div>
             </Breadcrumbs>
 
@@ -694,14 +695,14 @@ export default class Manage extends Component {
                 {menu}
               </Grid>
               <Grid className="bg-white" item xs={12} md={10}>
-                <section id="articles_div">
+                <section id="articlesDiv">
                   {this.setDefaultView(this.state.articles, "articles")}
                 </section>
-                <section id="news_div">
+                <section id="newsDiv">
                   {" "}
                   {this.setDefaultView(this.state.news, "news")}
                 </section>
-                <section id="about_div">
+                <section id="aboutDiv">
                   {" "}
                   {this.setDefaultView(this.state.about, "about")}
                 </section>
@@ -725,7 +726,6 @@ export default class Manage extends Component {
               </DialogContent>
               <DialogActions>
                 <Button
-                  autoFocus
                   onClick={this.handleDialogClose}
                   className="button plain primaryMain"
                 >

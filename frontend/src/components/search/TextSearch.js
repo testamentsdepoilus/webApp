@@ -69,7 +69,7 @@ class TextSearch extends React.Component {
   render() {
     return (
     <Box >
-        <Box display="flex" className="containerSelectMode">
+        <Box display="flex" className="containerSelectMode" mb={1}>
             <Box><label className="fontWeightBold">Effectuer une recherche dans </label></Box>
             <Box>
                <Select

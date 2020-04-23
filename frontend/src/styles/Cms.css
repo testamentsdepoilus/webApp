@@ -206,6 +206,9 @@ font-size: 2em!important;
   margin-top: 15px;
   margin-bottom: 15px;
 }
+.cms .text-error{
+  font-family: "Fira Sans", sans serif;
+}
 .cms button:focus{
   background-color: #DADAD9!important;
 }
@@ -230,13 +233,13 @@ font-size: 2em!important;
 .cms form #standard-userName-input-label, 
 .cms form #standard-email-input-label, 
 .cms form #password-confirme-label {
-line-height: 16px;
+  line-height: 6px;
 }
 .cms form #standard-userName-input, 
 .cms form #standard-email-input, 
 .cms form #password, 
 .cms form #password-confirme {
-  padding: 18.5px 14px;
+  padding: 12.5px 14px;
   height: 1.1875em;
 }
 .cms form input:-internal-autofill-selected {

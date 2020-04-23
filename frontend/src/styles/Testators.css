@@ -1,0 +1,60 @@
+<<<<<<< HEAD
+.testators .menu {
+  margin: 0 0 1em 1em;
+}
+
+.testators ul {
+  list-style-type: none;
+  margin-top: 1em;
+}
+.testators .li {
+  margin-top: 1em;
+  font-size: 0.9em;
+}
+.testators .li_active {
+  margin-top: 1em;
+  font-size: 0.9em;
+  color: #0091ea;
+  font-weight: 600;
+}
+
+.testators .resultsInfo {
+  margin: 1em 0 0 2em;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.testators .pagination {
+  position: relative;
+  bottom: 5em;
+}
+
+.testators .sortResult {
+  margin: 0 0 2em 5em;
+  font-weight: 600;
+}
+
+.testators .select {
+  max-width: 12em;
+}
+
+.testators .list {
+  max-width: 12em;
+  height: 15em;
+}
+.testators .selectList {
+  width: 15em;
+  float: right;
+  position: relative;
+  bottom: 2em;
+}
+
+.testators .testatorSearch {
+  margin: 2em 0 2em 0;
+}
+
+.testators .typoSurname {
+  font-variant-caps: small-caps;
+}
+=======
+>>>>>>> refs/remotes/origin/master

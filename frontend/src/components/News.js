@@ -123,6 +123,8 @@ class News extends Component {
               return item["_id"] === this.state.selectedId;
             }.bind(this)
           );
+
+
     const currLink = !Boolean(curItem) ? (
       <div
         id="news"
@@ -157,6 +159,8 @@ class News extends Component {
         {currLink}
       </Breadcrumbs>
     );
+
+    
 
     const menuNews = (
       <div className="leftMenu bg-gray">
