@@ -3,7 +3,7 @@ import Login from "./Login";
 import Register from "./Register";
 import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 function TabPanel(props) {
@@ -26,26 +26,17 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
 
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`
+    "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
 
-const useStyles = makeStyles(theme => ({
-  avatar: {
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginBottom: theme.spacing(3),
-  }
-}));
-
 export default function LogRegister() {
-  const classes = useStyles();
   const theme = useTheme();
 
   const [value, setValue] = React.useState(1);
@@ -54,7 +45,7 @@ export default function LogRegister() {
     setValue(newValue);
   };
 
-  const handleChangeIndex = index => {
+  const handleChangeIndex = (index) => {
     setValue(index);
   };
 

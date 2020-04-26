@@ -55,10 +55,6 @@ class Compare extends Component {
   }
 
   render() {
-    /*const prevLink = document.referrer.includes("recherche?")
-      ? "/recherche?" + document.referrer.split("?")[1]
-      : "/recherche";*/
-
     return (
       <div className="compare">
         <Breadcrumbs

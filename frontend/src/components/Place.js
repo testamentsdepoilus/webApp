@@ -1,21 +1,14 @@
 import React, { Component } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import {
-  Breadcrumbs,
-  Link,
-  Tooltip,
-  Box,
-  Button,
-} from "@material-ui/core";
+import { Breadcrumbs, Link, Tooltip, Box, Button } from "@material-ui/core";
 import { getParamConfig, getHitsFromQuery } from "../utils/functions";
 import PlaceDisplay from "./PlaceDisplay";
-
 
 class Place extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
     };
 
     this.renderFunc = this.renderFunc.bind(this);
@@ -34,14 +27,13 @@ class Place extends Component {
     } else {
       return (
         <div key={0}>
-         <div className="text-error">Pas de résultat</div>
+          <div className="text-error">Pas de résultat</div>
         </div>
       );
     }
   }
 
   handleBackUp(e) {
-    console.log(document.referrer);
     document.location.href = document.referrer;
   }
 
@@ -56,17 +48,17 @@ class Place extends Component {
         JSON.stringify({
           query: {
             term: {
-              _id: query_id
-            }
-          }
+              _id: query_id,
+            },
+          },
         })
       )
-        .then(data => {
+        .then((data) => {
           this.setState({
-            data: data
+            data: data,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error :", error);
         });
     }
@@ -79,46 +71,46 @@ class Place extends Component {
 
     const place_link =
       this.state.data.length > 0 ? (
-        <div key={2}>
-          {this.state.data[0]._source["city"]}
-        </div>
+        <div key={2}>{this.state.data[0]._source["city"]}</div>
       ) : null;
 
     return (
-
       <div className="place">
-
-        <Box className="d-block d-md-flex"  justifyContent="space-between"> 
+        <Box className="d-block d-md-flex" justifyContent="space-between">
           <Breadcrumbs
-                  separator={<i className="fas fa-caret-right"></i>}
-                  aria-label="Breadcrumb"
-                  className="breadcrumbs"
-                >
-                  <Link
-                    id="home"
-                    key={0}
-                    color="inherit"
-                    component={RouterLink}
-                    to="/accueil"
-                  >
-                    Accueil
-                  </Link>
-                  {place_link}
+            separator={<i className="fas fa-caret-right"></i>}
+            aria-label="Breadcrumb"
+            className="breadcrumbs"
+          >
+            <Link
+              id="home"
+              key={0}
+              color="inherit"
+              component={RouterLink}
+              to="/accueil"
+            >
+              Accueil
+            </Link>
+            {place_link}
           </Breadcrumbs>
           <div>
             {document.referrer.length > 0 &&
             document.referrer !== document.location.href ? (
               <Tooltip title="Revenir à la recherche">
-                <Button className="button outlined secondary-light" id="btnBack" onClick={this.handleBackUp} aria-label="page précédente">
-                 <i className="fas fa-undo-alt"></i> Revenir en arrière
+                <Button
+                  className="button outlined secondary-light"
+                  id="btnBack"
+                  onClick={this.handleBackUp}
+                  aria-label="page précédente"
+                >
+                  <i className="fas fa-undo-alt"></i> Revenir en arrière
                 </Button>
               </Tooltip>
             ) : null}
           </div>
-       </Box>
+        </Box>
 
         <div>{this.renderFunc()}</div>
-
       </div>
     );
   }

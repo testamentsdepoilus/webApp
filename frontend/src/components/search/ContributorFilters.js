@@ -1,7 +1,7 @@
 import React from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
 
-import { Grid, Button, Box } from "@material-ui/core";
+import { Button, Box } from "@material-ui/core";
 
 class ContributorFilters extends React.Component {
   constructor(props) {
@@ -21,7 +21,12 @@ class ContributorFilters extends React.Component {
 
   render() {
     return (
-      <Box  display="flex" alignItems="center" justifyContent="space-between" mt={2}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        mt={2}
+      >
         <Box flexGrow="1" flexShrink="1" pr={1}>
           <SingleDropdownList
             className="select"
@@ -59,12 +64,12 @@ class ContributorFilters extends React.Component {
           />
         </Box>
         <Button
-            id="clearContributeur"
-            onClick={(event) => this.handleContributeurChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
+          id="clearContributeur"
+          onClick={(event) => this.handleContributeurChange("")}
+          title="Supprimer le filtre"
+          className="button iconButton"
+        >
+          <i className="fas fa-times"></i>
         </Button>
       </Box>
     );

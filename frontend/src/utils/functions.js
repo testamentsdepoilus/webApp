@@ -429,7 +429,6 @@ export const updateConfigMail = async (item) => {
 
 export const generateWillPDF = async (item) => {
   try {
-    console.log("item :", item);
     const host = getParamConfig("web_host");
     const res = await axios.post(host + "/utils/generateWillPDF", item);
     return res.data;
@@ -535,7 +534,6 @@ function urlToPromise(url) {
       if (err) {
         reject(err);
       } else {
-        console.log(data);
         resolve(data);
       }
     });
@@ -869,10 +867,9 @@ export const resetPassWord = async (user) => {
     const res = await axios.post(host + "/users/resetPassWord", {
       email: user.email,
     });
-    console.log("res :", res);
+
     return res.data;
   } catch (err) {
-    console.log("err :", err);
     return err;
   }
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import "./styles/App.css";
 import { BrowserRouter, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
@@ -168,47 +168,53 @@ const theme = createMuiTheme({
   },
 });
 
-function App() {
-  return (
-    <BrowserRouter basename="/testaments-de-poilus">
-      <MuiThemeProvider theme={theme}>
-        <div className="App">
-          <StylesProvider injectFirst>
-            <Navbar />
-            <div className="mainContainer">
-              <Route exact path="/" component={Home} />
-              <Route exact path="/accueil" component={Home} />
-              <Route exact path="/recherche" component={Search} />
-              <Route path="/news" component={News} />
-              <Route path="/articles" component={Articles} />
-              <Route path="/apropos" component={About} />
-              <Route exact path="/testaments" component={Wills} />
-              <Route exact path="/testateurs" component={Testators} />
-              <Route exact path="/places" component={Places} />
-              <Route exact path="/armees" component={Units} />
-              <Route path="/testament" component={Will} />
-              <Route path="/testateur" component={Testator} />
-              <Route path="/place" component={Place} />
-              <Route path="/armee" component={Unit} />
-              <Route path="/home" component={Home} />
-              <Route exact path="/login" component={LogRegister} />
-              <Route exact path="/espace" component={MySpace} />
-              <Route exact path="/espace/profile" component={Profile} />
-              <Route exact path="/espace/panier" component={MyFavoritesCart} />
-              <Route path="/espace/cms" component={Manage} />
-              <Route exact path="/espace/config" component={ConfigMail} />
-              <Route path="/compare" component={Compare} />
-              <Route exact path="/explore" component={Explore} />
-              <Route exact path="/contact" component={Contact} />
-              <Route exact path="/lostPassWord" component={LostPassWord} />
-              <Route path="/reinitialiserMDP" component={ResetMDP} />
-            </div>
-            <Footer />
-          </StylesProvider>
-        </div>
-      </MuiThemeProvider>
-    </BrowserRouter>
-  );
+class App extends Component {
+  render() {
+    return (
+      <BrowserRouter basename="/testaments-de-poilus">
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+            <StylesProvider injectFirst>
+              <Navbar />
+              <div className="mainContainer">
+                <Route exact path="/" component={Home} />
+                <Route exact path="/accueil" component={Home} />
+                <Route exact path="/recherche" component={Search} />
+                <Route path="/news" component={News} />
+                <Route path="/articles" component={Articles} />
+                <Route path="/apropos" component={About} />
+                <Route exact path="/testaments" component={Wills} />
+                <Route exact path="/testateurs" component={Testators} />
+                <Route exact path="/places" component={Places} />
+                <Route exact path="/armees" component={Units} />
+                <Route path="/testament" component={Will} />
+                <Route path="/testateur" component={Testator} />
+                <Route path="/place" component={Place} />
+                <Route path="/armee" component={Unit} />
+                <Route path="/home" component={Home} />
+                <Route exact path="/login" component={LogRegister} />
+                <Route exact path="/espace" component={MySpace} />
+                <Route exact path="/espace/profile" component={Profile} />
+                <Route
+                  exact
+                  path="/espace/panier"
+                  component={MyFavoritesCart}
+                />
+                <Route path="/espace/cms" component={Manage} />
+                <Route exact path="/espace/config" component={ConfigMail} />
+                <Route path="/compare" component={Compare} />
+                <Route exact path="/explore" component={Explore} />
+                <Route exact path="/contact" component={Contact} />
+                <Route exact path="/lostPassWord" component={LostPassWord} />
+                <Route path="/reinitialiserMDP" component={ResetMDP} />
+              </div>
+              <Footer />
+            </StylesProvider>
+          </div>
+        </MuiThemeProvider>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;

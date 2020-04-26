@@ -183,7 +183,7 @@ export default class ResultWills extends React.Component {
     localStorage.setItem("willCompare", JSON.stringify(this.state.styleTitle));
     localStorage.setItem("chipData", JSON.stringify(this.state.chipData));
     window.location.href =
-      "http://localhost:3000/testaments-de-poilus/compare/" + url_ids.join("+");
+      getParamConfig("web_url") + "/compare/" + url_ids.join("+");
   }
 
   componentDidUpdate() {
@@ -208,10 +208,9 @@ export default class ResultWills extends React.Component {
       let chip = (
         <div id="chipWill">
           {this.state.chipData.map((data) => {
-            const name = data["name"].split(" ");
-            const username =
-              name[0].length > 2 ? name[0] : name[0] + " " + name[1];
-            const forename = name[name.length - 1];
+            const name = data["name"].split("+");
+            const username = name[0].toUpperCase();
+            const forename = name[1];
             return (
               <Chip
                 key={data["id"]}

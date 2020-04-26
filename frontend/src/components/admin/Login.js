@@ -6,14 +6,14 @@ import {
   Link,
   InputAdornment,
   Box,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import {
   login,
   getUserToken,
   getHitsFromQuery,
-  getParamConfig
+  getParamConfig,
 } from "../../utils/functions";
 
 class Login extends Component {
@@ -25,7 +25,7 @@ class Login extends Component {
       error: "",
       showPassword: false,
       mailError: false,
-      passError: false
+      passError: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -36,13 +36,13 @@ class Login extends Component {
     this.setState({
       [e.target.name]: e.target.value,
       mailError: false,
-      passError: false
+      passError: false,
     });
   }
 
   handleClickShowPassword = () => {
     this.setState({
-      showPassword: !this.state.showPassword
+      showPassword: !this.state.showPassword,
     });
   };
 
@@ -51,13 +51,13 @@ class Login extends Component {
     if (this.state.email && this.state.password) {
       const user = {
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       };
-      login(user).then(res => {
+      login(user).then((res) => {
         if (res.status === 200) {
           localStorage.setItem("usertoken", res.res);
           const myToken = getUserToken();
-          console.log("myToken :", myToken.email);
+
           getHitsFromQuery(
             getParamConfig("es_host") + "/" + getParamConfig("es_index_user"),
             JSON.stringify({
@@ -65,27 +65,29 @@ class Login extends Component {
                 match: {
                   email: {
                     query: myToken.email,
-                    operator: "and"
-                  }
-                }
-              }
+                    operator: "and",
+                  },
+                },
+              },
             })
           )
-            .then(data => {
+            .then((data) => {
               localStorage.setItem(
                 "myBackups",
                 JSON.stringify(data[0]._source["myBackups"])
               );
               document.location.reload(true);
             })
-            .catch(error => {
+            .catch((error) => {
               console.log("error :", error);
             });
         } else {
-          const err = res.error ? res.error : "La connexion au serveur a échoué !";
+          const err = res.error
+            ? res.error
+            : "La connexion au serveur a échoué !";
 
           this.setState({
-            error: err
+            error: err,
           });
         }
       });
@@ -93,19 +95,19 @@ class Login extends Component {
       this.setState({
         error: "Saisissez l'adresse e-mail et le mot de passe !",
         mailError: true,
-        passError: true
+        passError: true,
       });
     } else if (!this.state.email) {
       this.setState({
         error: "Saisissez l'adresse e-mail !",
         mailError: true,
-        passError: false
+        passError: false,
       });
     } else {
       this.setState({
         error: "Saisissez  le mot de passe !",
         mailError: false,
-        passError: true
+        passError: true,
       });
     }
   }
@@ -115,13 +117,16 @@ class Login extends Component {
       <Container maxWidth="xs">
         <div className="login cms">
           {this.state.error !== "" ? (
-            <div className="text-error">
-              Erreur : {this.state.error}
-            </div>
+            <div className="text-error">Erreur : {this.state.error}</div>
           ) : (
             ""
           )}
-          <form id="loginForm" noValidate className="form" onSubmit={this.onSubmit}>
+          <form
+            id="loginForm"
+            noValidate
+            className="form"
+            onSubmit={this.onSubmit}
+          >
             <TextField
               id="email"
               variant="outlined"
@@ -164,21 +169,25 @@ class Login extends Component {
                       )}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
             <Box pt={1} display="flex" justifyContent="flex-end">
-             <Button
-              id="btLogin"
-              className="submit button fontWeightMedium plain bg-secondaryLight"
-              type="submit"
-             >
-              Se connecter
-             </Button>
+              <Button
+                id="btLogin"
+                className="submit button fontWeightMedium plain bg-secondaryLight"
+                type="submit"
+              >
+                Se connecter
+              </Button>
             </Box>
             <Box pt={1} display="flex" justifyContent="flex-end">
-             <Link id="resetMDP"
-              href={getParamConfig("web_url") + "/lostPassWord"}>Mot de passe oublié ?</Link>
+              <Link
+                id="resetMDP"
+                href={getParamConfig("web_url") + "/lostPassWord"}
+              >
+                Mot de passe oublié ?
+              </Link>
             </Box>
           </form>
         </div>

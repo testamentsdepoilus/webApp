@@ -1,7 +1,6 @@
 import React from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
 import {
-  Grid,
   List,
   Checkbox,
   ListItemIcon,
@@ -93,111 +92,111 @@ class PlaceFilter extends React.Component {
   render() {
     return (
       <div>
-         <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Box flexGrow="1" flexShrink="1" pr={1}>
-              <SingleDropdownList
-                className="select"
-                react={{
-                  and: [
-                    "texte",
-                    "date_redaction",
-                    "institution",
-                    "contributeur",
-                    "nom_testateur",
-                    "collection",
-                    "notoriale",
-                    "profession",
-                    "unite",
-                    "cote",
-                  ],
-                }}
-                componentId="lieu"
-                dataField="will_contents.place.keyword"
-                value={this.state.place}
-                size={2000}
-                sortBy="asc"
-                showCount={false}
-                autosuggest={true}
-                placeholder="Lieu"
-                URLParams={true}
-                loader="En chargement ..."
-                showSearch={true}
-                searchPlaceholder="Saisir un nom de lieu"
-                onChange={this.handlePlaceChange}
-                innerClass={{
-                  list: "list",
-                }}
-                customQuery={this.customQuery}
-              />
-            </Box>
-            <Button
-                id="clearPlace"
-                onClick={(event) => this.handlePlaceChange("")}
-                title="Supprimer le filtre"
-                className="button iconButton"
-              >
-                <i className="fas fa-times"></i>
-            </Button>
-         </Box>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box flexGrow="1" flexShrink="1" pr={1}>
+            <SingleDropdownList
+              className="select"
+              react={{
+                and: [
+                  "texte",
+                  "date_redaction",
+                  "institution",
+                  "contributeur",
+                  "nom_testateur",
+                  "collection",
+                  "notoriale",
+                  "profession",
+                  "unite",
+                  "cote",
+                ],
+              }}
+              componentId="lieu"
+              dataField="will_contents.place.keyword"
+              value={this.state.place}
+              size={2000}
+              sortBy="asc"
+              showCount={false}
+              autosuggest={true}
+              placeholder="Lieu"
+              URLParams={true}
+              loader="En chargement ..."
+              showSearch={true}
+              searchPlaceholder="Saisir un nom de lieu"
+              onChange={this.handlePlaceChange}
+              innerClass={{
+                list: "list",
+              }}
+              customQuery={this.customQuery}
+            />
+          </Box>
+          <Button
+            id="clearPlace"
+            onClick={(event) => this.handlePlaceChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
+          </Button>
+        </Box>
 
         <div>
-            <List className="places_list">
-              <ListItem className="checkbox">
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.birth_place}
-                    onChange={this.handChange("birth_place")}
-                    value="birth_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox",
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de naissance" />
-              </ListItem>
+          <List className="places_list">
+            <ListItem className="checkbox">
+              <ListItemIcon>
+                <Checkbox
+                  checked={this.state.birth_place}
+                  onChange={this.handChange("birth_place")}
+                  value="birth_place"
+                  inputProps={{
+                    "aria-label": "primary checkbox",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText secondary="Lieu de naissance" />
+            </ListItem>
 
-              <ListItem className="checkbox">
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.residence_place}
-                    onChange={this.handChange("residence_place")}
-                    value="residence_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox",
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de résidence" />
-              </ListItem>
+            <ListItem className="checkbox">
+              <ListItemIcon>
+                <Checkbox
+                  checked={this.state.residence_place}
+                  onChange={this.handChange("residence_place")}
+                  value="residence_place"
+                  inputProps={{
+                    "aria-label": "primary checkbox",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText secondary="Lieu de résidence" />
+            </ListItem>
 
-              <ListItem className="checkbox">
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.will_place}
-                    onChange={this.handChange("will_place")}
-                    value="will_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox",
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de rédaction" />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={this.state.death_place}
-                    onChange={this.handChange("death_place")}
-                    value="death_place"
-                    inputProps={{
-                      "aria-label": "primary checkbox",
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText secondary="Lieu de décès" />
-              </ListItem>
-            </List>
-         </div>
+            <ListItem className="checkbox">
+              <ListItemIcon>
+                <Checkbox
+                  checked={this.state.will_place}
+                  onChange={this.handChange("will_place")}
+                  value="will_place"
+                  inputProps={{
+                    "aria-label": "primary checkbox",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText secondary="Lieu de rédaction" />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Checkbox
+                  checked={this.state.death_place}
+                  onChange={this.handChange("death_place")}
+                  value="death_place"
+                  inputProps={{
+                    "aria-label": "primary checkbox",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText secondary="Lieu de décès" />
+            </ListItem>
+          </List>
+        </div>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={this.state.openAlert}

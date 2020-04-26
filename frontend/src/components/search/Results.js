@@ -20,7 +20,7 @@ import {
   getTotalHits,
   getParamConfig,
   updateMyListWills,
-  getUserToken
+  getUserToken,
 } from "../../utils/functions";
 
 import ResultWills from "./ResultWills";
@@ -30,7 +30,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 // Up to top page click
 
-window.onscroll = function() {
+window.onscroll = function () {
   scrollFunction();
 };
 
@@ -59,7 +59,7 @@ class Results extends React.Component {
       message: "",
       field: "",
       order: "",
-      value: 0
+      value: 0,
     };
     this.userToken = getUserToken();
     this.topFunction = this.topFunction.bind(this);
@@ -73,7 +73,7 @@ class Results extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  topFunction = function() {
+  topFunction = function () {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   };
@@ -81,27 +81,27 @@ class Results extends React.Component {
   handleHelpOpen(event) {
     this.setState({
       anchorEl: this.state.anchorEl ? null : event.currentTarget,
-      anchorElSearch: null
+      anchorElSearch: null,
     });
   }
 
   handleHelpClose(event) {
     this.setState({
-      anchorEl: null
+      anchorEl: null,
     });
   }
 
   handleSearchOpen(event) {
     this.setState({
       anchorElSearch: this.state.anchorElSearch ? null : event.currentTarget,
-      anchorEl: null
+      anchorEl: null,
     });
   }
 
   handleSearchClose(event) {
     this.setState({
       anchorElSearch: null,
-      openAlert: false
+      openAlert: false,
     });
   }
 
@@ -111,49 +111,49 @@ class Results extends React.Component {
         this.setState({
           value: event.target.value,
           field: "testator.name_norm.keyword",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 2:
         this.setState({
           value: event.target.value,
           field: "testator.name_norm.keyword",
-          order: "desc"
+          order: "desc",
         });
         break;
       case 3:
         this.setState({
           value: event.target.value,
           field: "will_contents.will_date",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 4:
         this.setState({
           value: event.target.value,
           field: "will_contents.will_date",
-          order: "desc"
+          order: "desc",
         });
         break;
       case 5:
         this.setState({
           value: event.target.value,
           field: "will_identifier.cote.keyword",
-          order: "asc"
+          order: "asc",
         });
         break;
       case 6:
         this.setState({
           value: event.target.value,
           field: "will_identifier.cote.keyword",
-          order: "desc"
+          order: "desc",
         });
         break;
       default:
         this.setState({
           value: event.target.value,
           field: "",
-          order: ""
+          order: "",
         });
         break;
     }
@@ -167,19 +167,38 @@ class Results extends React.Component {
             correspondent à votre recherche
           </Box>
           <Box display="flex" className="sort_results">
-             <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
-            <Select className="select" value={this.state.value} onChange={this.handleChange}>
-              <MenuItem className="sortBy" value={0}>pertinence</MenuItem>
-              <MenuItem className="sortBy" value={1}>nom de famille (A-Z)</MenuItem>
-              <MenuItem className="sortBy" value={2}>nom de famille (Z-A)</MenuItem>
-              <MenuItem className="sortBy" value={3}>date de rédaction <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
-              <MenuItem className="sortBy" value={4}>date de rédaction <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
-              <MenuItem className="sortBy" value={5}>Cote (A-Z)</MenuItem>
-              <MenuItem className="sortBy" value={6}>Cote (Z-A)</MenuItem>
+            <Box>
+              <label className="fontWeightBold">Trier par </label>
+            </Box>
+            <Select
+              className="select"
+              value={this.state.value}
+              onChange={this.handleChange}
+            >
+              <MenuItem className="sortBy" value={0}>
+                pertinence
+              </MenuItem>
+              <MenuItem className="sortBy" value={1}>
+                nom de famille (A-Z)
+              </MenuItem>
+              <MenuItem className="sortBy" value={2}>
+                nom de famille (Z-A)
+              </MenuItem>
+              <MenuItem className="sortBy" value={3}>
+                date de rédaction <i className="fas fa-long-arrow-alt-up"></i>
+              </MenuItem>
+              <MenuItem className="sortBy" value={4}>
+                date de rédaction <i className="fas fa-long-arrow-alt-down"></i>
+              </MenuItem>
+              <MenuItem className="sortBy" value={5}>
+                Cote (A-Z)
+              </MenuItem>
+              <MenuItem className="sortBy" value={6}>
+                Cote (Z-A)
+              </MenuItem>
             </Select>
           </Box>
         </Box>
-
       );
     } else {
       return (
@@ -188,15 +207,35 @@ class Results extends React.Component {
             {stats.numberOfResults} testaments correspondent à votre recherche
           </Box>
           <Box display="flex" className="sort_results">
-            <Box><label className="fontWeightBold">Trier par {" "}</label></Box>
-            <Select className="select" value={this.state.value} onChange={this.handleChange}>
-              <MenuItem className="sortBy" value={0}>pertinence</MenuItem>
-              <MenuItem className="sortBy" value={1}>nom de famille (A-Z)</MenuItem>
-              <MenuItem className="sortBy" value={2}>nom de famille (Z-A)</MenuItem>
-              <MenuItem className="sortBy" value={3}>date de rédaction <i className="fas fa-long-arrow-alt-up"></i></MenuItem>
-              <MenuItem className="sortBy" value={4}>date de rédaction <i className="fas fa-long-arrow-alt-down"></i></MenuItem>
-              <MenuItem className="sortBy" value={5}>Cote (A-Z)</MenuItem>
-              <MenuItem className="sortBy" value={6}>Cote (Z-A)</MenuItem>
+            <Box>
+              <label className="fontWeightBold">Trier par </label>
+            </Box>
+            <Select
+              className="select"
+              value={this.state.value}
+              onChange={this.handleChange}
+            >
+              <MenuItem className="sortBy" value={0}>
+                pertinence
+              </MenuItem>
+              <MenuItem className="sortBy" value={1}>
+                nom de famille (A-Z)
+              </MenuItem>
+              <MenuItem className="sortBy" value={2}>
+                nom de famille (Z-A)
+              </MenuItem>
+              <MenuItem className="sortBy" value={3}>
+                date de rédaction <i className="fas fa-long-arrow-alt-up"></i>
+              </MenuItem>
+              <MenuItem className="sortBy" value={4}>
+                date de rédaction <i className="fas fa-long-arrow-alt-down"></i>
+              </MenuItem>
+              <MenuItem className="sortBy" value={5}>
+                Cote (A-Z)
+              </MenuItem>
+              <MenuItem className="sortBy" value={6}>
+                Cote (Z-A)
+              </MenuItem>
             </Select>
           </Box>
         </Box>
@@ -205,7 +244,7 @@ class Results extends React.Component {
   }
   onChange(e) {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }
 
@@ -215,7 +254,7 @@ class Results extends React.Component {
       ? myBackups_.mySearches
       : [];
 
-    const idx = mySearches_.findIndex(item => {
+    const idx = mySearches_.findIndex((item) => {
       const label = item["label"];
       const url = item["url"];
       return label === this.state.label || url === document.location.href;
@@ -228,38 +267,36 @@ class Results extends React.Component {
       const date = new Date();
       label_ = document.location.href.split("?")[1] + date;
     }
-    console.log("label_ :", label_);
 
     if (idx === -1 && label_.length > 0) {
       mySearches_.push({
         label: label_,
-        url: document.location.href
+        url: document.location.href,
       });
       myBackups_["mySearches"] = mySearches_;
       const newItem = {
         email: this.userToken.email,
-        myBackups: myBackups_
+        myBackups: myBackups_,
       };
-      updateMyListWills(newItem).then(res => {
+      updateMyListWills(newItem).then((res) => {
         if (res.status === 200) {
           localStorage.setItem("myBackups", JSON.stringify(myBackups_));
           this.setState({
             anchorElSearch: null,
             label: "",
             openAlert: true,
-            message: "Votre recherche a bien été enregistrée !"
+            message: "Votre recherche a bien été enregistrée !",
           });
         } else {
           const err = res.err ? res.err : "Connexion au serveur a échoué !";
           console.log("err :", err);
           this.setState({
             openAlert: true,
-            message: "Votre recherche n'a pas été enregistrée !"
+            message: "Votre recherche n'a pas été enregistrée !",
           });
         }
       });
     } else if (idx > -1) {
-      console.log("find :", mySearches_[idx]);
       this.setState({
         anchorElSearch: null,
         label: "",
@@ -267,7 +304,7 @@ class Results extends React.Component {
         message:
           "Votre recherche est déjà enregistrée sous le label " +
           mySearches_[idx].label +
-          " !"
+          " !",
       });
     }
   }
@@ -276,16 +313,16 @@ class Results extends React.Component {
     getTotalHits(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_wills")
     )
-      .then(res => {
+      .then((res) => {
         const totalHits = res;
         const total =
           typeof totalHits === "object" ? totalHits.value : totalHits;
 
         this.setState({
-          totalHits: total
+          totalHits: total,
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("error :", e);
       });
   }
@@ -302,135 +339,142 @@ class Results extends React.Component {
           <div className="searchBar">
             <Grid container direction="row" spacing={0}>
               <Grid className="searchByKwd" item xs={11}>
-                 <TextSearch />
+                <TextSearch />
               </Grid>
               <Grid item xs={1} className="d-flex align-items-center">
-               <Box display="flex" mb={1}>
-                 <Button
-                   className="iconButton"
-                   aria-describedby={id}
-                   onClick={this.handleHelpOpen}
-                   style={{ cursor: "help" }}
-                 >
-                  <i className="fas fa-question-circle"></i>
-                 </Button>
-
-                 <Popper
-                  elevation={0}
-                  id={id}
-                  open={open}
-                  anchorEl={this.state.anchorEl}
-                  placement="bottom-end"
-                 >
-                  <div className="tooltip">
-                    <p className="popperTitle">Aide à la recherche :</p>
-                    <p>
-                      Vous pouvez saisir un mot ou plusieurs mots séparés par
-                      des espaces. Dans ce cas, la recherche va retourner tous
-                      les testaments contenant l’un ou l’autre de ces mots
-                      (équivalent de l’opérateur OR ou du caractère |). La
-                      recherche est insensible à la casse.
-                    </p>
-                    <p>
-                      Le caractère ^ permet de donner plus de poids dans la
-                      recherche au mot qui le précède (exemple : armée guerre^2)
-                    </p>
-                    <p>
-                      L’opérateur AND ou + peut être utilisé. Dans ce cas, la
-                      recherche va retourner tous les testaments contenant tous
-                      les mots saisis (armée + guerre).{" "}
-                    </p>
-                    <p>
-                      Si vous cherchez une expression précise, les caractères "
-                      " permettent de rechercher exactement une suite de mots
-                      (exemple "au poste de commandement").
-                    </p>
-                    <p>
-                      Le caractère * (troncature) peut être utilisé pour masquer
-                      un nombre de caractères allant de 0 à n dans un mot.
-                    </p>
-                    <p>Le caractère ? (masque) masque un seul caractère.</p>
-                    <p>
-                      L’opérateur NOT (ou le caractère -), permet d'exclure le
-                      mot qui le suit (armée NOT guerre ; armée -guerre).
-                    </p>
-                  </div>
-                 </Popper>
-
-                 {Boolean(this.userToken) ? (
-                  <Tooltip
-                    title="Sauvegarder la recherche dans mes favoris"
-                    interactive
-                    arrow={true}
+                <Box display="flex" mb={1}>
+                  <Button
+                    className="iconButton"
+                    aria-describedby={id}
+                    onClick={this.handleHelpOpen}
+                    style={{ cursor: "help" }}
                   >
-                       <Button
-                       className="iconButton"
-                       aria-describedby="save"
-                       onClick={this.handleSearchOpen}
-                       style={{ cursor: "hand" }}
-                      >
-                      <i className="far fa-save"></i>
-                     </Button>
-                  </Tooltip>
-                 ) : (
-                  <Tooltip
-                    title="Connectez-vous pour sauvegarder votre recherche !"
-                    arrow={true}
-                  >
-                    <Button
-                       className="disabled iconButton"
-                       aria-describedby="save"
-                      >
-                      <i className="far fa-save"></i>
-                    </Button>
-                  </Tooltip>
-                 )}
+                    <i className="fas fa-question-circle"></i>
+                  </Button>
 
-                 <Popper
-                  id={id_search}
-                  open={open_search}
-                  anchorEl={this.state.anchorElSearch}
-                  placement="bottom-end"
-                 >
-                  <Container className="saveSearchForm bg-mid-gray">
-                    <div className="fontWeightRegular label">Sauvegarder votre recherche</div>
-                    <Grid
-                      container
-                      direction="row"
-                      justify="center"
-                      alignItems="center"
-                      spacing={1}
+                  <Popper
+                    elevation={0}
+                    id={id}
+                    open={open}
+                    anchorEl={this.state.anchorEl}
+                    placement="bottom-end"
+                  >
+                    <div className="tooltip">
+                      <p className="popperTitle">Aide à la recherche :</p>
+                      <p>
+                        Vous pouvez saisir un mot ou plusieurs mots séparés par
+                        des espaces. Dans ce cas, la recherche va retourner tous
+                        les testaments contenant l’un ou l’autre de ces mots
+                        (équivalent de l’opérateur OR ou du caractère |). La
+                        recherche est insensible à la casse.
+                      </p>
+                      <p>
+                        Le caractère ^ permet de donner plus de poids dans la
+                        recherche au mot qui le précède (exemple : armée
+                        guerre^2)
+                      </p>
+                      <p>
+                        L’opérateur AND ou + peut être utilisé. Dans ce cas, la
+                        recherche va retourner tous les testaments contenant
+                        tous les mots saisis (armée + guerre).{" "}
+                      </p>
+                      <p>
+                        Si vous cherchez une expression précise, les caractères
+                        " " permettent de rechercher exactement une suite de
+                        mots (exemple "au poste de commandement").
+                      </p>
+                      <p>
+                        Le caractère * (troncature) peut être utilisé pour
+                        masquer un nombre de caractères allant de 0 à n dans un
+                        mot.
+                      </p>
+                      <p>Le caractère ? (masque) masque un seul caractère.</p>
+                      <p>
+                        L’opérateur NOT (ou le caractère -), permet d'exclure le
+                        mot qui le suit (armée NOT guerre ; armée -guerre).
+                      </p>
+                    </div>
+                  </Popper>
+
+                  {Boolean(this.userToken) ? (
+                    <Tooltip
+                      title="Sauvegarder la recherche dans mes favoris"
+                      interactive
+                      arrow={true}
                     >
-                      <Grid item>
-                        <TextField
-                          id="input_search"
-                          variant="outlined"
-                          required
-                          className="input"
-                          name="label"
-                          placeholder="Donner un nom à votre recherche"
-                          onChange={this.onChange}
-                          value={this.state.label}
-                        />
+                      <Button
+                        className="iconButton"
+                        aria-describedby="save"
+                        onClick={this.handleSearchOpen}
+                        style={{ cursor: "hand" }}
+                      >
+                        <i className="far fa-save"></i>
+                      </Button>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      title="Connectez-vous pour sauvegarder votre recherche !"
+                      arrow={true}
+                    >
+                      <Button
+                        className="disabled iconButton"
+                        aria-describedby="save"
+                      >
+                        <i className="far fa-save"></i>
+                      </Button>
+                    </Tooltip>
+                  )}
+
+                  <Popper
+                    id={id_search}
+                    open={open_search}
+                    anchorEl={this.state.anchorElSearch}
+                    placement="bottom-end"
+                  >
+                    <Container className="saveSearchForm bg-mid-gray">
+                      <div className="fontWeightRegular label">
+                        Sauvegarder votre recherche
+                      </div>
+                      <Grid
+                        container
+                        direction="row"
+                        justify="center"
+                        alignItems="center"
+                        spacing={1}
+                      >
+                        <Grid item>
+                          <TextField
+                            id="input_search"
+                            variant="outlined"
+                            required
+                            className="input"
+                            name="label"
+                            placeholder="Donner un nom à votre recherche"
+                            onChange={this.onChange}
+                            value={this.state.label}
+                          />
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            id="btSave"
+                            color="secondary"
+                            className="submit button fontWeightMedium plain bg-secondaryLight"
+                            onClick={this.handleSearchSave}
+                          >
+                            Sauvegarder
+                          </Button>
+                        </Grid>
                       </Grid>
-                      <Grid item>
-                        <Button
-                          id="btSave"
-                          color="secondary"
-                          className="submit button fontWeightMedium plain bg-secondaryLight"
-                          onClick={this.handleSearchSave}
-                        >
-                          Sauvegarder
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Container>
-                 </Popper>
-               </Box>
+                    </Container>
+                  </Popper>
+                </Box>
               </Grid>
             </Grid>
 
-            <SelectedFilters className="criteres_selected" clearAllLabel="Effacer les critères de recherche" />
+            <SelectedFilters
+              className="criteres_selected"
+              clearAllLabel="Effacer les critères de recherche"
+            />
           </div>
 
           {this.state.field === "" && this.state.order === "" ? (
@@ -449,8 +493,8 @@ class Results extends React.Component {
                   "lieu",
                   "notoriale",
                   "profession",
-                  "unite"
-                ]
+                  "unite",
+                ],
               }}
               className="searchResults"
               dataField=""
@@ -458,15 +502,19 @@ class Results extends React.Component {
               stream={false}
               pagination={true}
               innerClass={{
-              pagination: "pagination"
-              }}              
+                pagination: "pagination",
+              }}
               size={15}
               showResultStats={true}
               infiniteScroll={true}
-              loader={<CircularProgress/>}
+              loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
-              renderNoResults={function() {
-                return <p className="text-error paddingContainer">Aucun résultat ne correspond à cette recherche.</p>;
+              renderNoResults={function () {
+                return (
+                  <p className="text-error paddingContainer">
+                    Aucun résultat ne correspond à cette recherche.
+                  </p>
+                );
               }}
             >
               {({ data, error, loading }) => <ResultWills data={data} />}
@@ -487,8 +535,8 @@ class Results extends React.Component {
                   "lieu",
                   "notoriale",
                   "profession",
-                  "unite"
-                ]
+                  "unite",
+                ],
               }}
               className="searchResults"
               dataField={this.state.field}
@@ -498,13 +546,13 @@ class Results extends React.Component {
               pagination={true}
               size={15}
               innerClass={{
-              pagination: "pagination"
-              }}  
+                pagination: "pagination",
+              }}
               showResultStats={true}
               infiniteScroll={true}
               loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
-              renderNoResults={function() {
+              renderNoResults={function () {
                 return <p>Aucun résultat ne correspond à cette recherche.</p>;
               }}
             >
@@ -512,22 +560,24 @@ class Results extends React.Component {
             </ReactiveList>
           )}
           <Box display="flex" justifyContent="flex-end">
-           <Tooltip title="Haut de page" style={{ cursor: "hand" }} interactive>
-            <Button
-              id="btTop"
-              onClick={this.topFunction}
-              aria-label="Remonter en haut de la page"
-              className="iconButton"
+            <Tooltip
+              title="Haut de page"
+              style={{ cursor: "hand" }}
+              interactive
             >
-             <i className="fas fa-level-up-alt"></i>
-            </Button>
-           </Tooltip>
+              <Button
+                id="btTop"
+                onClick={this.topFunction}
+                aria-label="Remonter en haut de la page"
+                className="iconButton"
+              >
+                <i className="fas fa-level-up-alt"></i>
+              </Button>
+            </Tooltip>
           </Box>
         </div>
 
         <div>
-        
-
           <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             key="topCenter"
@@ -535,7 +585,7 @@ class Results extends React.Component {
             onClose={this.handleSearchClose}
             autoHideDuration={500000}
             ContentProps={{
-              "aria-describedby": "message-id"
+              "aria-describedby": "message-id",
             }}
           >
             <SnackbarContent
@@ -554,7 +604,7 @@ class Results extends React.Component {
                   onClick={this.handleSearchClose}
                 >
                   <CloseIcon className="icon" />
-                </IconButton>
+                </IconButton>,
               ]}
             />
           </Snackbar>

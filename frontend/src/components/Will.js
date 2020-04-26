@@ -111,7 +111,6 @@ class Will extends Component {
       let cur_idx = 0;
       if (localStorage.willsIds) {
         const willsIds = JSON.parse(localStorage.willsIds);
-        console.log(willsIds);
 
         cur_idx = willsIds.indexOf(query_id);
       }
@@ -177,30 +176,32 @@ class Will extends Component {
           <div className="d-md-flex">
             {localStorage.willsIds &&
             JSON.parse(localStorage.willsIds).length > 1 ? (
-               <Box display="flex" mb={1}>
-                  <Box px={1}>              
-                    <Button
-                      id="prev"
-                      className="button outlined secondary-light"
-                      onClick={this.handlePrev}
-                      disabled={this.state.idx === 0}
-                    >
-                    <i class="fa fa-caret-left" aria-hidden="true"></i> Testament précédent
-                    </Button>
-                  </Box>
-                  <Box px={1}>                
-                    <Button
-                      id="next"
-                      className="button outlined secondary-light"
-                      disabled={
-                        this.state.idx ===
-                        JSON.parse(localStorage.willsIds).length - 1
-                      }
-                      onClick={this.handleNext}
-                    >
-                      Testament suivant <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </Button>
-                  </Box>
+              <Box display="flex" mb={1}>
+                <Box px={1}>
+                  <Button
+                    id="prev"
+                    className="button outlined secondary-light"
+                    onClick={this.handlePrev}
+                    disabled={this.state.idx === 0}
+                  >
+                    <i class="fa fa-caret-left" aria-hidden="true"></i>{" "}
+                    Testament précédent
+                  </Button>
+                </Box>
+                <Box px={1}>
+                  <Button
+                    id="next"
+                    className="button outlined secondary-light"
+                    disabled={
+                      this.state.idx ===
+                      JSON.parse(localStorage.willsIds).length - 1
+                    }
+                    onClick={this.handleNext}
+                  >
+                    Testament suivant{" "}
+                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                  </Button>
+                </Box>
               </Box>
             ) : (
               ""
@@ -210,12 +211,12 @@ class Will extends Component {
               {document.referrer.length > 0 &&
               document.referrer !== document.location.href ? (
                 <Button
-                    className="button outlined secondary-light"
-                    id="btnBack"
-                    onClick={this.handleBackUp}
-                    aria-label="page précédente"
-                  >
-                    <i className="fas fa-undo-alt"></i> Revenir en arrière
+                  className="button outlined secondary-light"
+                  id="btnBack"
+                  onClick={this.handleBackUp}
+                  aria-label="page précédente"
+                >
+                  <i className="fas fa-undo-alt"></i> Revenir en arrière
                 </Button>
               ) : null}
             </Box>

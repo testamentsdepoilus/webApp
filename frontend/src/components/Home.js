@@ -352,7 +352,6 @@ class Home extends Component {
                       sm={6}
                       md={3}
                     >
-                      {console.log(tile)}
                       <a
                         href={
                           getParamConfig("web_url") + "/testament/" + tile._id

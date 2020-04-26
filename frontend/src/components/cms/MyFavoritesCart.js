@@ -629,7 +629,6 @@ export default class MyFavoritesCart extends Component {
     let output_filename = myPlaces_.map((id) => "Projet_TdP_lieu_" + id);
     generatePlaceHTML(myPlaces_)
       .then((outputHTML) => {
-        console.log(outputHTML);
         if (outputHTML.length === 1) {
           const inputItem = {
             outputHtml: outputHTML[0],

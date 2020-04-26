@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SingleDropdownList } from "@appbaseio/reactivesearch";
-import { Grid, Button, Box } from "@material-ui/core";
+import { Button, Box } from "@material-ui/core";
 import PlaceFilter from "./PlaceFilter";
 
 export default class CustumerDataSearch extends Component {
@@ -40,7 +40,6 @@ export default class CustumerDataSearch extends Component {
   }
 
   handleTestatorChange(value) {
-    console.log("value :", value);
     this.setState({
       testator: value,
     });
@@ -113,8 +112,13 @@ export default class CustumerDataSearch extends Component {
     };
     return (
       <div>
-
-        <Box display="flex" alignItems="center" justifyContent="space-between" mt={1} mb={2}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={1}
+          mb={2}
+        >
           <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
@@ -151,7 +155,7 @@ export default class CustumerDataSearch extends Component {
                   {label.split("+")[1] + " "}
                   <span className="smallcaps">{label.split("+")[0]}</span>
                 </div>
-              )}              
+              )}
               innerClass={{
                 list: "list",
                 select: "select",
@@ -159,18 +163,24 @@ export default class CustumerDataSearch extends Component {
             />
           </Box>
           <Button
-              id="clearTestator"
-              onClick={(event) => this.handleTestatorChange("")}
-              title="Supprimer le filtre"
-              className="button iconButton"
-            >
+            id="clearTestator"
+            onClick={(event) => this.handleTestatorChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
             <i className="fas fa-times"></i>
-           </Button>
+          </Button>
         </Box>
 
         <PlaceFilter />
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" mt={3} mb={2}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={3}
+          mb={2}
+        >
           <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
@@ -235,16 +245,21 @@ export default class CustumerDataSearch extends Component {
             />
           </Box>
           <Button
-              id="clearOccupation"
-              onClick={(event) => this.handleOccupationChange("")}
-              title="Supprimer le filtre"
-              className="button iconButton"
-            >
-              <i className="fas fa-times"></i>
+            id="clearOccupation"
+            onClick={(event) => this.handleOccupationChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
           </Button>
         </Box>
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          my={2}
+        >
           <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
@@ -283,16 +298,21 @@ export default class CustumerDataSearch extends Component {
             />
           </Box>
           <Button
-              id="clearUnit"
-              onClick={(event) => this.handleUnitChange("")}
-              title="Supprimer le filtre"
-              className="button iconButton"
-            >
-              <i className="fas fa-times"></i>
+            id="clearUnit"
+            onClick={(event) => this.handleUnitChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
           </Button>
         </Box>
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          my={2}
+        >
           <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
@@ -326,16 +346,21 @@ export default class CustumerDataSearch extends Component {
             />
           </Box>
           <Button
-              id="clearInstitution"
-              onClick={(event) => this.handleInstitutionChange("")}
-              title="Supprimer le filtre"
-              className="button iconButton"
-            >
-              <i className="fas fa-times"></i>
-         </Button>
+            id="clearInstitution"
+            onClick={(event) => this.handleInstitutionChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
+          </Button>
         </Box>
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          my={2}
+        >
           <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
@@ -374,16 +399,21 @@ export default class CustumerDataSearch extends Component {
             />
           </Box>
           <Button
-              id="clearCote"
-              onClick={(event) => this.handleCoteChange("")}
-              title="Supprimer le filtre"
-              className="button iconButton"
-            >
-              <i className="fas fa-times"></i>
+            id="clearCote"
+            onClick={(event) => this.handleCoteChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
           </Button>
         </Box>
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          my={2}
+        >
           <Box flexGrow="1" flexShrink="1" pr={1}>
             <SingleDropdownList
               className="select"
@@ -422,15 +452,14 @@ export default class CustumerDataSearch extends Component {
             />
           </Box>
           <Button
-              id="clearNotoriale"
-              onClick={(event) => this.handleNotorialeChange("")}
-              title="Supprimer le filtre"
-              className="button iconButton"
-            >
-              <i className="fas fa-times"></i>
+            id="clearNotoriale"
+            onClick={(event) => this.handleNotorialeChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
           </Button>
         </Box>
-
       </div>
     );
   }
