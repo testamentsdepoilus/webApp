@@ -60,7 +60,7 @@ class ResetMDP extends Component {
     } else if (this.state.password !== this.state.passConfirme) {
       this.setState({
         error:
-          "Les mots de passe saisies ne sont pas identiques, veuillez saisir le même mot de passe.",
+          "Les mots de passe saisis ne sont pas identiques, veuillez saisir le même mot de passe.",
         isError: true,
       });
     } else {

@@ -507,6 +507,7 @@ class Results extends React.Component {
               size={15}
               showResultStats={true}
               infiniteScroll={true}
+              URLParams
               loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
               renderNoResults={function () {
@@ -550,6 +551,7 @@ class Results extends React.Component {
               }}
               showResultStats={true}
               infiniteScroll={true}
+              URLParams
               loader={<CircularProgress />}
               renderResultStats={this.renderResultStats}
               renderNoResults={function () {

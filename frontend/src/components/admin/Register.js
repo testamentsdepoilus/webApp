@@ -27,7 +27,7 @@ class Register extends Component {
       showPassword: false,
       error: "",
       isError: [false, false, false, false],
-      open: false
+      open: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -38,13 +38,13 @@ class Register extends Component {
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
-      error: ""
+      error: "",
     });
   }
 
-  handleClickShowPassword = e => {
+  handleClickShowPassword = (e) => {
     this.setState({
-      showPassword: !this.state.showPassword
+      showPassword: !this.state.showPassword,
     });
   };
 
@@ -58,29 +58,29 @@ class Register extends Component {
       if (!this.state.password) {
         this.setState({
           error: "Saisissez votre mot de passe !",
-          isError: [false, false, true, true]
+          isError: [false, false, true, true],
         });
       } else if (this.state.password !== this.state.passConfirme) {
         this.setState({
-          error: 
-            "Les mots de passe saisies ne sont pas identiques, veuillez saisir le même mot de passe.",
-          isError: [false, false, true, true]
+          error:
+            "Les mots de passe saisis ne sont pas identiques, veuillez saisir le même mot de passe.",
+          isError: [false, false, true, true],
         });
       } else {
         const user = {
           user_name: this.state.user_name,
           email: this.state.email,
-          password: this.state.password
+          password: this.state.password,
         };
-        register(user).then(res => {
+        register(user).then((res) => {
           if (res.status === 200) {
             this.setState({
-              open: true
+              open: true,
             });
           } else {
             const err = res.err ? res.err : "Connexion au serveur a échoué !";
             this.setState({
-              error: err
+              error: err,
             });
           }
         });
@@ -88,17 +88,17 @@ class Register extends Component {
     } else if (!this.state.user_name && !this.state.email) {
       this.setState({
         error: "Saisissez votre pseudo et votre adresse e-mail !",
-        isError: [true, true, false, false]
+        isError: [true, true, false, false],
       });
     } else if (!this.state.user_name) {
       this.setState({
         error: "Saisissez votre pseudo !",
-        isError: [true, false, false, false]
+        isError: [true, false, false, false],
       });
     } else {
       this.setState({
         error: "Saisissez votre adresse e-mail !",
-        isError: [false, true, false, false]
+        isError: [false, true, false, false],
       });
     }
   }
@@ -195,20 +195,15 @@ class Register extends Component {
                 </InputAdornment>
               </Grid>
             </Grid>
-         
 
-           <Box pt={1} display="flex" justifyContent="flex-end">
-             <Button
-              className="submit button fontWeightMedium plain bg-secondaryLight"
-              type="submit"
-             >
-               S'inscrire
-             </Button>
+            <Box pt={1} display="flex" justifyContent="flex-end">
+              <Button
+                className="submit button fontWeightMedium plain bg-secondaryLight"
+                type="submit"
+              >
+                S'inscrire
+              </Button>
             </Box>
-           
-
-
-
           </form>
           {this.state.error ? (
             <div className="text-error">{this.state.error}</div>

@@ -335,7 +335,8 @@ class Home extends Component {
             <Grid item id="random_wills">
               <Paper className="card">
                 <h2 className="card-title">
-                  <i className="fas fa-folder-open"></i> Testaments au hasard
+                  <i className="fas fa-folder-open"></i> Quelques exemples de
+                  testaments
                 </h2>
                 <Grid
                   container
