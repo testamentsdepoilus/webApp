@@ -9,15 +9,16 @@ import { getParamConfig } from "../../utils/functions";
 export default class GeoMap extends React.Component {
   map = null;
   markers = L.markerClusterGroup({
-    iconCreateFunction: function(cluster) {
+    showCoverageOnHover: false,
+    iconCreateFunction: function (cluster) {
       var childCount = cluster.getChildCount();
 
       return new L.DivIcon({
         html: "<div><span>" + childCount + "</span></div>",
         className: "marker-cluster marker-mycluster",
-        iconSize: new L.Point(40, 40)
+        iconSize: new L.Point(40, 40),
       });
-    }
+    },
   });
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ export default class GeoMap extends React.Component {
       checkedB: true,
       checkedC: false,
       checkedD: false,
-      count: 0
+      count: 0,
     };
     this.handleCheckA = this.handleCheckA.bind(this);
     this.handleCheckB = this.handleCheckB.bind(this);
@@ -40,40 +41,40 @@ export default class GeoMap extends React.Component {
       iconUrl:
         "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png"
+        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png",
     });
     this.redIcon = L.icon({
       iconUrl:
         "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png"
+        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png",
     });
   }
 
   handleCheckA(event) {
     this.setState({
       checkedA: event.target.checked,
-      count: 0
+      count: 0,
     });
   }
   handleCheckB(event) {
     this.setState({
       checkedB: event.target.checked,
-      count: 0
+      count: 0,
     });
   }
 
   handleCheckC(event) {
     this.setState({
       checkedC: event.target.checked,
-      count: 0
+      count: 0,
     });
   }
 
   handleCheckD(event) {
     this.setState({
       checkedD: event.target.checked,
-      count: 0
+      count: 0,
     });
   }
 
@@ -93,7 +94,7 @@ export default class GeoMap extends React.Component {
         death_data: nextProps.death_data,
         residence_data: nextProps.residence_data,
         will_data: nextProps.will_data,
-        count: 0
+        count: 0,
       };
     }
     return null;
@@ -121,7 +122,7 @@ export default class GeoMap extends React.Component {
                   onChange={this.handleCheckA}
                   value="checked"
                   inputProps={{
-                    "aria-label": "primary checkbox"
+                    "aria-label": "primary checkbox",
                   }}
                 />
               </Grid>
@@ -136,7 +137,7 @@ export default class GeoMap extends React.Component {
                   onChange={this.handleCheckC}
                   value="checked"
                   inputProps={{
-                    "aria-label": "primary checkbox"
+                    "aria-label": "primary checkbox",
                   }}
                 />
               </Grid>
@@ -151,7 +152,7 @@ export default class GeoMap extends React.Component {
                   onChange={this.handleCheckD}
                   value="checked"
                   inputProps={{
-                    "aria-label": "primary checkbox"
+                    "aria-label": "primary checkbox",
                   }}
                 />
               </Grid>
@@ -166,7 +167,7 @@ export default class GeoMap extends React.Component {
                 onChange={this.handleCheckB}
                 value="checkedB"
                 inputProps={{
-                  "aria-label": "primary checkbox"
+                  "aria-label": "primary checkbox",
                 }}
               />
             </Grid>
@@ -419,7 +420,7 @@ export default class GeoMap extends React.Component {
 
       this.map.addLayer(this.markers);
       this.setState({
-        count: this.state.count + 1
+        count: this.state.count + 1,
       });
     }
   }
@@ -430,11 +431,11 @@ export default class GeoMap extends React.Component {
     );
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
-        "&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+        "&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors",
     }).addTo(this.map);
 
     let legend = L.control({ position: "bottomleft" });
-    legend.onAdd = function(map) {
+    legend.onAdd = function (map) {
       let div = L.DomUtil.create("div", "legend");
       div.innerHTML += '<div id="legend"> </div>';
       return div;
@@ -468,7 +469,7 @@ export default class GeoMap extends React.Component {
         }
 
         let myList = [];
-        point.forEach(item => {
+        point.forEach((item) => {
           myList.push(
             <li>
               {item["testator.forename"]}{" "}
