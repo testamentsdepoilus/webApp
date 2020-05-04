@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 
-import ReactDOMServer from "react-dom/server";
 import {
-  createElementFromHTML,
   getParamConfig,
   downloadFile,
   generateWillPDF,
@@ -23,9 +21,7 @@ import {
   Tooltip,
   CircularProgress,
 } from "@material-ui/core";
-import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
-import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
-import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
+
 import ImageIIF from "../utils/ImageIIIF";
 import isEqual from "lodash/isEqual";
 import TestatorDisplay from "./TestatorDisplay";
@@ -333,7 +329,7 @@ export default class WillDisplay extends Component {
   }
 
   componentDidUpdate() {
-    if (document.getElementById("newLine_lb") === null) {
+    /*if (document.getElementById("newLine_lb") === null) {
       let lbCollection = document.getElementsByClassName("lb");
       for (let item of lbCollection) {
         item.before(
@@ -387,7 +383,7 @@ export default class WillDisplay extends Component {
           )
         );
       }
-    }
+    }*/
     getHitsFromQuery(
       getParamConfig("es_host") + "/" + getParamConfig("es_index_testators"),
       JSON.stringify({
@@ -428,7 +424,7 @@ export default class WillDisplay extends Component {
         idx: cur_idx,
       });
     }
-    let lbCollection = document.getElementsByClassName("lb");
+    /*let lbCollection = document.getElementsByClassName("lb");
     for (let item of lbCollection) {
       item.before(
         createElementFromHTML(
@@ -474,7 +470,7 @@ export default class WillDisplay extends Component {
           )
         )
       );
-    }
+    }*/
     if (localStorage.myBackups) {
       const myBackups_ = JSON.parse(localStorage.myBackups);
       let myWills_ = Boolean(myBackups_["myWills"])

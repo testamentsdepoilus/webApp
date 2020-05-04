@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import ReactDOMServer from "react-dom/server";
-import { createElementFromHTML } from "../utils/functions";
+
 import { Paper, Link, Grid, Box } from "@material-ui/core";
-import NewLine from "@material-ui/icons/SubdirectoryArrowLeftOutlined";
-import SpaceLineIcon from "@material-ui/icons/FormatLineSpacingOutlined";
-import SpaceBarIcon from "@material-ui/icons/SpaceBarOutlined";
+
 import ImageIIF from "../utils/ImageIIIF";
 
 function createPageMenu(pages, idx, handleClick) {
@@ -100,7 +97,7 @@ class WillCompare extends Component {
       cur_idx = 0;
     }*/
     //document.getElementById(String(cur_idx)).focus();
-    let lbCollection = document.getElementsByClassName("lb");
+    /*let lbCollection = document.getElementsByClassName("lb");
     for (let item of lbCollection) {
       item.before(
         createElementFromHTML(
@@ -146,11 +143,11 @@ class WillCompare extends Component {
           )
         )
       );
-    }
+    }*/
   }
 
   componentDidUpdate() {
-    if (document.getElementById("newLine_lb") === null) {
+    /*if (document.getElementById("newLine_lb") === null) {
       let lbCollection = document.getElementsByClassName("lb");
       let i = 0;
       for (let item of lbCollection) {
@@ -210,7 +207,7 @@ class WillCompare extends Component {
           )
         );
       }
-    }
+    }*/
   }
 
   render() {
@@ -252,7 +249,7 @@ class WillCompare extends Component {
               onClick={this.handleMenuClick}
               className={this.state.type === "edition" ? "active" : ""}
             >
-              <i className="far fa-file-alt"></i> Edition
+              <i className="far fa-file-alt"></i> Édition
             </Link>
           </div>
         </Box>

@@ -1177,7 +1177,8 @@ export default class MyFavoritesCart extends Component {
         {this.exportRender(title)}
         {title === "myWills" ? (
           Boolean(this.state.selected[title]) &&
-          this.state.selected[title].length < 4 ? (
+          this.state.selected[title].length < 4 &&
+          this.state.selected[title].length > 1 ? (
             <Grid item>
               <Tooltip title="Comparer les testaments sélectionnés">
                 <span>
@@ -1199,7 +1200,7 @@ export default class MyFavoritesCart extends Component {
             </Grid>
           ) : (
             <Grid item>
-              <Tooltip title="On peut comparer au maximum 3 testaments à la fois">
+              <Tooltip title="On peut comparer seulement 2 ou 3 testaments à la fois">
                 <span>
                   <Button
                     className="button iconButton plain primaryMain"
