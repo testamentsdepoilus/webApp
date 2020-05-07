@@ -65,32 +65,6 @@ function scrollFunction() {
   }
 }
 
-function desc(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function stableSort(array, cmp) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = cmp(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-function getSorting(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => desc(a, b, orderBy)
-    : (a, b) => -desc(a, b, orderBy);
-}
-
 const headCells = [
   { id: "title", numeric: false, disablePadding: false, label: "Titre" },
 ];
@@ -783,10 +757,7 @@ export default class MyFavoritesCart extends Component {
             title={title}
           />
           <TableBody>
-            {stableSort(
-              data,
-              getSorting(this.state.order[title], this.state.orderBy)
-            ).map((row, index) => {
+            {data.map((row, index) => {
               const isItemSelected =
                 title === "mySearches"
                   ? isSelected(row.label)
@@ -872,7 +843,6 @@ export default class MyFavoritesCart extends Component {
       ? JSON.parse(localStorage.myBackups)
       : {};
     if (Boolean(myBackups_.myWills)) {
-      localStorage.setItem("willsIds", JSON.stringify(myBackups_.myWills));
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
         JSON.stringify({
@@ -891,6 +861,11 @@ export default class MyFavoritesCart extends Component {
             };
             return output;
           });
+
+          localStorage.setItem(
+            "willsIds",
+            JSON.stringify(data_["myWills"].map((item) => item._id))
+          );
           this.setState({
             data: data_,
           });

@@ -111,7 +111,6 @@ class Will extends Component {
       let cur_idx = 0;
       if (localStorage.willsIds) {
         const willsIds = JSON.parse(localStorage.willsIds);
-
         cur_idx = willsIds.indexOf(query_id);
       }
       getHitsFromQuery(
