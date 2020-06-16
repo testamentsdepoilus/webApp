@@ -385,7 +385,7 @@ router.post("/updateConfigMail", function (req, res, next) {
   const email_root = req.body.email_root;
   const email = req.body.email;
   const password = req.body.password;
-
+  console.log("config begin ...");
   client.search(
     {
       index: indexES,
@@ -408,9 +408,9 @@ router.post("/updateConfigMail", function (req, res, next) {
           let isFailed = false;
           let transporter = nodemailer.createTransport(
             smtpTransport({
-              host: "smtp2.ensea.fr", // hostname
-              secureConnection: true, // TLS requires secureConnection to be false
-              port: 465, // port for secure SMTP
+              host: "smtp.oronge.fr", // hostname
+              secureConnection: false, // TLS requires secureConnection to be false
+              port: 25, // port for secure SMTP
               tls: {
                 rejectUnauthorized: false,
               },
@@ -421,14 +421,17 @@ router.post("/updateConfigMail", function (req, res, next) {
             })
           );
 
+          console.log("verify begin ...");
           // verify connection configuration
           transporter.verify(function (error, success) {
+            console.log("Verify ...", error);
             if (error) {
               res.send({
                 status: 400,
-                err: "Erreur avec authentification serveur :" + error,
+                err: "Erreur avec authentification serveur oronge:" + error,
               });
             } else {
+              console.log("update email config ...");
               client.update({
                 index: indexES,
                 id: hits[idx]._id,
@@ -450,7 +453,7 @@ router.post("/updateConfigMail", function (req, res, next) {
               if (isFailed) {
                 res.send({
                   status: 400,
-                  err: "Connexion au serveur a échoué !" + err,
+                  err: "toto Connexion au serveur a échoué !" + err,
                 });
               } else {
                 auth = {
@@ -488,14 +491,14 @@ router.post("/resetPassWord", function (req, res, next) {
     },
     (err, result) => {
       if (err) {
-        res.send({ status: 400, err: "ES connexion au serveur a échoué !" });
+        res.send({ status: 400, error: "ES connexion au serveur a échoué !" });
       } else {
         hits = result.body.hits.hits;
 
         if (hits.length === 0) {
           res.send({
             status: 400,
-            err: "L'adresse e-mail " + req.body.email + " n'est pas valide !",
+            error: "L'adresse e-mail " + req.body.email + " n'est pas valide !",
           });
         } else {
           try {
@@ -503,7 +506,7 @@ router.post("/resetPassWord", function (req, res, next) {
               { email: req.body.email },
               process.env.SECRET_KEY,
               {
-                expiresIn: "2h",
+                expiresIn: "24h",
               }
             );
 
@@ -524,11 +527,25 @@ router.post("/resetPassWord", function (req, res, next) {
                     : {},
                 })
               );
+              /*  let transporter = nodemailer.createTransport({
+                host: "smtp2.ensea.fr", // hostname
+                port: 465, // port for secure SMTP
+                secure: true,
+                auth: Boolean(auth.email)
+                  ? {
+                      user: auth.email,
+                      pass: simpleCrypto.decrypt(auth.password),
+                    }
+                  : {},
+              });*/
 
               // verify connection configuration
               transporter.verify(function (error, success) {
                 if (error) {
-                  res.send({ status: 400, err: error });
+                  res.send({
+                    status: 400,
+                    error: "Erreur serveur d'envoie de mail !",
+                  });
                 } else {
                   const link =
                     process.env.host_web + "/reinitialiserMDP/" + emailToken;
@@ -552,7 +569,7 @@ router.post("/resetPassWord", function (req, res, next) {
                   };
                   transporter.sendMail(mailOptions, function (err, info) {
                     if (err) {
-                      res.send({ status: 400, err: err.message });
+                      res.send({ status: 400, error: err.message });
                     } else {
                       res.send({
                         status: 200,
@@ -568,13 +585,13 @@ router.post("/resetPassWord", function (req, res, next) {
             } else {
               res.send({
                 status: 400,
-                err: "Merci de configurer le serveur d'envoie d'e-mail !",
+                error: "Merci de configurer le serveur d'envoie d'e-mail !",
               });
             }
           } catch (e) {
             res.send({
               status: 400,
-              err: "catch : " + e,
+              error: "catch : " + e,
             });
           }
         }

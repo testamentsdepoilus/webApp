@@ -53,12 +53,14 @@ import "./styles/WillCompare.css";
 import "./styles/Compare.css";
 import "./styles/Responsive.css";
 import "./styles/Contact.css";
+import "./styles/ManageES.css";
 
 import LostPassWord from "./components/admin/LostPassWord";
 import ResetMDP from "./components/admin/ResetMDP";
 import "./styles/LostPassWord.css";
 import "./styles/ResetMDP.css";
 import MyFavoritesCart from "./components/cms/MyFavoritesCart";
+import ManageES from "./components/cms/ManageES";
 
 const theme = createMuiTheme({
   palette: {
@@ -202,6 +204,7 @@ class App extends Component {
                 />
                 <Route path="/espace/cms" component={Manage} />
                 <Route exact path="/espace/config" component={ConfigMail} />
+                <Route exact path="/espace/manageES" component={ManageES} />
                 <Route path="/compare" component={Compare} />
                 <Route exact path="/explore" component={Explore} />
                 <Route exact path="/contact" component={Contact} />

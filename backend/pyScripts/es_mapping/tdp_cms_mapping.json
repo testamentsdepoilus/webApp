@@ -1,0 +1,38 @@
+{
+  "mappings": {
+    "properties": {
+      "user_id": {
+        "type": "object",
+        "enabled": false
+      },
+      "title": {
+        "type": "object",
+        "enabled": false
+      },
+      "author": {
+        "type": "object",
+        "enabled": false
+      },
+      "summary": {
+        "type": "object",
+        "enabled": false
+      },
+      "detail": {
+        "type": "object",
+        "enabled": false
+      },
+      "type": {
+        "type": "integer"
+      },
+      "created": {
+        "type": "date"
+      },
+      "selected": {
+        "type": "boolean"
+      },
+      "order": {
+        "type": "integer"
+      }
+    }
+  }
+}

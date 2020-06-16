@@ -197,15 +197,6 @@ export default class WillDisplay extends Component {
           isLoading: false,
         });
       });
-    /*generateWillPDF(this.props.data, this.state.testator_notice)
-      .then(res => {
-        this.setState({
-          isLoading: false
-        });
-      })
-      .catch(e => {
-        console.log(e);
-      });*/
   }
 
   handleNextPage(event) {

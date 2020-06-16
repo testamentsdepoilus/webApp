@@ -1,0 +1,44 @@
+{
+  "mappings": {
+    "properties": {
+      "first_name": {
+        "type": "object",
+        "enabled": false
+      },
+      "last_name": {
+        "type": "object",
+        "enabled": false
+      },
+      "user_name": {
+        "type": "object",
+        "enabled": false
+      },
+      "password": {
+        "type": "object",
+        "enabled": false
+      },
+      "email": {
+        "type": "text"
+      },
+      "created": {
+        "type": "date"
+      },
+      "confirmed": {
+        "type": "object",
+        "enabled": false
+      },
+      "isAdmin": {
+        "type": "object",
+        "enabled": false
+      },
+      "myBackups": {
+        "type": "object",
+        "enabled": false
+      },
+      "auth_config": {
+        "type": "object",
+        "enabled": false
+      }
+    }
+  }
+}

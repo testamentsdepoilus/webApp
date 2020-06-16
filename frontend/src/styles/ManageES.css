@@ -1,0 +1,30 @@
+
+
+.configES cms #menuList  {
+  padding: 0;
+  margin:0;
+}
+
+.configES #menuList li{
+  background-color:#F0F0F0;
+  border-bottom: 3px solid white;
+  display: block;
+}
+
+.configES cms #menuList .active
+{
+  background-color:#8DB2C2;
+}
+
+.configES .select_index {
+  margin-bottom: 1em;
+}
+
+.configES .bt_upload {
+  font-size: 0.9rem;
+}
+
+#order-select-label {
+  font-size: 0.9rem;
+}
+

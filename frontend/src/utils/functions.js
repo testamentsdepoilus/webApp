@@ -132,7 +132,8 @@ export function getTotalHits(host) {
     xhr.send();
     xhr.addEventListener("load", () => {
       const response = JSON.parse(xhr.responseText);
-      resolve(response.hits.total);
+      const total = response.hits ? response.hits.total : 0;
+      resolve(total);
     });
     xhr.addEventListener("error", () => {
       const error = JSON.parse(xhr.responseText);
@@ -879,6 +880,19 @@ export const updateMDP = async (user) => {
     const host = getParamConfig("web_host");
 
     const res = await axios.post(host + "/users/updateMDP", user);
+
+    return res.data;
+  } catch (err) {
+    console.log("err :", err);
+    return err;
+  }
+};
+
+export const updateESPost = async (req) => {
+  try {
+    const host = getParamConfig("web_host");
+
+    const res = await axios.post(host + "/cms/updateES", req);
 
     return res.data;
   } catch (err) {

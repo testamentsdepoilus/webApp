@@ -56,7 +56,7 @@ export default class UnitDisplay extends Component {
       outputHtml: unit_div,
       filename: "Projet_TdP_unite_militaire_" + this.props.id
     };
-    generatePDF(inputItem)
+   generatePDF(inputItem)
       .then(res => {
         if (res.status === 200) {
           downloadFile(

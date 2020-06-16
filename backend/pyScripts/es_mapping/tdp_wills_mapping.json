@@ -1,0 +1,292 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "french_elision": {
+          "type": "elision",
+          "articles_case": true,
+          "articles": [
+            "l",
+            "m",
+            "t",
+            "qu",
+            "n",
+            "s",
+            "j",
+            "d",
+            "c",
+            "jusqu",
+            "quoiqu",
+            "lorsqu",
+            "puisqu"
+          ]
+        },
+        "french_stemmer": {
+          "type": "stemmer",
+          "language": "light_french"
+        },
+        "my_ascii_folding": {
+          "type": "asciifolding",
+          "preserve_original": true
+        },
+        "my_snow": {
+          "type": "snowball",
+          "language": "French"
+        }
+      },
+      "analyzer": {
+        "french_heavy": {
+          "tokenizer": "icu_tokenizer",
+          "char_filter": ["html_strip"],
+          "filter": [
+            "french_elision",
+            "lowercase",
+            "asciifolding",
+            "icu_folding"
+          ]
+        }
+      },
+      "normalizer": {
+        "my_normalizer": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "will_id": {
+        "type": "text"
+      },
+      "testator": {
+        "properties": {
+          "name": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "name_norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "ref": {
+            "type": "text"
+          },
+          "occupation": {
+            "type": "keyword",
+            "fields": {
+              "no_accent": {
+                "type": "keyword",
+                "normalizer": "my_normalizer"
+              }
+            }
+          },
+          "occupation_norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "affiliation": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "contributions": {
+        "type": "nested",
+        "properties": {
+          "resp": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "persName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "will_identifier": {
+        "properties": {
+          "institution": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "collection": {
+            "type": "text"
+          },
+          "cote": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "name": {
+            "type": "text"
+          },
+          "idno": {
+            "type": "object",
+            "enabled": false
+          }
+        }
+      },
+      "will_physDesc": {
+        "properties": {
+          "support": {
+            "type": "object",
+            "enabled": false
+          },
+          "dim": {
+            "type": "object",
+            "enabled": false
+          },
+          "handDesc": {
+            "type": "object",
+            "enabled": false
+          }
+        }
+      },
+      "will_contents": {
+        "properties": {
+          "will_date": {
+            "type": "date"
+          },
+          "will_date_range": {
+            "type": "date_range"
+          },
+          "will_place": {
+            "type": "geo_point"
+          },
+          "will_place_ref": {
+            "type": "text"
+          },
+          "will_place_norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "birth_date": {
+            "type": "date"
+          },
+          "birth_place": {
+            "type": "geo_point"
+          },
+          "birth_place_ref": {
+            "type": "text"
+          },
+          "birth_place_norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "death_date": {
+            "type": "date"
+          },
+          "death_place": {
+            "type": "geo_point"
+          },
+          "death_place_ref": {
+            "type": "text"
+          },
+          "death_place_norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "residence_geo": {
+            "type": "geo_point"
+          },
+          "residence_ref": {
+            "type": "text"
+          },
+          "residence_norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "place": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "will_provenance": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "will_pages": {
+        "type": "nested",
+        "properties": {
+          "page_id": {
+            "type": "text"
+          },
+          "picture_url": {
+            "type": "object",
+            "enabled": false
+          },
+          "page_type": {
+            "type": "object",
+            "enabled": false
+          },
+          "transcription": {
+            "type": "text",
+            "analyzer": "french_heavy"
+          },
+          "edition": {
+            "type": "text",
+            "analyzer": "french_heavy"
+          }
+        }
+      }
+    }
+  }
+}

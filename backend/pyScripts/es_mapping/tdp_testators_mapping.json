@@ -1,0 +1,115 @@
+{
+  "mappings": {
+    "properties": {
+      "persName": {
+        "properties": {
+          "fullProseForm": {
+            "type": "text"
+          },
+
+          "fullIndexEntryForm": {
+            "properties": {
+              "surname": {
+                "type": "text"
+              },
+              "forname": {
+                "type": "text"
+              }
+            }
+          },
+          "norm": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "birth": {
+        "properties": {
+          "date": {
+            "type": "date"
+          },
+          "place": {
+            "properties": {
+              "name": {
+                "type": "text"
+              },
+              "ref": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "death": {
+        "properties": {
+          "date": {
+            "type": "date"
+          },
+          "place": {
+            "properties": {
+              "name": {
+                "type": "text"
+              },
+              "ref": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "affiliation": {
+        "properties": {
+          "name": {
+            "type": "text"
+          },
+          "orgName": {
+            "type": "text"
+          },
+          "ref": {
+            "type": "text"
+          }
+        }
+      },
+      "bibl": {
+        "properties": {
+          "type": {
+            "type": "text"
+          },
+          "author": {
+            "type": "text"
+          },
+          "title": {
+            "type": "text"
+          },
+          "uri": {
+            "type": "text"
+          }
+        }
+      },
+      "occupation": {
+        "type": "text"
+      },
+      "residence": {
+        "properties": {
+          "name": {
+            "type": "text"
+          },
+          "ref": {
+            "type": "text"
+          }
+        }
+      },
+      "note_history": {
+        "type": "text"
+      },
+      "figure": {
+        "type": "object",
+        "enabled": false
+      }
+    }
+  }
+}

@@ -297,7 +297,7 @@ export default class Manage extends Component {
           selected: selected_,
         });
 
-        return;
+
       } else {
         selected_[title] = [];
 

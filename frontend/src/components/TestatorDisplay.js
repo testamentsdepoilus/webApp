@@ -147,6 +147,7 @@ export default class TestatorDisplay extends Component {
         });
         console.log(e);
       });
+
   }
 
   handleAddShoppingWill(id) {

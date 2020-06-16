@@ -125,7 +125,7 @@ class ConfigMail extends Component {
             Mon espace
           </Link>
           <div>Administration</div>
-          <div>Configuration</div>
+          <div>Serveur SMTP</div>
         </Breadcrumbs>
 
         <div className="bg-white paddingContainer">

@@ -1,0 +1,31 @@
+{
+  "mappings": {
+    "properties": {
+      "country": {
+        "type": "text"
+      },
+      "corps": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "composante": {
+        "type": "text"
+      },
+      "number": {
+        "type": "text"
+      },
+      "unit": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

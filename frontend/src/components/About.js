@@ -27,8 +27,8 @@ class About extends Component {
 
   handleListItemClick(event) {
     /*const itemFind = this.state.lastNews.find(function (item) {
-      return item["_id"] === event.target.id;
-    });*/
+          return item["_id"] === event.target.id;
+        });*/
 
     this.setState({
       selectedId: event.target.id,
@@ -43,6 +43,7 @@ class About extends Component {
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
     ).then((res) => {
       const total = typeof res === "object" ? res.value : res;
+      console.log("total :", total);
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
         JSON.stringify({
@@ -56,6 +57,7 @@ class About extends Component {
         })
       )
         .then((data) => {
+          console.log("data :", data);
           if (idx !== -1) {
             const id_query = url.substring(idx + 8).split("/");
             getHitsFromQuery(
@@ -100,10 +102,9 @@ class About extends Component {
             }.bind(this)
           );
 
+    console.log("curItem :", this.state.selectedId);
     const currLink = [
-      <div>
-        À propos
-      </div>,
+      <div>À propos</div>,
       <div key={2}>{curItem ? curItem._source["title"] : null}</div>,
     ];
 

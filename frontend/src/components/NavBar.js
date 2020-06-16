@@ -445,7 +445,7 @@ class NavBar extends Component {
                             }
                             onClick={this.handleExplorClick}
                           >
-                            <i class="far fa-edit"></i> Administration
+                            <i className="far fa-edit"></i> Administration
                           </Link>
                           <Menu
                             id="admin_submenu"
@@ -491,7 +491,22 @@ class NavBar extends Component {
                                 to="/espace/config"
                                 onClick={this.handleListItemClick}
                               >
-                                Configuration
+                                Serveur SMTP
+                              </Link>
+                            </MenuItem>
+                            <MenuItem onClick={this.handleExplorClose}>
+                              <Link
+                                id="manageES"
+                                className={
+                                  this.state.selectedId === "manageES"
+                                    ? "active"
+                                    : ""
+                                }
+                                component={RouterLink}
+                                to="/espace/manageES"
+                                onClick={this.handleListItemClick}
+                              >
+                                Gestion ES
                               </Link>
                             </MenuItem>
                           </Menu>

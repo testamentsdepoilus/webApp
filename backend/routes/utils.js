@@ -240,7 +240,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
 
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
-      orientation: "portrait", // portrait or landscape
+      orientation: "portrait", // portrait or landscaperesolve
 
       border: "0",
       paginationOffset: 1, // Override the initial pagination number
@@ -312,9 +312,48 @@ router.post("/generatePDF", async (req, res, next) => {
     let outputHtml =
       '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title>' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
-      "<style> #root {margin: 1em; font-family: -apple-system; font-size: 0.8rem;}  #name {font-size: 1.1rem; " +
-      "font-weight: 600; color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;} a {text-decoration: none;}" +
-      '</style></head> <body><div id="root"><img src="file://' +
+      '<script src="https://kit.fontawesome.com/57c7a6238a.js" crossorigin="anonymous"></script>' +
+      " <style>" +
+      "      body {" +
+      "        font-family: 'Fira Sans', sans-serif;" +
+      "        font-size: 1rem;" +
+      "      }" +
+      "      .d-flex {" +
+      "        display: flex;" +
+      "      }" +
+      "      i {" +
+      "        padding-right: 10px;" +
+      "        font-size: 1.4em;" +
+      "      }" +
+      "      .noticeInfo div {" +
+      "        margin-bottom: 4px;" +
+      "      }" +
+      "      h1.item {" +
+      "        color: black;" +
+      "        font-size: 1.3rem;" +
+      "        line-height: 1.8rem;" +
+      "        font-weight: 600;" +
+      "        margin-top: 0px;" +
+      "      }" +
+      "      .noticeInfo .permalien {" +
+      "        margin-bottom: 20px;" +
+      "      }" +
+      "      .smallcaps {" +
+      "        font-variant: small-caps;" +
+      "      }" +
+      "      .noticeInfo a {" +
+      "        color: #1F8299;" +
+      "      }" +
+      "      .MuiLink-underlineHover {" +
+      "        text-decoration: none;" +
+      "      }" +
+      "      .noticeInfo h2 {" +
+      "        font-size: 1.13rem;" +
+      "        margin-top: 30px;" +
+      "        margin-bottom: 5px;" +
+      "      }" +
+      "</style>" +
+      '</head> <body><div id="root"><img src="file://' +
       resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" height="40" style="display: none"/> <img src="file://' +
       resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +

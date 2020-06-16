@@ -1,0 +1,49 @@
+{
+  "tags": {
+    "p": ["fw", "dateline", "head", "signed"],
+    "div": ["pb", "postscript"],
+    "br": ["lb"],
+    "li": ["item"],
+    "ul": ["list"],
+    "del": ["del"],
+    "span": [
+      "choice",
+      "sic",
+      "corr",
+      "persName",
+      "date",
+      "abbr",
+      "expan",
+      "placeName",
+      "orgName",
+      "note",
+      "lem",
+      "hi",
+      "unclear",
+      "add",
+      "surplus",
+      "app",
+      "surname",
+      "address",
+      "addrLine",
+      "metamark",
+      "damage",
+      "foreign",
+      "supplied",
+      "seg",
+      "term",
+      "subst",
+      "del",
+      "space",
+      "gap"
+    ]
+  },
+  "attrs": ["type", "reason", "place", "agent", "function", "break", "dim"],
+  "values": {
+    "centered": "text-align: center; display: block;",
+    "right": "text-align: right; display: block;",
+    "left": "text-align: left; display: block;",
+    "superscript-underlined": "text-decoration: underline; vertical-align: super;",
+    "superscript": "vertical-align: super"
+  }
+}
