@@ -9,12 +9,12 @@
 }
 
 
-.willCompare .column
+.willCompare .columnContent
 {
  padding: 26px 20px 30px 20px;
  width: 100%;
 }
-.willCompare .column h2{
+.willCompare .columnContent h2{
   color:#1F8299;
   font-size:1.2rem;
   font-weight: 600;
@@ -22,23 +22,23 @@
 }
 
 
-.willCompare .column nav.will_pages ul{
+.willCompare .columnContent nav.will_pages ul{
   list-style-type: none;
   display: flex;
   padding-left: 0px;
   margin-top:20px;
   margin-bottom: 30px;
 }
-.willCompare .column nav.will_pages li{
+.willCompare .columnContent nav.will_pages li{
   margin-right: 10px
 
 }
-.willCompare .column .MuiSvgIcon-colorPrimary,
-.willCompare .column .transcription .choice {
+.willCompare .columnContent .MuiSvgIcon-colorPrimary,
+.willCompare .columnContent .transcription .choice {
     color: #1F8299;
 }
-.willCompare .column .transcription .choice .corr, 
-.willCompare .column .transcription .choice .expan {
+.willCompare .columnContent .transcription .choice .corr, 
+.willCompare .columnContent .transcription .choice .expan {
     background-color: #2E5D81;
     border-radius: 4px;
     padding: 5px 5px 5px 5px;
@@ -46,6 +46,6 @@
     left: 0%;
 }
 
-.willCompare .column  .edition {
+.willCompare .columnContent  .edition {
   line-height: 1.5rem;
 }
