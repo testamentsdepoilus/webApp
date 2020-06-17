@@ -271,7 +271,7 @@ class WillCompare extends Component {
                 sm={12}
                 md={12 / totalItem}
               >
-                <div className="bg-white column" key={i * 10}>
+                <div className="bg-white columnContent" key={i * 10}>
                   <div key={1}>
                     <h2>
                       {hit["forename"] + " "}

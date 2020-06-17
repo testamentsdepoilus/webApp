@@ -146,7 +146,9 @@ def edition(file_tei, config_file):
                             # new_attrs['class'] = "add-" + node['place']
                             # node.insert(0, "\\")
                             # node.insert(len(node.contents), "/ ")
-
+                    elif node.name == "supplied":
+                        node.insert(0, "{")
+                        node.insert(len(node.contents), "}")
                     node.name = x
                     node.attrs = new_attrs
                     if len(node.contents) == 0 and node.name == "span":
@@ -312,13 +314,13 @@ def convertTag(node, x, tag, config):
                      "marginBottom": "en marge inférieur", "marginTop": "en marge supérieur", "inline": "dans la ligne"}
 
     if node.name in ["sic", "abbr"]:
-        if node.string is not None:
-            node.string.insert_before("[")
-            new_str = NavigableString("]")
-            node.append(new_str)
-        else:
-            node.insert(0, "[")
-            node.insert(len(node.contents), "]")
+        # if node.string is not None:
+        #     node.string.insert_before("[")
+        #     new_str = NavigableString("]")
+        #     node.append(new_str)
+        # else:
+        node.insert(0, "[")
+        node.insert(len(node.contents), "]")
     elif node.name == "corr":
         if node.get_text() == "":
             node.extract()
@@ -369,10 +371,11 @@ def convertTag(node, x, tag, config):
     if "rend" in node.attrs:
         new_attrs['class'] += "-" + node.attrs["rend"]
     if node.name == "unclear":
-        new_attrs['title'] = "transcription incertaine"
+        node.insert(0, "|")
+        node.insert(len(node.contents), "|")
     elif node.name == "add":
         if 'place' in node.attrs:
-            new_attrs['title'] = "ajout " + add_translate[node['place']]
+            #new_attrs['title'] = "ajout " + add_translate[node['place']]
             # new_attrs['class'] = "add-" + node['place']
             # node.next_element.insert_before("\\")
             # node.next_element.next_element.insert_after("/")
@@ -382,7 +385,9 @@ def convertTag(node, x, tag, config):
         node.insert(len(node.contents),
                     " (auteur de cette note : "+node.attrs["resp"] + ")")
         new_attrs['class'] += "-" + node.parent.name
-
+    elif node.name == "supplied":
+        node.insert(0, "{")
+        node.insert(len(node.contents), "}")
     node.name = x
     node.attrs = new_attrs
 
@@ -394,9 +399,9 @@ if __name__ == "__main__":
     fileTei = '../../../../data/new_teiFiles/' + \
         "will_342_AN_0273_2020-04-08_10-44-17_V4_espacesRevus-bis.xml"
     configFile = 'config.json'
-    revised = edition(fileTei, configFile)
+    revised = transcription(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'][0])
+    print(revised['will'][1])
     # print("*****************")
     # print(edit_soup.get_text())

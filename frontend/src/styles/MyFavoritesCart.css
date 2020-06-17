@@ -1,99 +1,97 @@
-
-.cms .leftMenu{
+.cms .leftMenu {
   padding: 20px 0px 20px 20px;
-  margin:0;
+  margin: 0;
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
 }
-.cms .leftMenu ul{
-  padding:0;
+.cms .leftMenu ul {
+  padding: 0;
 }
-.cms .leftMenu li{
+.cms .leftMenu li {
   margin-bottom: 12px;
 }
-.cms .leftMenu li:last-of-type{
-    margin-bottom: 0px;
+.cms .leftMenu li:last-of-type {
+  margin-bottom: 0px;
 }
-.cms .leftMenu li:hover{
-    background-color: #8DB2C2;
+.cms .leftMenu li:hover {
+  background-color: #8db2c2;
 }
-.cms .leftMenu li a{
- font-weight: 600;
- font-size: 1rem;
- line-height: 1.3rem;
+.cms .leftMenu li a {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.3rem;
 }
-.cms .leftMenu li a:hover{
- color:white;
+.cms .leftMenu li a:hover {
+  color: white;
 }
-.cms .leftMenu li a i{
- padding-right: 5px;
+.cms .leftMenu li a i {
+  padding-right: 5px;
 }
-.cms.favoris .leftMenu .units_div a{
+.cms.favoris .leftMenu .units_div a {
   margin-left: -4px;
 }
-.cms.favoris .leftMenu .units_div svg{
+.cms.favoris .leftMenu .units_div svg {
   width: 0.8em;
   height: 0.8em;
   padding-right: 8px;
-  font-size:1.3rem;
+  font-size: 1.3rem;
 }
-.cms .tableContainer{
+.cms .tableContainer {
   padding-bottom: 30px;
 }
-.cms section{
+.cms section {
   padding: 10px 40px 40px 40px;
 }
-.cms .toolBar{
+.cms .toolBar {
   min-height: 20px;
   padding: 0;
 }
 
-.cms table{
+.cms table {
   font-family: "Fira Sans";
 }
-.cms table th{
-}
-.cms table thead th:first-of-type{
+
+.cms table thead th:first-of-type {
   width: auto;
 }
-.cms table .MuiTableCell-root{
+.cms table .MuiTableCell-root {
   padding: 3px 0px 3px 0px;
 }
-.cms table thead .MuiTableCell-root{
-  border-color:black;
+.cms table thead .MuiTableCell-root {
+  border-color: black;
 }
-.cms table tbody .MuiTableCell-root{
-  border-bottom:none;
+.cms table tbody .MuiTableCell-root {
+  border-bottom: none;
 }
-.cms table tbody tr:hover{
-  background-color: #C7D7E1!important;
+.cms table tbody tr:hover {
+  background-color: #c7d7e1 !important;
 }
-.cms table thead th{
+.cms table thead th {
   font-weight: 700;
 }
 
-.cms table tbody th{
+.cms table tbody th {
   font-weight: 600;
 }
-.cms table .MuiTableSortLabel-root:hover{
-  color:#8DB2C2;
+.cms table .MuiTableSortLabel-root:hover {
+  color: #8db2c2;
 }
-.cms table .MuiTableSortLabel-active{
-  color:#1F8299;
+.cms table .MuiTableSortLabel-active {
+  color: #1f8299;
 }
-.cms table .MuiTableSortLabel-root:hover svg{
-    fill:#8DB2C2;
+.cms table .MuiTableSortLabel-root:hover svg {
+  fill: #8db2c2;
 }
-.cms table .MuiTableSortLabel-active svg{
-  fill:#1F8299;
+.cms table .MuiTableSortLabel-active svg {
+  fill: #1f8299;
 }
-.cms .labelCheckBox{
+.cms .labelCheckBox {
   font-weight: 600;
   font-size: 0.9rem;
 }
 
-.cms .toolBar .button.plain{
+.cms .toolBar .button.plain {
   line-height: 1.6rem;
   margin-left: 10px;
 }
@@ -110,8 +108,6 @@
   width: 1;
 }
 
-
-
 .cms .bootstrapRoot {
   display: none;
   position: fixed;
@@ -127,14 +123,11 @@
   border-color: #bcaaa4;
 }
 
-
-
 .cms .labelTitle {
   font-size: 1rem;
   font-weight: 600;
   margin-left: 1em;
 }
-
 
 .cms .highlight {
   font-size: 1rem;
@@ -147,74 +140,72 @@
   font-weight: 600;
 }
 
-
 .cms .form {
   max-width: 600px;
   margin-top: 2rem;
 }
 .cms .login .form,
-.cms .register .form{
+.cms .register .form {
   margin-top: 0rem;
 }
-.cms .input{
+.cms .input {
   margin-bottom: 15px;
   margin-top: 15px;
 }
-.cms .form fieldset{
-  border-color:#8DB2C2;
+.cms .form fieldset {
+  border-color: #8db2c2;
 }
 .cms form h2 {
   margin-top: 35px;
   font-size: 1.2rem;
 }
-.cms form .rdw-editor-wrapper{
-  border: 1px solid #F0F0F0;
+.cms form .rdw-editor-wrapper {
+  border: 1px solid #f0f0f0;
 }
-.cms form .rdw-editor-main{
+.cms form .rdw-editor-main {
   padding-left: 10px;
   padding-right: 10px;
 }
-.cms form .submitButtons{
+.cms form .submitButtons {
   margin-top: 30px;
-
 }
 .cms form .submit {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.cms button:focus{
-  background-color: #DADAD9!important;
+.cms button:focus {
+  background-color: #dadad9 !important;
 }
-.cms button.backBt{
-  border-color: #1F8299;
-  color:#1F8299;
+.cms button.backBt {
+  border-color: #1f8299;
+  color: #1f8299;
   border-style: solid;
   border-width: 1px;
   background-color: white;
   text-transform: none;
   box-shadow: none;
 }
-.cms button.backBt:hover{
-  border-color: #8DB2C2;
-  background-color:#DADAD9;
+.cms button.backBt:hover {
+  border-color: #8db2c2;
+  background-color: #dadad9;
 }
-.cms input[type="file"]{
+.cms input[type="file"] {
   padding: 18.5px 14px;
 }
-.cms form #email-label, 
+.cms form #email-label,
 .cms form #password-label,
-.cms form #standard-userName-input-label, 
-.cms form #standard-email-input-label, 
+.cms form #standard-userName-input-label,
+.cms form #standard-email-input-label,
 .cms form #password-confirme-label {
-line-height: 16px;
+  line-height: 16px;
 }
-.cms form #standard-userName-input, 
-.cms form #standard-email-input, 
-.cms form #password, 
+.cms form #standard-userName-input,
+.cms form #standard-email-input,
+.cms form #password,
 .cms form #password-confirme {
   padding: 18.5px 14px;
   height: 1.1875em;
 }
 .cms form input:-internal-autofill-selected {
-    background-color: #8CB2C2!important;
+  background-color: #8cb2c2 !important;
 }
