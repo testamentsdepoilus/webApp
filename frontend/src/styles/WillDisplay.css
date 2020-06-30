@@ -133,6 +133,7 @@
 	display: none;
 }
 
+
 /* lb */
 .transcription .lb:before{
 	content: "\f3be \a";
@@ -142,6 +143,7 @@
     line-height: 1rem;
     color: #8DB2C2;
     vertical-align: text-bottom;
+    padding-left: 2px;
 }
 .transcription .lb{
 	content: "\a";
@@ -173,7 +175,7 @@
   text-decoration-line: underline;
   text-decoration-style: double;
 }
-.columnContent hi.superscript.double-underlined{
+.columnContent .hi-superscript-double-underlined{
   vertical-align: super; 
   font-size: 70%;
   text-decoration-line: underline;
@@ -188,7 +190,9 @@
 	text-transform: uppercase;
 }
 
-
+.edition .choice{
+  display: inline-block;
+}
 
 /* éléments survolés : choice, app, lem; */
 .transcription .choice,
@@ -277,6 +281,7 @@
 
 
 /* placeName,orgName, persName, surname, date, address, damage   */
+
 .transcription [class^="placeName"]:before,
 .transcription .orgName:before,
 .transcription .persName:before,
