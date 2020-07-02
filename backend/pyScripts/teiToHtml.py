@@ -357,9 +357,15 @@ def convertTag(node, x, tag, config):
         node.insert_after(space)
         node.extract()
 
+    elif node.name == "lb":
+        # Traitmenet br add <i> tag
+        i_tag = BeautifulSoup(features="html.parser").new_tag('i')
+        i_tag.attrs["aria-hidden"] = "true"
+        i_tag.attrs["class"] = "fas fa-level-down-alt"
+        node.insert_before(i_tag)
+
     new_attrs = dict()
     new_attrs['class'] = tag
-
     for old_attr in node.attrs:
         if old_attr in config["attrs"]:
             new_attrs['class'] += "-" + node.attrs[old_attr]
@@ -397,11 +403,11 @@ def convertTag(node, x, tag, config):
 
 if __name__ == "__main__":
     fileTei = '../../../../data/new_teiFiles/' + \
-        "will_342_AN_0273_2020-04-08_10-44-17_V4_espacesRevus-bis.xml"
+        "will_AD78_0005.xml"
     configFile = 'config.json'
     revised = transcription(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'][1])
+    print(revised['will'][0])
     # print("*****************")
     # print(edit_soup.get_text())
