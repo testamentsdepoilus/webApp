@@ -107,24 +107,10 @@
 }
 
 /* lb */
-.trancription .fa-level-down-alt{
+.transcription .fa-level-down-alt{
   font-size:0.7rem!important;
   color: #8094B1;
 }
-/*.transcription .lb:before{
-	  content: "\f3be \a";
-    font-family: FontAwesome;
-    white-space: pre;
-    font-size:0.675rem;
-    line-height: 1rem;
-    color: #8094B1;
-    vertical-align: text-bottom;
-    padding-left: 2px;
-}
-.transcription .lb{
-	content: "\a";
-	white-space: pre;
-}*/
 .transcription .lb-no:before{
 	content: "- \a";
 	white-space: pre;

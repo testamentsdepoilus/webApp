@@ -440,19 +440,27 @@ class Home extends Component {
                           )}
                           innerClass={{
                             list: "list",
+                            select:
+                              this.state.testator_name === ""
+                                ? "select"
+                                : "selected",
                           }}
                           onChange={this.handleNameChange}
                         />
                       </Box>
-                      <Button
-                        id="testator_name"
-                        value="testator_name"
-                        onClick={this.handleClear("testator_name")}
-                        title="Supprimer le filtre"
-                        // className="d-none" pour masquer ou "d-inline-flex" pour afficher
-                      >
-                        <i className="fas fa-times"></i>
-                      </Button>
+                      {this.state.testator_name !== "" ? (
+                        <Button
+                          id="testator_name"
+                          value="testator_name"
+                          onClick={this.handleClear("testator_name")}
+                          title="Supprimer le filtre"
+                          // className="d-none" pour masquer ou "d-inline-flex" pour afficher
+                        >
+                          <i className="fas fa-times"></i>
+                        </Button>
+                      ) : (
+                        ""
+                      )}
                     </Box>
 
                     <Box mb={0.7} mt={3}>
@@ -489,19 +497,25 @@ class Home extends Component {
                           searchPlaceholder="Saisissez un nom de lieu"
                           innerClass={{
                             list: "list",
+                            select:
+                              this.state.place === "" ? "select" : "selected",
                           }}
                           onChange={this.handlePlaceChange}
                         />
                       </Box>
-                      <Button
-                        id="place"
-                        value="place"
-                        onClick={this.handleClear("place")}
-                        title="Supprimer le filtre"
-                        // className="d-none" pour masquer ou "d-inline-flex" pour afficher
-                      >
-                        <i className="fas fa-times"></i>
-                      </Button>
+                      {this.state.place !== "" ? (
+                        <Button
+                          id="place"
+                          value="place"
+                          onClick={this.handleClear("place")}
+                          title="Supprimer le filtre"
+                          // className="d-none" pour masquer ou "d-inline-flex" pour afficher
+                        >
+                          <i className="fas fa-times"></i>
+                        </Button>
+                      ) : (
+                        ""
+                      )}
                     </Box>
 
                     <DateFilter />

@@ -163,16 +163,21 @@ class Testators extends Component {
                 )}
                 innerClass={{
                   list: "list",
-                  select: "select",
+                  select:
+                    this.state.testator_name === "" ? "select" : "selected",
                 }}
               />
-              <Button
-                onClick={this.handleClear("")}
-                title="Supprimer le filtre"
-                className="button iconButton"
-              >
-                <i className="fas fa-times"></i>
-              </Button>
+              {this.state.testator_name !== "" ? (
+                <Button
+                  onClick={this.handleClear("")}
+                  title="Supprimer le filtre"
+                  className="button iconButton"
+                >
+                  <i className="fas fa-times"></i>
+                </Button>
+              ) : (
+                ""
+              )}
             </div>
           </Box>
 

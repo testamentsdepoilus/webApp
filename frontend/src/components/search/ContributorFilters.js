@@ -60,17 +60,22 @@ class ContributorFilters extends React.Component {
             onChange={this.handleContributeurChange}
             innerClass={{
               list: "list",
+              select: this.state.contributeur === "" ? "select" : "selected",
             }}
           />
         </Box>
-        <Button
-          id="clearContributeur"
-          onClick={(event) => this.handleContributeurChange("")}
-          title="Supprimer le filtre"
-          className="button iconButton"
-        >
-          <i className="fas fa-times"></i>
-        </Button>
+        {this.state.contributeur !== "" ? (
+          <Button
+            id="clearContributeur"
+            onClick={(event) => this.handleContributeurChange("")}
+            title="Supprimer le filtre"
+            className="button iconButton"
+          >
+            <i className="fas fa-times"></i>
+          </Button>
+        ) : (
+          ""
+        )}
       </Box>
     );
   }

@@ -158,18 +158,22 @@ export default class CustumerDataSearch extends Component {
               )}
               innerClass={{
                 list: "list",
-                select: "select",
+                select: this.state.testator === "" ? "select" : "selected",
               }}
             />
           </Box>
-          <Button
-            id="clearTestator"
-            onClick={(event) => this.handleTestatorChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.testator !== "" ? (
+            <Button
+              id="clearTestator"
+              onClick={(event) => this.handleTestatorChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
 
         <PlaceFilter />
@@ -240,18 +244,22 @@ export default class CustumerDataSearch extends Component {
               }}
               innerClass={{
                 list: "list",
-                select: "select",
+                select: this.state.occupation === "" ? "select" : "selected",
               }}
             />
           </Box>
-          <Button
-            id="clearOccupation"
-            onClick={(event) => this.handleOccupationChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.occupation !== "" ? (
+            <Button
+              id="clearOccupation"
+              onClick={(event) => this.handleOccupationChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
 
         <Box
@@ -293,18 +301,22 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleUnitChange}
               innerClass={{
                 list: "list",
-                select: "select",
+                select: this.state.unit === "" ? "select" : "selected",
               }}
             />
           </Box>
-          <Button
-            id="clearUnit"
-            onClick={(event) => this.handleUnitChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.unit !== "" ? (
+            <Button
+              id="clearUnit"
+              onClick={(event) => this.handleUnitChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
 
         <Box
@@ -343,16 +355,24 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleInstitutionChange}
               URLParams={true}
               showSearch={false}
+              innerClass={{
+                list: "list",
+                select: this.state.institution === "" ? "select" : "selected",
+              }}
             />
           </Box>
-          <Button
-            id="clearInstitution"
-            onClick={(event) => this.handleInstitutionChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.institution !== "" ? (
+            <Button
+              id="clearInstitution"
+              onClick={(event) => this.handleInstitutionChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
 
         <Box
@@ -394,18 +414,22 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleCoteChange}
               innerClass={{
                 list: "list",
-                select: "select",
+                select: this.state.cote === "" ? "select" : "selected",
               }}
             />
           </Box>
-          <Button
-            id="clearCote"
-            onClick={(event) => this.handleCoteChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.cote !== "" ? (
+            <Button
+              id="clearCote"
+              onClick={(event) => this.handleCoteChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
 
         <Box
@@ -447,18 +471,22 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleNotorialeChange}
               innerClass={{
                 list: "list",
-                select: "select",
+                select: this.state.notoriale === "" ? "select" : "selected",
               }}
             />
           </Box>
-          <Button
-            id="clearNotoriale"
-            onClick={(event) => this.handleNotorialeChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.notoriale !== "" ? (
+            <Button
+              id="clearNotoriale"
+              onClick={(event) => this.handleNotorialeChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
       </div>
     );

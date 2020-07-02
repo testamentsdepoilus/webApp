@@ -160,17 +160,20 @@ class Places extends Component {
                 URLParams={true}
                 innerClass={{
                   list: "list",
-                  select: "select",
+                  select: this.state.city === "" ? "select" : "selected",
                 }}
               />
-
-              <Button
-                onClick={this.handleClear("")}
-                title="Supprimer le filtre"
-                className="button iconButton"
-              >
-                <i className="fas fa-times"></i>
-              </Button>
+              {this.state.city !== "" ? (
+                <Button
+                  onClick={this.handleClear("")}
+                  title="Supprimer le filtre"
+                  className="button iconButton"
+                >
+                  <i className="fas fa-times"></i>
+                </Button>
+              ) : (
+                ""
+              )}
             </div>
           </Box>
           <div className="places_result">

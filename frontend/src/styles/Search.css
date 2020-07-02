@@ -45,6 +45,10 @@
 	color:black!important;
 }
 
+.search .leftSidebar .selected div{
+	color:darkred!important;
+}
+
 .search .leftSidebar  .dateFilter{
 	margin-top: 30px;
 	margin-bottom: 30px;

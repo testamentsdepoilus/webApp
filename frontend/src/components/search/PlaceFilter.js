@@ -123,20 +123,25 @@ class PlaceFilter extends React.Component {
               showSearch={true}
               searchPlaceholder="Saisir un nom de lieu"
               onChange={this.handlePlaceChange}
+              customQuery={this.customQuery}
               innerClass={{
                 list: "list",
+                select: this.state.place === "" ? "select" : "selected",
               }}
-              customQuery={this.customQuery}
             />
           </Box>
-          <Button
-            id="clearPlace"
-            onClick={(event) => this.handlePlaceChange("")}
-            title="Supprimer le filtre"
-            className="button iconButton"
-          >
-            <i className="fas fa-times"></i>
-          </Button>
+          {this.state.place !== "" ? (
+            <Button
+              id="clearPlace"
+              onClick={(event) => this.handlePlaceChange("")}
+              title="Supprimer le filtre"
+              className="button iconButton"
+            >
+              <i className="fas fa-times"></i>
+            </Button>
+          ) : (
+            ""
+          )}
         </Box>
 
         <div>
