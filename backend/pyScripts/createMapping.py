@@ -13,10 +13,16 @@ if __name__ == '__main__':
     with open(args["file"]) as f:
         d = json.load(f)
 
-    es = Elasticsearch(
-            hosts=args['host']
-        )
-    res = es.indices.create(index=args["index"], body=d, ignore=400)
-    print(res)
-    if 'status' in res and res['status'] == 400:
-        res = es.indices.put_mapping(index=args["index"], doc_type='_doc', body=d['mappings'], include_type_name=True)
+    try:
+        es = Elasticsearch(
+                hosts=args['host']
+            )
+        res = es.indices.create(index=args["index"], body=d, ignore=400)
+
+        if 'status' in res and res['status'] == 400:
+            #res = es.indices.put_mapping(index=args["index"], doc_type='_doc', body=d['mappings'], include_type_name=True)
+            print(json.dumps({"status": 400, "err": "l'index <"+args["index"]+"> exist dans la base ES !"}))
+        elif 'acknowledged' in res:
+            print(json.dumps({"status": 200, "res": "Success"}))
+    except ConnectionError:
+        print(json.dumps({"status": 400, "err": "Problème de connexion au serveur ES !"}))

@@ -3,6 +3,7 @@ import os
 from elasticsearch import Elasticsearch
 from getMetaData import get_meta_data
 from teiToHtml import transcription, edition
+import json
 
 if __name__ == '__main__':
 	# construct the argument parser and parse the arguments
@@ -27,16 +28,27 @@ if __name__ == '__main__':
 			if os.path.splitext(filename)[1] == ".xml":
 				list_tei.append(filename.strip())
 
-	print(args)
-	for tei_file in list_tei:
-		tei_transcription = transcription(tei_file, args['file'])
-		tei_edition = edition(tei_file, args['file'].strip())
-		doc = get_meta_data(
-			tei_file, args['persFile'], args['placeFile'], tei_transcription, tei_edition)
-
+	try:
 		es = Elasticsearch(
-			hosts=args['host']
-		)
-		res = es.index(index=args['index'],
-					   doc_type='_doc', id=doc['will_id'], body=doc)
-		print(res['result'])
+				hosts=args['host']
+			)
+	except ConnectionError:
+		print(json.dumps({"status": 500, "res": "ES connexion error"}))
+
+	for tei_file in list_tei:
+		try:
+			tei_transcription = transcription(tei_file, args['file'])
+			tei_edition = edition(tei_file, args['file'].strip())
+			doc = get_meta_data(
+				tei_file, args['persFile'], args['placeFile'], tei_transcription, tei_edition)
+			res = es.index(index=args['index'],
+						   doc_type='_doc', id=doc['will_id'], body=doc)
+		except AttributeError:
+			print(json.dumps({"status": 400, "res": tei_file}))
+		except ConnectionError:
+			print(json.dumps({"status": 500, "res": "ES connexion error"}))
+
+	print(json.dumps({"status": 200, "res": "Success !"}))
+
+
+

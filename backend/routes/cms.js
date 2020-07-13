@@ -14,12 +14,6 @@ let options = {
   scriptPath: process.env.py_path,
 };
 
-/*async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}*/
-
 router.use(cors());
 //("/home/adoula/myProjects/testaments_de_poilus/dev/webApp/backend/app.js");
 
@@ -166,19 +160,35 @@ router.post("/updateES", function (req, res, next) {
         let will_files = "--data=";
         if (Array.isArray(req.files.myFiles)) {
           req.files.myFiles.forEach((file) => {
-            console.log("myFiles :", file.path);
             fs.copyFileSync(file.path, resolve(file_path + file.name));
-            console.log(file.name + " was copied !");
+
             will_files += resolve(file_path + file.name) + " ";
           });
           options["args"].push(will_files);
-          console.log("after copy function:", options);
+
           PythonShell.run(pyScript, options, function (err, results) {
             if (err) {
-              console.log(err);
+              res.send({
+                status: 400,
+                err: "Connexion au serveur a échoué !" + err,
+              });
             } else {
               // results is an array consisting of messages collected during execution
-              console.log("results: %j", results);
+              results_ = JSON.parse(results);
+              if (results_.status === 200) {
+                res.send({
+                  status: 200,
+                  mess: "Success !",
+                });
+              } else {
+                res.send({
+                  status: 400,
+                  err:
+                    "Le processus du fichier TEI <" +
+                    results_.res +
+                    "> a échoué",
+                });
+              }
             }
           });
         } else {
@@ -192,10 +202,27 @@ router.post("/updateES", function (req, res, next) {
           console.log("ars :", options);
           PythonShell.run(pyScript, options, function (err, results) {
             if (err) {
-              console.log(err);
+              res.send({
+                status: 400,
+                err: "Connexion au serveur a échoué !" + err,
+              });
             } else {
               // results is an array consisting of messages collected during execution
-              console.log("results: %j", results);
+              results_ = JSON.parse(results);
+              if (results_.status === 200) {
+                res.send({
+                  status: 200,
+                  mess: "Success !",
+                });
+              } else {
+                res.send({
+                  status: 400,
+                  err:
+                    "Le processus du fichier TEI <" +
+                    results_.res +
+                    "> a échoué",
+                });
+              }
             }
           });
         }
@@ -218,7 +245,7 @@ router.post("/updateES", function (req, res, next) {
         case "tdp_places":
           mapping_file += process.env.mapping_path + "tdp_places_mapping.json";
           break;
-        case "tdp_units":
+        case "tdp_military_unit":
           mapping_file +=
             process.env.mapping_path + "tdp_militaryUnits_mapping.json";
           break;
@@ -230,17 +257,31 @@ router.post("/updateES", function (req, res, next) {
           break;
       }
       options["args"].push(mapping_file);
+
       PythonShell.run("createMapping.py", options, function (err, results) {
         if (err) {
-          console.log(err);
+          res.send({
+            status: 400,
+            err: err,
+          });
         } else {
           // results is an array consisting of messages collected during execution
-          console.log("results: %j", results);
+          results_ = JSON.parse(results);
+          if (results_.status === 200) {
+            res.send({
+              status: 200,
+              mess: "Success !",
+            });
+          } else {
+            res.send({
+              status: 400,
+              err: results_.err,
+            });
+          }
         }
       });
       break;
     case "remove":
-      console.log(req.body);
       const es_client = new Client({ node: req.body.host });
       es_client.indices.delete(
         {
@@ -248,17 +289,15 @@ router.post("/updateES", function (req, res, next) {
         },
         (err, result) => {
           if (err) {
-            console.log("err :", err);
-            /*res.send({
+            res.send({
               status: 400,
-              err: "ES Connexion au serveur a échoué !" + err,
-            });*/
+              err: "Erreur: " + err,
+            });
           } else {
-            console.log("index removed !");
-            /*res.send({
+            res.send({
               status: 200,
-              mess: "Votre index a été supprimé",
-            });*/
+              mess: "l'index <" + req.body.index + "> a été supprimé",
+            });
           }
         }
       );

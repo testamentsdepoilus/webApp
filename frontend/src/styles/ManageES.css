@@ -28,3 +28,6 @@
   font-size: 0.9rem;
 }
 
+.configES .progress {
+  position: absolute;
+}

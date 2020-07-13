@@ -15,6 +15,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Fade,
+  CircularProgress,
+  Snackbar,
 } from "@material-ui/core";
 import { getParamConfig, updateESPost } from "../../utils/functions";
 import { Link as RouterLink } from "react-router-dom";
@@ -39,6 +42,9 @@ class ManageES extends Component {
       refIndex: 1,
       files: null,
       open: false,
+      loading: false,
+      openAlert: false,
+      message: "",
     };
     this.handleSelectItem = this.handleSelectItem.bind(this);
   }
@@ -46,6 +52,7 @@ class ManageES extends Component {
   handleDialogClose = (event) => {
     this.setState({
       open: false,
+      openAlert: false,
     });
   };
 
@@ -95,9 +102,11 @@ class ManageES extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+
     if (this.state.selectedId === "remove") {
       this.setState({
         open: true,
+        loading: true,
       });
     } else {
       this.handleUpdatePost();
@@ -111,6 +120,7 @@ class ManageES extends Component {
   handleUpdatePost = () => {
     this.setState({
       open: false,
+      loading: true,
     });
     const indexNames = [
       "tdp_wills",
@@ -145,15 +155,18 @@ class ManageES extends Component {
     };*/
 
     updateESPost(formData).then((res) => {
+      console.log("res :", res);
       if (res.status === 200) {
         this.setState({
           openAlert: true,
           message: res.mess,
+          loading: false,
         });
       } else {
         this.setState({
           openAlert: true,
-          message: res.err,
+          message: res.err ? res.err : "Erreur: connexion serveur a échoué !",
+          loading: false,
         });
       }
     });
@@ -176,6 +189,7 @@ class ManageES extends Component {
   }
 
   render() {
+    console.log(this.state.message);
     return (
       <div className="configES cms">
         <Breadcrumbs
@@ -333,6 +347,19 @@ class ManageES extends Component {
                         >
                           {this.state.bt_title[this.state.selectedId]}
                         </Button>
+                        <div className="progress">
+                          <Fade
+                            in={this.state.loading}
+                            style={{
+                              transitionDelay: this.state.loading
+                                ? "800ms"
+                                : "0ms",
+                            }}
+                            unmountOnExit
+                          >
+                            <CircularProgress />
+                          </Fade>
+                        </div>
                       </Box>
                     </form>
                   </div>
@@ -369,6 +396,17 @@ class ManageES extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          key="topCenter"
+          open={this.state.openAlert}
+          onClose={this.handleDialogClose}
+          autoHideDuration={3000}
+          ContentProps={{
+            "aria-describedby": "message-id",
+          }}
+          message={<span id="message-id">{this.state.message}</span>}
+        />
       </div>
     );
   }

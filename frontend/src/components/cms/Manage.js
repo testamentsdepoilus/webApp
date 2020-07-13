@@ -240,7 +240,7 @@ const AlertMessage = (props) => {
         "aria-describedby": "message-id",
       }}
       message={<span id="message-id">{message}</span>}
-    ></Snackbar>
+    />
   );
 };
 
@@ -296,8 +296,6 @@ export default class Manage extends Component {
         this.setState({
           selected: selected_,
         });
-
-
       } else {
         selected_[title] = [];
 
