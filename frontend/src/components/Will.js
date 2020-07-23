@@ -154,7 +154,7 @@ class Will extends Component {
 
     return (
       <div className="will">
-        <Box className="d-block d-md-flex" justifyContent="space-between">
+        <Box display={{ xs: "block", lg: "flex" }} justifyContent="space-between">
           <Breadcrumbs
             separator={<i className="fas fa-caret-right"></i>}
             aria-label="Breadcrumb"
@@ -172,10 +172,10 @@ class Will extends Component {
             {will_link}
           </Breadcrumbs>
 
-          <div className="d-md-flex">
+          <Box px={1} mb={2} display={{ xs: "block", sm: "flex" }} id="navButtons">
             {localStorage.willsIds &&
             JSON.parse(localStorage.willsIds).length > 1 ? (
-              <Box display="flex" mb={1}>
+              <Box display="flex" justifyContent="space-between" mb={1}>
                 <Box px={1}>
                   <Button
                     id="prev"
@@ -183,8 +183,8 @@ class Will extends Component {
                     onClick={this.handlePrev}
                     disabled={this.state.idx === 0}
                   >
-                    <i class="fa fa-caret-left" aria-hidden="true"></i>{" "}
-                    Testament précédent
+                    <i className="fa fa-caret-left" aria-hidden="true"></i>{" "}
+                    <span>Testament précédent</span>
                   </Button>
                 </Box>
                 <Box px={1}>
@@ -197,8 +197,8 @@ class Will extends Component {
                     }
                     onClick={this.handleNext}
                   >
-                    Testament suivant{" "}
-                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                    <span>Testament suivant{" "}</span>
+                    <i className="fa fa-caret-right" aria-hidden="true"></i>
                   </Button>
                 </Box>
               </Box>
@@ -215,11 +215,11 @@ class Will extends Component {
                   onClick={this.handleBackUp}
                   aria-label="page précédente"
                 >
-                  <i className="fas fa-undo-alt"></i> Revenir en arrière
+                  <i className="fas fa-undo-alt"></i><span>Revenir en arrière</span>
                 </Button>
               ) : null}
             </Box>
-          </div>
+          </Box>
         </Box>
 
         <div>{this.renderFunc()}</div>

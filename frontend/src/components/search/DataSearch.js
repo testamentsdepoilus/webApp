@@ -119,7 +119,7 @@ export default class CustumerDataSearch extends Component {
           mt={1}
           mb={2}
         >
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -153,12 +153,12 @@ export default class CustumerDataSearch extends Component {
               renderItem={(label, count, isSelected) => (
                 <div>
                   {label.split("+")[1] + " "}
-                  <span className="smallcaps">{label.split("+")[0]}</span>
+                  <span className="text-uppercase">{label.split("+")[0]}</span>
                 </div>
               )}
               innerClass={{
                 list: "list",
-                select: this.state.testator === "" ? "select" : "selected",
+                select: this.state.testator === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -167,7 +167,7 @@ export default class CustumerDataSearch extends Component {
               id="clearTestator"
               onClick={(event) => this.handleTestatorChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>
@@ -185,7 +185,7 @@ export default class CustumerDataSearch extends Component {
           mt={3}
           mb={2}
         >
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -244,7 +244,7 @@ export default class CustumerDataSearch extends Component {
               }}
               innerClass={{
                 list: "list",
-                select: this.state.occupation === "" ? "select" : "selected",
+                select: this.state.occupation === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -253,7 +253,7 @@ export default class CustumerDataSearch extends Component {
               id="clearOccupation"
               onClick={(event) => this.handleOccupationChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>
@@ -268,7 +268,7 @@ export default class CustumerDataSearch extends Component {
           justifyContent="space-between"
           my={2}
         >
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -301,7 +301,7 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleUnitChange}
               innerClass={{
                 list: "list",
-                select: this.state.unit === "" ? "select" : "selected",
+                select: this.state.unit === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -310,7 +310,7 @@ export default class CustumerDataSearch extends Component {
               id="clearUnit"
               onClick={(event) => this.handleUnitChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>
@@ -325,7 +325,7 @@ export default class CustumerDataSearch extends Component {
           justifyContent="space-between"
           my={2}
         >
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -357,7 +357,7 @@ export default class CustumerDataSearch extends Component {
               showSearch={false}
               innerClass={{
                 list: "list",
-                select: this.state.institution === "" ? "select" : "selected",
+                select: this.state.institution === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -366,7 +366,7 @@ export default class CustumerDataSearch extends Component {
               id="clearInstitution"
               onClick={(event) => this.handleInstitutionChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>
@@ -381,7 +381,7 @@ export default class CustumerDataSearch extends Component {
           justifyContent="space-between"
           my={2}
         >
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -414,7 +414,7 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleCoteChange}
               innerClass={{
                 list: "list",
-                select: this.state.cote === "" ? "select" : "selected",
+                select: this.state.cote === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -423,7 +423,7 @@ export default class CustumerDataSearch extends Component {
               id="clearCote"
               onClick={(event) => this.handleCoteChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>
@@ -438,7 +438,7 @@ export default class CustumerDataSearch extends Component {
           justifyContent="space-between"
           my={2}
         >
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -471,7 +471,7 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleNotorialeChange}
               innerClass={{
                 list: "list",
-                select: this.state.notoriale === "" ? "select" : "selected",
+                select: this.state.notoriale === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -480,7 +480,7 @@ export default class CustumerDataSearch extends Component {
               id="clearNotoriale"
               onClick={(event) => this.handleNotorialeChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>

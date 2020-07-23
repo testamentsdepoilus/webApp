@@ -128,7 +128,9 @@ class About extends Component {
     );
 
     const menuAbout = (
-      <div className="leftMenu bg-gray">
+      <Box 
+        display={{xs: "none", sm: "block"}} 
+        className="leftMenu bg-gray">        
         <h2 className="card-title bg-primaryMain text-uppercase">
           <i className="far fa-newspaper"></i> à propos
         </h2>
@@ -149,7 +151,7 @@ class About extends Component {
             </MenuItem>
           ))}
         </MenuList>
-      </div>
+      </Box>
     );
 
     const date = Boolean(curItem) ? new Date(curItem._source["created"]) : null;
@@ -159,16 +161,16 @@ class About extends Component {
         {navBar}
 
         <Grid container direction="row" spacing={2}>
-          <Grid item xs={3}>
+          <Grid item sm={4} md={3}>
             {menuAbout}
           </Grid>
-          <Grid item xs={9}>
+          <Grid item sm={8} md={9} className="typography">
             <div className="typography">
               <div className="bg-white" key={0}>
                 <h1>{curItem._source["title"]} </h1>
                 <Box
                   className="bg-gray"
-                  display="flex"
+                  display={{xs: "block", md: "flex"}}
                   justifyContent="space-between"
                 >
                   <div className="authors fontWeightMedium text-secondaryMain">

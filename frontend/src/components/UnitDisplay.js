@@ -350,7 +350,7 @@ export default class UnitDisplay extends Component {
                                       ]
                                         .toString()
                                         .replace(/,/g, " ") + " "}
-                                      <span className="smallcaps">
+                                      <span className="text-uppercase">
                                         {
                                           hit._source[
                                             "persName.fullIndexEntryForm.surname"

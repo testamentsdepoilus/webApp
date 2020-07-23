@@ -9,27 +9,55 @@ class Footer extends Component {
         <Grid className="footerContainer" container direction="row">
           <Grid item xs={12} lg={3} className="footer_menu">
             <Box
-              display="flex"
+              display={{xs:"block", md:"flex"}}              
               id="footer_menu"
               alignItems="center"
               justifyContent="center"
               spacing={0}
             >
-              <address>
-                <a href="mailto:testaments-de-poilus@mail.com">Contact</a>
-              </address>
-              &nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href={getParamConfig("web_url") + "/mentionslegales"}>
-                Mentions légales
-              </a>
-              &nbsp;&nbsp;|&nbsp;&nbsp;
-              <a
-                href={
-                  getParamConfig("web_url") + "/apropos/MbCig24BcBbXesm0SnLM"
-                }
-              >
-                Crédits
-              </a>
+              <Box display="flex" justifyContent="center" alignItems="center" ml={2} mr={2}>
+                  <address>
+                    <a href="mailto:testaments-de-poilus@mail.com">Contact</a>
+                  </address>
+                  &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a href={getParamConfig("web_url") + "/mentionslegales"}>
+                    Mentions légales
+                  </a>
+                  &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a
+                    href={
+                      getParamConfig("web_url") + "/apropos/MbCig24BcBbXesm0SnLM"
+                    }
+                  >
+                    Crédits
+                  </a>
+              </Box> 
+              <Box display={{xs:"flex", md:"none"}} mt={1} mb={2} ml={2} mr={2} align-items="center" justifyContent="center">
+                  <a
+                    href={
+                      getParamConfig("web_url") + "/news"
+                    }
+                  >
+                    Les Actualités
+                  </a>
+                  &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a
+                    href={
+                      getParamConfig("web_url") + "/articles"
+                    }
+
+                  >
+                    L'État de la recherche
+                  </a>
+                  &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a
+                    href={
+                      getParamConfig("web_url") + "/apropos"
+                    }
+                  >
+                    À propos
+                  </a>    
+              </Box>
             </Box>
           </Grid>
 
@@ -40,6 +68,7 @@ class Footer extends Component {
               alignItems="center"
               justifyContent="space-between"
               spacing={0}
+              align="center"
             >
               <Box alignItems="center" p={1}>
                 <a

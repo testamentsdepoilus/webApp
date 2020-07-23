@@ -337,11 +337,11 @@ class Results extends React.Component {
       <div key={0}>
         <div className="main-container">
           <div className="searchBar">
-            <Grid container direction="row" spacing={0}>
-              <Grid className="searchByKwd" item xs={11}>
+            <Grid container direction="row" spacing={1}>
+              <Grid className="searchByKwd" item xs={11} md={10}>
                 <TextSearch />
               </Grid>
-              <Grid item xs={1} className="d-flex align-items-center">
+              <Grid item xs={1} md={2} className="d-flex align-items-end">
                 <Box display="flex" mb={1}>
                   <Button
                     className="iconButton"
@@ -568,10 +568,10 @@ class Results extends React.Component {
               interactive
             >
               <Button
+                className="mr-2"
                 id="btTop"
                 onClick={this.topFunction}
                 aria-label="Remonter en haut de la page"
-                className="iconButton"
               >
                 <i className="fas fa-level-up-alt"></i>
               </Button>

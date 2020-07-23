@@ -131,8 +131,8 @@ class Testators extends Component {
           </Breadcrumbs>
 
           <Box
+            display={{ xs: "block", sm: "flex" }}
             className="headingBar bg-gray"
-            display="flex"
             justifyContent="space-between"
           >
             <h2 className="card-title bg-primaryMain">
@@ -158,20 +158,20 @@ class Testators extends Component {
                     {label.split("+")[1][0].toUpperCase() +
                       label.split("+")[1].slice(1) +
                       " "}
-                    <span className="smallcaps">{label.split("+")[0]}</span>
+                    <span className="text-uppercase">{label.split("+")[0]}</span>
                   </div>
                 )}
                 innerClass={{
                   list: "list",
                   select:
-                    this.state.testator_name === "" ? "select" : "selected",
+                    this.state.testator_name === "" ? "select" : "select selected",
                 }}
               />
               {this.state.testator_name !== "" ? (
                 <Button
                   onClick={this.handleClear("")}
                   title="Supprimer le filtre"
-                  className="button iconButton"
+                  className="button clear iconButton"
                 >
                   <i className="fas fa-times"></i>
                 </Button>
@@ -276,7 +276,7 @@ class Testators extends Component {
                           </Select>
                         </Box>
                       </Box>
-                      <div className="resultList">
+                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(
@@ -307,7 +307,7 @@ class Testators extends Component {
                                 ]
                                   .toString()
                                   .replace(/,/g, " ") + " "}
-                                <span className="smallcaps">
+                                <span className="text-uppercase">
                                   {
                                     item._source[
                                       "persName.fullIndexEntryForm.surname"
@@ -318,7 +318,7 @@ class Testators extends Component {
                             )
                           )}
                         </ul>
-                      </div>
+                      </Box>
                     </div>
                   );
                   return (

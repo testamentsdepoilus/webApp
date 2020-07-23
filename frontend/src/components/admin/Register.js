@@ -142,11 +142,12 @@ class Register extends Component {
               error={this.state.isError[1]}
             />
 
-            <Grid
+            <Box
               container
               alignItems="center"
               justify="space-evenly"
               spacing={1}
+              display={{xs:"block", md: "inline-block"}}
             >
               <Grid item xs>
                 <TextField
@@ -183,6 +184,7 @@ class Register extends Component {
               <Grid item xs={1}>
                 <InputAdornment position="end">
                   <IconButton
+                    className="togglePassword"
                     aria-label="Toggle password visibility"
                     onClick={this.handleClickShowPassword}
                   >
@@ -194,7 +196,7 @@ class Register extends Component {
                   </IconButton>
                 </InputAdornment>
               </Grid>
-            </Grid>
+            </Box>
 
             <Box pt={1} display="flex" justifyContent="flex-end">
               <Button

@@ -53,8 +53,8 @@ class DateFilter extends React.Component {
                       <div className="tooltip">
                         <p>
                           Pour rechercher une date exacte, saisissez ou sélectionnez
-                          la même date dans les champs « date de début » et « date
-                          de fin ».
+                          la même date dans les champs «&nbsp;date de début&nbsp;» et «&nbsp;date
+                          de fin&nbsp;».
                         </p>
                       </div>
                     </Popper>

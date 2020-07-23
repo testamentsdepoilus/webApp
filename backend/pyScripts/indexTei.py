@@ -4,6 +4,7 @@ from elasticsearch import Elasticsearch
 from getMetaData import get_meta_data
 from teiToHtml import transcription, edition
 import json
+import sys
 
 if __name__ == '__main__':
 	# construct the argument parser and parse the arguments
@@ -34,6 +35,7 @@ if __name__ == '__main__':
 			)
 	except ConnectionError:
 		print(json.dumps({"status": 500, "res": "Erreur : connexion au serveur a échoué !"}))
+		sys.exit()
 
 	for tei_file in list_tei:
 		try:
@@ -44,11 +46,16 @@ if __name__ == '__main__':
 			res = es.index(index=args['index'],
 						   doc_type='_doc', id=doc['will_id'], body=doc)
 		except AttributeError:
-			print(json.dumps({"status": 400, "res": tei_file}))
+			print(json.dumps({"status": 400, "type": "AttributeError", "res": tei_file}))
+			sys.exit()
 		except ConnectionError:
 			print(json.dumps({"status": 500, "res": "ES connexion error"}))
+			sys.exit()
+		except:
+			print(json.dumps({"status": 500, "res": "Error script"}))
+			sys.exit()
 
 	print(json.dumps({"status": 200, "res": "Success !"}))
-
+	sys.exit()
 
 

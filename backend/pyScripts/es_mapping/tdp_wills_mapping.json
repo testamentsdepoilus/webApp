@@ -165,6 +165,10 @@
             "type": "object",
             "enabled": false
           },
+           "supportDesc": {
+            "type": "object",
+            "enabled": false
+          },
           "dim": {
             "type": "object",
             "enabled": false

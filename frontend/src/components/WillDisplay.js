@@ -678,7 +678,7 @@ export default class WillDisplay extends Component {
                         }
                       >
                         {this.props.data["testator.forename"] + " "}
-                        <span className="smallcaps">
+                        <span className="text-uppercase">
                           {this.props.data["testator.surname"]}
                         </span>
                       </Link>
@@ -797,15 +797,19 @@ export default class WillDisplay extends Component {
                       </span>
                     </div>
                     <div>
-                      {this.props.data[
-                        "will_physDesc.support"
-                      ][0].toUpperCase() +
-                        this.props.data["will_physDesc.support"].slice(1)}
-                      , {this.props.data["will_physDesc.handDesc"]},{" "}
-                      {this.props.data["will_physDesc.dim"]["width"]}
+                      {"Support : " + this.props.data["will_physDesc.support"]}
+                    </div>
+                    <div>
+                      {"Importance matérielle et dimensions : " +
+                        this.props.data["will_physDesc.supportDesc"]}
+                      {this.props.data["will_physDesc.dim"]["width"] + " "}
                       {this.props.data["will_physDesc.dim"]["unit"]} x{" "}
-                      {this.props.data["will_physDesc.dim"]["height"]}
+                      {this.props.data["will_physDesc.dim"]["height"] + " "}
                       {this.props.data["will_physDesc.dim"]["unit"]}
+                    </div>
+                    <div>
+                      {"Type d'écriture : " +
+                        this.props.data["will_physDesc.handDesc"]}
                     </div>
                     <div className="permalien">
                       {" "}

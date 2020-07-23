@@ -515,7 +515,7 @@ export default class PlaceDisplay extends Component {
                                     ]
                                       .toString()
                                       .replace(/,/g, " ") + " "}
-                                    <span className="smallcaps">
+                                    <span className="text-uppercase">
                                       {
                                         hit._source[
                                           "persName.fullIndexEntryForm.surname"
@@ -563,7 +563,7 @@ export default class PlaceDisplay extends Component {
                                     ]
                                       .toString()
                                       .replace(/,/g, " ") + " "}
-                                    <span className="smallcaps">
+                                    <span className="text-uppercase">
                                       {
                                         hit._source[
                                           "persName.fullIndexEntryForm.surname"
@@ -720,7 +720,7 @@ export default class PlaceDisplay extends Component {
                                     ]
                                       .toString()
                                       .replace(/,/g, " ") + " "}
-                                    <span className="smallcaps">
+                                    <span className="text-uppercase">
                                       {
                                         hit._source[
                                           "persName.fullIndexEntryForm.surname"

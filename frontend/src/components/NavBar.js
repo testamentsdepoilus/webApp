@@ -170,8 +170,8 @@ class NavBar extends Component {
             >
               <img
                 src={
-                  getParamConfig("web_url") +
-                  "/images/testaments-poilus-header.jpg"
+                  // getParamConfig("web_url") +
+                  "http://localhost:3000/testaments-de-poilus/images/testaments-poilus-header.jpg"
                 }
                 alt="Testaments de Poilus, édition numérique"
                 width="205"
@@ -275,7 +275,7 @@ class NavBar extends Component {
                 className="collapse_mainNav"
                 position="relative"
                 component={Box}
-                xs={2}
+                xs={3}
                 display={{ xs: "block", md: "none" }}
               >
                 <IconButton

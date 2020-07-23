@@ -388,7 +388,7 @@ export default class TestatorDisplay extends Component {
                       {this.props.data["persName.fullIndexEntryForm.forename"]
                         .toString()
                         .replace(/,/g, " ") + " "}
-                      <span className="smallcaps">
+                      <span className="text-uppercase">
                         {this.props.data["persName.fullIndexEntryForm.surname"]}
                       </span>{" "}
                       {Boolean(birth_date) ? "(" + birth_date[2] : "("}

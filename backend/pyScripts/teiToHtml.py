@@ -116,16 +116,16 @@ def edition(file_tei, config_file):
                     # 			node.previous_sibling.replace_with(str_.replace('-', ''))
                     node.decompose()
                 else:
-                    if node.name in ["persName", "item", "placeName", "date", "addrLine", "surname"]:
-                        node.insert(0, "")
-                        # if node.name == "persName" :
-                        # 	node.next_element.next_element.insert_after(" ")
-                        next_str = node.parent.next_sibling
-                        if next_str is not None and len(next_str) > 1 and next_str[0] not in [".", ","]:
-                            node.insert(len(node.contents), "")
+                    # if node.name in ["persName", "item", "placeName", "date", "addrLine", "surname"]:
+                    #     node.insert(0, "")
+                    #     # if node.name == "persName" :
+                    #     # 	node.next_element.next_element.insert_after(" ")
+                    #     next_str = node.parent.next_sibling
+                    #     # if next_str is not None and len(next_str) > 1 and next_str[0] not in [".", ","]:
+                    #     #     node.insert(len(node.contents), "")
 
-                    elif node.name in ["expan"] and node.string is not None:
-                        node.string = "" + node.string + ""
+                    # elif node.name in ["expan"] and node.string is not None:
+                    #     node.string = "" + node.string + ""
                     new_attrs = dict()
                     new_attrs['class'] = tag
                     for old_attr in node.attrs:
@@ -334,10 +334,10 @@ def convertTag(node, x, tag, config):
     # 	else:
     # 		node.insert(0, "{")
     # 		node.insert(len(node.contents), "}")
-    elif node.name in ["persName", "item", "placeName", "date", "addrLine", "surname"]:
-        node.insert(0, "")
-        # if node.name == "persName":
-        # 	node.next_element.next_element.insert_after(" ")
+    # elif node.name in ["persName", "item", "placeName", "date", "addrLine", "surname"]:
+    #     node.insert(0, "")
+    #     # if node.name == "persName":
+    #     # 	node.next_element.next_element.insert_after(" ")
     # node.next_element.insert_before("\\")
     # node.next_element.next_element.insert_after("/")
 
@@ -358,6 +358,8 @@ def convertTag(node, x, tag, config):
         node.extract()
 
     elif node.name == "lb":
+        if "break" in node.attrs and node["break"] == "no":
+            node.insert_before("-")
         # Traitmenet br add <i> tag
         i_tag = BeautifulSoup(features="html.parser").new_tag('i')
         i_tag.attrs["aria-hidden"] = "true"
@@ -394,6 +396,9 @@ def convertTag(node, x, tag, config):
     elif node.name == "supplied":
         node.insert(0, "{")
         node.insert(len(node.contents), "}")
+    elif  node.name == "surplus":
+        node.insert(0, "+")
+        node.insert(len(node.contents), "+")
     node.name = x
     node.attrs = new_attrs
 
@@ -402,12 +407,11 @@ def convertTag(node, x, tag, config):
 
 
 if __name__ == "__main__":
-    fileTei = '../../../../data/new_teiFiles/' + \
-        "will_342_AN_0273_2020-04-08_10-44-17_V4_espacesRevus-bis.xml"
+    fileTei = "/home/adoula/Downloads/fichiers-def/will_11_AD78_0011_2020-07-20_12-01-02-corrige.xml"
     configFile = 'config.json'
-    revised = transcription(fileTei, configFile)
+    revised = edition(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'][1])
+    print(revised['will'])
     # print("*****************")
     # print(edit_soup.get_text())

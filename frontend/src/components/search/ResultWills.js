@@ -334,10 +334,10 @@ export default class ResultWills extends React.Component {
       let title_testator = (
         <p>
           Testament de {" " + item["testator.forename"]}{" "}
-          <span style={{ fontVariantCaps: "small-caps" }}>
-            {item["testator.surname"]}
+          <span className={"text-uppercase"}>
+            {item["testator.surname"] + ","}
           </span>
-          <span> {Boolean(will_date) ? " rédigé le " + will_date : ""} </span>
+          <span> {Boolean(will_date) ? "rédigé le " + will_date : ""} </span>
         </p>
       );
 
@@ -365,7 +365,7 @@ export default class ResultWills extends React.Component {
                         className="typoName"
                       >
                         {item["testator.forename"] + " "}
-                        <span className="smallcaps">
+                        <span className="text-uppercase">
                           {item["testator.surname"]}
                         </span>
                       </Link>

@@ -341,6 +341,7 @@ class Home extends Component {
                 <Grid
                   container
                   direction="row"
+                  align="center"
                   spacing={0}
                   className="random_wills"
                 >
@@ -374,7 +375,7 @@ class Home extends Component {
                           }
                         >
                           {tile._source["testator.name"].split("+")[1] + " "}
-                          <span className="smallcaps">
+                          <span className="text-uppercase">
                             {tile._source["testator.name"].split("+")[0]}
                           </span>
                         </a>
@@ -406,7 +407,7 @@ class Home extends Component {
                       alignItems="center"
                       spacing={2}
                     >
-                      <Box width="90%">
+                      <Box width="100%">
                         <SingleDropdownList
                           className="select"
                           react={{
@@ -433,7 +434,7 @@ class Home extends Component {
                               {label.split("+")[1][0].toUpperCase() +
                                 label.split("+")[1].slice(1) +
                                 " "}
-                              <span className="smallcaps">
+                              <span className="text-uppercase">
                                 {label.split("+")[0]}
                               </span>
                             </div>
@@ -443,7 +444,7 @@ class Home extends Component {
                             select:
                               this.state.testator_name === ""
                                 ? "select"
-                                : "selected",
+                                : "select selected",
                           }}
                           onChange={this.handleNameChange}
                         />
@@ -454,7 +455,7 @@ class Home extends Component {
                           value="testator_name"
                           onClick={this.handleClear("testator_name")}
                           title="Supprimer le filtre"
-                          // className="d-none" pour masquer ou "d-inline-flex" pour afficher
+                          className="clear"
                         >
                           <i className="fas fa-times"></i>
                         </Button>
@@ -472,7 +473,7 @@ class Home extends Component {
                       alignItems="center"
                       spacing={2}
                     >
-                      <Box width="90%">
+                      <Box width="100%">
                         <SingleDropdownList
                           className="select"
                           react={{
@@ -498,7 +499,7 @@ class Home extends Component {
                           innerClass={{
                             list: "list",
                             select:
-                              this.state.place === "" ? "select" : "selected",
+                              this.state.place === "" ? "select" : "select selected",
                           }}
                           onChange={this.handlePlaceChange}
                         />
@@ -509,7 +510,7 @@ class Home extends Component {
                           value="place"
                           onClick={this.handleClear("place")}
                           title="Supprimer le filtre"
-                          // className="d-none" pour masquer ou "d-inline-flex" pour afficher
+                          className="clear"
                         >
                           <i className="fas fa-times"></i>
                         </Button>
@@ -565,7 +566,7 @@ class Home extends Component {
                         let title_testator = (
                           <p>
                             Testament de {" " + res["testator.forename"]}{" "}
-                            <span style={{ fontVariantCaps: "small-caps" }}>
+                            <span className="text-uppercase">
                               {res["testator.surname"]}
                             </span>
                             <span>
@@ -595,7 +596,7 @@ class Home extends Component {
                                     aria-label="More"
                                   >
                                     {res["testator.forename"] + " "}
-                                    <span className="smallcaps">
+                                    <span className="text-uppercase">
                                       {res["testator.surname"]}
                                     </span>
                                   </Link>

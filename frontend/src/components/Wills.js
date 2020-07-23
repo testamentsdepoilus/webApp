@@ -206,7 +206,7 @@ class Wills extends Component {
                         </Box>
                       </Box>
 
-                      <div className="resultList">
+                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(
@@ -232,7 +232,7 @@ class Wills extends Component {
                             )
                           )}
                         </ul>
-                      </div>
+                      </Box>
                     </div>
                   );
                   return (

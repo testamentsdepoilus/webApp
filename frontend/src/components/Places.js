@@ -135,8 +135,8 @@ class Places extends Component {
           </Breadcrumbs>
 
           <Box
+            display={{ xs: "block", sm: "flex" }}
             className="headingBar bg-gray"
-            display="flex"
             justifyContent="space-between"
           >
             <h2 className="card-title bg-primaryMain">
@@ -160,14 +160,14 @@ class Places extends Component {
                 URLParams={true}
                 innerClass={{
                   list: "list",
-                  select: this.state.city === "" ? "select" : "selected",
+                  select: this.state.city === "" ? "select" : "select selected",
                 }}
               />
               {this.state.city !== "" ? (
                 <Button
                   onClick={this.handleClear("")}
                   title="Supprimer le filtre"
-                  className="button iconButton"
+                  className="button clear iconButton"
                 >
                   <i className="fas fa-times"></i>
                 </Button>
@@ -271,7 +271,7 @@ class Places extends Component {
                           </Select>
                         </Box>
                       </Box>
-                      <div className="resultList">
+                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(
@@ -291,7 +291,7 @@ class Places extends Component {
                             )
                           )}
                         </ul>
-                      </div>
+                      </Box>
                     </div>
                   );
                   return (

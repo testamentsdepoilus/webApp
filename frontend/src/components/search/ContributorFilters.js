@@ -27,7 +27,7 @@ class ContributorFilters extends React.Component {
         justifyContent="space-between"
         mt={2}
       >
-        <Box flexGrow="1" flexShrink="1" pr={1}>
+        <Box flexGrow="1" flexShrink="1">
           <SingleDropdownList
             className="select"
             react={{
@@ -60,7 +60,7 @@ class ContributorFilters extends React.Component {
             onChange={this.handleContributeurChange}
             innerClass={{
               list: "list",
-              select: this.state.contributeur === "" ? "select" : "selected",
+              select: this.state.contributeur === "" ? "select" : "select selected",
             }}
           />
         </Box>
@@ -69,7 +69,7 @@ class ContributorFilters extends React.Component {
             id="clearContributeur"
             onClick={(event) => this.handleContributeurChange("")}
             title="Supprimer le filtre"
-            className="button iconButton"
+            className="button clear iconButton"
           >
             <i className="fas fa-times"></i>
           </Button>

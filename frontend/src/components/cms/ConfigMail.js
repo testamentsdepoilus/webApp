@@ -200,6 +200,7 @@ class ConfigMail extends Component {
                   <Grid item xs={1}>
                     <InputAdornment position="end">
                       <IconButton
+                        className="togglePassword"
                         aria-label="Toggle password visibility"
                         onClick={this.handleClickShowPassword}
                       >

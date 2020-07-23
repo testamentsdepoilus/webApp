@@ -102,7 +102,7 @@ class Unit extends Component {
                   </Link>
                   {unit_link}
           </Breadcrumbs>
-          <div>
+          <Box px={1}>
             {document.referrer.length > 0 &&
             document.referrer !== document.location.href ? (
               <Tooltip title="Revenir à la recherche">
@@ -111,7 +111,7 @@ class Unit extends Component {
                 </Button>
               </Tooltip>
             ) : null}
-          </div>
+          </Box>
        </Box>
 
         <div>{this.renderFunc()}</div>

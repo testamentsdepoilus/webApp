@@ -109,8 +109,8 @@ class Units extends Component {
           </Breadcrumbs>
 
           <Box
+            display={{ xs: "block", sm: "flex" }}
             className="headingBar bg-gray"
-            display="flex"
             justifyContent="space-between"
           >
             <h2 className="card-title bg-primaryMain">
@@ -173,14 +173,14 @@ class Units extends Component {
                 URLParams={true}
                 innerClass={{
                   list: "list",
-                  select: this.state.unit === "" ? "select" : "selected",
+                  select: this.state.unit === "" ? "select" : "select selected",
                 }}
               />
               {this.state.unit !== "" ? (
                 <Button
                   onClick={this.handleClear("")}
                   title="Supprimer le filtre"
-                  className="button iconButton"
+                  className="button clear iconButton"
                 >
                   <i className="fas fa-times"></i>
                 </Button>
@@ -269,7 +269,7 @@ class Units extends Component {
                           </Select>
                         </Box>
                       </Box>
-                      <div className="resultList">
+                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(
@@ -289,7 +289,7 @@ class Units extends Component {
                             )
                           )}
                         </ul>
-                      </div>
+                      </Box>
                     </div>
                   );
 

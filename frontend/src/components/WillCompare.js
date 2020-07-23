@@ -275,7 +275,7 @@ class WillCompare extends Component {
                   <div key={1}>
                     <h2>
                       {hit["forename"] + " "}
-                      <span className="smallcaps">{hit["surname"]}</span>
+                      <span className="text-uppercase">{hit["surname"]}</span>
                     </h2>
                   </div>
                   <div key={2}>

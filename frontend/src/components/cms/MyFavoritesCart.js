@@ -5,7 +5,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -150,39 +149,41 @@ const EnhancedTableToolbar = (props) => {
     mySearches: "Mes recherches",
   };
   return (
-    <Toolbar className="toolBar" id={title}>
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="center"
-      >
-        <Grid item>
-          <h2
-            className="card-title bg-dark-gray text-white fontWeightMedium"
-            id="tableTitle"
-          >
-            {title_[title]}
-          </h2>
-        </Grid>
-        <Grid item>
-          {numSelected > 0 ? (
-            <Grid container direction="row" alignItems="center" spacing={1}>
-              <Grid item>
-                <div className="fontWeightRegular">
-                  {numSelected === 1
-                    ? numSelected + " sélectionné"
-                    : numSelected + " sélectionnés"}
-                </div>
-              </Grid>
-              <Grid item>{actionButton}</Grid>
-            </Grid>
-          ) : (
-            actionButton
-          )}
-        </Grid>
-      </Grid>
-    </Toolbar>
+    <Box
+      className="toolBar"
+      id={title}
+      display={{ xs: "block", sm: "flex" }}
+      justifyContent="space-between"
+      alignItems="center"
+      mb={2}
+    >
+      <div class="d-flex">
+        <h2
+          className="card-title bg-dark-gray text-white fontWeightMedium"
+          id="tableTitle"
+        >
+          {title_[title]}
+        </h2>
+      </div>
+
+      {numSelected > 0 ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          spacing={1}
+        >
+          <div className="fontWeightRegular">
+            {numSelected === 1
+              ? numSelected + " sélectionné"
+              : numSelected + " sélectionnés"}
+          </div>
+          {actionButton}
+        </Box>
+      ) : (
+        actionButton
+      )}
+    </Box>
   );
 };
 
@@ -1124,14 +1125,8 @@ export default class MyFavoritesCart extends Component {
 
   actionButton = function (title) {
     return (
-      <Grid
-        id={"actionBt_" + title}
-        container
-        direction="row"
-        justify="flex-end"
-        alignItems="center"
-      >
-        <Grid item>
+      <Box id={"actionBt_" + title} alignItems="center" display="flex">
+        <Box>
           <Tooltip title="Suppression des éléments sélectionnés">
             <span>
               <Button
@@ -1149,13 +1144,13 @@ export default class MyFavoritesCart extends Component {
               </Button>
             </span>
           </Tooltip>
-        </Grid>
+        </Box>
         {this.exportRender(title)}
         {title === "myWills" ? (
           Boolean(this.state.selected[title]) &&
           this.state.selected[title].length < 4 &&
           this.state.selected[title].length > 1 ? (
-            <Grid item>
+            <Box>
               <Tooltip title="Comparer les testaments sélectionnés">
                 <span>
                   <Button
@@ -1173,9 +1168,9 @@ export default class MyFavoritesCart extends Component {
                   </Button>
                 </span>
               </Tooltip>
-            </Grid>
+            </Box>
           ) : (
-            <Grid item>
+            <Box>
               <Tooltip title="On peut comparer seulement 2 ou 3 testaments à la fois">
                 <span>
                   <Button
@@ -1187,10 +1182,10 @@ export default class MyFavoritesCart extends Component {
                   </Button>
                 </span>
               </Tooltip>
-            </Grid>
+            </Box>
           )
         ) : null}
-      </Grid>
+      </Box>
     );
   };
 
@@ -1360,7 +1355,7 @@ export default class MyFavoritesCart extends Component {
             </Button>
             <Button
               onClick={this.handleDialogConfirm}
-              className="button fontWeightMedium plain bg-secondaryLight"
+              className="button fontWeightMedium plain bg-danger"
             >
               Supprimer
             </Button>

@@ -181,6 +181,7 @@ router.post("/updateES", function (req, res, next) {
               });
             } else {
               // results is an array consisting of messages collected during execution
+
               results_ = JSON.parse(results);
               if (results_.status === 200) {
                 res.send({
@@ -209,12 +210,14 @@ router.post("/updateES", function (req, res, next) {
 
           PythonShell.run(pyScript, options, function (err, results) {
             if (err) {
+              console.log("erro : ", err);
               res.send({
                 status: 400,
                 err: "Connexion au serveur a échoué !" + err,
               });
             } else {
               // results is an array consisting of messages collected during execution
+              console.log("results :", results);
               results_ = JSON.parse(results);
               if (results_.status === 200) {
                 res.send({

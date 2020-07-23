@@ -157,13 +157,16 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
 
     # will physDesc
     phys_desc = file_desc.sourceDesc.msDesc.physDesc
-    doc['will_physDesc.support'] = phys_desc.objectDesc.supportDesc.support.string.split(":")[
-        1].strip()
-    doc['will_physDesc.dim'] = dict()
-    doc['will_physDesc.dim']["unit"] = phys_desc.objectDesc.supportDesc.extent.dimensions['unit']
-    doc['will_physDesc.dim']["height"] = phys_desc.objectDesc.supportDesc.extent.dimensions.height.string.strip()
-    doc['will_physDesc.dim']["width"] = phys_desc.objectDesc.supportDesc.extent.dimensions.width.string.strip()
-    doc['will_physDesc.handDesc'] = phys_desc.handDesc.get_text().strip()
+    if phys_desc.objectDesc.supportDesc.support is not None:
+        doc['will_physDesc.support'] = phys_desc.objectDesc.supportDesc.support.string
+    if phys_desc.objectDesc.supportDesc.extent is not None:
+        doc['will_physDesc.supportDesc'] = phys_desc.objectDesc.supportDesc.extent.dimensions.previous_element
+        doc['will_physDesc.dim'] = dict()
+        doc['will_physDesc.dim']["unit"] = phys_desc.objectDesc.supportDesc.extent.dimensions['unit']
+        doc['will_physDesc.dim']["height"] = phys_desc.objectDesc.supportDesc.extent.dimensions.height.string.strip()
+        doc['will_physDesc.dim']["width"] = phys_desc.objectDesc.supportDesc.extent.dimensions.width.string.strip()
+    if phys_desc.handDesc is not None:
+        doc['will_physDesc.handDesc'] = phys_desc.handDesc.get_text().strip()
 
     # will contents
     if file_desc.sourceDesc.msDesc.msContents is not None:
@@ -387,7 +390,7 @@ if __name__ == "__main__":
     transcription_ = transcription(fileTei, configFile)
     edition_ = edition(fileTei, configFile)
     doc = get_meta_data(fileTei, persFile, placeFile, transcription_, edition_)
-    print(doc['will_pages'][0]["transcription"])
+    print(doc['will_physDesc.support'])
     print("**************************************")
     # print(doc['will_pages'][0]['edition'])
     print("**************************************")

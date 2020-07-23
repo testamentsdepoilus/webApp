@@ -93,7 +93,7 @@ class PlaceFilter extends React.Component {
     return (
       <div>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box flexGrow="1" flexShrink="1" pr={1}>
+          <Box flexGrow="1" flexShrink="1">
             <SingleDropdownList
               className="select"
               react={{
@@ -126,7 +126,7 @@ class PlaceFilter extends React.Component {
               customQuery={this.customQuery}
               innerClass={{
                 list: "list",
-                select: this.state.place === "" ? "select" : "selected",
+                select: this.state.place === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -135,7 +135,7 @@ class PlaceFilter extends React.Component {
               id="clearPlace"
               onClick={(event) => this.handlePlaceChange("")}
               title="Supprimer le filtre"
-              className="button iconButton"
+              className="button clear iconButton"
             >
               <i className="fas fa-times"></i>
             </Button>
