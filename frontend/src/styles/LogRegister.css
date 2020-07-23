@@ -12,6 +12,10 @@
 	background-color: #8DB2C2!important;
 	color: white;
 }
+.loginRegister button.togglePassword:hover{
+	background-color: inherit!important;
+	color:#1F8299;
+}
 
 .login #resetMDP {
   color: #1F8299;

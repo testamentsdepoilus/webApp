@@ -900,3 +900,15 @@ export const updateESPost = async (req) => {
     return err;
   }
 };
+
+export const getESHost = async (req) => {
+  try {
+    const host = getParamConfig("web_host");
+
+    const res = await axios.get(host + "/cms/getESHost");
+    return res.data;
+  } catch (err) {
+    console.log("err :", err);
+    return err;
+  }
+};

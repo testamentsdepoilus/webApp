@@ -4,5 +4,8 @@
   height: 60em;
   border:none;
   box-shadow: none;
-  height:4700px;
+  height: 4100px;
+}
+.explore .paddingContainer{
+	padding: 0;
 }

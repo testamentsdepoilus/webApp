@@ -403,11 +403,11 @@ def convertTag(node, x, tag, config):
 
 if __name__ == "__main__":
     fileTei = '../../../../data/new_teiFiles/' + \
-        "will_AD78_0005.xml"
+        "will_342_AN_0273_2020-04-08_10-44-17_V4_espacesRevus-bis.xml"
     configFile = 'config.json'
     revised = transcription(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'][0])
+    print(revised['will'][1])
     # print("*****************")
     # print(edit_soup.get_text())

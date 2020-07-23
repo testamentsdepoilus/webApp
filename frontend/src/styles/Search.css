@@ -46,7 +46,7 @@
 }
 
 .search .leftSidebar .selected div{
-	color:darkred!important;
+	color: #B91918!important;
 }
 
 .search .leftSidebar  .dateFilter{
@@ -58,12 +58,9 @@
 .search .leftSidebar .dateFilter .e1hwwpu60{
 	border:none;
 }
-.search .leftSidebar .dateFilter label{
+.search .leftSidebar  label{
 	font-weight: 700;
 	color:black;
-}
-.search .leftSidebar label{
-  font-weight: 700;
   font-size:0.9rem;
   display: block;
 }
@@ -71,7 +68,7 @@
   font-size:0.975rem;
 }
 
-
+.search .leftSidebar 
 .search .leftSidebar svg.cancel-icon{
 	fill:#1f8399;
 }

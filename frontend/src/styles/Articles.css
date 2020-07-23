@@ -17,7 +17,7 @@
   margin-bottom: 50px;
 }
 .content.item .bg-white{
-  padding: 30px 30px 30px 30px;
+  padding: 30px 20px 30px 20px;
 }
 .content .bg-gray{
   padding: 6px 15px 6px 15px;
@@ -42,6 +42,7 @@
 .content .leftMenu li{
   padding: 10px 0px 10px 0px;
   border-bottom: 1px solid white;
+  white-space: normal;
 }
 .content .leftMenu li:hover{
   background-color: inherit;

@@ -1,6 +1,6 @@
 
 .search .searchBar {
- padding: 24px 24px 24px 24px;
+ padding: 24px 24px 18px 24px;
  background-color: #DADAD9;
  margin-bottom: 30px;
 }
@@ -72,17 +72,18 @@
   line-height: 2rem;
 }
 
-.search .searchByKwd{
-  margin-bottom: 16px;
-}
-
-
  /* critères sélectionnés*/
+ .search .criteres_selected{
+  margin-top: 16px;
+ }
 .search .criteres_selected a{
   background-color: #F5F5F5;
   font-family:'PT Sans';
   margin-bottom: 10px;
   font-size: 1rem;
+}
+.search .criteres_selected a:hover{
+  background: white;
 }
 .search .criteres_selected a span:nth-of-type(1){
   color: #1F8299;
@@ -91,6 +92,9 @@
 .search .criteres_selected a  span:nth-of-type(2){
   color: #B91918;
   font-weight: bold;
+}
+.search .criteres_selected a:hover span:nth-of-type(2){
+  color: darkred;
 }
 .search .criteres_selected a span:last-child{
   border-left: none;
@@ -123,6 +127,15 @@
   box-shadow: none;
 }
 
+.search .searchBar .css-dmx3ll-InputIcon-left {
+    top: 8px;
+    left: auto;
+    right: 10px;
+}
+.search .searchBar .input_keywords svg.search-icon:hover {
+    fill: #8CB2C2;
+}
+
 .search .searchResults{
   background: white;
   position: relative;
@@ -134,10 +147,9 @@
 }
 
 .search .searchResults .sort_results .select .MuiInputBase-input{
-  padding-top: 0px;
-  padding-bottom: 0.001rem;
+  padding-top: 0.09rem;
+  padding-bottom: 0px;
 }
-
 
 
 .searchResults  p.text-error{

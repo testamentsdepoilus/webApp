@@ -21,6 +21,14 @@ router.use(cors());
 //log HTTP requests
 router.use(morgan("combined"));
 
+var logger = require("../logger").Logger;
+
+router.use(function timeLog(req, res, next) {
+  // this is an example of how you would call our new logging system to log an info message
+  logger.info("Log USERS");
+  next();
+});
+
 const simpleCrypto = new SimpleCrypto(process.env.SECRET_KEY);
 const { Client } = require("@elastic/elasticsearch");
 const client = new Client({ node: process.env.host_es });
@@ -38,7 +46,7 @@ client.search(
   },
   (err, result) => {
     if (err) {
-      console.log("ES connexion au serveur a échoué !");
+      logger.error("ES connexion au serveur a échoué => " + err);
     } else {
       hits = result.body.hits.hits;
       const admin = hits.filter((hit) => {
@@ -200,6 +208,7 @@ router.post("/register", function (req, res, next) {
 
 /* POST login user listing. */
 router.post("/login", (req, res) => {
+  logger.info("Login function");
   client.search(
     {
       index: indexES,
@@ -217,6 +226,7 @@ router.post("/login", (req, res) => {
     (err, result) => {
       if (err) {
         res.json({ status: 400, error: "Connexion au serveur a échoué !" });
+        logger.error("users.js => " + err);
       } else {
         hits = result.body.hits.hits;
 
@@ -267,6 +277,7 @@ router.get("/confirmation/:token", async (req, res) => {
       },
       (err, result) => {
         if (err) {
+          logger.error("users.js => " + err);
           res.json({ status: 400, error: "Connexion au serveur a échoué !" });
         } else {
           hits = result.body.hits.hits;

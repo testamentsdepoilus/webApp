@@ -450,7 +450,7 @@ export default class MyFavoritesCart extends Component {
 
     if (myWills_.length === 1) {
       downloadFile(
-        getParamConfig("web_url") + "/files/will_" + myWills_[0] + ".xml",
+        getParamConfig("web_url") + "/files/wills/will_" + myWills_[0] + ".xml",
         "will_" + myWills_[0] + ".xml"
       );
       this.setState({
@@ -458,7 +458,8 @@ export default class MyFavoritesCart extends Component {
       });
     } else if (myWills_.length > 1) {
       let urls = myWills_.map((item) => {
-        const url = getParamConfig("web_url") + "/files/will_" + item + ".xml";
+        const url =
+          getParamConfig("web_url") + "/files/wills/will_" + item + ".xml";
         return url;
       });
       downloadZipFiles(urls, "Projet_TdP_testaments_" + this.curDate + ".zip");

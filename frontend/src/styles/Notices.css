@@ -3,33 +3,25 @@
 }
 
 .notices .headingBar{
-  padding: 0px 30px 0px 15px;
+  padding: 5px 20px 5px 20px;
 }
-
-
 
 .notices .headingBar .select{
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .notices .headingBar .select button{
-  padding-left:7px;
   width: 200px;
 }
-.notices .headingBar .select button:hover{
-  background-color: inherit;
-}
+
 .notices .headingBar .select > div {
     color: black;
 }
 .notices .headingBar .select button{
   height: 32px!important;
   min-height: 32px!important;
-  background-color: white!important;
-}
-.notices .headingBar .select button:hover{
- background-color: white!important
 }
 
 .notices.units .headingBar svg {
@@ -37,7 +29,6 @@
     height: 0.675em;
     margin-right: 3px;
 }
-
 
 .notices .countResults,
 .notices .sort_results{
@@ -52,10 +43,9 @@
 }
 
 .notices .sort_results .select .MuiInputBase-input{
-  padding-top: 0px;
-  padding-bottom: 0.001rem;
+  padding-top: 0.2rem;
 }
-.notices .sort_results label {
+.notices .sort_results label{
     font-size: 0.9rem;
     font-family: 'PT Sans';
     padding-right: 5px;
@@ -63,7 +53,9 @@
     font-weight: bold;
 }
 
-.notices .leftColumn {
+
+
+.notices .leftColumn{
   padding: 15px 25px 5px 10px;
   background-color: #F5F5F5;
 }
@@ -78,10 +70,7 @@
   padding-top:6px;
   padding-bottom: 6px;
 }
-.notices .leftColumn .resultList ul li:hover,
 .notices .leftColumn .resultList ul li.active{
   color:#B91918;
-}
-.notices .leftColumn .resultList ul li.active{
   font-weight: 600;
 }

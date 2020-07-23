@@ -16,7 +16,6 @@
 .sort_results .select:before,
 .sort_results .select:hover:before,
 .sort_results .MuiSelect-select:focus,
-.button:focus,
 .button:hover:before {
 	border:none;
 	background: inherit!important;

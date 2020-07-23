@@ -110,10 +110,10 @@
 .transcription .fa-level-down-alt{
   font-size:0.7rem!important;
   color: #8094B1;
+    display: none;
 }
-
 .transcription .lb-no:before{
-	content: "\a";
+	content: "- \a";
 	white-space: pre;
 }
 .transcription .lb-no{
@@ -194,6 +194,8 @@
 }
 
 
+
+
 /* placeName,orgName, persName, surname, date, address, damage, term   */
 .transcription [class^="placeName"]:before,
 .transcription .orgName:before,
@@ -245,7 +247,7 @@
 }
 
 /* surplus */
-/*.transcription .surplus:before,
+.transcription .surplus:before,
 .transcription .surplus:after{
     content: "\f067";
     font-family: FontAwesome;
@@ -256,11 +258,6 @@
     padding-left: 1px;
     padding-right: 1px;
 }
-*/
-.transcription .surplus:hover:after{
-  content: "Texte superflu";
-}
-
 
 /* del */
 .transcription .del{
@@ -311,6 +308,11 @@
 .transcription .add-marginBottom:hover:after{
 	content: "Ajouté en marge au-dessous";
 }
+
+
+
+
+
 
 /* damage */
 .transcription  [class^="damage"]:hover{
@@ -370,7 +372,8 @@
 .transcription .add,
 .transcription [class^="add-"],
 .transcription [class^="metamark"],
-.transcription [class^="space-"]{
+.transcription [class^="space-"],
+.transcription .surplus{
   position: relative;
   color: #1F8299;
 }
@@ -385,7 +388,8 @@
 .transcription .add:hover,
 .transcription [class^="add-"]:hover,
 .transcription [class^="metamark"]:hover,
-.transcription [class^="space-"]:hover{
+.transcription [class^="space-"]:hover,
+.transcription .surplus{
   position: relative;
   color: #2E5D81;
 }
@@ -409,8 +413,7 @@
 .transcription  [class^="metamark"]:hover:after,
 .transcription  [class^="space-"]:hover:after,
 .transcription  [class^="supplied"]:hover:after,
-.transcription  [class^="damage"]:hover:after,
-.transcription  .surplus:hover:after{
+.transcription  [class^="damage"]:hover:after{
   padding: 5px 6px 5px 6px;
   line-height: 1.2rem;
   font-size: 0.975rem;  
@@ -419,7 +422,6 @@
   text-align: center;
   position: absolute;
   z-index: 1;
-  border-radius: 0px!important;
 }
 /* position et largeur des éléments affichés au survol */
 .transcription .choice .corr,
@@ -430,8 +432,7 @@
 .transcription  [class^="add-"]:hover:after,
 .transcription  [class^="metamark"]:hover:after,
 .transcription  [class^="space-"]:hover:after,
-.transcription  [class^="supplied"]:hover:after,
-.transcription  .surplus:hover:after{
+.transcription  [class^="supplied"]:hover:after{
     top: 125%;
     width: auto;
     white-space: nowrap;
@@ -450,8 +451,7 @@
 .transcription  [class^="add-"]:hover:after,
 .transcription  [class^="space-"]:hover:after,
 .transcription  [class^="supplied"]:hover:after,
-.transcription  [class^="metamark"]:hover:after,
-.transcription  .surplus:hover:after{
+.transcription  [class^="metamark"]:hover:after{
   background-color: #2E5D81;
 }
 .transcription .app .note-app{

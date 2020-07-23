@@ -7,6 +7,14 @@ const { Client } = require("@elastic/elasticsearch");
 const client = new Client({ node: process.env.host_es });
 const es_index = process.env.index_cms;
 
+var logger = require("../logger").Logger;
+
+router.use(function timeLog(req, res, next) {
+  // this is an example of how you would call our new logging system to log an info message
+  logger.info("Log CMS");
+  next();
+});
+
 let { PythonShell } = require("python-shell");
 
 let options = {
@@ -114,7 +122,6 @@ router.post("/updatePost", function (req, res, next) {
 
 /* POST update index ES*/
 router.post("/updateES", function (req, res, next) {
-  console.log(req.body.action);
   switch (req.body.action) {
     case "add":
       let pyScript = "indexTei.py";
@@ -123,7 +130,7 @@ router.post("/updateES", function (req, res, next) {
         "--index=" + req.body.index,
       ];
       let file_path = process.env.notices_path;
-      console.log(req.body.index);
+
       switch (req.body.index) {
         case "tdp_testators":
           pyScript = "indexTestator.py";
@@ -199,7 +206,7 @@ router.post("/updateES", function (req, res, next) {
           console.log(req.files.myFiles.name + " was copied !");
           will_files += resolve(file_path + req.files.myFiles.name);
           options["args"].push(will_files);
-          console.log("ars :", options);
+
           PythonShell.run(pyScript, options, function (err, results) {
             if (err) {
               res.send({
@@ -303,6 +310,10 @@ router.post("/updateES", function (req, res, next) {
       );
       break;
   }
+});
+
+router.get("/getESHost", function (req, res, next) {
+  res.send(process.env.host_es);
 });
 
 module.exports = router;

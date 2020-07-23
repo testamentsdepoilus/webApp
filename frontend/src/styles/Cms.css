@@ -11,6 +11,7 @@
 }
 .cms .leftMenu li{
   margin-bottom: 12px;
+  white-space: normal;
 }
 .cms .leftMenu li:last-of-type{
     margin-bottom: 0px;
@@ -40,6 +41,10 @@
 }
 .cms.favoris .iconButton i{
   font-size: 0.975rem;
+}
+.manage_root.cms .tableContainer,
+.favoris.cms .tableContainer{
+ overflow-x: hidden;
 }
 .cms.manage_root  .button.plain i,
 .cms.favoris  .button.plain i{
@@ -118,7 +123,6 @@ font-size: 2em!important;
 }
 
 .cms .toolBar .button.plain{
-  line-height: 1.6rem;
   margin-left: 10px;
 }
 

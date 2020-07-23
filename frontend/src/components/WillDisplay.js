@@ -160,7 +160,7 @@ export default class WillDisplay extends Component {
 
   handleExportTEIClick() {
     downloadFile(
-      getParamConfig("web_url") + "/files/will_" + this.props.id + ".xml",
+      getParamConfig("web_url") + "/files/wills/will_" + this.props.id + ".xml",
       "will_" + this.props.id + ".xml"
     );
   }
@@ -518,7 +518,7 @@ export default class WillDisplay extends Component {
         title="Page suivante"
         onClick={this.handleNextPage}
       >
-       <i class="fas fa-arrow-circle-right"></i> 
+        <i class="fas fa-arrow-circle-right"></i>
       </Button>
     );
     let output = null;

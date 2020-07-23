@@ -33,7 +33,7 @@ if __name__ == '__main__':
 				hosts=args['host']
 			)
 	except ConnectionError:
-		print(json.dumps({"status": 500, "res": "ES connexion error"}))
+		print(json.dumps({"status": 500, "res": "Erreur : connexion au serveur a échoué !"}))
 
 	for tei_file in list_tei:
 		try:

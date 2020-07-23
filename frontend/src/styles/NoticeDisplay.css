@@ -11,13 +11,24 @@
 }
 .noticeDisplay .itemTitle i{
   padding-right: 10px;
-  font-size: 1.8em;
+  line-height: 1.6rem;
+  color:black;
+}
+.wills .noticeDisplay .itemTitle i,
+.will .noticeDisplay .itemTitle i {
+  font-size: 1.4em;
+}
+.noticeDisplay #place_notice .itemTitle i{
+  font-size: 1.1em;
+}
+.noticeDisplay #testator_notice .itemTitle i{
+  font-size: 1.2em;
 }
 .noticeDisplay .unit_notice .itemTitle svg{
-  margin-right: 12px;
-  margin-top: -6px;
-  width: 1.3em;
-  height: 1.3em;
+    margin-right: 8px;
+    margin-top: -4px;
+    width: 1em;
+    height: 1em;
 }
 .noticeDisplay h1.item{
   color:black;
@@ -28,6 +39,29 @@
 }
 .noticeDisplay h1.item a{
   color:#1F8299;
+}
+
+
+                                                                                                     
+.will #navButtons button span{
+  display: flex;
+}
+.will #navButtons .fa-caret-left,
+.will #navButtons .fa-undo-alt{
+  padding-right:6px;
+  padding-left:4px;
+  padding-top: 1px;
+}
+.will #navButtons .fa-caret-right{
+  padding-left:6px;
+  padding-right:4px;
+  padding-top: 1px;
+}
+.will #navButtons .fa-undo-alt{
+  font-size:0.8rem;
+}
+.will #navButtons button span{
+  line-height: normal;
 }
 
 .noticeDisplay  .containerInfo #btExport{
@@ -90,7 +124,14 @@ z-index: 100000;
 .noticeDisplay #testator_notice .noticeInfo  div{
   margin-bottom: 4px;
 }
+.noticeDisplay #testator_notice .noticeInfo  .biblio i{
+  font-size: 1rem;
+}
 
+.noticeDisplay .noticeInfo,
+.noticeDisplay .noticeInfo h2{
+  font-size:1.13rem;
+}
 .noticeDisplay .noticeInfo h2{
  margin-top: 30px;
  margin-bottom: 5px;
@@ -136,7 +177,7 @@ z-index: 100000;
 .notices .pagination a{
   margin-bottom: 7px;
   padding: 1px 3px;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 
@@ -145,6 +186,7 @@ z-index: 100000;
 .noticeDisplay .containerNoticeInfo{
   padding: 20px 20px 20px 20px;
   display: block;
+  color: black;
 }
 
 .noticeDisplay .tabs{
@@ -183,8 +225,7 @@ z-index: 100000;
   padding-right: 0px!important;
   padding-left: 0px!important;
 }
-.noticeDisplay .tabs button.active,
-.noticeDisplay .tabs button.active i{
+.noticeDisplay .tabs button.active{
   color:#B91918;
   font-weight: 600;
 }
@@ -192,11 +233,12 @@ z-index: 100000;
   font-size:0.8rem;
   padding-left: 4px;
   padding-right: 6px;
-  color: #2E5D81;
+  color: black;
 }
 .noticeDisplay .tab button.permalink:hover i{
   color:#B91918;
 }
+
 
 .permalienDialog > div > div{
   font-size: 1rem;
@@ -212,9 +254,12 @@ z-index: 100000;
 .permalienDialog .label {
   font-weight: 600;
 }
-.permalienDialog .MuiInput-underline:before{
- content:"";
+
+.permalienDialog .MuiInput-underline:before,
+.permalienDialog .MuiInput-underline:after{
+  border:none!important;
 }
+
 
 
 
@@ -249,12 +294,12 @@ z-index: 100000;
  padding: 26px 30px 30px 30px;
  width: 100%;
  font-family: 'Fira Sans';
+ color: black;
 }
 
 .noticeDisplay .image {
   max-width: 100%
 }
-
 
 .noticeDisplay .contributeursWill{
   border-radius: 0px;

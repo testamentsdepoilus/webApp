@@ -19,7 +19,7 @@ import {
   CircularProgress,
   Snackbar,
 } from "@material-ui/core";
-import { getParamConfig, updateESPost } from "../../utils/functions";
+import { getESHost, getParamConfig, updateESPost } from "../../utils/functions";
 import { Link as RouterLink } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -38,7 +38,7 @@ class ManageES extends Component {
         create: "Créer",
         remove: "Supprimer",
       },
-      host: getParamConfig("es_host"),
+      host: "http://localhost:9200",
       refIndex: 1,
       files: null,
       open: false,
@@ -134,14 +134,13 @@ class ManageES extends Component {
     let input = document.getElementById("file_uploads");
     if (input !== null) {
       for (const file of input.files) {
-        console.log("file :", file);
         formData.append("myFiles", file);
       }
     }
 
-    for (var pair of formData.entries()) {
+    /*for (var pair of formData.entries()) {
       console.log(pair[0] + ", " + pair[1]);
-    }
+    }*/
 
     formData.append("host", this.state.host);
     formData.append("action", this.state.selectedId);
@@ -155,7 +154,6 @@ class ManageES extends Component {
     };*/
 
     updateESPost(formData).then((res) => {
-      console.log("res :", res);
       if (res.status === 200) {
         this.setState({
           openAlert: true,
@@ -186,10 +184,15 @@ class ManageES extends Component {
       input.addEventListener("change", this.updateFileDisplay);
       input.style.opacity = 0;
     }
+
+    getESHost().then((res) => {
+      this.setState({
+        host: res,
+      });
+    });
   }
 
   render() {
-    console.log(this.state.message);
     return (
       <div className="configES cms">
         <Breadcrumbs
@@ -293,16 +296,22 @@ class ManageES extends Component {
                           <option value={4} key={4}>
                             tdp_units
                           </option>
-                          {this.state.selectedId !== "add"
-                            ? [
-                                <option value={5} key={5}>
-                                  tdp_cms
-                                </option>,
-                                <option value={6} key={6}>
-                                  tdp_users
-                                </option>,
-                              ]
-                            : []}
+                          {this.state.selectedId === "create" ? (
+                            [
+                              <option value={5} key={5}>
+                                tdp_cms
+                              </option>,
+                              <option value={6} key={6}>
+                                tdp_users
+                              </option>,
+                            ]
+                          ) : this.state.selectedId === "remove" ? (
+                            <option value={5} key={5}>
+                              tdp_cms
+                            </option>
+                          ) : (
+                            ""
+                          )}
                         </NativeSelect>
                       </div>
                       {this.state.selectedId === "add" ? (

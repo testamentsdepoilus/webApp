@@ -6,6 +6,14 @@ const resolve = require("path").resolve;
 
 router.use(cors());
 
+var logger = require("../logger").Logger;
+
+router.use(function timeLog(req, res, next) {
+  // this is an example of how you would call our new logging system to log an info message
+  logger.info("Log UTILS");
+  next();
+});
+
 function footerPDF() {
   const date = new Date();
   const footer =
@@ -40,10 +48,13 @@ router.post("/generateWillPDF", async (req, res, next) => {
     };
 
     let outputHtml =
-      '<html> <head> <title>Testaments De Poilus</title> <meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+      '<!DOCTYPE html> <html  lang="en"> <head>    <meta charset="utf-8" />  <link rel="stylesheet" type="text/css" href="file://' +
+      resolve("css/styles.css") +
+      '"> <script src="https://kit.fontawesome.com/57c7a6238a.js" crossorigin="anonymous"> </script> <title>Testaments De Poilus</title> ' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
       "<style> #root { margin: 1em; font-family: -apple-system; font-size: 0.8rem;} .before { page-break-before: always; } .after" +
       "{ page-break-after: always; } .avoid { page-break-inside: avoid; } #name {font-size: 1.1rem; font-weight: 600; " +
-      "color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;}  a {text-decoration: none;}</style></head>" +
+      "color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;}  a {text-decoration: none;} </style></head>" +
       '<body> <div id="root"><img src="file://' +
       resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" style="display: none"/> <img src="file://' +
@@ -182,6 +193,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
         "</p>";
     });
 
+    outputHtml += "</div>";
     let outputImage = '<div id="image" class="before"> <h4>Image :</h4>';
     let outputTranscription =
       '<div id="transcription" > <h4>Transcription :</h4>';
@@ -211,6 +223,8 @@ router.post("/generateWillPDF", async (req, res, next) => {
       outputEdition += title;
       outputEdition += page["edition"];
     });
+
+    outputImage += "</div>";
     outputHtml += outputImage;
     outputTranscription += "</div>";
     outputHtml += outputTranscription;
@@ -220,6 +234,9 @@ router.post("/generateWillPDF", async (req, res, next) => {
     outputHtml +=
       '<div id="will" class="before">' + req.body["testator_data"] + "</div>";
     outputHtml += "</div></body></html>";
+
+    console.log(outputHtml);
+    console.log("******************************");
 
     /*fs.writeFile("/tmp/" + data["will_id"] + ".html", outputHtml, function(
       err
@@ -263,6 +280,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
             '" alt="Xcel-RCM" width="100%" height="40" /></div>',
         },
       },
+      base: "file://" + resolve("client/build/static/"),
     };
     pdf
       .create(outputHtml, options)

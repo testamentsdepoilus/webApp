@@ -1,12 +1,12 @@
 
 .home{
-  padding-top: 60px;
+  padding-top: 0px;
 }
 .home h2.card-title{
   background-color: #8094B1;
 }
 .home .card .content{
-  font-size: 1.075rem;
+  font-size: 1rem;
   line-height: 1.5rem;
 }
 .home .card .content img{
@@ -25,16 +25,19 @@
 .home #random_wills {
   margin-bottom: 35px;
 }
+.home #random_wills .card{
+  text-align: center;
+}
 .home #random_wills img{
- border: 1px solid #2E5D81;
- width:auto;
- height: 120px;
- margin-bottom: 10px;
- -moz-box-shadow: 4px 4px 7px 0px #cfcfcf;
--webkit-box-shadow: 4px 4px 7px 0px #cfcfcf;
--o-box-shadow: 4px 4px 7px 0px #cfcfcf;
-box-shadow: 4px 4px 7px 0px #cfcfcf;
-filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=134, Strength=7);
+  border: 1px solid #2E5D81;
+  width:auto;
+  height: 120px;
+  margin-bottom: 10px;
+  -moz-box-shadow: 4px 4px 7px 0px #cfcfcf;
+  -webkit-box-shadow: 4px 4px 7px 0px #cfcfcf;
+  -o-box-shadow: 4px 4px 7px 0px #cfcfcf;
+  box-shadow: 4px 4px 7px 0px #cfcfcf;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=134, Strength=7);
 }
 .home #random_wills .random_wills .card{
   margin-bottom: 20px;
@@ -62,8 +65,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=134, St
   font-size:0.89rem;
   display: block;
 }
-.home .searchForm input,
-.home .searchForm .select div{
+.home .searchForm input{
   color: black!important;
 }
 .home .searchForm .moreCriteria{
@@ -78,10 +80,20 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=134, St
 .home .searchForm svg.cancel-icon{
   fill: #1f8399;
 }
-.home .searchForm i.fa-times:hover,
-.home .searchForm svg.cancel-icon:hover{
-  color:#8094B1!important;
+
+.home .searchForm .dateFilter{
+  margin-top: 24px;
 }
+
+.home .searchForm button div{
+  font-weight: normal;
+  font-size: 1.05rem;
+  color: #8DB2C2;
+}
+
+
+
+
 .home .css-1py3auy{
   font-family: 'Fira Sans', sans-serif!important;
   font-size:1rem;
@@ -116,5 +128,5 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=134, St
 .home .map-container {
   width: 100%;
   height: 30em;
-  position: relative;
 }
+

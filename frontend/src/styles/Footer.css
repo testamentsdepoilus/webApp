@@ -13,6 +13,7 @@ footer .footerContainer {
 footer .footerContainer a{
   color:#1F8299;
   font-size:0.98rem;
+  text-align: center;
 }
 footer .footerContainer a:hover{
   color:#8094B1;
@@ -23,6 +24,7 @@ footer .footer_menu{
 }
 footer .footerContainer img{
   max-width: 80px;
+  max-height: 70px;
 }
 
 footer .footerLogos > div > div{

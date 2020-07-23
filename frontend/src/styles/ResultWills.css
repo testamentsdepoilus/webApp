@@ -50,7 +50,7 @@
   border-bottom: 1px solid #C6C6C5;
   padding-left: 0px;
   padding-right: 0px;
-  padding-bottom: 14px;
+  padding-bottom: 6px;
 }
 .resultWill:last-of-type > div > div{
   border-bottom: none;
@@ -81,6 +81,11 @@
   height: 0px;
 }
 
+
+.resultWill .fa-level-down-alt,
+.resultWill br[class^="lb"]{
+  display: none;
+}
 
 .info .message {
   display: flex;

@@ -8,7 +8,7 @@ body{
   margin: 0 auto;
   display: block;
   background-color: #F5F5F5;
-  min-height: 600px;
+  min-height: 500px;
 }
 .mainContainer{
   max-width: 1280px;
@@ -36,6 +36,9 @@ a:hover{
 }
 .d-none{
   display: none;
+}
+.flex-end{
+  justify-content: flex-end;
 }
 .p-relative{
   position: relative;
@@ -164,6 +167,7 @@ a:hover{
  margin: -12px;
 }
 
+
 #explorer .text-green{
   color: #C4D983;
 }
@@ -268,8 +272,14 @@ nav.breadcrumbs a:hover{
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-family: 'Fira Sans', sans-serif!important;
+  font-family: 'Fira Sans', sans-serif!important;
 }
+/* Titre article/actualité*/
+.content h1{
+  font-size: 1.866rem;
+  font-weight: 600;
+}
+/* Titre bloc */
 h1.heading{
   text-transform: uppercase;
   background-color: #2E5D81;
@@ -377,7 +387,10 @@ top:5px;
     font-size: 1.1rem;
 }
 
-
+/* Formulaire de recherche sur la page d'accueil et la page Rechercher */
+.searchForm{
+    font-family: "PT Sans", sans-serif!important;
+}
 i.fa-times,
 i.fa-question-circle{
  color:#1f8399;
@@ -394,14 +407,7 @@ svg.cancel-icon path{
   stroke-width: 20px;
   stroke: #1f8399;
 }
-.DayPickerInput {
-  padding-right: 8px;
-}
-.DayPickerInput input{
-  color:black!important;
-  font-family: "PT Sans", sans-serif!important;
-  padding-right: 8px;
-}
+
 input::placeholder{
   color:#8DB2C2;
   font-weight: 400;
@@ -410,6 +416,66 @@ input::placeholder{
 .searchForm button {
  min-width: 5px;
 }
+.searchForm button:hover {
+   background-color: inherit;
+}
+
+.searchForm .selected div,
+.notices .selected div,
+.searchForm .DayPickerInput input{
+  color: #B91918!important;
+  font-weight: bold;
+}
+.DayPickerInput input{
+  color:black!important;
+}
+
+.searchForm button.select,
+.searchForm input,
+.searchBar input{
+  background-color: white!important;
+}
+.searchForm button.select:hover,
+.searchForm input:hover,
+.searchBar input:hover,
+.notices .headingBar .select button:hover{
+  background-color: rgba(255, 255, 255, 0.8)!important;
+}
+.searchForm label {
+  color:black;
+}
+.searchForm ul,
+.notices .headingBar ul {
+ top: 0px;
+}
+.searchForm ul input,
+.notices .headingBar ul input{
+  border: none;
+  border-radius:0px;
+}
+/* la croix rouge à droite du champ pour supprimer le critère  */
+.searchForm button.clear,
+.searchForm svg.cancel-icon,
+.notices .headingBar button.clear,
+.searchForm .clear{
+  padding-left: 12px!important;
+  padding-right: 0px!important;
+}
+.searchForm i.fa-times:hover,
+.searchForm svg.cancel-icon:hover,
+.searchForm svg.cancel-icon:hover path{
+  color:#B91918!important;
+  fill:#B91918;
+  stroke:#B91918;
+}
+.searchForm button.clear i,
+.searchForm svg.cancel-icon,
+.notices .headingBar button.clear i{
+  display: block;
+}
+
+
+
 .home .searchResults {
   padding-top: 20px;
 }
@@ -448,11 +514,12 @@ h1.heading{
   font-weight: 400;
   font-size: 0.985rem;
 }
+
 h2.card-title i{
   padding-right: 3px;
 }
 .paddingContainer{
- padding: 30px 30px 30px 30px;
+ padding: 10px 10px 10px 10px;
 }
 .paddingContainer > h1{
   margin-top: 0px!important;
@@ -462,12 +529,17 @@ img{
   max-width: 100%;
 }
 
+.MuiDialog-paper{
+  margin:5;
+  padding: 5;
+}
+
 .button.MuiButtonBase-root{
-  padding: 0px 7px 0px 7px;
+  padding: 4px 7px 4px 7px;
   text-transform: none!important;
   font-size: 0.933rem;
   font-weight: 400;
-  line-height: 1.75;
+  line-height: normal;
   text-align: center;
   border-radius: 4px!important;
   display: inline-block;
@@ -481,7 +553,8 @@ button:disabled{
   text-decoration: none;
 }
 
-.outlined.secondary-light{
+.outlined.secondary-light,
+.outlined.secondary-light:focus{
   border-color: #1F8299;
   color:#1F8299;
   border-style: solid;
@@ -493,9 +566,10 @@ button:disabled{
   background-color:#DADAD9;
 }
 
+
 .button.plain{
-  padding: 1px 7px;
   min-height: 10px;
+  padding: 4px 7px 4px 7px;
   color: white;
   font-size: 0.975rem;
   display: inline-block;
@@ -523,16 +597,14 @@ button:disabled{
  color:white;
   padding-right: 5px;
 }
-.button.plain:hover
-{
+.button.plain:hover{
   background-color: #B91918;
 }
-.button.plain.bg-danger:hover{
-  background-color:#8DB2C2;
+.button.plain.bg-danger:hover,
+.button.plain.bg-danger:focus{
+  background-color:#8DB2C2!important;
 }
-.button.plain:focus{
-  background-color: inherit!important;
-}
+
 .button.plain:disabled,
 .button.plain.disabled{
   background-color: #C7D7E1;
@@ -564,6 +636,8 @@ button:disabled{
 .pagination a[rel=next]{
   visibility: hidden;
   display: inline-block;
+  font-size: 0px!important;
+  line-height: 0.7rem!important;
 }
 .pagination a:hover[rel=next]:before,
 .pagination a:hover[rel=prev]:after{
@@ -596,17 +670,20 @@ button:disabled{
 .pagination a.active:focus{
   box-shadow:none;
 }
-
+.notices .pagination a{
+  padding: 1px 1px;
+}
 
 
 .map-container {
   width: 100%;
   height: 35em;
   position: relative;
+  z-index: 1;
 }
 
 .map-popup {
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 9em;
   font-size: 0.8rem;
 }
@@ -668,7 +745,9 @@ button:disabled{
   margin-top: 20px;
 }
 
-
+.typography p{
+ text-align: justify;
+}
 .typography table {
   border-spacing: 0px; 
   border-collapse: collapse!important;
@@ -699,6 +778,7 @@ button:disabled{
 }
 .typography li{
  padding-left: 20px;
+ padding-bottom: 5px;
 }
 .typography p.lead{
  font-weight: 500;
