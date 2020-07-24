@@ -19,7 +19,7 @@ import {
   CircularProgress,
   Snackbar,
 } from "@material-ui/core";
-import { getParamConfig, updateESPost } from "../../utils/functions";
+import { getESHost, getParamConfig, updateESPost } from "../../utils/functions";
 import { Link as RouterLink } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -155,7 +155,6 @@ class ManageES extends Component {
     };*/
 
     updateESPost(formData).then((res) => {
-      console.log("res :", res);
       if (res.status === 200) {
         this.setState({
           openAlert: true,
@@ -186,6 +185,14 @@ class ManageES extends Component {
       input.addEventListener("change", this.updateFileDisplay);
       input.style.opacity = 0;
     }
+
+    getESHost().then((res) => {
+      if (Boolean(res)) {
+        this.setState({
+          host: res,
+        });
+      }
+    });
   }
 
   render() {

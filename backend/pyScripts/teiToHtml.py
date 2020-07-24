@@ -18,6 +18,8 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
     if tag.parent.name and tag.parent.name != "div":
         new_element = dict()
         new_element[tag.parent.name] = []
+        if isinstance(tag, NavigableString) and tag.string != "\n":
+            new_element[tag.parent.name].append(tag.string)
         prev_tags.insert(0, new_element)
     if tag is not None and tag.name is not None:
         if tag.get('class') == "pb":
@@ -47,6 +49,8 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
     for item in tag.next_siblings:
         if item is not None and item.name is not None:
             if item.get('class') == "pb":
+                # print(prev_tags)
+                # print("***************************************")
                 if len(prev_tags) > 0:
                     for i in range(len(prev_tags)-1):
                         for key in prev_tags[i].keys():
@@ -64,7 +68,7 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
                 page_div.extend(tags)
                 for element in page_div(text=lambda it: isinstance(it, Comment)):
                     element.extract()
-                wrap_ul(page_div)
+
                 output.append(str(page_div))
                 tags = []
                 page_div = BeautifulSoup(features="html.parser").new_tag('div')
@@ -76,17 +80,15 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
                 if len(prev_tags) == 0:
                     tags.append(item)
                 else:
-                    for element in prev_tags:
-                        if tag.parent.name in element:
-                            element[tag.parent.name].append(item)
+                    if tag.parent.name in prev_tags[0]:
+                        prev_tags[0][tag.parent.name].append(item)
 
         else:
             if len(prev_tags) == 0:
                 tags.append(item)
             else:
-                for element in prev_tags:
-                    if tag.parent.name in element:
-                        element[tag.parent.name].append(item)
+                if tag.parent.name in prev_tags[0]:
+                    prev_tags[0][tag.parent.name].append(item)
 
     return [tags, page_div, output, prev_tags]
 
@@ -407,11 +409,11 @@ def convertTag(node, x, tag, config):
 
 
 if __name__ == "__main__":
-    fileTei = "/home/adoula/Downloads/fichiers-def/will_11_AD78_0011_2020-07-20_12-01-02-corrige.xml"
+    fileTei = "/home/adoula/Downloads/will_AN_0125.xml"
     configFile = 'config.json'
-    revised = edition(fileTei, configFile)
+    revised = transcription(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'])
+    print(revised['will'][0])
     # print("*****************")
     # print(edit_soup.get_text())
