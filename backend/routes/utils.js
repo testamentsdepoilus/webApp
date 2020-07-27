@@ -50,11 +50,10 @@ router.post("/generateWillPDF", async (req, res, next) => {
     let outputHtml =
       '<!DOCTYPE html> <html  lang="en"> <head>    <meta charset="utf-8" />  <link rel="stylesheet" type="text/css" href="file://' +
       resolve("css/styles.css") +
-      '"> <script src="https://kit.fontawesome.com/57c7a6238a.js" crossorigin="anonymous"> </script> <title>Testaments De Poilus</title> ' +
+      '"> <title>Testaments De Poilus</title> ' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
-      "<style> #root { margin: 1em; font-family: -apple-system; font-size: 0.8rem;} .before { page-break-before: always; } .after" +
-      "{ page-break-after: always; } .avoid { page-break-inside: avoid; } #name {font-size: 1.1rem; font-weight: 600; " +
-      "color: #024975ad;} #name span {text-transform: uppercase; font-size: 80%;}  a {text-decoration: none;} </style></head>" +
+      "<style>  .before { page-break-before: always; } .after" +
+      "{ page-break-after: always; } .avoid { page-break-inside: avoid; }  .imageAfter {page-break-after: always; display: block;}</style></head>" +
       '<body> <div id="root"><img src="file://' +
       resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" style="display: none"/> <img src="file://' +
@@ -63,12 +62,14 @@ router.post("/generateWillPDF", async (req, res, next) => {
 
     // Create div infos testateur
     const will_uri = process.env.host_web + "/testament/" + data["will_id"];
-    outputHtml +=
-      '<div id="testator-info"> <p style="font-size: 1.1rem; font-weight: 600; color: #024975ad;"> Testament de ' +
+    outputHtml += req.body["notice_info"];
+    outputHtml += req.body["contributeur"];
+    /*  outputHtml +=
+      '<div class="noticeInfo"> <h1 class="item"> Testament de ' +
       data["testator.forename"] +
-      '<span style="text-transform: uppercase; font-size: 80%;"> ' +
+      '<span class="text-uppercase"> ' +
       data["testator.surname"] +
-      "</span></p>";
+      "</span></h1>";
     outputHtml +=
       '<p>Permalien dans l’édition numérique : <a  href="' +
       will_uri +
@@ -193,10 +194,10 @@ router.post("/generateWillPDF", async (req, res, next) => {
         "</p>";
     });
 
-    outputHtml += "</div>";
+    outputHtml += "</div>";*/
     let outputImage = '<div id="image" class="before"> <h4>Image :</h4>';
     let outputTranscription =
-      '<div id="transcription" > <h4>Transcription :</h4>';
+      '<div id="transcription"> <h4>Transcription :</h4>';
     let outputEdition = '<div id="edition" class="before"> <h4>Edition :</h4>';
 
     data["will_pages"].forEach((page, i) => {
@@ -204,7 +205,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
         '<div id="image_' +
         listMenu[page["page_type"].type] +
         page["page_type"].id +
-        '" class="after">';
+        '" class="imageAfter">';
       const title =
         "<h5>" +
         listMenu[page["page_type"].type] +
@@ -216,7 +217,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
         '<img src="' +
         page["picture_url"] +
         "/full/full/0/default.jpg" +
-        '" style="width: 90%; height: 150%"></img></div>';
+        '"></img></div>';
 
       outputTranscription += title;
       outputTranscription += page["transcription"];
@@ -227,9 +228,23 @@ router.post("/generateWillPDF", async (req, res, next) => {
     outputImage += "</div>";
     outputHtml += outputImage;
     outputTranscription += "</div>";
-    outputHtml += outputTranscription;
+    [
+      '<span class="surplus">+',
+      "+</span>",
+      "[+",
+      "+]",
+      "[",
+      "]",
+      "|",
+      "|",
+    ].forEach((char) => {
+      outputTranscription = outputTranscription.split(char).join(" ");
+    });
+    outputTranscription = outputTranscription.split("{").join("[");
+    outputHtml += outputTranscription.split("}").join("]");
     outputEdition += "</div>";
-    outputHtml += outputEdition;
+    outputEdition += outputEdition.split("}").join("]");
+    outputHtml += outputEdition.split("{").join("[");
     // Add testator information
     outputHtml +=
       '<div id="will" class="before">' + req.body["testator_data"] + "</div>";

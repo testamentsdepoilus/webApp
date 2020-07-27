@@ -173,6 +173,8 @@ export default class WillDisplay extends Component {
     const input_item = {
       data: this.props.data,
       testator_data: this.state.testator_notice,
+      notice_info: document.getElementById("noticeTitleInfo").innerHTML,
+      contributeur: document.getElementById("contributeursWill").innerHTML,
     };
     generateWillPDF(input_item)
       .then((res) => {
@@ -665,7 +667,7 @@ export default class WillDisplay extends Component {
                     </Tooltip>
                   )}
                 </Box>
-                <div key={2}>
+                <div id="noticeTitleInfo" key={2}>
                   <div className="d-flex itemTitle">
                     <i className="fab fa-2x fa-stack-overflow"></i>
                     <h1 className="item">
@@ -893,7 +895,10 @@ export default class WillDisplay extends Component {
             </Grid>
           </Grid>
 
-          <div className="contributeursWill card bg-white">
+          <div
+            id="contributeursWill"
+            className="contributeursWill card bg-white"
+          >
             <h2 className="card-title bg-primaryLight">
               <i className="fas fa-child"></i> Les contributeurs
             </h2>
