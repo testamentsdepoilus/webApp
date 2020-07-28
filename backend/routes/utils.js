@@ -349,7 +349,7 @@ router.post("/generatePDF", async (req, res, next) => {
       resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
       '" alt="Xcel-RCM" height="30" style="display: none" />';
     outputHtml += req.body["outputHtml"] + "</div></body></html>";
-    console.log(outputHtml);
+
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
       orientation: "portrait", // portrait or landscape
