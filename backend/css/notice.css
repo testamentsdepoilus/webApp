@@ -1,0 +1,211 @@
+#btnBack{
+  margin-bottom: 20px;
+}
+
+.noticeDisplay{
+  min-height: 600px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.noticeDisplay .itemTitle{
+  margin-top: 10px;
+}
+
+.noticeDisplay  i {
+  display: none;
+}
+
+
+svg{
+   display: none;
+}
+.noticeDisplay h1.item{
+  color:black;
+  font-size:1.2rem;
+  line-height: 1.4rem;
+  font-weight: 600;
+  margin-top: 0px;
+}
+.noticeDisplay h1.item a{
+  color:#1F8299;
+}
+
+.noticeDisplay .noticeInfo {
+  margin-top: 10px;
+  font-size:0.9rem;
+  line-height: 0.9rem;
+  font-family: "Fira Sans";
+}
+
+.noticeDisplay .noticeInfo div{
+  margin-bottom: 20px;
+}
+.noticeDisplay #testator_notice .noticeInfo  div{
+  margin-bottom: 4px;
+}
+
+
+.noticeDisplay .noticeInfo h2{
+  font-size:1.03rem;
+}
+.noticeDisplay .noticeInfo h2{
+ margin-top: 20px;
+ margin-bottom: 5px;
+}
+
+.noticeDisplay .noticeInfo .mainInfo{
+  display: block;
+}
+.noticeDisplay #testator_notice .noticeInfo .photoTestateur {
+  width: 120px;
+  height: 100%;
+  border-radius: 0px;
+  margin-right:30px;
+  margin-bottom: 30px;
+  border: 1px solid #1F8299;
+}
+.noticeDisplay #testator_notice .noticeInfo .photoTestateur img{
+    height: 100%;
+    max-width: 100%
+}
+.noticeDisplay #testator_notice .noticeInfo .permalien{
+  margin-bottom: 20px;
+}
+.noticeDisplay .noticeInfo ul{
+ padding-left: 20px;
+ margin-top: 0px;
+}
+.noticeDisplay .noticeInfo li{
+ padding-left: 0px;
+}
+.noticeDisplay .noticeInfo a{
+  color:#1F8299;
+}
+.noticeDisplay .noticeInfo a:hover{
+  color:#8DB2C2;
+}
+
+.notices .pagination {
+  padding-bottom: 0px;
+}
+.notices .pagination a{
+  margin-bottom: 7px;
+  padding: 1px 3px;
+  font-size: 0.9rem;
+}
+
+
+
+
+.noticeDisplay .containerNoticeInfo{
+  padding: 20px 20px 20px 20px;
+  display: block;
+  color: black;
+}
+
+.noticeDisplay .tabs{
+  margin:auto;
+  display: inline-block;
+  margin-top: 20px;
+}
+.noticeDisplay .tabs{
+  color:#1F8299;
+  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.noticeDisplay .tabs .tab{
+  padding-left: 8px;
+  display: inline-block;
+}
+.noticeDisplay .tabs div.tab:not(:last-of-type):after{
+  content: '\|';
+  color: #B91918;
+}
+.noticeDisplay .tabs button{
+  font-family: 'Fira Sans';
+  color:#1F8299;
+  font-size: 0.9rem;  
+  padding-right: 0px!important;
+  padding-left: 0px!important;
+}
+.noticeDisplay .tab button.page_title:hover{
+  text-decoration: none;
+  color:#B91918;
+}
+.noticeDisplay .tabs button.permalink{
+  padding-right: 0px!important;
+  padding-left: 0px!important;
+}
+.noticeDisplay .tabs button.active{
+  color:#B91918;
+  font-weight: 600;
+}
+
+
+
+
+.permalienDialog > div > div{
+  font-size: 1rem;
+  padding: 10px 10px 10px 10px;
+}
+.permalienDialog input {
+  width:500px;
+  min-height:5px;
+  padding: 0px 5px 5px 5px;
+  border:none!important;
+  display: inline-block;
+}
+.permalienDialog .label {
+  font-weight: 600;
+}
+
+.permalienDialog .MuiInput-underline:before,
+.permalienDialog .MuiInput-underline:after{
+  border:none!important;
+}
+
+
+.noticeDisplay .containerColumns
+{
+ padding: 15px 10px 15px 10px;
+ display: block;
+}
+.noticeDisplay .containerColumns > div{
+  max-width: 100%;
+    margin-top: 20px;
+}
+
+
+
+.noticeDisplay .containerColumns .columnTitle{
+  color:#2E5D81;
+  font-weight: 700;
+  font-size: 1.1rem;  
+  text-align: center; 
+  font-family: 'Fira Sans';
+  position: relative;
+  top:-60px;
+}
+
+.noticeDisplay .containerColumns .columnContent{
+ margin: 12px 10px 70px 10px;
+ padding: 26px 30px 30px 30px;
+ width: 100%;
+ font-family: 'Fira Sans';
+ color: black;
+}
+
+.noticeDisplay .image {
+  max-width: 100%
+}
+
+
+
+
+

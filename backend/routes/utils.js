@@ -53,7 +53,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
       '"> <title>Testaments De Poilus</title> ' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
       "<style>  .before { page-break-before: always; } .after" +
-      "{ page-break-after: always; } .avoid { page-break-inside: avoid; }  .imageAfter {page-break-after: always; display: block;}</style></head>" +
+      "{ page-break-after: always; } .avoid { page-break-inside: avoid; } </style></head>" +
       '<body> <div id="root"><img src="file://' +
       resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" style="display: none"/> <img src="file://' +
@@ -205,7 +205,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
         '<div id="image_' +
         listMenu[page["page_type"].type] +
         page["page_type"].id +
-        '" class="imageAfter">';
+        '" class="after">';
       const title =
         "<h5>" +
         listMenu[page["page_type"].type] +
@@ -243,15 +243,12 @@ router.post("/generateWillPDF", async (req, res, next) => {
     outputTranscription = outputTranscription.split("{").join("[");
     outputHtml += outputTranscription.split("}").join("]");
     outputEdition += "</div>";
-    outputEdition += outputEdition.split("}").join("]");
+    outputEdition = outputEdition.split("}").join("]");
     outputHtml += outputEdition.split("{").join("[");
     // Add testator information
     outputHtml +=
       '<div id="will" class="before">' + req.body["testator_data"] + "</div>";
     outputHtml += "</div></body></html>";
-
-    console.log(outputHtml);
-    console.log("******************************");
 
     /*fs.writeFile("/tmp/" + data["will_id"] + ".html", outputHtml, function(
       err
@@ -272,7 +269,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
 
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
-      orientation: "portrait", // portrait or landscaperesolve
+      orientation: "portrait", // portrait or landscape
 
       border: "0",
       paginationOffset: 1, // Override the initial pagination number
@@ -295,7 +292,6 @@ router.post("/generateWillPDF", async (req, res, next) => {
             '" alt="Xcel-RCM" width="100%" height="40" /></div>',
         },
       },
-      base: "file://" + resolve("client/build/static/"),
     };
     pdf
       .create(outputHtml, options)
@@ -307,7 +303,7 @@ router.post("/generateWillPDF", async (req, res, next) => {
           if (err) {
             res.send({
               status: 400,
-              err: "Error: " + e,
+              err: "Error: " + err,
             });
             return console.log(err);
           }
@@ -343,55 +339,17 @@ router.post("/generatePDF", async (req, res, next) => {
   try {
     let footer_html = footerPDF();
     let outputHtml =
-      '<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml"> <head> <title>Testaments De Poilus</title>' +
+      '<!DOCTYPE html> <html  lang="en"> <head>    <meta charset="utf-8" /> <link rel="stylesheet" type="text/css" href="file://' +
+      resolve("css/notice.css") +
+      '"><title>Testaments De Poilus</title>' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
-      '<script src="https://kit.fontawesome.com/57c7a6238a.js" crossorigin="anonymous"></script>' +
-      " <style>" +
-      "      body {" +
-      "        font-family: 'Fira Sans', sans-serif;" +
-      "        font-size: 1rem;" +
-      "      }" +
-      "      .d-flex {" +
-      "        display: flex;" +
-      "      }" +
-      "      i {" +
-      "        padding-right: 10px;" +
-      "        font-size: 1.4em;" +
-      "      }" +
-      "      .noticeInfo div {" +
-      "        margin-bottom: 4px;" +
-      "      }" +
-      "      h1.item {" +
-      "        color: black;" +
-      "        font-size: 1.3rem;" +
-      "        line-height: 1.8rem;" +
-      "        font-weight: 600;" +
-      "        margin-top: 0px;" +
-      "      }" +
-      "      .noticeInfo .permalien {" +
-      "        margin-bottom: 20px;" +
-      "      }" +
-      "      .smallcaps {" +
-      "        font-variant: small-caps;" +
-      "      }" +
-      "      .noticeInfo a {" +
-      "        color: #1F8299;" +
-      "      }" +
-      "      .MuiLink-underlineHover {" +
-      "        text-decoration: none;" +
-      "      }" +
-      "      .noticeInfo h2 {" +
-      "        font-size: 1.13rem;" +
-      "        margin-top: 30px;" +
-      "        margin-bottom: 5px;" +
-      "      }" +
-      "</style>" +
-      '</head> <body><div id="root"><img src="file://' +
+      '</head> <body><div class="noticeDisplay" id="root"><img src="file://' +
       resolve("client/build/images/Entete_Bande-logo-bas-150dpi.jpg") +
       '" alt="Xcel-RCM" height="40" style="display: none"/> <img src="file://' +
       resolve("client/build/images/Entete_titre-site-haut-150dpi.jpg") +
       '" alt="Xcel-RCM" height="30" style="display: none" />';
     outputHtml += req.body["outputHtml"] + "</div></body></html>";
+    console.log(outputHtml);
     const options = {
       format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
       orientation: "portrait", // portrait or landscape
@@ -427,7 +385,7 @@ router.post("/generatePDF", async (req, res, next) => {
           if (err) {
             res.send({
               status: 400,
-              err: "Error: " + e,
+              err: "Error: " + err,
             });
             return console.log(err);
           }
