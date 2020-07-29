@@ -31,10 +31,11 @@ i {
     margin-bottom: 10px;
 }
 
-#image img {
+#image img  {
     width: 85%;
     max-height: 150%;
     margin: auto;
+
 }
 
 .columnContent {
@@ -125,23 +126,23 @@ h1 .item {
 /* hi */
 .hi-underlined,
 .transcription .hi-superscript-underlined,
-.edition .hi-double-underlined,
-.edition .hi-superscript-underlined{
-    text-decoration-line: underline;
+.edition .hi-double-underlined {
+    text-decoration: underline;
     text-decoration-style: solid;
 }
 .transcription [class$="double-underlined"]{
-    text-decoration-line: underline;
-    text-decoration-style: double;
+    text-decoration: underline;
+    vertical-align: super;
 }
 
 .hi-superscript-double-underlined{
     vertical-align: super;
     font-size: 70%;
-    text-decoration-line: underline;
-    text-decoration-style: double;
+    text-decoration: underline;
 }
-.columnContent [class*="hi-superscript"]{
+
+.edition [class*="hi-superscript"],
+.transcription [class*="hi-superscript"]{
     vertical-align: super;
     font-size: 70%;
     line-height: 16px;
@@ -241,8 +242,10 @@ h1 .item {
 
 }
 /* surname et seg */
-.columnContent [class^="seg"] .surname,
-.columnContent [class^="signed"] .surname{
+.transcription [class^="seg"] .surname,
+.transcription [class^="signed"] .surname,
+.edition [class^="seg"] .surname,
+.edition [class^="signed"] .surname{
     text-transform: uppercase;
 }
 

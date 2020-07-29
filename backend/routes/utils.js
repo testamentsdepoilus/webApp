@@ -228,17 +228,11 @@ router.post("/generateWillPDF", async (req, res, next) => {
     outputImage += "</div>";
     outputHtml += outputImage;
     outputTranscription += "</div>";
-    [
-      '<span class="surplus">+',
-      "+</span>",
-      "[+",
-      "+]",
-      "[",
-      "]",
-      "|",
-      "|",
-    ].forEach((char) => {
+    ["[+", "+]", "[", "]", "|", "|"].forEach((char) => {
       outputTranscription = outputTranscription.split(char).join(" ");
+    });
+    ['<span class="surplus">+', "+</span>"].forEach((char) => {
+      outputTranscription = outputTranscription.split(char).join("");
     });
     outputTranscription = outputTranscription.split("{").join("[");
     outputHtml += outputTranscription.split("}").join("]");
