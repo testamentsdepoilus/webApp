@@ -12,6 +12,7 @@ import TestatorDisplay from "../components/TestatorDisplay";
 import ReactDOM from "react-dom";
 import PlaceDisplay from "../components/PlaceDisplay";
 import UnitDisplay from "../components/UnitDisplay";
+import WillDisplay from "../components/WillDisplay";
 
 // Global declaration for jsPDF (needed before call html())
 window.html2canvas = html2canvas;
@@ -572,21 +573,26 @@ export function generateTestatorHTML(ids) {
           })
         )
           .then((data) => {
+            var div = document.createElement("div");
+            div.setAttribute("id", "testator_" + i);
+            document.getElementById("notice_none").appendChild(div);
             ReactDOM.render(
               <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
-              document.getElementById("notice_none")
+              document.getElementById("testator_" + i)
             );
+            setTimeout(() => {
+              output_html[i] = document
+                .getElementById("testator_" + i)
+                .getElementsByClassName("testator_notice")[0].innerHTML;
 
-            output_html[i] = document.getElementById(
-              "testator_notice"
-            ).innerHTML;
+              resolve(output_html);
+            }, 1000);
           })
           .catch((error) => {
             console.log("error :", error);
+            reject("error :" + error);
           });
       });
-
-      resolve(output_html);
     } catch (e) {
       reject("error :" + e);
     }
@@ -609,22 +615,28 @@ export function generatePlaceHTML(ids) {
           })
         )
           .then((data) => {
+            var div = document.createElement("div");
+            div.setAttribute("id", "place_" + i);
+            document.getElementById("notice_none").appendChild(div);
             ReactDOM.render(
               <PlaceDisplay id={data[0]["_id"]} data={data[0]._source} />,
-              document.getElementById("notice_none")
+              document.getElementById("place_" + i)
             );
+            setTimeout(() => {
+              let map_div = document.getElementsByClassName("map-container")[i];
+              map_div.style.display = "none";
+              output_html[i] = document
+                .getElementById("place_" + i)
+                .getElementsByClassName("lieu_notice")[0].innerHTML;
 
-            let map_div = document.getElementById("map-container");
-            map_div.style.display = "none";
-
-            output_html[i] = document.getElementById("lieu_notice").innerHTML;
+              resolve(output_html);
+            }, 1000);
           })
           .catch((error) => {
             console.log("error :", error);
+            reject("error :" + error);
           });
       });
-
-      resolve(output_html);
     } catch (e) {
       reject("error :" + e);
     }
@@ -647,18 +659,25 @@ export function generateUnitHTML(ids) {
           })
         )
           .then((data) => {
+            var div = document.createElement("div");
+            div.setAttribute("id", "unit_" + i);
+            document.getElementById("notice_none").appendChild(div);
             ReactDOM.render(
               <UnitDisplay id={data[0]["_id"]} data={data[0]._source} />,
-              document.getElementById("notice_none")
+              document.getElementById("unit_" + i)
             );
-
-            output_html[i] = document.getElementById("unit_notice").innerHTML;
+            setTimeout(() => {
+              output_html[i] = document
+                .getElementById("unit_" + i)
+                .getElementsByClassName("unit_notice")[0].innerHTML;
+              resolve(output_html);
+            }, 1000);
           })
           .catch((error) => {
             console.log("error :", error);
+            reject("error :" + error);
           });
       });
-      resolve(output_html);
     } catch (e) {
       reject("error :" + e);
     }
@@ -668,6 +687,7 @@ export function generateUnitHTML(ids) {
 export function generateWillHTML(ids) {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log("generate will html ");
       let output = new Array(ids.length);
       await asyncForEach(ids, async (id, i) => {
         await getHitsFromQuery(
@@ -680,44 +700,41 @@ export function generateWillHTML(ids) {
             },
           })
         )
-          .then(async (data) => {
-            await getHitsFromQuery(
-              getParamConfig("es_host") +
-                "/" +
-                getParamConfig("es_index_testators"),
-              JSON.stringify({
-                query: {
-                  term: {
-                    _id: data[0]._source["testator.ref"],
-                  },
-                },
-              })
-            )
-              .then((hit_testator) => {
-                ReactDOM.render(
-                  <TestatorDisplay
-                    id={hit_testator[0]["_id"]}
-                    data={hit_testator[0]._source}
-                  />,
-                  document.getElementById("notice_none")
-                );
-                output[i] = {
-                  data: data[0]._source,
-                  testator_data: document.getElementById("notice_none")
-                    .innerHTML,
-                };
-              })
-              .catch((error) => {
-                console.log("error :", error);
-                reject("error :" + error);
-              });
+          .then((data) => {
+            var div = document.createElement("div");
+            div.setAttribute("id", "will_" + i);
+            document.getElementById("notice_none").appendChild(div);
+            ReactDOM.render(
+              <WillDisplay id={id} data={data[0]._source} number={i} />,
+              document.getElementById("will_" + i)
+            );
+            output[i] = {
+              data: data[0]._source,
+              testator_data: document.getElementById("notice_none").innerHTML,
+            };
+
+            setTimeout(() => {
+              output[i] = {
+                data: data[0]._source,
+                testator_data: document
+                  .getElementById("will_" + i)
+                  .getElementsByClassName("testator_notice")[0].innerHTML,
+                notice_info: document
+                  .getElementById("will_" + i)
+                  .getElementsByClassName("noticeTitleInfo")[0].innerHTML,
+                contributeur: document
+                  .getElementById("will_" + i)
+                  .getElementsByClassName("contributeursWill")[0].innerHTML,
+              };
+
+              resolve(output);
+            }, 1000);
           })
           .catch((error) => {
             console.log("error :", error);
             reject("error :" + error);
           });
       });
-      resolve(output);
     } catch (e) {
       reject("error :" + e);
     }

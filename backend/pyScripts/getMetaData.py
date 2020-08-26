@@ -124,27 +124,33 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
         soup_place = BeautifulSoup(fp, "lxml-xml")
 
     # init doc
-    file_desc = soup.find("fileDesc")
-    title_stmt = file_desc.titleStmt
+    doc = dict()
 
     # Contributions
-    doc = dict()
-    respStmt_all = title_stmt.find_all("respStmt")
+    file_desc = soup.find("fileDesc")
+    edition_stmt = file_desc.editionStmt
     doc['contributions'] = []
-    for respStmt in respStmt_all:
-        contribution = dict()
-        if respStmt.find("persName"):
-            contribution['resp'] = respStmt.resp.string
-            contribution['persName'] = []
-            if contribution['resp'] == "Identification et description du testament":
-                for item in respStmt.find_all("persName"):
-                    contribution['persName'].append(item['xml:id'])
-            else:
-                for item in respStmt.find_all("persName"):
-                    if item.string is not None:
-                        contribution['persName'].append(item.string.strip())
+    if edition_stmt is not None:
+        respStmt_all = edition_stmt.find_all("respStmt")
+        for respStmt in respStmt_all:
+            contribution = dict()
+            if respStmt.find("persName"):
+                contribution['resp'] = respStmt.resp.string
+                contribution['persName'] = []
+                if contribution['resp'] == "Identification et description du testament":
+                    for item in respStmt.find_all("persName"):
+                        if item.string is not None:
+                            contribution['persName'].append(item.string.strip())
+                        elif 'ref' in item.attrs:
+                            contribution['persName'].append(item['ref'])
+                else:
+                    for item in respStmt.find_all("persName"):
+                        if item.string is not None:
+                            contribution['persName'].append(item.string.strip())
+                        elif 'ref' in item.attrs:
+                            contribution['persName'].append(item['ref'])
 
-            doc['contributions'].append(contribution)
+                doc['contributions'].append(contribution)
     # will identifier
     ms_identifier = file_desc.sourceDesc.msDesc.msIdentifier
     doc['will_identifier.institution'] = ms_identifier.institution.string.strip()
@@ -383,14 +389,15 @@ if __name__ == "__main__":
     # for file_ in os.listdir('../../../../data/toto/'):
     # will_342_AN_0273_2020-04-08_10-44-17_V2.xml
     fileTei = os.path.join('../../../../data/new_teiFiles/',
-                           "will_342_AN_0273_2020-04-08_10-44-17_V4_espacesRevus-bis.xml")
+                           "will_AD78_0001.xml")
+    # fileTei = '/home/adoula/Downloads/will_AN_0001.xml'
     persFile = '../../../../data/notices_wills/contextualEntity_person_2019-11-06_04-04-43.xml'
     placeFile = '../../../../data/notices_wills/contextualEntity_place_2019-11-06_03-28-52.xml'
     configFile = 'config.json'
     transcription_ = transcription(fileTei, configFile)
     edition_ = edition(fileTei, configFile)
     doc = get_meta_data(fileTei, persFile, placeFile, transcription_, edition_)
-    print(doc['will_physDesc.support'])
+    print(doc['contributions'])
     print("**************************************")
     # print(doc['will_pages'][0]['edition'])
     print("**************************************")

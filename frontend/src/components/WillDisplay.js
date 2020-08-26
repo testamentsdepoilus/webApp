@@ -176,6 +176,7 @@ export default class WillDisplay extends Component {
       notice_info: document.getElementById("noticeTitleInfo").innerHTML,
       contributeur: document.getElementById("contributeursWill").innerHTML,
     };
+
     generateWillPDF(input_item)
       .then((res) => {
         if (res.status === 200) {
@@ -399,7 +400,7 @@ export default class WillDisplay extends Component {
       .then((data) => {
         ReactDOM.render(
           <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
-          document.getElementById("testator_none")
+          document.getElementById("testator_none_" + this.props.number)
         );
         if (
           this.state.testator_notice !==
@@ -496,7 +497,7 @@ export default class WillDisplay extends Component {
       .then((data) => {
         ReactDOM.render(
           <TestatorDisplay id={data[0]["_id"]} data={data[0]._source} />,
-          document.getElementById("testator_none")
+          document.getElementById("testator_none_" + this.props.number)
         );
         if (
           this.state.testator_notice !==
@@ -667,7 +668,7 @@ export default class WillDisplay extends Component {
                     </Tooltip>
                   )}
                 </Box>
-                <div id="noticeTitleInfo" key={2}>
+                <div id="noticeTitleInfo" className="noticeTitleInfo" key={2}>
                   <div className="d-flex itemTitle">
                     <i className="fab fa-2x fa-stack-overflow"></i>
                     <h1 className="item">
@@ -951,7 +952,10 @@ export default class WillDisplay extends Component {
               </Grid>
             </div>
           </Dialog>
-          <div id="testator_none" style={{ display: "none" }}></div>
+          <div
+            id={"testator_none_" + this.props.number}
+            style={{ display: "none" }}
+          ></div>
         </div>
       );
     }
