@@ -414,6 +414,6 @@ if __name__ == "__main__":
     revised = transcription(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'][0])
+    print(revised['will'][1])
     # print("*****************")
     # print(edit_soup.get_text())

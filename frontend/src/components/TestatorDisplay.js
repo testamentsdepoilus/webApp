@@ -147,7 +147,6 @@ export default class TestatorDisplay extends Component {
         });
         console.log(e);
       });
-
   }
 
   handleAddShoppingWill(id) {
@@ -267,24 +266,20 @@ export default class TestatorDisplay extends Component {
       let death_date = [];
 
       if (Boolean(this.props.data["death.date"])) {
-        if (Array.isArray(this.props.data["death.date"])) {
-          death_date = this.props.data["death.date"].map((item) => {
-            const date = new Date(item);
-            return date.toLocaleDateString().split("/");
-          });
-        } else {
-          const date = new Date(this.props.data["death.date"]);
-          death_date.push(date.toLocaleDateString().split("/"));
-        }
+        death_date = this.props.data["death.date"].map((item) => {
+          const date = new Date(item.gte);
+          return date.toLocaleDateString().split("/");
+        });
       }
 
-      let birth_date = Boolean(this.props.data["birth.date"])
-        ? new Date(this.props.data["birth.date"])
-        : null;
-
-      birth_date = Boolean(birth_date)
-        ? birth_date.toLocaleDateString().split("/")
-        : null;
+      console.log(death_date);
+      let birth_date = [];
+      if (Boolean(this.props.data["birth.date"])) {
+        birth_date = this.props.data["birth.date"].map((item) => {
+          const date = new Date(item.gte);
+          return date.toLocaleDateString().split("/");
+        });
+      }
 
       const isAdded = Boolean(this.userToken)
         ? this.state.myTestators.findIndex((el) => el === this.props.id)
@@ -391,7 +386,9 @@ export default class TestatorDisplay extends Component {
                       <span className="text-uppercase">
                         {this.props.data["persName.fullIndexEntryForm.surname"]}
                       </span>{" "}
-                      {Boolean(birth_date) ? "(" + birth_date[2] : "("}
+                      {birth_date.length > 0
+                        ? "(" + birth_date[0][2].trim()
+                        : "("}
                       {"-"}
                       {death_date.length > 0
                         ? death_date[0][2].trim() + ")"
@@ -444,15 +441,7 @@ export default class TestatorDisplay extends Component {
                         {Boolean(birth_date) ||
                         Boolean(this.props.data["birth.place.name"]) ? (
                           <div>
-                            Né
-                            {Boolean(birth_date)
-                              ? " le " +
-                                birth_date[0] +
-                                " " +
-                                this.months[birth_date[1] - 1] +
-                                " " +
-                                birth_date[2]
-                              : ""}{" "}
+                            {this.props.data["birth.date_text"]}
                             {Boolean(this.props.data["birth.place.name"]) ? (
                               <Link
                                 href={
@@ -462,7 +451,7 @@ export default class TestatorDisplay extends Component {
                                 }
                                 target="_blank"
                               >
-                                à {this.props.data["birth.place.name"]}
+                                {this.props.data["birth.place.name"]}
                               </Link>
                             ) : (
                               ""
@@ -496,22 +485,7 @@ export default class TestatorDisplay extends Component {
                           ""
                         )}
                         <div>
-                          Mort pour la France le{" "}
-                          {death_date.length > 0
-                            ? death_date[0][0] +
-                              " " +
-                              this.months[death_date[0][1] - 1] +
-                              " " +
-                              death_date[0][2]
-                            : ""}{" "}
-                          {death_date.length === 2
-                            ? " ou le " +
-                              death_date[1][0] +
-                              " " +
-                              this.months[death_date[1][1] - 1] +
-                              " " +
-                              death_date[1][2]
-                            : ""}{" "}
+                          {this.props.data["death.date_text"]}
                           {Boolean(this.props.data["death.place.name"]) ? (
                             <Link
                               href={
@@ -523,48 +497,39 @@ export default class TestatorDisplay extends Component {
                               }
                               target="_blank"
                             >
-                              à {this.props.data["death.place.name"]}
+                              {this.props.data["death.place.name"]}
                             </Link>
                           ) : (
                             ""
                           )}
                         </div>
-                        {Boolean(this.props.data["occupation"]) ? (
+                        {this.props.data["occupation"].length > 0 ? (
                           <div>
-                            Profession : {this.props.data["occupation"]}
+                            Profession :
+                            {" " + this.props.data["occupation"].join("; ")}
                           </div>
                         ) : (
                           ""
                         )}
                       </div>
                     </Box>
-
-                    {Boolean(this.props.data["note_history"]) ? (
+                    {this.props.data["note_history"].length > 0 ? (
                       <div className="biographie">
                         <h2 className="fontWeightRegular">
                           <i className="fas fa-street-view"></i> Biographie
                         </h2>
                         <ul className="text">
-                          {this.props.data["note_history"]
-                            .split("*")
-                            .map((item, i) => {
-                              item = item.trim();
-                              if (item.length > 1) {
-                                return (
-                                  <li key={i}>
-                                    {item[0].toUpperCase() + item.slice(1)}
-                                  </li>
-                                );
-                              } else {
-                                return null;
-                              }
-                            })}
+                          {this.props.data["note_history"].map((item, i) => {
+                            item = item.trim();
+                            if (item.length > 1) {
+                              return <li key={i}>{item}</li>;
+                            } else {
+                              return null;
+                            }
+                          })}
                         </ul>
                       </div>
-                    ) : (
-                      ""
-                    )}
-
+                    ) : null}
                     {Boolean(this.props.data["bibl.author"]) ? (
                       <div className="biblio">
                         <h2 className="fontWeightRegular">

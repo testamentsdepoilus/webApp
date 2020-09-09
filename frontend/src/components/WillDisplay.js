@@ -619,7 +619,10 @@ export default class WillDisplay extends Component {
                         <i className="far fa-file-pdf"></i> PDF
                       </Button>
                       {Boolean(this.state.isLoading) ? (
-                        <CircularProgress />
+                        <CircularProgress
+                          className="spinner"
+                          color="secondary"
+                        />
                       ) : (
                         ""
                       )}
@@ -690,21 +693,13 @@ export default class WillDisplay extends Component {
 
                   <div className="noticeInfo">
                     <div>
-                      Mort pour la France
-                      {Boolean(death_date)
-                        ? " le " +
-                          death_date[0] +
-                          " " +
-                          this.months[death_date[1] - 1] +
-                          " " +
-                          death_date[2]
-                        : ""}
+                      {this.props.data["will_contents.death_text"]}
+
                       {Boolean(
                         this.props.data["will_contents.death_place_norm"]
                       ) ? (
                         <div className="d-inline-block">
                           {" "}
-                          <span className="text-error">&nbsp;|</span>{" "}
                           {Boolean(
                             this.props.data["will_contents.death_place_ref"]
                           ) ? (
@@ -718,12 +713,12 @@ export default class WillDisplay extends Component {
                             >
                               {
                                 this.props.data[
-                                  "will_contents.death_place_norm"
+                                  "will_contents.death_place_text"
                                 ]
                               }
                             </Link>
                           ) : (
-                            this.props.data["will_contents.death_place_norm"]
+                            this.props.data["will_contents.death_place_text"]
                           )}
                         </div>
                       ) : (
@@ -795,9 +790,7 @@ export default class WillDisplay extends Component {
                     <div>
                       Cote aux {this.props.data["will_identifier.institution"]}
                       {" : "}
-                      <span className="fontWeightBold">
-                        {this.props.data["will_identifier.cote"]}
-                      </span>
+                      <span>{this.props.data["will_identifier.cote"]}</span>
                     </div>
                     <div>
                       {"Support : " + this.props.data["will_physDesc.support"]}

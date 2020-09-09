@@ -41,8 +41,10 @@ if __name__ == '__main__':
 		try:
 			tei_transcription = transcription(tei_file, args['file'])
 			tei_edition = edition(tei_file, args['file'].strip())
+
 			doc = get_meta_data(
 				tei_file, args['persFile'], args['placeFile'], tei_transcription, tei_edition)
+
 			res = es.index(index=args['index'],
 						   doc_type='_doc', id=doc['will_id'], body=doc)
 		except AttributeError:

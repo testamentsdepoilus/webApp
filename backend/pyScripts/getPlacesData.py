@@ -10,7 +10,10 @@ def get_meta_data(file_tei):
 	for place in list_pers.find_all("place"):
 		doc = dict()
 		doc['id'] = place['xml:id'].split('-')[1]
-		doc['city'] = place.settlement.string.strip()
+		if place.settlement is not None:
+			doc['city'] = place.settlement.string.strip()
+		elif place.geogName is not None:
+			doc['city'] = place.geogName.string.strip()
 
 		for location in place.find_all('location'):
 			if location.region is not None:
@@ -18,7 +21,7 @@ def get_meta_data(file_tei):
 			if location.country is not None:
 				doc['country'] = location.country.string.strip()
 			if location.geo is not None:
-				geo_point = location.geo.string.split('+')
+				geo_point = location.geo.string.split(' ')
 				doc['geo'] = {"lat": geo_point[0], "lon": geo_point[1]}
 
 		if place.idno is not None and 'type' in place.idno.attrs:
@@ -29,6 +32,8 @@ def get_meta_data(file_tei):
 
 
 if __name__ == "__main__":
-	fileTei = "/home/adoula/myProjects/testaments_de_poilus/data/notices_wills/contextualEntity_place_2019-11-06_03-28-52.xml"
+	fileTei = "../client/build/files/notices/places.xml"
 	output = get_meta_data(fileTei)
-	print(output[0])
+	for item in output:
+		if item["id"] == "687":
+			print(item)

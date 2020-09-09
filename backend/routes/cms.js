@@ -130,33 +130,31 @@ router.post("/updateES", function (req, res, next) {
         "--index=" + req.body.index,
       ];
       let file_path = process.env.notices_path;
-
+      let file_name = "";
       switch (req.body.index) {
         case "tdp_testators":
           pyScript = "indexTestator.py";
+          file_name = "persons.xml";
           break;
         case "tdp_places":
           pyScript = "indexPlaces.py";
+          file_name = "places.xml";
           break;
         case "tdp_military_unit":
           pyScript = "indexMilitary.py";
+          file_name = "units.xml";
           break;
         case "tdp_wills":
           pyScript = "indexTei.py";
           file_path = process.env.wills_path;
+          if (!Array.isArray(req.files.myFiles)) {
+            file_name = req.files.myFiles.name;
+          }
           options["args"].push(
-            "--placeFile=" +
-              resolve(
-                process.env.notices_path +
-                  "contextualEntity_place_2019-11-06_03-28-52.xml"
-              )
+            "--placeFile=" + resolve(process.env.notices_path + "places.xml")
           );
           options["args"].push(
-            "--persFile=" +
-              resolve(
-                process.env.notices_path +
-                  "contextualEntity_person_2019-11-06_04-04-43.xml"
-              )
+            "--persFile=" + resolve(process.env.notices_path + "persons.xml")
           );
 
           options["args"].push("--file=" + resolve("pyScripts/config.json"));
@@ -200,12 +198,8 @@ router.post("/updateES", function (req, res, next) {
             }
           });
         } else {
-          fs.copyFileSync(
-            req.files.myFiles.path,
-            file_path + req.files.myFiles.name
-          );
-          console.log(req.files.myFiles.name + " was copied !");
-          will_files += resolve(file_path + req.files.myFiles.name);
+          fs.copyFileSync(req.files.myFiles.path, file_path + file_name);
+          will_files += resolve(file_path + file_name);
           options["args"].push(will_files);
 
           PythonShell.run(pyScript, options, function (err, results) {
@@ -217,13 +211,61 @@ router.post("/updateES", function (req, res, next) {
               });
             } else {
               // results is an array consisting of messages collected during execution
-              console.log("results :", results);
               results_ = JSON.parse(results);
+              console.log(results_);
               if (results_.status === 200) {
-                res.send({
-                  status: 200,
-                  mess: "Success !",
-                });
+                if (req.body.index !== "tdp_wills") {
+                  options["args"] = [
+                    "--host=" + req.body.host,
+                    "--index=" + "tdp_wills",
+                  ];
+                  options["args"].push(
+                    "--placeFile=" +
+                      resolve(process.env.notices_path + "places.xml")
+                  );
+                  options["args"].push(
+                    "--persFile=" +
+                      resolve(process.env.notices_path + "persons.xml")
+                  );
+
+                  options["args"].push(
+                    "--file=" + resolve("pyScripts/config.json")
+                  );
+                  will_files = "--data=" + resolve(process.env.wills_path);
+                  options["args"].push(will_files);
+                  PythonShell.run("indexTei.py", options, function (
+                    err,
+                    results
+                  ) {
+                    if (err) {
+                      console.log("error : ", err);
+                      res.send({
+                        status: 400,
+                        err: "Connexion au serveur a échoué !" + err,
+                      });
+                    } else {
+                      // results is an array consisting of messages collected during execution
+                      results_ = JSON.parse(results);
+                      if (results_.status === 200) {
+                        res.send({
+                          status: 200,
+                          mess: "Success !",
+                        });
+                      } else {
+                        res.send({
+                          status: 400,
+                          err:
+                            "Le processus de ré-indexation des testaments a échoué !",
+                        });
+                      }
+                    }
+                  });
+                } else {
+                  res.send({
+                    status: 200,
+                    mess: "Success !",
+                  });
+                }
               } else {
                 res.send({
                   status: 400,

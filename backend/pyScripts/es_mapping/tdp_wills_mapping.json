@@ -201,8 +201,12 @@
               }
             }
           },
-          "birth_date": {
-            "type": "date"
+          "birth_date_range": {
+            "type": "date_range"
+          },
+          "birth_text": {
+           "type": "object",
+            "enabled": false
           },
           "birth_place": {
             "type": "geo_point"
@@ -218,14 +222,22 @@
               }
             }
           },
-          "death_date": {
-            "type": "date"
+           "death_date_range": {
+            "type": "date_range"
+          },
+          "death_text": {
+           "type": "object",
+            "enabled": false
           },
           "death_place": {
             "type": "geo_point"
           },
           "death_place_ref": {
             "type": "text"
+          },
+          "death_place_text": {
+           "type": "object",
+            "enabled": false
           },
           "death_place_norm": {
             "type": "text",

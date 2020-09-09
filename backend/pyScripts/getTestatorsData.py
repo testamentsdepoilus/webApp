@@ -28,22 +28,56 @@ def get_meta_data(file_tei):
 
 		doc['persName.norm'] = doc['persName.norm'].lower()
 		birth = pers.birth
+		doc['birth.date_text'] = birth.next_element.string
 		doc['birth.date'] = []
 		for date in birth.find_all('date'):
-			if 'when' in date.attrs:
-				for item in date['when'].split('|'):
-					doc['birth.date'].append(item.split(' ')[0].strip())
+			if date.string is not None:
+				doc['birth.date_text'] += date.string
+			if date.next_sibling is not None:
+				doc['birth.date_text'] += date.next_sibling
+			if 'when' in date.attrs and len(date['when']) > 0:
+				if "[" in date['when']:
+					doc['birth.date'].append(
+						{"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
+				else:
+					doc['birth.date'].append(
+						{"gte": date['when'].strip(), "lte": date['when'].strip()})
+			elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
+				date_notBefore = date['notBefore']
+				date_notAfter = date['notAfter']
+				if "[" in date_notBefore:
+					date_notBefore = date_notBefore.split("[")[0].strip()
+				if "[" in date_notAfter:
+					date_notAfter = date_notAfter.split("[")[0].strip()
+				doc['birth.date'].append({"gte": date_notBefore.strip(), "lte": date_notAfter.strip()})
 		birth_place = birth.placeName
 		if birth_place is not None and 'ref' in birth_place.attrs:
 			doc['birth.place.ref'] = birth_place['ref'].split('#')[1].split('-')[1].strip()
 			doc['birth.place.name'] = birth_place.string.split('[')[0]
 
 		death = pers.death
+		doc['death.date_text'] = death.next_element.string
 		doc['death.date'] = []
 		for date in death.find_all('date'):
+			doc['death.date_text'] += date.string
+			if date.next_sibling is not None:
+				doc['death.date_text'] += date.next_sibling
 			if 'when' in date.attrs and len(date['when']) > 0:
-				for item in date['when'].split('|'):
-					doc['death.date'].append(item.split(' ')[0].strip())
+				if "[" in date['when']:
+					doc['death.date'].append(
+						{"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
+				else:
+					doc['death.date'].append(
+						{"gte": date['when'].strip(), "lte": date['when'].strip()})
+			elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
+				date_notBefore = date['notBefore']
+				date_notAfter = date['notAfter']
+				if "[" in date_notBefore:
+					date_notBefore = date_notBefore.split("[")[0].strip()
+				if "[" in date_notAfter:
+					date_notAfter = date_notAfter.split("[")[0].strip()
+				doc['death.date'].append({"gte": date_notBefore.strip(), "lte": date_notAfter.strip()})
+
 		death_place = death.placeName
 		if death_place is not None and 'ref' in death_place.attrs:
 			doc['death.place.ref'] = death_place['ref'].split('#')[1].split('-')[1].strip()
@@ -54,11 +88,12 @@ def get_meta_data(file_tei):
 			if isinstance(affiliation.next_element, NavigableString):
 				doc['affiliation.name'] = affiliation.next_element
 			org_name = affiliation.find('orgName')
-			doc['affiliation.orgName'] = org_name.string.split('[')[0].strip()
-			doc['affiliation.orgName'] = doc['affiliation.orgName'].lower()
-			doc['affiliation.orgName'] = doc['affiliation.orgName'].replace("’", "'")
-			if 'ref' in org_name.attrs:
-				doc['affiliation.ref'] = org_name['ref'].split('#')[1].split('-')[1].strip()
+			if org_name is not None:
+				doc['affiliation.orgName'] = org_name.get_text().strip()
+				#doc['affiliation.orgName'] = doc['affiliation.orgName'].lower()
+				#doc['affiliation.orgName'] = doc['affiliation.orgName'].replace("’", "'")
+				if 'ref' in org_name.attrs:
+					doc['affiliation.ref'] = org_name['ref'].split('#')[1].split('-')[1].strip()
 
 		bibl = pers.bibl
 		if bibl is not None:
@@ -67,28 +102,39 @@ def get_meta_data(file_tei):
 			doc['bibl.type'] = bibl['type'].strip()
 			doc['bibl.uri'] = bibl.ref.string.strip()
 
-		if pers.occupation is not None:
-			doc['occupation'] = pers.occupation.string.strip()
+		doc['occupation'] = []
+		for occupation in pers.find_all("occupation"):
+			if occupation.string is not None:
+				doc['occupation'].append(occupation.string)
 
 		residence = pers.residence
 		if residence is not None:
 			if 'ref' in residence.attrs:
 				doc['residence.ref'] = residence['ref'].split('#')[1].split('-')[1].strip()
 			doc['residence.name'] = residence.string.strip()
+
+		doc['note_history'] = []
 		if pers.note is not None:
-			doc['note_history'] = pers.note.get_text().strip()
+			if 'type' in pers.note.attrs and pers.note["type"] == "history":
+				list_note = pers.note.find_all("p")
+				if len(list_note) > 0:
+					for element_p in list_note:
+						doc['note_history'].append(element_p.string.strip())
 
 		figure = pers.figure
 		if figure is not None:
 			doc['figure'] = figure.graphic['url'].strip()
+
 		output.append(doc)
 
 	return output
 
 
 if __name__ == "__main__":
-	fileTei = "../../../../data/notices_wills/contextualEntity_person_2019-11-06_04-04-43.xml"
+	fileTei = "../client/build/files/notices/persons.xml"
 	output = get_meta_data(fileTei)
+
 	for pers in output:
-		if pers['id'] == '13':
-			print(pers["affiliation.orgName"])
+		# print(pers['id'] + ": " + pers["birth.date_text"])
+		if pers['id'] == '410':
+			print( pers["note_history"])

@@ -20,7 +20,8 @@ def get_meta_data(file_tei):
 		doc['corps'] = elements[2].get_text().strip()
 
 		num = org_name.find("num")
-		doc['number'] = num.get_text().strip()
+		if num is not None:
+			doc['number'] = num.get_text().strip()
 
 		output_.append(doc)
 
@@ -28,6 +29,6 @@ def get_meta_data(file_tei):
 
 
 if __name__ == "__main__":
-	fileTei = "/home/adoula/myProjects/testaments_de_poilus/data/notices_wills/contextualEntity_militaryUnit_2019-11-06_10-29-32.xml"
+	fileTei = "../client/build/files/notices/units.xml"
 	output = get_meta_data(fileTei)
 	print(output[0])

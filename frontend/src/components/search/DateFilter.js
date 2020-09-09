@@ -117,7 +117,7 @@ class DateFilter extends React.Component {
                 <Box mb={0.7} mt={2}><label className="text-black fontWeightLight">Date de décès</label></Box>
                 <DateRange
                   componentId="date_deces"
-                  dataField="will_contents.death_date"
+                  dataField="will_contents.death_date_range"
                   placeholder={{
                     start: "Début: JJ/MM/YYYY",
                     end: "Fin: JJ/MM/YYYY"

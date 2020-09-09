@@ -30,7 +30,11 @@
       "birth": {
         "properties": {
           "date": {
-            "type": "date"
+            "type": "date_range"
+          },
+           "date_text": {
+               "type": "object",
+                "enabled": false
           },
           "place": {
             "properties": {
@@ -47,7 +51,11 @@
       "death": {
         "properties": {
           "date": {
-            "type": "date"
+            "type": "date_range"
+          },
+            "date_text": {
+               "type": "object",
+                "enabled": false
           },
           "place": {
             "properties": {
@@ -91,7 +99,8 @@
         }
       },
       "occupation": {
-        "type": "text"
+        "type": "object",
+         "enabled": false
       },
       "residence": {
         "properties": {
@@ -104,7 +113,8 @@
         }
       },
       "note_history": {
-        "type": "text"
+         "type": "object",
+        "enabled": false
       },
       "figure": {
         "type": "object",

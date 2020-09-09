@@ -449,16 +449,7 @@ export default class PlaceDisplay extends Component {
                 >
                   <div className="d-flex itemTitle">
                     <i className="fas fa-map-marker-alt"></i>
-                    <h1 className="item">
-                      {this.props.data["city"]}
-                      {" ("}
-                      {Boolean(this.props.data["region"])
-                        ? this.props.data["region"] + " - "
-                        : ""}
-                      {Boolean(this.props.data["country"])
-                        ? this.props.data["country"] + ")"
-                        : ""}
-                    </h1>
+                    <h1 className="item">{this.props.data["city"]}</h1>
                   </div>
 
                   <Grid container className="noticeInfo">
