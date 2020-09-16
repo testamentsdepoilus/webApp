@@ -460,13 +460,16 @@ export default class TestatorDisplay extends Component {
                         ) : (
                           ""
                         )}
-                        {Boolean(this.props.data["affiliation.orgName"]) ? (
-                          <div>
-                            {this.props.data[
-                              "affiliation.name"
-                            ][0].toUpperCase() +
-                              this.props.data["affiliation.name"].slice(1)}
-                            {Boolean(this.props.data["affiliation.ref"]) ? (
+
+                        <div>
+                          {Boolean(this.props.data["affiliation.name"])
+                            ? this.props.data[
+                                "affiliation.name"
+                              ][0].toUpperCase() +
+                              this.props.data["affiliation.name"].slice(1)
+                            : ""}
+                          {Boolean(this.props.data["affiliation.orgName"]) ? (
+                            Boolean(this.props.data["affiliation.ref"]) ? (
                               <Link
                                 href={
                                   getParamConfig("web_url") +
@@ -479,11 +482,12 @@ export default class TestatorDisplay extends Component {
                               </Link>
                             ) : (
                               this.props.data["affiliation.orgName"]
-                            )}
-                          </div>
-                        ) : (
-                          ""
-                        )}
+                            )
+                          ) : (
+                            ""
+                          )}
+                        </div>
+
                         <div>
                           {this.props.data["death.date_text"]}
                           {Boolean(this.props.data["death.place.name"]) ? (

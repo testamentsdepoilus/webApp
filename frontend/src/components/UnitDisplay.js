@@ -335,10 +335,10 @@ export default class UnitDisplay extends Component {
                         ". " +
                         this.props.data["composante"] +
                         ". " +
-                        this.props.data["corps"] +
-                        " (" +
-                        this.props.data["number"] +
-                        ")"}
+                        this.props.data["corps"]}
+                      {this.props.data["number"]
+                        ? " (" + this.props.data["number"] + ")"
+                        : ""}
                     </h1>
                   </div>
                   <div className="noticeInfo">

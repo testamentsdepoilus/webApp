@@ -33,8 +33,8 @@ def get_meta_data(file_tei):
 		for date in birth.find_all('date'):
 			if date.string is not None:
 				doc['birth.date_text'] += date.string
-			if date.next_sibling is not None:
-				doc['birth.date_text'] += date.next_sibling
+			if isinstance(date.next_sibling, NavigableString) and date.next_sibling.string != "\n":
+				doc['birth.date_text'] += date.next_sibling.string
 			if 'when' in date.attrs and len(date['when']) > 0:
 				if "[" in date['when']:
 					doc['birth.date'].append(
@@ -60,8 +60,8 @@ def get_meta_data(file_tei):
 		doc['death.date'] = []
 		for date in death.find_all('date'):
 			doc['death.date_text'] += date.string
-			if date.next_sibling is not None:
-				doc['death.date_text'] += date.next_sibling
+			if isinstance(date.next_sibling, NavigableString) and date.next_sibling.string != "\n":
+				doc['death.date_text'] += date.next_sibling.string
 			if 'when' in date.attrs and len(date['when']) > 0:
 				if "[" in date['when']:
 					doc['death.date'].append(
@@ -131,10 +131,11 @@ def get_meta_data(file_tei):
 
 
 if __name__ == "__main__":
-	fileTei = "../client/build/files/notices/persons.xml"
+	# fileTei = "../client/build/files/notices/persons.xml"
+	fileTei = "/home/adoula/Downloads/personnes.xml"
 	output = get_meta_data(fileTei)
 
 	for pers in output:
-		# print(pers['id'] + ": " + pers["birth.date_text"])
-		if pers['id'] == '410':
-			print( pers["note_history"])
+		print(pers['id'] + ": " + pers["birth.date_text"])
+		# if pers['id'] == '410':
+		# 	print( pers["note_history"])
