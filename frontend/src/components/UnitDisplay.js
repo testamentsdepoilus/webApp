@@ -356,8 +356,7 @@ export default class UnitDisplay extends Component {
                         Poilus membres de cette unité militaire :
                         <ul>
                           {this.state.testators.map((hit, i) => {
-                            let death_date = [];
-
+                            /*let death_date = [];
                             if (Boolean(hit._source["death.date"])) {
                               if (Array.isArray(hit._source["death.date"])) {
                                 death_date = hit._source["death.date"].map(
@@ -374,7 +373,7 @@ export default class UnitDisplay extends Component {
                                   date.toLocaleDateString().split("/")
                                 );
                               }
-                            }
+                            }*/
 
                             const testator_uri =
                               getParamConfig("web_url") +
@@ -395,24 +394,10 @@ export default class UnitDisplay extends Component {
                                       ]
                                     }
                                   </span>
-                                  {death_date.length > 0
-                                    ? ", décédé le " +
-                                      death_date[0][0] +
-                                      " " +
-                                      this.months[death_date[0][1] - 1] +
-                                      " " +
-                                      death_date[0][2]
-                                    : ""}{" "}
-                                  {death_date.length === 2
-                                    ? " ou le " +
-                                      death_date[1][0] +
-                                      " " +
-                                      this.months[death_date[1][1] - 1] +
-                                      " " +
-                                      death_date[1][2]
-                                    : ""}
-                                  {Boolean(hit._source["death.place.name"])
-                                    ? " à " + hit._source["death.place.name"]
+                                  {", " + hit._source["death.date_text"]}
+
+                                  {hit._source["death.place.name"]
+                                    ? hit._source["death.place.name"]
                                     : ""}
                                 </Link>
                               </li>

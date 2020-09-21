@@ -122,6 +122,7 @@ router.post("/updatePost", function (req, res, next) {
 
 /* POST update index ES*/
 router.post("/updateES", function (req, res, next) {
+  req.setTimeout(500000); // no timeout
   switch (req.body.action) {
     case "add":
       let pyScript = "indexTei.py";
@@ -134,15 +135,15 @@ router.post("/updateES", function (req, res, next) {
       switch (req.body.index) {
         case "tdp_testators":
           pyScript = "indexTestator.py";
-          file_name = "persons.xml";
+          file_name = "personnes.xml";
           break;
         case "tdp_places":
           pyScript = "indexPlaces.py";
-          file_name = "places.xml";
+          file_name = "lieux.xml";
           break;
         case "tdp_military_unit":
           pyScript = "indexMilitary.py";
-          file_name = "units.xml";
+          file_name = "unites.xml";
           break;
         case "tdp_wills":
           pyScript = "indexTei.py";
@@ -151,10 +152,10 @@ router.post("/updateES", function (req, res, next) {
             file_name = req.files.myFiles.name;
           }
           options["args"].push(
-            "--placeFile=" + resolve(process.env.notices_path + "places.xml")
+            "--placeFile=" + resolve(process.env.notices_path + "lieux.xml")
           );
           options["args"].push(
-            "--persFile=" + resolve(process.env.notices_path + "persons.xml")
+            "--persFile=" + resolve(process.env.notices_path + "personnes.xml")
           );
 
           options["args"].push("--file=" + resolve("pyScripts/config.json"));
@@ -204,7 +205,7 @@ router.post("/updateES", function (req, res, next) {
 
           PythonShell.run(pyScript, options, function (err, results) {
             if (err) {
-              console.log("erro : ", err);
+              console.log("error: ", err);
               res.send({
                 status: 400,
                 err: "Connexion au serveur a échoué !" + err,
@@ -212,7 +213,6 @@ router.post("/updateES", function (req, res, next) {
             } else {
               // results is an array consisting of messages collected during execution
               results_ = JSON.parse(results);
-              console.log(results_);
               if (results_.status === 200) {
                 if (req.body.index !== "tdp_wills") {
                   options["args"] = [
@@ -221,11 +221,11 @@ router.post("/updateES", function (req, res, next) {
                   ];
                   options["args"].push(
                     "--placeFile=" +
-                      resolve(process.env.notices_path + "places.xml")
+                      resolve(process.env.notices_path + "lieux.xml")
                   );
                   options["args"].push(
                     "--persFile=" +
-                      resolve(process.env.notices_path + "persons.xml")
+                      resolve(process.env.notices_path + "personnes.xml")
                   );
 
                   options["args"].push(

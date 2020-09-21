@@ -532,14 +532,6 @@ export default class WillDisplay extends Component {
         this.props.data["will_pages"].length <= this.state.idx
           ? 0
           : this.state.idx;
-      let death_date = Boolean(this.props.data["will_contents.death_date"])
-        ? new Date(this.props.data["will_contents.death_date"])
-        : null;
-
-      death_date = Boolean(death_date)
-        ? death_date.toLocaleDateString().split("/")
-        : null;
-
       let will_date = [];
       if (Boolean(this.props.data["will_contents.will_date_range"])) {
         let date_ = new Date(
@@ -696,7 +688,7 @@ export default class WillDisplay extends Component {
                       {this.props.data["will_contents.death_text"]}
 
                       {Boolean(
-                        this.props.data["will_contents.death_place_norm"]
+                        this.props.data["will_contents.death_place_text"]
                       ) ? (
                         <div className="d-inline-block">
                           {" "}

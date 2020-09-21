@@ -483,14 +483,6 @@ export default class PlaceDisplay extends Component {
                             : " du Poilu suivant :"}{" "}
                           <ul>
                             {this.state.birth_hits.map((hit, i) => {
-                              let date = Boolean(hit._source["birth.date"])
-                                ? new Date(hit._source["birth.date"])
-                                : null;
-
-                              date = Boolean(date)
-                                ? date.toLocaleDateString().split("/")
-                                : null;
-
                               return (
                                 <li key={i}>
                                   <Link
@@ -514,14 +506,14 @@ export default class PlaceDisplay extends Component {
                                       }
                                     </span>
 
-                                    {Boolean(date)
-                                      ? ", né le " +
-                                        date[0] +
-                                        " " +
-                                        this.months[date[1] - 1] +
-                                        " " +
-                                        date[2]
-                                      : " "}
+                                    {", " +
+                                      hit._source[
+                                        "birth.date_text"
+                                      ].toLowerCase()}
+
+                                    {hit._source["birth.place.name"]
+                                      ? hit._source["birth.place.name"]
+                                      : ""}
                                   </Link>
                                 </li>
                               );
@@ -718,21 +710,10 @@ export default class PlaceDisplay extends Component {
                                         ]
                                       }
                                     </span>
-                                    {death_date.length > 0
-                                      ? ", décédé le " +
-                                        death_date[0][0] +
-                                        " " +
-                                        this.months[death_date[0][1] - 1] +
-                                        " " +
-                                        death_date[0][2]
-                                      : ""}{" "}
-                                    {death_date.length === 2
-                                      ? " ou le " +
-                                        death_date[1][0] +
-                                        " " +
-                                        this.months[death_date[1][1] - 1] +
-                                        " " +
-                                        death_date[1][2]
+                                    {", " + hit._source["death.date_text"]}
+
+                                    {hit._source["death.place.name"]
+                                      ? hit._source["death.place.name"]
                                       : ""}
                                   </Link>
                                 </li>

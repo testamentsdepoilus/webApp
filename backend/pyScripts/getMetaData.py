@@ -1,5 +1,5 @@
 import os.path
-import re
+from bs4 import NavigableString
 from bs4 import BeautifulSoup
 import os
 from teiToHtml import transcription, edition
@@ -180,7 +180,7 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
         # testator name
         pers_name = ms_contents.find("persName")
         testator_ref = pers_name['ref'].replace("#", "").strip()
-        pers_tag = soup_pers.find("person", {'xml:id': testator_ref})
+
         doc['testator.ref'] = testator_ref.split("-")[1]
         doc['testator.forename'] = ""
         doc['testator.surname'] = ""
@@ -202,17 +202,6 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
         doc['testator.name_norm'] = doc['testator.name_norm'].replace("ë", "e")
         doc['testator.occupation'] = []
         doc['testator.occupation_norm'] = []
-        for occupation in pers_tag.find_all("occupation"):
-            if occupation.string is not None:
-                doc['testator.occupation'].append(occupation.string.split(" [")[0])
-                doc['testator.occupation_norm'].append(occupation.string.split(" [")[0].lower().replace("é", "e"))
-        affiliation = pers_tag.affiliation
-        if affiliation is not None:
-            org_name = affiliation.find('orgName')
-            if org_name is not None:
-                doc['testator.affiliation'] = org_name.get_text().strip()
-                #doc['testator.affiliation'] = doc['testator.affiliation'].lower()
-                #doc['testator.affiliation'] = doc['testator.affiliation'].replace("’", "'")
 
         doc["will_contents.place"] = []
         will_date = ms_contents.find(type="willDate")
@@ -227,7 +216,7 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     "gte": will_date['notBefore'], "lte": will_date['notAfter']}
         will_place = ms_contents.find(type="willPlace")
         if will_place is not None:
-            doc['will_contents.will_place_norm'] = will_place.string.strip()
+            doc['will_contents.will_place_norm'] = will_place.string.split("(")[0].strip()
             if doc['will_contents.will_place_norm'] not in doc["will_contents.place"]:
                 doc["will_contents.place"].append(
                     doc['will_contents.will_place_norm'])
@@ -236,117 +225,135 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     1].split('-')[1].strip()
                 place_tag = soup_place.find(
                     "place", {'xml:id': will_place['ref'].split('#')[1]})
+
                 if place_tag.geo is not None:
                     geo_point = place_tag.geo.string.split(' ')
                     doc['will_contents.will_place'] = {
                         "lat": geo_point[0], "lon": geo_point[1]}
 
+        pers_tag = soup_pers.find("person", {'xml:id': testator_ref})
+        if pers_tag is not None:
+            for occupation in pers_tag.find_all("occupation"):
+                if occupation.string is not None:
+                    doc['testator.occupation'].append(occupation.string.split(" [")[0])
+                    doc['testator.occupation_norm'].append(occupation.string.split(" [")[0].lower().replace("é", "e"))
+            affiliation = pers_tag.affiliation
+            if affiliation is not None:
+                org_name = affiliation.find('orgName')
+                if org_name is not None:
+                    doc['testator.affiliation'] = org_name.get_text().strip()
+                    #doc['testator.affiliation'] = doc['testator.affiliation'].lower()
+                    #doc['testator.affiliation'] = doc['testator.affiliation'].replace("’", "'")
+            birth = pers_tag.birth
+            doc['will_contents.birth_text'] = birth.next_element.string
+            doc['will_contents.birth_date_range'] = []
+            for date in birth.find_all('date'):
+                doc['will_contents.birth_text'] += date.string
+                if isinstance(date.next_sibling, NavigableString) and date.next_sibling.string != "\n":
+                    doc['will_contents.birth_text'] += date.next_sibling
+                if 'when' in date.attrs and len(date['when']) > 0:
+                    if "[" in date['when']:
+                        doc['will_contents.birth_date_range'].append(
+                            {"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
+                    else:
+                        doc['will_contents.birth_date_range'].append({"gte": date['when'], "lte": date['when']})
+                elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
+                    date_notBefore = date['notBefore']
+                    date_notAfter = date['notAfter']
+                    if "[" in date_notBefore:
+                        date_notBefore = date_notBefore.split("[")[0].strip()
+                    if "[" in date_notAfter:
+                        date_notAfter = date_notAfter.split("[")[0].strip()
+                    doc['will_contents.birth_date_range'].append({"gte": date_notBefore, "lte": date_notAfter})
+            if birth.placeName is not None and 'ref' in birth.placeName.attrs:
+                # doc['will_contents.birth_place_norm'] = birth.placeName.string.split('(')[0].strip()
+                # doc['will_contents.birth_place_norm'] = doc['will_contents.birth_place_norm'].split(",")[0].strip()
+                doc['will_contents.birth_place_ref'] = birth.placeName['ref'].split('#')[
+                    1].split('-')[1].strip()
+                place_tag = soup_place.find(
+                    "place", {'xml:id': birth.placeName['ref'].split('#')[1]})
+                if place_tag.geo is not None:
+                    geo_point = place_tag.geo.string.split(' ')
+                    doc['will_contents.birth_place'] = {
+                        "lat": geo_point[0], "lon": geo_point[1]}
+                    doc['will_contents.birth_place_norm'] = place_tag.settlement.string.string.split("(")[0].strip()
+                    if doc['will_contents.birth_place_norm'] not in doc["will_contents.place"]:
+                        doc["will_contents.place"].append(
+                            doc['will_contents.birth_place_norm'])
+
+            death = pers_tag.death
+            # if 'NOT' not in death.date['when'] and 'MDH' not in death.date['when']:
+            #     doc['will_contents.death_date'] = death.date['when']
+            # else:
+            #     doc['will_contents.death_date'] = death.date['when'].split(' ')[0]
+            doc['will_contents.death_text'] = death.next_element.string
+            doc['will_contents.death_date_range'] = []
+            for date in death.find_all('date'):
+                doc['will_contents.death_text'] += date.string
+                if isinstance(date.next_sibling, NavigableString) and date.next_sibling.string != "\n":
+                    doc['will_contents.death_text'] += date.next_sibling.string
+                if 'when' in date.attrs and len(date['when']) > 0:
+                    if "[" in date['when']:
+                        doc['will_contents.death_date_range'].append(
+                            {"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
+                    else:
+                        doc['will_contents.death_date_range'].append({"gte": date['when'], "lte": date['when']})
+                elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
+                    date_notBefore = date['notBefore']
+                    date_notAfter = date['notAfter']
+                    if "[" in date_notBefore:
+                        date_notBefore = date_notBefore.split("[")[0].strip()
+                    if "[" in date_notAfter:
+                        date_notAfter = date_notAfter.split("[")[0].strip()
+                    doc['will_contents.death_date_range'].append({"gte": date_notBefore, "lte": date_notAfter})
+
+            if death.placeName is not None:
+                if 'ref' in death.placeName.attrs:
+                    doc['will_contents.death_place_ref'] = death.placeName['ref'].split('#')[1].split('-')[1].strip()
+                    place_tag = soup_place.find(
+                        "place", {'xml:id': death.placeName['ref'].split('#')[1]})
+
+                    if place_tag.geo is not None:
+                        geo_point = place_tag.geo.string.split(' ')
+                        doc['will_contents.death_place'] = {
+                            "lat": geo_point[0], "lon": geo_point[1]}
+                    if place_tag.settlement.string is not None:
+                        doc['will_contents.death_place_norm'] = place_tag.settlement.string.string.split("(")[0].strip()
+                        if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
+                            doc["will_contents.place"].append(
+                                doc['will_contents.death_place_norm'])
+                    elif place_tag.geogName.string is not None:
+                        doc['will_contents.death_place_norm'] = place_tag.geogName.string.split("(")[0].strip()
+                        if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
+                            doc["will_contents.place"].append(
+                                doc['will_contents.death_place_norm'])
+                if death.placeName.string is not None:
+                    doc['will_contents.death_place_text'] = death.placeName.string
+                    if isinstance(death.placeName.next_sibling, NavigableString) and death.placeName.next_sibling.string != "\n":
+                        doc['will_contents.death_place_text'] += death.placeName.next_sibling.string
+
+            residence = pers_tag.residence
+            if residence is not None:
+                if 'ref' in residence.attrs:
+                    doc['will_contents.residence_ref'] = residence['ref'].split('#')[
+                        1].split('-')[1].strip()
+                    place_tag = soup_place.find(
+                        "place", {'xml:id': residence['ref'].split('#')[1]})
+                    if place_tag.geo is not None:
+                        geo_point = place_tag.geo.string.split(' ')
+                        doc['will_contents.residence_geo'] = {
+                            "lat": geo_point[0], "lon": geo_point[1]}
+                        doc['will_contents.residence_norm'] = place_tag.settlement.string.string.split("(")[0].strip()
+                        if doc['will_contents.residence_norm'] not in doc["will_contents.place"]:
+                            doc["will_contents.place"].append(
+                                doc['will_contents.residence_norm'])
+
+
+
+
         # death_place = ms_contents.find(type="willAuthorDeathPlace")
         # if death_place is not None:
         # 	doc['will_contents.death_place_norm'] = death_place.string.strip()
-
-        birth = pers_tag.birth
-        doc['will_contents.birth_text'] = birth.next_element.string
-        doc['will_contents.birth_date_range'] = []
-        for date in birth.find_all('date'):
-            doc['will_contents.birth_text'] += date.string
-            if date.next_sibling is not None:
-                doc['will_contents.birth_text'] += date.next_sibling
-            if 'when' in date.attrs and len(date['when']) > 0:
-                if "[" in date['when']:
-                    doc['will_contents.birth_date_range'].append(
-                        {"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
-                else:
-                    doc['will_contents.birth_date_range'].append({"gte": date['when'], "lte": date['when']})
-            elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
-                date_notBefore = date['notBefore']
-                date_notAfter = date['notAfter']
-                if "[" in date_notBefore:
-                    date_notBefore = date_notBefore.split("[")[0].strip()
-                if "[" in date_notAfter:
-                    date_notAfter = date_notAfter.split("[")[0].strip()
-                doc['will_contents.birth_date_range'].append({"gte": date_notBefore, "lte": date_notAfter})
-
-        if birth.placeName is not None and 'ref' in birth.placeName.attrs:
-            # doc['will_contents.birth_place_norm'] = birth.placeName.string.split('(')[0].strip()
-            # doc['will_contents.birth_place_norm'] = doc['will_contents.birth_place_norm'].split(",")[0].strip()
-            doc['will_contents.birth_place_ref'] = birth.placeName['ref'].split('#')[
-                1].split('-')[1].strip()
-            place_tag = soup_place.find(
-                "place", {'xml:id': birth.placeName['ref'].split('#')[1]})
-            if place_tag.geo is not None:
-                geo_point = place_tag.geo.string.split(' ')
-                doc['will_contents.birth_place'] = {
-                    "lat": geo_point[0], "lon": geo_point[1]}
-                doc['will_contents.birth_place_norm'] = place_tag.settlement.string.strip()
-                if doc['will_contents.birth_place_norm'] not in doc["will_contents.place"]:
-                    doc["will_contents.place"].append(
-                        doc['will_contents.birth_place_norm'])
-
-        death = pers_tag.death
-        # if 'NOT' not in death.date['when'] and 'MDH' not in death.date['when']:
-        #     doc['will_contents.death_date'] = death.date['when']
-        # else:
-        #     doc['will_contents.death_date'] = death.date['when'].split(' ')[0]
-        doc['will_contents.death_text'] = death.next_element.string
-        doc['will_contents.death_date_range'] = []
-        for date in death.find_all('date'):
-            doc['will_contents.death_text'] += date.string
-            if date.next_sibling is not None:
-                doc['will_contents.death_text'] += date.next_sibling
-            if 'when' in date.attrs and len(date['when']) > 0:
-                if "[" in date['when']:
-                    doc['will_contents.death_date_range'].append({"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
-                else:
-                    doc['will_contents.death_date_range'].append({"gte": date['when'], "lte": date['when']})
-            elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
-                date_notBefore = date['notBefore']
-                date_notAfter = date['notAfter']
-                if "[" in date_notBefore:
-                    date_notBefore = date_notBefore.split("[")[0].strip()
-                if "[" in date_notAfter:
-                    date_notAfter = date_notAfter.split("[")[0].strip()
-                doc['will_contents.death_date_range'].append({"gte": date_notBefore, "lte": date_notAfter})
-
-        if death.placeName is not None:
-            if 'ref' in death.placeName.attrs:
-                doc['will_contents.death_place_ref'] = death.placeName['ref'].split('#')[1].split('-')[1].strip()
-                place_tag = soup_place.find(
-                    "place", {'xml:id': death.placeName['ref'].split('#')[1]})
-
-                if place_tag.geo is not None:
-                    geo_point = place_tag.geo.string.split(' ')
-                    doc['will_contents.death_place'] = {
-                        "lat": geo_point[0], "lon": geo_point[1]}
-                if place_tag.settlement.string is not None:
-                    doc['will_contents.death_place_norm'] = place_tag.settlement.string.strip()
-                    if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
-                        doc["will_contents.place"].append(
-                            doc['will_contents.death_place_norm'])
-                elif place_tag.geogName.string is not None:
-                    doc['will_contents.death_place_norm'] = place_tag.geogName.string.strip()
-                    if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
-                        doc["will_contents.place"].append(
-                            doc['will_contents.death_place_norm'])
-            if death.placeName.string is not None:
-                doc['will_contents.death_place_text'] = death.placeName.string
-
-
-        residence = pers_tag.residence
-        if residence is not None:
-            if 'ref' in residence.attrs:
-                doc['will_contents.residence_ref'] = residence['ref'].split('#')[
-                    1].split('-')[1].strip()
-                place_tag = soup_place.find(
-                    "place", {'xml:id': residence['ref'].split('#')[1]})
-                if place_tag.geo is not None:
-                    geo_point = place_tag.geo.string.split(' ')
-                    doc['will_contents.residence_geo'] = {
-                        "lat": geo_point[0], "lon": geo_point[1]}
-                    doc['will_contents.residence_norm'] = place_tag.settlement.string.strip()
-                    if doc['will_contents.residence_norm'] not in doc["will_contents.place"]:
-                        doc["will_contents.place"].append(
-                            doc['will_contents.residence_norm'])
 
     # will provenance
     will_provenance = file_desc.sourceDesc.msDesc.history.provenance.orgName
@@ -434,15 +441,15 @@ if __name__ == "__main__":
     # for file_ in os.listdir('../../../../data/toto/'):
     # will_342_AN_0273_2020-04-08_10-44-17_V2.xml
     fileTei = os.path.join('../client/build/files/wills/',
-                           "will_AD78_0013.xml")
+                           "will_AD78_0037.xml")
     # fileTei = '/home/adoula/Downloads/will_AN_0001.xml'
-    persFile = '../client/build/files/notices/persons.xml'
-    placeFile = '../client/build/files/notices/places.xml'
+    persFile = '../client/build/files/notices/personnes.xml'
+    placeFile = '../client/build/files/notices/lieux.xml'
     configFile = 'config.json'
     transcription_ = transcription(fileTei, configFile)
     edition_ = edition(fileTei, configFile)
     doc = get_meta_data(fileTei, persFile, placeFile, transcription_, edition_)
-    print(doc["will_contents.birth_date_range"])
+    print(doc["will_contents.place"])
     print("**************************************")
     # print(doc['will_pages'][0]['edition'])
     print("**************************************")

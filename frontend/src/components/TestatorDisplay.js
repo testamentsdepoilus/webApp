@@ -442,7 +442,7 @@ export default class TestatorDisplay extends Component {
                         Boolean(this.props.data["birth.place.name"]) ? (
                           <div>
                             {this.props.data["birth.date_text"]}
-                            {Boolean(this.props.data["birth.place.name"]) ? (
+                            {Boolean(this.props.data["death.place.name"]) ? (
                               <Link
                                 href={
                                   getParamConfig("web_url") +
@@ -491,18 +491,20 @@ export default class TestatorDisplay extends Component {
                         <div>
                           {this.props.data["death.date_text"]}
                           {Boolean(this.props.data["death.place.name"]) ? (
-                            <Link
-                              href={
-                                Boolean(this.props.data["death.place.ref"])
-                                  ? getParamConfig("web_url") +
-                                    "/place/" +
-                                    this.props.data["death.place.ref"]
-                                  : ""
-                              }
-                              target="_blank"
-                            >
-                              {this.props.data["death.place.name"]}
-                            </Link>
+                            Boolean(this.props.data["death.place.ref"]) ? (
+                              <Link
+                                href={
+                                  getParamConfig("web_url") +
+                                  "/place/" +
+                                  this.props.data["death.place.ref"]
+                                }
+                                target="_blank"
+                              >
+                                {this.props.data["death.place.name"]}
+                              </Link>
+                            ) : (
+                              this.props.data["death.place.name"]
+                            )
                           ) : (
                             ""
                           )}
@@ -510,7 +512,7 @@ export default class TestatorDisplay extends Component {
                         {this.props.data["occupation"].length > 0 ? (
                           <div>
                             Profession :
-                            {" " + this.props.data["occupation"].join("; ")}
+                            {" " + this.props.data["occupation"].join(" ; ")}
                           </div>
                         ) : (
                           ""

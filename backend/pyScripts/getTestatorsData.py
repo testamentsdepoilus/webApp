@@ -51,10 +51,12 @@ def get_meta_data(file_tei):
 					date_notAfter = date_notAfter.split("[")[0].strip()
 				doc['birth.date'].append({"gte": date_notBefore.strip(), "lte": date_notAfter.strip()})
 		birth_place = birth.placeName
-		if birth_place is not None and 'ref' in birth_place.attrs:
-			doc['birth.place.ref'] = birth_place['ref'].split('#')[1].split('-')[1].strip()
-			doc['birth.place.name'] = birth_place.string.split('[')[0]
-
+		if birth_place is not None:
+			if 'ref' in birth_place.attrs:
+				doc['birth.place.ref'] = birth_place['ref'].split('#')[1].split('-')[1].strip()
+			doc['birth.place.name'] = birth_place.string
+			if isinstance(birth_place.next_sibling, NavigableString) and birth_place.next_sibling.string != "\n":
+				doc['birth.place.name'] += birth_place.next_siblin.string
 		death = pers.death
 		doc['death.date_text'] = death.next_element.string
 		doc['death.date'] = []
@@ -79,9 +81,12 @@ def get_meta_data(file_tei):
 				doc['death.date'].append({"gte": date_notBefore.strip(), "lte": date_notAfter.strip()})
 
 		death_place = death.placeName
-		if death_place is not None and 'ref' in death_place.attrs:
-			doc['death.place.ref'] = death_place['ref'].split('#')[1].split('-')[1].strip()
-			doc['death.place.name'] = death_place.string.split('[')[0]
+		if death_place is not None:
+			if 'ref' in death_place.attrs:
+				doc['death.place.ref'] = death_place['ref'].split('#')[1].split('-')[1].strip()
+			doc['death.place.name'] = death_place.string
+			if isinstance(death_place.next_sibling, NavigableString) and death_place.next_sibling.string != "\n":
+				doc['death.place.name'] += death_place.next_sibling.string
 
 		affiliation = pers.affiliation
 		if affiliation is not None:
@@ -92,6 +97,8 @@ def get_meta_data(file_tei):
 				doc['affiliation.orgName'] = org_name.get_text().strip()
 				#doc['affiliation.orgName'] = doc['affiliation.orgName'].lower()
 				#doc['affiliation.orgName'] = doc['affiliation.orgName'].replace("’", "'")
+				if isinstance(org_name.next_sibling, NavigableString) and org_name.next_sibling.string != "\n":
+					doc['affiliation.orgName'] += org_name.next_sibling.string
 				if 'ref' in org_name.attrs:
 					doc['affiliation.ref'] = org_name['ref'].split('#')[1].split('-')[1].strip()
 
@@ -136,6 +143,6 @@ if __name__ == "__main__":
 	output = get_meta_data(fileTei)
 
 	for pers in output:
-		print(pers['id'] + ": " + pers["birth.date_text"])
-		# if pers['id'] == '410':
-		# 	print( pers["note_history"])
+		# print(pers['id'] + ": " + pers["birth.date_text"])
+		if pers['id'] == '78':
+			print( pers["affiliation.orgName"])
