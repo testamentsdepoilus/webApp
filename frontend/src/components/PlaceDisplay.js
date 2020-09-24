@@ -509,7 +509,8 @@ export default class PlaceDisplay extends Component {
                                     {", " +
                                       hit._source[
                                         "birth.date_text"
-                                      ].toLowerCase()}
+                                      ][0].toLowerCase() +
+                                      hit._source["birth.date_text"].slice(1)}
 
                                     {hit._source["birth.place.name"]
                                       ? hit._source["birth.place.name"]

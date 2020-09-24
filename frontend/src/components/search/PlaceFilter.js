@@ -90,6 +90,10 @@ class PlaceFilter extends React.Component {
   };
 
   render() {
+    const terms_normalized = {
+      "epagne-epagnette": "Épagne-Épagnette",
+      eton: "Éton",
+    };
     return (
       <div>
         <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -111,7 +115,7 @@ class PlaceFilter extends React.Component {
                 ],
               }}
               componentId="lieu"
-              dataField="will_contents.place.keyword"
+              dataField="will_contents.place.no_accent"
               value={this.state.place}
               size={2000}
               sortBy="asc"
@@ -124,6 +128,25 @@ class PlaceFilter extends React.Component {
               searchPlaceholder="Saisir un nom de lieu"
               onChange={this.handlePlaceChange}
               customQuery={this.customQuery}
+              renderItem={(label, count, isSelected) => {
+                let label_ = "";
+                label.split(" ").forEach((item) => {
+                  if (item.length === 1) {
+                    item = item.replace("a", "à");
+                  } else {
+                    console.log(terms_normalized);
+                    for (let [key, value] of Object.entries(terms_normalized)) {
+                      item = item.replace(key, value);
+                    }
+                  }
+
+                  label_ += item + " ";
+                });
+                if (label_.trim() !== "inconnu") {
+                  label_ = label_[0].toUpperCase() + label_.slice(1);
+                }
+                return <div>{label_}</div>;
+              }}
               innerClass={{
                 list: "list",
                 select: this.state.place === "" ? "select" : "select selected",

@@ -32,8 +32,10 @@ def get_meta_data(file_tei):
 
 
 if __name__ == "__main__":
-	fileTei = "../client/build/files/notices/places.xml"
+	fileTei = "../client/build/files/notices/lieux.xml"
 	output = get_meta_data(fileTei)
 	for item in output:
-		if item["id"] == "687":
-			print(item)
+		# if item["id"] == "687":
+		# 	print(item)
+		if '(' in item["city"]:
+			print(item["city"])

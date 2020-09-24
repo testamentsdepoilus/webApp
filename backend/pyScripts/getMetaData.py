@@ -216,16 +216,16 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     "gte": will_date['notBefore'], "lte": will_date['notAfter']}
         will_place = ms_contents.find(type="willPlace")
         if will_place is not None:
-            doc['will_contents.will_place_norm'] = will_place.string.split("(")[0].strip()
-            if doc['will_contents.will_place_norm'] not in doc["will_contents.place"]:
-                doc["will_contents.place"].append(
-                    doc['will_contents.will_place_norm'])
+
             if 'ref' in will_place.attrs:
                 doc["will_contents.will_place_ref"] = will_place['ref'].split('#')[
                     1].split('-')[1].strip()
                 place_tag = soup_place.find(
                     "place", {'xml:id': will_place['ref'].split('#')[1]})
-
+                doc['will_contents.will_place_norm'] = place_tag.settlement.string.string
+                if doc['will_contents.will_place_norm'] not in doc["will_contents.place"]:
+                    doc["will_contents.place"].append(
+                        doc['will_contents.will_place_norm'])
                 if place_tag.geo is not None:
                     geo_point = place_tag.geo.string.split(' ')
                     doc['will_contents.will_place'] = {
@@ -276,7 +276,7 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     geo_point = place_tag.geo.string.split(' ')
                     doc['will_contents.birth_place'] = {
                         "lat": geo_point[0], "lon": geo_point[1]}
-                    doc['will_contents.birth_place_norm'] = place_tag.settlement.string.string.split("(")[0].strip()
+                    doc['will_contents.birth_place_norm'] = place_tag.settlement.string
                     if doc['will_contents.birth_place_norm'] not in doc["will_contents.place"]:
                         doc["will_contents.place"].append(
                             doc['will_contents.birth_place_norm'])
@@ -318,12 +318,12 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                         doc['will_contents.death_place'] = {
                             "lat": geo_point[0], "lon": geo_point[1]}
                     if place_tag.settlement.string is not None:
-                        doc['will_contents.death_place_norm'] = place_tag.settlement.string.string.split("(")[0].strip()
+                        doc['will_contents.death_place_norm'] = place_tag.settlement.string
                         if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
                             doc["will_contents.place"].append(
                                 doc['will_contents.death_place_norm'])
                     elif place_tag.geogName.string is not None:
-                        doc['will_contents.death_place_norm'] = place_tag.geogName.string.split("(")[0].strip()
+                        doc['will_contents.death_place_norm'] = place_tag.geogName.string
                         if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
                             doc["will_contents.place"].append(
                                 doc['will_contents.death_place_norm'])
@@ -343,7 +343,7 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                         geo_point = place_tag.geo.string.split(' ')
                         doc['will_contents.residence_geo'] = {
                             "lat": geo_point[0], "lon": geo_point[1]}
-                        doc['will_contents.residence_norm'] = place_tag.settlement.string.string.split("(")[0].strip()
+                        doc['will_contents.residence_norm'] = place_tag.settlement.string
                         if doc['will_contents.residence_norm'] not in doc["will_contents.place"]:
                             doc["will_contents.place"].append(
                                 doc['will_contents.residence_norm'])

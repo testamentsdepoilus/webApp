@@ -262,10 +262,11 @@
             }
           },
           "place": {
-            "type": "text",
+            "type": "keyword",
             "fields": {
-              "keyword": {
-                "type": "keyword"
+              "no_accent": {
+                "type": "keyword",
+                "normalizer": "my_normalizer"
               }
             }
           }

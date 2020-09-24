@@ -158,7 +158,8 @@ export default class CustumerDataSearch extends Component {
               )}
               innerClass={{
                 list: "list",
-                select: this.state.testator === "" ? "select" : "select selected",
+                select:
+                  this.state.testator === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -222,6 +223,7 @@ export default class CustumerDataSearch extends Component {
                   if (item.length === 1) {
                     item = item.replace("a", "à");
                   } else {
+                    console.log(terms_normalized);
                     for (let [key, value] of Object.entries(terms_normalized)) {
                       item = item.replace(key, value);
                     }
@@ -244,7 +246,8 @@ export default class CustumerDataSearch extends Component {
               }}
               innerClass={{
                 list: "list",
-                select: this.state.occupation === "" ? "select" : "select selected",
+                select:
+                  this.state.occupation === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -357,7 +360,8 @@ export default class CustumerDataSearch extends Component {
               showSearch={false}
               innerClass={{
                 list: "list",
-                select: this.state.institution === "" ? "select" : "select selected",
+                select:
+                  this.state.institution === "" ? "select" : "select selected",
               }}
             />
           </Box>
@@ -471,7 +475,8 @@ export default class CustumerDataSearch extends Component {
               onChange={this.handleNotorialeChange}
               innerClass={{
                 list: "list",
-                select: this.state.notoriale === "" ? "select" : "select selected",
+                select:
+                  this.state.notoriale === "" ? "select" : "select selected",
               }}
             />
           </Box>
