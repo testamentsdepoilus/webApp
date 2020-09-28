@@ -10,6 +10,7 @@ import {
   Button,
   Box,
 } from "@material-ui/core";
+import { getHitsFromQuery, getParamConfig } from "../../utils/functions";
 
 class PlaceFilter extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class PlaceFilter extends React.Component {
       openAlert: false,
       noResults: false,
       place: "",
+      places: {},
     };
     this.handChange = this.handChange.bind(this);
     this.customQuery = this.customQuery.bind(this);
@@ -89,11 +91,34 @@ class PlaceFilter extends React.Component {
     }
   };
 
+  componentDidMount() {
+    getHitsFromQuery(
+      getParamConfig("es_host") + "/" + getParamConfig("es_index_places"),
+      JSON.stringify({
+        size: 2000,
+        _source: ["city"],
+        query: {
+          match_all: {},
+        },
+      })
+    )
+      .then((data) => {
+        let output = {};
+        data.forEach((item) => {
+          const city_norm = item._source["city"]
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+          output[city_norm] = item._source["city"];
+        });
+        this.setState({
+          places: output,
+        });
+      })
+      .catch((e) => {});
+  }
+
   render() {
-    const terms_normalized = {
-      "epagne-epagnette": "Épagne-Épagnette",
-      eton: "Éton",
-    };
     return (
       <div>
         <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -129,23 +154,7 @@ class PlaceFilter extends React.Component {
               onChange={this.handlePlaceChange}
               customQuery={this.customQuery}
               renderItem={(label, count, isSelected) => {
-                let label_ = "";
-                label.split(" ").forEach((item) => {
-                  if (item.length === 1) {
-                    item = item.replace("a", "à");
-                  } else {
-                    console.log(terms_normalized);
-                    for (let [key, value] of Object.entries(terms_normalized)) {
-                      item = item.replace(key, value);
-                    }
-                  }
-
-                  label_ += item + " ";
-                });
-                if (label_.trim() !== "inconnu") {
-                  label_ = label_[0].toUpperCase() + label_.slice(1);
-                }
-                return <div>{label_}</div>;
+                return <div>{this.state.places[label]}</div>;
               }}
               innerClass={{
                 list: "list",

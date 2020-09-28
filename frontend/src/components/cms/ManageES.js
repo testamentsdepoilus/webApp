@@ -134,13 +134,8 @@ class ManageES extends Component {
     let input = document.getElementById("file_uploads");
     if (input !== null) {
       for (const file of input.files) {
-        console.log("file :", file);
         formData.append("myFiles", file);
       }
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
     }
 
     formData.append("host", this.state.host);
