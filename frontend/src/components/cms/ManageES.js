@@ -191,7 +191,6 @@ class ManageES extends Component {
   }
 
   render() {
-    console.log(this.state.message);
     return (
       <div className="configES cms">
         <Breadcrumbs

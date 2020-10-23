@@ -929,3 +929,16 @@ export const getESHost = async (req) => {
     return err;
   }
 };
+
+export const updateRole = async (req) => {
+  try {
+    const host = getParamConfig("web_host");
+
+    const res = await axios.post(host + "/users/updateRole", req);
+
+    return res.data;
+  } catch (err) {
+    console.log("err :", err);
+    return err;
+  }
+};

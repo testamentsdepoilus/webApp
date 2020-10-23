@@ -671,7 +671,6 @@ export default class MyFavoritesCart extends Component {
     );
     generateUnitHTML(myUnits_)
       .then((outputHTML) => {
-        console.log(outputHTML);
         if (outputHTML.length === 1) {
           const inputItem = {
             outputHtml: outputHTML[0],

@@ -57,7 +57,6 @@ class About extends Component {
         })
       )
         .then((data) => {
-          console.log("data :", data);
           if (idx !== -1) {
             const id_query = url.substring(idx + 8).split("/");
             getHitsFromQuery(
@@ -102,7 +101,6 @@ class About extends Component {
             }.bind(this)
           );
 
-    console.log("curItem :", this.state.selectedId);
     const currLink = [
       <div>À propos</div>,
       <div key={2}>{curItem ? curItem._source["title"] : null}</div>,
@@ -128,9 +126,7 @@ class About extends Component {
     );
 
     const menuAbout = (
-      <Box 
-        display={{xs: "none", sm: "block"}} 
-        className="leftMenu bg-gray">        
+      <Box display={{ xs: "none", sm: "block" }} className="leftMenu bg-gray">
         <h2 className="card-title bg-primaryMain text-uppercase">
           <i className="far fa-newspaper"></i> à propos
         </h2>
@@ -170,7 +166,7 @@ class About extends Component {
                 <h1>{curItem._source["title"]} </h1>
                 <Box
                   className="bg-gray"
-                  display={{xs: "block", md: "flex"}}
+                  display={{ xs: "block", md: "flex" }}
                   justifyContent="space-between"
                 >
                   <div className="authors fontWeightMedium text-secondaryMain">

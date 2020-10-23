@@ -76,40 +76,6 @@ export default class CustumerDataSearch extends Component {
   }
 
   render() {
-    const terms_normalized = {
-      employe: "employé",
-      garcon: "garçon",
-      cafe: "café",
-      negociant: "négociant",
-      epicier: "épicier",
-      commercant: "commerçant",
-      nouveautes: "nouveautés",
-      departement: "département",
-      cremier: "crémier",
-      bicetre: "Bicêtre",
-      editeurs: "éditeurs",
-      societe: "Société",
-      generale: "Générale",
-      metropolitain: "Métropolitain",
-      montbeliard: "Montbéliard",
-      doubs: "Doubs",
-      "thomson-houston": "Thomson-Houston",
-      "d'electricite": "d'électricité",
-      hotelier: "hôtelier",
-      bangkok: "Bangkok",
-      royaume: "Royaume",
-      siam: "Siam",
-      orfevre: "orfèvre",
-      pepinieriste: "pépiniériste",
-      prêtre: "prêtre",
-      cathedrale: "cathédrale",
-      "l'eglise": "l'église",
-      proprietaire: "propriétaire",
-      representant: "représentant",
-      represantant: "représantant",
-      facon: "façon",
-      ingenieur: "ingénieur",
-    };
     return (
       <div>
         <Box
@@ -141,7 +107,7 @@ export default class CustumerDataSearch extends Component {
               componentId="nom_testateur"
               dataField="testator.name.keyword"
               value={this.state.testator}
-              size={1000}
+              size={2000}
               sortBy="asc"
               showCount={true}
               autosuggest={true}
@@ -206,10 +172,10 @@ export default class CustumerDataSearch extends Component {
                 ],
               }}
               componentId="profession"
-              dataField="testator.occupation.no_accent"
+              dataField="testator.occupation"
               value={this.state.occupation}
               sortBy="asc"
-              size={500}
+              size={2000}
               showCount={true}
               autosuggest={true}
               placeholder="Profession"
@@ -218,31 +184,13 @@ export default class CustumerDataSearch extends Component {
               searchPlaceholder="Saisir une profession"
               onChange={this.handleOccupationChange}
               renderItem={(label, count, isSelected) => {
-                let label_ = "";
-                label.split(" ").forEach((item) => {
-                  if (item.length === 1) {
-                    item = item.replace("a", "à");
-                  } else {
-                    console.log(terms_normalized);
-                    for (let [key, value] of Object.entries(terms_normalized)) {
-                      item = item.replace(key, value);
-                    }
-                  }
-
-                  label_ += item + " ";
+                return <div>{label + " (" + count + ")"}</div>;
+              }}
+              transformData={(data) => {
+                data.sort(function (a, b) {
+                  return a["key"].localeCompare(b["key"]);
                 });
-                return (
-                  <div>
-                    {label_}
-                    <span
-                      style={{
-                        marginLeft: 5,
-                      }}
-                    >
-                      ({count})
-                    </span>
-                  </div>
-                );
+                return data;
               }}
               innerClass={{
                 list: "list",
@@ -293,7 +241,7 @@ export default class CustumerDataSearch extends Component {
               componentId="unite"
               dataField="testator.affiliation.keyword"
               value={this.state.unit}
-              size={1000}
+              size={2000}
               sortBy="count"
               showCount={true}
               autosuggest={true}
@@ -350,7 +298,7 @@ export default class CustumerDataSearch extends Component {
               componentId="institution"
               dataField="will_identifier.institution.keyword"
               value={this.state.institution}
-              size={1000}
+              size={2000}
               sortBy="count"
               showCount={true}
               autosuggest={true}
@@ -407,7 +355,7 @@ export default class CustumerDataSearch extends Component {
               componentId="cote"
               dataField="will_identifier.cote.keyword"
               value={this.state.cote}
-              size={1000}
+              size={2000}
               sortBy="asc"
               showCount={false}
               autosuggest={true}
@@ -464,7 +412,7 @@ export default class CustumerDataSearch extends Component {
               componentId="notoriale"
               dataField="will_provenance.keyword"
               value={this.state.notoriale}
-              size={1000}
+              size={2000}
               sortBy="count"
               showCount={true}
               autosuggest={true}

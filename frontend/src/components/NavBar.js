@@ -491,7 +491,7 @@ class NavBar extends Component {
                                 to="/espace/config"
                                 onClick={this.handleListItemClick}
                               >
-                                Serveur SMTP
+                                Gestion serveur
                               </Link>
                             </MenuItem>
                             <MenuItem onClick={this.handleExplorClose}>

@@ -319,6 +319,7 @@ router.post("/updateES", function (req, res, next) {
         } else {
           // results is an array consisting of messages collected during execution
           results_ = JSON.parse(results);
+
           if (results_.status === 200) {
             res.send({
               status: 200,

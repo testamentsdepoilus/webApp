@@ -15,6 +15,7 @@ import {
   getUserToken,
   updateConfigMail,
   getParamConfig,
+  updateRole,
 } from "../../utils/functions";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
@@ -25,6 +26,7 @@ class ConfigMail extends Component {
     super();
     this.state = {
       email: "",
+      email_admin: "",
       password: "",
       passConfirme: "",
       showPassword: false,
@@ -36,8 +38,47 @@ class ConfigMail extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
+  handleAdd = (e) => {
+    if (this.state.email_admin) {
+      const req = { email: this.state.email_admin, role: true };
+      updateRole(req).then((res) => {
+        if (res.status === 200) {
+          this.setState({
+            open: true,
+          });
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          this.setState({
+            error: err,
+          });
+        }
+      });
+    }
+  };
+
+  handleRemove = (e) => {
+    const userToken = getUserToken();
+
+    if (this.state.email_admin && this.state.email_admin !== userToken.email) {
+      const req = { email: this.state.email_admin, role: false };
+      updateRole(req).then((res) => {
+        if (res.status === 200) {
+          this.setState({
+            open: true,
+          });
+        } else {
+          const err = res.err ? res.err : "Connexion au serveur a échoué !";
+          this.setState({
+            error: err,
+          });
+        }
+      });
+    }
+  };
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -125,131 +166,187 @@ class ConfigMail extends Component {
             Mon espace
           </Link>
           <div>Administration</div>
-          <div>Serveur SMTP</div>
+          <div>Gestion serveur</div>
         </Breadcrumbs>
 
         <div className="bg-white paddingContainer">
-          <h1>Configurer le serveur d'envoi du mail aux utilisateurs</h1>
-          <form
-            className="form"
-            noValidate
-            onSubmit={this.onSubmit}
-            autoComplete="off"
-          >
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-            >
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-email-input"
-                  required
-                  fullWidth
-                  variant="outlined"
-                  className="input"
-                  label="Adresse email"
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  onChange={this.onChange}
-                  value={this.state.email}
-                  error={this.state.isError[1]}
-                />
-              </Grid>
-              <Grid item>
+          <Grid>
+            <Grid item>
+              <h2>
+                {" "}
+                Gestion des droits d'administrateurs (ajouter où supprimer les
+                droits d'admin):
+              </h2>
+              <Grid container direction={"column"}>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-email-input-2"
+                    required
+                    fullWidth
+                    variant="outlined"
+                    className="input"
+                    label="Adresse email"
+                    type="email"
+                    name="email_admin"
+                    autoComplete="email"
+                    onChange={this.onChange}
+                    value={this.state.email_admin}
+                    error={this.state.isError[1]}
+                  />
+                </Grid>
                 <Grid
+                  item
                   container
-                  alignItems="center"
+                  direction={"row"}
                   justify="space-evenly"
-                  spacing={1}
+                  alignItems="center"
+                  xs={6}
                 >
-                  <Grid item xs>
-                    <TextField
-                      id="password"
-                      required
-                      className="input"
-                      variant="outlined"
-                      fullWidth
-                      label="Mot de passe"
-                      type={this.state.showPassword ? "text" : "password"}
-                      name="password"
-                      autoComplete="current-password"
-                      onChange={this.onChange}
-                      value={this.state.password}
-                      error={this.state.isError[2]}
-                    />
+                  <Grid item>
+                    <Button
+                      className="submit button fontWeightMedium plain bg-secondaryLight"
+                      onClick={this.handleAdd}
+                    >
+                      Ajouter
+                    </Button>
                   </Grid>
-                  <Grid item xs>
-                    <TextField
-                      id="password-confirme"
-                      required
-                      className="input"
-                      variant="outlined"
-                      fullWidth
-                      label="Confirmation"
-                      type={this.state.showPassword ? "text" : "password"}
-                      name="passConfirme"
-                      autoComplete="current-password"
-                      onChange={this.onChange}
-                      value={this.state.passConfirme}
-                      error={this.state.isError[3]}
-                    />{" "}
-                  </Grid>
-                  <Grid item xs={1}>
-                    <InputAdornment position="end">
-                      <IconButton
-                        className="togglePassword"
-                        aria-label="Toggle password visibility"
-                        onClick={this.handleClickShowPassword}
-                      >
-                        {this.state.showPassword ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
+                  <Grid item>
+                    <Button
+                      className="submit button fontWeightMedium plain bg-secondaryLight"
+                      onClick={this.handleRemove}
+                    >
+                      Supprimer
+                    </Button>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            <Button
-              className="submit button fontWeightMedium plain bg-secondaryLight"
-              type="submit"
-            >
-              Mettre à jour
-            </Button>
-          </form>
-          {this.state.error ? (
-            <div className="text-error">{this.state.error}</div>
-          ) : (
-            ""
-          )}
-          <Dialog
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={this.state.open}
-            onClose={this.handleClose}
-          >
-            <DialogTitle id="customized-dialog-title">
-              <IconButton
-                aria-label="close"
-                className="closeButton"
-                onClick={this.handleClose}
+            <Grid item>
+              <h2>
+                Configurer le serveur SMTP d'envoi du mail aux utilisateurs
+              </h2>
+              <form
+                className="form"
+                noValidate
+                onSubmit={this.onSubmit}
+                autoComplete="off"
               >
-                <CloseIcon />
-              </IconButton>
-            </DialogTitle>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <Grid item xs={12}>
+                    <TextField
+                      id="standard-email-input"
+                      required
+                      fullWidth
+                      variant="outlined"
+                      className="input"
+                      label="Adresse email"
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      onChange={this.onChange}
+                      value={this.state.email}
+                      error={this.state.isError[1]}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Grid
+                      container
+                      alignItems="center"
+                      justify="space-evenly"
+                      spacing={1}
+                    >
+                      <Grid item xs>
+                        <TextField
+                          id="password"
+                          required
+                          className="input"
+                          variant="outlined"
+                          fullWidth
+                          label="Mot de passe"
+                          type={this.state.showPassword ? "text" : "password"}
+                          name="password"
+                          autoComplete="current-password"
+                          onChange={this.onChange}
+                          value={this.state.password}
+                          error={this.state.isError[2]}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <TextField
+                          id="password-confirme"
+                          required
+                          className="input"
+                          variant="outlined"
+                          fullWidth
+                          label="Confirmation"
+                          type={this.state.showPassword ? "text" : "password"}
+                          name="passConfirme"
+                          autoComplete="current-password"
+                          onChange={this.onChange}
+                          value={this.state.passConfirme}
+                          error={this.state.isError[3]}
+                        />{" "}
+                      </Grid>
+                      <Grid item xs={1}>
+                        <InputAdornment position="end">
+                          <IconButton
+                            className="togglePassword"
+                            aria-label="Toggle password visibility"
+                            onClick={this.handleClickShowPassword}
+                          >
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Button
+                  className="submit button fontWeightMedium plain bg-secondaryLight"
+                  type="submit"
+                >
+                  Mettre à jour
+                </Button>
+              </form>
+              {this.state.error ? (
+                <div className="text-error">{this.state.error}</div>
+              ) : (
+                ""
+              )}
+              <Dialog
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.open}
+                onClose={this.handleClose}
+              >
+                <DialogTitle id="customized-dialog-title">
+                  <IconButton
+                    aria-label="close"
+                    className="closeButton"
+                    onClick={this.handleClose}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </DialogTitle>
 
-            <DialogContent>
-              <div class="fontWeightBold text-primary">
-                {" "}
-                Votre configuration a été bien mis à jour !
-              </div>
-            </DialogContent>
-          </Dialog>
+                <DialogContent>
+                  <div className="fontWeightBold text-primary">
+                    {" "}
+                    Votre configuration a été bien mis à jour !
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </Grid>
+          </Grid>
         </div>
       </div>
     );

@@ -272,7 +272,6 @@ export default class TestatorDisplay extends Component {
         });
       }
 
-      console.log(death_date);
       let birth_date = [];
       if (Boolean(this.props.data["birth.date"])) {
         birth_date = this.props.data["birth.date"].map((item) => {

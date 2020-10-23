@@ -34,6 +34,13 @@ const { Client } = require("@elastic/elasticsearch");
 const client = new Client({ node: process.env.host_es });
 const indexES = process.env.index_users;
 
+let { PythonShell } = require("python-shell");
+
+let options = {
+  mode: "text",
+  scriptPath: process.env.py_path,
+};
+
 let auth = {};
 client.search(
   {
@@ -46,17 +53,94 @@ client.search(
   },
   (err, result) => {
     if (err) {
+      if (err.message.includes("index_not_found_exception")) {
+        options["args"] = [
+          "--host=" + process.env.host_es,
+          "--index=" + process.env.index_users,
+          "--file=" + process.env.mapping_path + "tdp_users_mapping.json",
+        ];
+        PythonShell.run("createMapping.py", options, function (err, results) {
+          if (err) {
+            logger.error("creation mapping :  => " + err);
+          } else {
+            // results is an array consisting of messages collected during execution
+            results_ = JSON.parse(results);
+
+            if (results_.status === 200) {
+              // Add default user admin
+              const userData = {
+                first_name: "admin",
+                last_name: "admin",
+                user_name: "admin",
+                email: process.env.user_admin,
+                password: process.env.pass_admin,
+                created: new Date(),
+                confirmed: true,
+                isAdmin: true,
+              };
+              bcrypt.hash(userData.password, 10, (err, hash) => {
+                userData.password = hash;
+                client.index(
+                  {
+                    index: indexES,
+                    body: userData,
+                  },
+                  (err, result) => {
+                    if (err) {
+                      logger.error("Erreur indexation :  => " + err);
+                    }
+                  }
+                );
+              });
+            } else {
+              logger.error("Erreur dans le script python => " + results_.err);
+            }
+          }
+        });
+      } else {
+        console.log(err);
+      }
+
       logger.error("ES connexion au serveur a échoué => " + err);
     } else {
       hits = result.body.hits.hits;
-      const admin = hits.filter((hit) => {
-        return (
-          hit._source["isAdmin"] === true && Boolean(hit._source["auth_config"])
-        );
-      });
+      if (hits.length > 0) {
+        const admin = hits.filter((hit) => {
+          return (
+            hit._source["isAdmin"] === true &&
+            Boolean(hit._source["auth_config"])
+          );
+        });
 
-      if (admin.length > 0) {
-        auth = admin[0]._source["auth_config"];
+        if (admin.length > 0) {
+          auth = admin[0]._source["auth_config"];
+        }
+      } else {
+        // Add default user admin
+        const userData = {
+          first_name: "admin",
+          last_name: "admin",
+          user_name: "admin",
+          email: process.env.user_admin,
+          password: process.env.pass_admin,
+          created: new Date(),
+          confirmed: true,
+          isAdmin: true,
+        };
+        bcrypt.hash(userData.password, 10, (err, hash) => {
+          userData.password = hash;
+          client.index(
+            {
+              index: indexES,
+              body: userData,
+            },
+            (err, result) => {
+              if (err) {
+                logger.error("Erreur indexation :  => " + err);
+              }
+            }
+          );
+        });
       }
     }
   }
@@ -665,6 +749,67 @@ router.post("/updateMDP", async (req, res) => {
                 });
               }
             });
+          }
+        }
+      }
+    );
+  } catch (e) {
+    res.send({ status: 400, err: e });
+  }
+});
+
+// update user roles
+router.post("/updateRole", async (req, res) => {
+  try {
+    const email = req.body.email;
+
+    client.search(
+      {
+        index: indexES,
+        body: {
+          query: {
+            match: {
+              email: {
+                query: email,
+                operator: "and",
+              },
+            },
+          },
+        },
+      },
+      (err, result) => {
+        if (err) {
+          res.json({ status: 400, error: "Connexion au serveur a échoué !" });
+        } else {
+          hits = result.body.hits.hits;
+
+          if (hits.length === 1) {
+            let isFailed = false;
+            client.update({
+              index: indexES,
+              id: hits[0]._id,
+              body: {
+                doc: {
+                  isAdmin: req.body.role,
+                },
+              },
+            }),
+              (err) => {
+                if (err) {
+                  isFailed = true;
+                }
+              };
+            if (isFailed) {
+              res.send({
+                status: 400,
+                err: "ES Connexion au serveur a échoué !" + err,
+              });
+            } else {
+              res.send({
+                status: 200,
+                mess: "Votre mot de passe a été bien mis à jour !",
+              });
+            }
           }
         }
       }

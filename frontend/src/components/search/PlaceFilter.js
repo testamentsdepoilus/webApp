@@ -10,7 +10,6 @@ import {
   Button,
   Box,
 } from "@material-ui/core";
-import { getHitsFromQuery, getParamConfig } from "../../utils/functions";
 
 class PlaceFilter extends React.Component {
   constructor(props) {
@@ -23,7 +22,6 @@ class PlaceFilter extends React.Component {
       openAlert: false,
       noResults: false,
       place: "",
-      places: {},
     };
     this.handChange = this.handChange.bind(this);
     this.customQuery = this.customQuery.bind(this);
@@ -91,33 +89,6 @@ class PlaceFilter extends React.Component {
     }
   };
 
-  componentDidMount() {
-    getHitsFromQuery(
-      getParamConfig("es_host") + "/" + getParamConfig("es_index_places"),
-      JSON.stringify({
-        size: 2000,
-        _source: ["city"],
-        query: {
-          match_all: {},
-        },
-      })
-    )
-      .then((data) => {
-        let output = {};
-        data.forEach((item) => {
-          const city_norm = item._source["city"]
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase();
-          output[city_norm] = item._source["city"];
-        });
-        this.setState({
-          places: output,
-        });
-      })
-      .catch((e) => {});
-  }
-
   render() {
     return (
       <div>
@@ -140,10 +111,9 @@ class PlaceFilter extends React.Component {
                 ],
               }}
               componentId="lieu"
-              dataField="will_contents.place.no_accent"
+              dataField="will_contents.place"
               value={this.state.place}
               size={2000}
-              sortBy="asc"
               showCount={false}
               autosuggest={true}
               placeholder="Lieu"
@@ -153,8 +123,12 @@ class PlaceFilter extends React.Component {
               searchPlaceholder="Saisir un nom de lieu"
               onChange={this.handlePlaceChange}
               customQuery={this.customQuery}
-              renderItem={(label, count, isSelected) => {
-                return <div>{this.state.places[label]}</div>;
+              renderItem={(label, count, isSelected) => <div>{label}</div>}
+              transformData={(data) => {
+                data.sort(function (a, b) {
+                  return a["key"].localeCompare(b["key"]);
+                });
+                return data;
               }}
               innerClass={{
                 list: "list",

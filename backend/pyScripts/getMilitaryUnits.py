@@ -29,6 +29,6 @@ def get_meta_data(file_tei):
 
 
 if __name__ == "__main__":
-	fileTei = "../client/build/files/notices/units.xml"
+	fileTei = "unites.xml"
 	output = get_meta_data(fileTei)
 	print(output[0])
