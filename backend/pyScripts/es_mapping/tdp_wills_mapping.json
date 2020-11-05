@@ -50,7 +50,7 @@
         "my_normalizer": {
           "type": "custom",
           "char_filter": [],
-          "filter": [ "lowercase", "asciifolding", "icu_folding"]
+          "filter": ["lowercase", "asciifolding", "icu_folding"]
         }
       }
     }
@@ -82,11 +82,10 @@
             "type": "text"
           },
           "occupation": {
-            "type": "keyword",
+            "type": "text",
             "fields": {
-              "no_accent": {
-                "type": "keyword",
-                "normalizer": "my_normalizer"
+              "keyword": {
+                "type": "keyword"
               }
             }
           },
@@ -165,7 +164,7 @@
             "type": "object",
             "enabled": false
           },
-           "supportDesc": {
+          "supportDesc": {
             "type": "object",
             "enabled": false
           },
@@ -185,7 +184,8 @@
             "type": "date"
           },
           "will_date_range": {
-            "type": "date_range"
+            "type": "date_range",
+            "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
           },
           "will_place": {
             "type": "geo_point"
@@ -202,10 +202,11 @@
             }
           },
           "birth_date_range": {
-            "type": "date_range"
+            "type": "date_range",
+            "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
           },
           "birth_text": {
-           "type": "object",
+            "type": "object",
             "enabled": false
           },
           "birth_place": {
@@ -222,11 +223,12 @@
               }
             }
           },
-           "death_date_range": {
-            "type": "date_range"
+          "death_date_range": {
+            "type": "date_range",
+            "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
           },
           "death_text": {
-           "type": "object",
+            "type": "object",
             "enabled": false
           },
           "death_place": {
@@ -236,7 +238,7 @@
             "type": "text"
           },
           "death_place_text": {
-           "type": "object",
+            "type": "object",
             "enabled": false
           },
           "death_place_norm": {
@@ -262,11 +264,10 @@
             }
           },
           "place": {
-            "type": "keyword",
+            "type": "text",
             "fields": {
-              "no_accent": {
-                "type": "keyword",
-                "normalizer": "my_normalizer"
+              "keyword": {
+                "type": "keyword"
               }
             }
           }

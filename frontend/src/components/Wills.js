@@ -91,7 +91,7 @@ class Wills extends Component {
       <div className="notices wills">
         <ReactiveBase
           app={getParamConfig("es_index_wills")}
-          url={getParamConfig("es_host")}
+          url={getParamConfig("es_host_with_auth")}
           type="_doc"
         >
           <Breadcrumbs
@@ -206,7 +206,10 @@ class Wills extends Component {
                         </Box>
                       </Box>
 
-                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
+                      <Box
+                        className="resultList"
+                        display={{ xs: "none", sm: "block" }}
+                      >
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(

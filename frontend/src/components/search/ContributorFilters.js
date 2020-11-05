@@ -47,7 +47,6 @@ class ContributorFilters extends React.Component {
             }}
             componentId="contributeur"
             value={this.state.contributeur}
-            nestedField="contributions"
             dataField="contributions.persName.keyword"
             size={1000}
             showCount={true}
@@ -60,7 +59,8 @@ class ContributorFilters extends React.Component {
             onChange={this.handleContributeurChange}
             innerClass={{
               list: "list",
-              select: this.state.contributeur === "" ? "select" : "select selected",
+              select:
+                this.state.contributeur === "" ? "select" : "select selected",
             }}
           />
         </Box>

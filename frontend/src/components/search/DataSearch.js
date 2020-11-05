@@ -172,7 +172,7 @@ export default class CustumerDataSearch extends Component {
                 ],
               }}
               componentId="profession"
-              dataField="testator.occupation"
+              dataField="testator.occupation.keyword"
               value={this.state.occupation}
               sortBy="asc"
               size={2000}

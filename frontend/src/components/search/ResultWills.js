@@ -233,7 +233,7 @@ export default class ResultWills extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.myBackups) {
+    if (Boolean(localStorage.myBackups)) {
       const myBackups_ = JSON.parse(localStorage.myBackups);
       let myWills_ = Boolean(myBackups_["myWills"])
         ? myBackups_["myWills"]
@@ -243,7 +243,7 @@ export default class ResultWills extends React.Component {
       });
     }
 
-    if (localStorage.willCompare && localStorage.chipData) {
+    if (Boolean(localStorage.willCompare) && Boolean(localStorage.chipData)) {
       const willCompare_ = JSON.parse(localStorage.willCompare);
       const chipData_ = JSON.parse(localStorage.chipData);
       localStorage.removeItem("willCompare");

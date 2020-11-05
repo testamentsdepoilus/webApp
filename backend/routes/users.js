@@ -9,6 +9,10 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const SimpleCrypto = require("simple-crypto-js").default;
+const sgMail = require("@sendgrid/mail");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+console.log("api key :", process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 require("dotenv").config();
 
 // use bodyParser to parse application/json content-type
@@ -77,6 +81,13 @@ client.search(
                 created: new Date(),
                 confirmed: true,
                 isAdmin: true,
+                myBackups: {
+                  myWills: [],
+                  myTestators: [],
+                  myPlaces: [],
+                  myUnits: [],
+                  mySearches: [],
+                },
               };
               bcrypt.hash(userData.password, 10, (err, hash) => {
                 userData.password = hash;
@@ -126,6 +137,13 @@ client.search(
           created: new Date(),
           confirmed: true,
           isAdmin: true,
+          myBackups: {
+            myWills: [],
+            myTestators: [],
+            myPlaces: [],
+            myUnits: [],
+            mySearches: [],
+          },
         };
         bcrypt.hash(userData.password, 10, (err, hash) => {
           userData.password = hash;
@@ -182,6 +200,7 @@ router.post("/register", function (req, res, next) {
     },
     (err, result) => {
       if (err) {
+        logger.error("in register :" + err);
         res.send({ status: 400, err: "ES connexion au serveur a échoué !" });
       } else {
         hits = result.body.hits.hits;
@@ -194,26 +213,36 @@ router.post("/register", function (req, res, next) {
               });
 
               if (typeof auth === "object" && Object.keys(auth).length > 0) {
+                /*let transporter = nodemailer.createTransport({
+                  service: "gmail",
+                  auth: {
+                    user: auth.email,
+                    pass: simpleCrypto.decrypt(auth.password),
+                  },
+                })
+                console.log(process.env.sendgrid_apikey);
                 let transporter = nodemailer.createTransport(
-                  smtpTransport({
-                    host: "smtp2.ensea.fr", // hostname
-                    secureConnection: true, // TLS requires secureConnection to be false
-                    port: 465, // port for secure SMTP
-                    tls: {
-                      rejectUnauthorized: false,
+                  sendgridTransport({
+                    auth: {
+                      api_key: process.env.sendgrid_apikey, // SG password
                     },
-                    auth: Boolean(auth.email)
-                      ? {
-                          user: auth.email,
-                          pass: simpleCrypto.decrypt(auth.password),
-                        }
-                      : {},
                   })
-                );
-
+                );;*/
+                let transporter = nodemailer.createTransport({
+                  host: "smtp.sendgrid.net",
+                  port: 465,
+                  secure: true, // true for 465, false for other ports
+                  auth: {
+                    user: "apikey", // generated ethereal user
+                    pass:
+                      "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", // generated ethereal password
+                  },
+                });
                 // verify connection configuration
                 transporter.verify(function (error, success) {
                   if (error) {
+                    console.log("in register :" + error);
+                    logger.error("in register :" + error);
                     res.send({ status: 400, err: error });
                   } else {
                     const link =
@@ -236,6 +265,8 @@ router.post("/register", function (req, res, next) {
 
                     transporter.sendMail(mailOptions, function (err, info) {
                       if (err) {
+                        console.log("in register :" + err.message);
+                        logger.error("in register :" + err.message);
                         res.send({ status: 400, err: err.message });
                       } else {
                         client.index(
@@ -245,11 +276,14 @@ router.post("/register", function (req, res, next) {
                           },
                           (err, result) => {
                             if (err) {
+                              console.log("in create doc in ES :" + err);
+                              logger.error("in register :" + err);
                               res.send({
                                 status: 400,
                                 err: "ES Connexion au serveur a échoué !",
                               });
                             } else {
+                              console.log("succes");
                               res.send({
                                 status: 200,
                                 res: userData.email + " registered",
@@ -263,13 +297,68 @@ router.post("/register", function (req, res, next) {
                 });
 
                 transporter.close();
+                /* const link =
+                  process.env.host + "/users/confirmation/" + emailToken;
+                const html =
+                  "<div>Bonjour " +
+                  userData.user_name +
+                  " <br/>" +
+                  "Merci de valider votre inscription au site d’édition numérique des testaments de Poilus en cliquant ici : <br/> <br/>" +
+                  "<a href=" +
+                  link +
+                  " style=\"text-align: center; font-family: 'Open Sans', 'Arial', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Lucida Grande', 'sans-serif'; color: #fff; background-color: #ee4e8b; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; width: auto; line-height: 1.6; margin: 20px auto; padding: 15px 40px 15px 30px;\" > oui je valide mon inscription </a ></div>";
+                const msg = {
+                  to: userData.email, // Change to your recipient
+                  from: auth.email, // Change to your verified sender
+                  subject: "Validation d'inscription",
+                  html: html,
+                };
+
+                sgMail
+                  .send(msg)
+                  .then(() => {
+                    console.log("Email sent");
+                    client.index(
+                      {
+                        index: indexES,
+                        body: userData,
+                      },
+                      (err, result) => {
+                        if (err) {
+                          logger.error("in register :" + err);
+                          res.send({
+                            status: 400,
+                            err: "ES Connexion au serveur a échoué !",
+                          });
+                        } else {
+                          res.send({
+                            status: 200,
+                            res: userData.email + " registered",
+                          });
+                        }
+                      }
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("catch :", error);
+                    logger.error("in register :" + error);
+                    res.send({ status: 400, err: error });
+                  });*/
               } else {
+                console.log(
+                  "in register : Merci de configurer le serveur d'envoie d'e-mail !"
+                );
+                logger.error(
+                  "in register : Merci de configurer le serveur d'envoie d'e-mail !"
+                );
                 res.send({
                   status: 400,
                   err: "Merci de configurer le serveur d'envoie d'e-mail !",
                 });
               }
             } catch (e) {
+              console.log("catch :", e);
+              logger.error("in register :" + e);
               res.send({
                 status: 400,
                 err: "catch : " + e,
@@ -310,7 +399,7 @@ router.post("/login", (req, res) => {
     (err, result) => {
       if (err) {
         res.json({ status: 400, error: "Connexion au serveur a échoué !" });
-        logger.error("users.js => " + err);
+        logger.error("in login : " + err);
       } else {
         hits = result.body.hits.hits;
 
@@ -387,7 +476,7 @@ router.get("/confirmation/:token", async (req, res) => {
                 err: "ES Connexion au serveur a échoué !" + err,
               });
             } else {
-              res.redirect("http://patrimeph.ensea.fr/testaments-de-poilus");
+              res.redirect("http://edition-testaments-de-poilus.huma-num.fr");
             }
           }
         }
@@ -501,20 +590,13 @@ router.post("/updateConfigMail", function (req, res, next) {
 
         if (idx !== -1) {
           let isFailed = false;
-          let transporter = nodemailer.createTransport(
-            smtpTransport({
-              host: "smtp.oronge.fr", // hostname
-              secureConnection: false, // TLS requires secureConnection to be false
-              port: 25, // port for secure SMTP
-              tls: {
-                rejectUnauthorized: false,
-              },
-              auth: {
-                user: email, // generated ethereal user
-                pass: password, // generated ethereal password
-              },
-            })
-          );
+          let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: email,
+              pass: password,
+            },
+          });
 
           console.log("verify begin ...");
           // verify connection configuration
@@ -606,22 +688,13 @@ router.post("/resetPassWord", function (req, res, next) {
             );
 
             if (typeof auth === "object" && Object.keys(auth).length > 0) {
-              let transporter = nodemailer.createTransport(
-                smtpTransport({
-                  host: "smtp2.ensea.fr", // hostname
-                  secureConnection: true, // TLS requires secureConnection to be false
-                  port: 465, // port for secure SMTP
-                  tls: {
-                    rejectUnauthorized: false,
-                  },
-                  auth: Boolean(auth.email)
-                    ? {
-                        user: auth.email,
-                        pass: simpleCrypto.decrypt(auth.password),
-                      }
-                    : {},
-                })
-              );
+              let transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                  user: auth.email,
+                  pass: simpleCrypto.decrypt(auth.password),
+                },
+              });
               /*  let transporter = nodemailer.createTransport({
                 host: "smtp2.ensea.fr", // hostname
                 port: 465, // port for secure SMTP

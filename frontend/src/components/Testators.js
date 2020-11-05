@@ -110,7 +110,7 @@ class Testators extends Component {
       <div className="notices testators">
         <ReactiveBase
           app={getParamConfig("es_index_testators")}
-          url={getParamConfig("es_host")}
+          url={getParamConfig("es_host_with_auth")}
           type="_doc"
         >
           <Breadcrumbs
@@ -158,13 +158,17 @@ class Testators extends Component {
                     {label.split("+")[1][0].toUpperCase() +
                       label.split("+")[1].slice(1) +
                       " "}
-                    <span className="text-uppercase">{label.split("+")[0]}</span>
+                    <span className="text-uppercase">
+                      {label.split("+")[0]}
+                    </span>
                   </div>
                 )}
                 innerClass={{
                   list: "list",
                   select:
-                    this.state.testator_name === "" ? "select" : "select selected",
+                    this.state.testator_name === ""
+                      ? "select"
+                      : "select selected",
                 }}
               />
               {this.state.testator_name !== "" ? (
@@ -276,7 +280,10 @@ class Testators extends Component {
                           </Select>
                         </Box>
                       </Box>
-                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
+                      <Box
+                        className="resultList"
+                        display={{ xs: "none", sm: "block" }}
+                      >
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(

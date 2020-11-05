@@ -13,6 +13,7 @@ import ReactDOM from "react-dom";
 import PlaceDisplay from "../components/PlaceDisplay";
 import UnitDisplay from "../components/UnitDisplay";
 import WillDisplay from "../components/WillDisplay";
+import btoa from "btoa";
 
 // Global declaration for jsPDF (needed before call html())
 window.html2canvas = html2canvas;
@@ -73,6 +74,7 @@ export function readXmlFile(file) {
 export function getParamConfig(param) {
   let config = {};
   config["es_host"] = process.env.REACT_APP_ES_HOST;
+  config["es_host_with_auth"] = process.env.REACT_APP_ES_HOST_with_auth;
   config["es_index_wills"] = process.env.REACT_APP_ES_INDEX_WILLS;
   config["es_index_cms"] = process.env.REACT_APP_ES_INDEX_CMS;
   config["es_index_user"] = process.env.REACT_APP_ES_INDEX_USERS;
@@ -130,14 +132,17 @@ export function getTotalHits(host) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", host + "/_search?filter_path=hits.total");
     xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Authorization", "Basic " + btoa("elastic:tdp2020"));
     xhr.send();
     xhr.addEventListener("load", () => {
       const response = JSON.parse(xhr.responseText);
       const total = response.hits ? response.hits.total : 0;
+
       resolve(total);
     });
     xhr.addEventListener("error", () => {
-      const error = JSON.parse(xhr.responseText);
+      console.log("error :", xhr);
+      const error = JSON.parse(xhr);
       reject(error);
     });
   });
@@ -153,6 +158,7 @@ export function getHits(host, size = null) {
       const xhr = new XMLHttpRequest();
       xhr.open("POST", host + "/_search?size=" + total);
       xhr.setRequestHeader("Content-type", "application/json");
+      xhr.setRequestHeader("Authorization", "Basic " + btoa("elastic:tdp2020"));
       xhr.send();
       xhr.addEventListener("load", () => {
         const response = JSON.parse(xhr.responseText);
@@ -172,6 +178,7 @@ export function getHitsFromQuery(host, query) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", host + "/_search?pretty");
     xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Authorization", "Basic " + btoa("elastic:tdp2020"));
     xhr.send(query);
     xhr.addEventListener("load", () => {
       const response = JSON.parse(xhr.responseText);

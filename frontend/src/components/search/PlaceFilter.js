@@ -111,7 +111,7 @@ class PlaceFilter extends React.Component {
                 ],
               }}
               componentId="lieu"
-              dataField="will_contents.place"
+              dataField="will_contents.place.keyword"
               value={this.state.place}
               size={2000}
               showCount={false}

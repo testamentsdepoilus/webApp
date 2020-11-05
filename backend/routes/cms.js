@@ -127,7 +127,7 @@ router.post("/updateES", function (req, res, next) {
     case "add":
       let pyScript = "indexTei.py";
       options["args"] = [
-        "--host=" + req.body.host,
+        "--host=" + process.env.host_es,
         "--index=" + req.body.index,
       ];
       let file_path = process.env.notices_path;
@@ -216,7 +216,7 @@ router.post("/updateES", function (req, res, next) {
               if (results_.status === 200) {
                 if (req.body.index !== "tdp_wills") {
                   options["args"] = [
-                    "--host=" + req.body.host,
+                    "--host=" + process.env.host_es,
                     "--index=" + "tdp_wills",
                   ];
                   options["args"].push(
@@ -282,7 +282,7 @@ router.post("/updateES", function (req, res, next) {
       break;
     case "create":
       options["args"] = [
-        "--host=" + req.body.host,
+        "--host=" + process.env.host_es,
         "--index=" + req.body.index,
       ];
       let mapping_file = "--file=";

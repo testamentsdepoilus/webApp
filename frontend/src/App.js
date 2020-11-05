@@ -170,7 +170,7 @@ const theme = createMuiTheme({
 class App extends Component {
   render() {
     return (
-      <BrowserRouter basename="/testaments-de-poilus">
+      <BrowserRouter>
         <MuiThemeProvider theme={theme}>
           <div className="App">
             <StylesProvider injectFirst>

@@ -16,7 +16,7 @@ class Search extends Component {
     return (
       <ReactiveBase
         app={getParamConfig("es_index_wills")}
-        url={getParamConfig("es_host")}
+        url={getParamConfig("es_host_with_auth")}
         type="_doc"
       >
         <div className="search">

@@ -39,15 +39,15 @@ export default class GeoMap extends React.Component {
     this.handleCheckD = this.handleCheckD.bind(this);
     this.blueIcon = L.icon({
       iconUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-blue.png",
+        "http://edition-testaments-de-poilus.huma-num.fr/images/marker-icon-blue.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png",
+        "http://edition-testaments-de-poilus.huma-num.fr/images/marker-shadow.png",
     });
     this.redIcon = L.icon({
       iconUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-icon-red.png",
+        "http://edition-testaments-de-poilus.huma-num.fr/images/marker-icon-red.png",
       shadowUrl:
-        "http://patrimeph.ensea.fr/testaments-de-poilus/images/marker-shadow.png",
+        "http://edition-testaments-de-poilus.huma-num.fr/images/marker-shadow.png",
     });
   }
 

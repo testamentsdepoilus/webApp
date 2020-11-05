@@ -320,11 +320,12 @@ class Home extends Component {
                   <h2 className="card-title">
                     <i className="far fa-chart-bar"></i> Visualiser les données
                   </h2>
+
                   <iframe
+                    src="https://edition-testaments-de-poilus.huma-num.fr/kibana7/app/kibana#/visualize/edit/2c250e30-1d2a-11eb-9438-2500570ff9d9?embed=true&_g=()"
                     className="chart"
                     id="chart"
                     title="visualisation"
-                    src="http://patrimeph.ensea.fr/kibana7/app/kibana#/visualize/edit/ff5975f0-6530-11ea-8a32-c183c080aac8?embed=true&_g=()"
                   ></iframe>
                 </Paper>
               </Grid>
@@ -389,7 +390,7 @@ class Home extends Component {
             <Box className="bg-light-gray" mt={2.5}>
               <ReactiveBase
                 app={getParamConfig("es_index_wills")}
-                url={getParamConfig("es_host")}
+                url={getParamConfig("es_host_with_auth")}
                 type="_doc"
               >
                 <Grid container direction="row" spacing={0}>
@@ -499,7 +500,9 @@ class Home extends Component {
                           innerClass={{
                             list: "list",
                             select:
-                              this.state.place === "" ? "select" : "select selected",
+                              this.state.place === ""
+                                ? "select"
+                                : "select selected",
                           }}
                           onChange={this.handlePlaceChange}
                         />

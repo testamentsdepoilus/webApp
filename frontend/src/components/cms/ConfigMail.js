@@ -222,7 +222,7 @@ class ConfigMail extends Component {
               </Grid>
             </Grid>
             <Grid item>
-              <h2>
+              {/*<h2>
                 Configurer le serveur SMTP d'envoi du mail aux utilisateurs
               </h2>
               <form
@@ -344,7 +344,7 @@ class ConfigMail extends Component {
                     Votre configuration a été bien mis à jour !
                   </div>
                 </DialogContent>
-              </Dialog>
+              </Dialog>*/}
             </Grid>
           </Grid>
         </div>

@@ -88,7 +88,7 @@ class Units extends Component {
       <div className="notices units">
         <ReactiveBase
           app={getParamConfig("es_index_units")}
-          url={getParamConfig("es_host")}
+          url={getParamConfig("es_host_with_auth")}
           type="_doc"
         >
           <Breadcrumbs
@@ -269,7 +269,10 @@ class Units extends Component {
                           </Select>
                         </Box>
                       </Box>
-                      <Box className="resultList" display={{ xs: "none", sm: "block" }}>
+                      <Box
+                        className="resultList"
+                        display={{ xs: "none", sm: "block" }}
+                      >
                         <ul>
                           {this.state.cur_list.map((item, i) =>
                             Boolean(
