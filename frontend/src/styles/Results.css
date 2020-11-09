@@ -174,4 +174,7 @@
   border-color: #bcaaa4;
 }
 
+ #closeToolTip {
+    float: right;
+}
 

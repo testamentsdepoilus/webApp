@@ -26,13 +26,17 @@ class Footer extends Component {
                   <a href="mailto:testaments-de-poilus@gmail.com">Contact</a>
                 </address>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                <a href={getParamConfig("web_url") + "/mentionslegales"}>
+                <a
+                  href={
+                    getParamConfig("web_url") + "/apropos/-hqvnHUBighAQ_8Sp2m5"
+                  }
+                >
                   Mentions légales
                 </a>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
                 <a
                   href={
-                    getParamConfig("web_url") + "/apropos/MbCig24BcBbXesm0SnLM"
+                    getParamConfig("web_url") + "/apropos/-Bowk3UBighAQ_8SQ2nQ"
                   }
                 >
                   Crédits

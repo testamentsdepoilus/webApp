@@ -15,8 +15,14 @@ class DateFilter extends React.Component {
       anchorEl: null,
     };
     this.handleHelpOpen = this.handleHelpOpen.bind(this);
+    this.handleHelpClose = this.handleHelpClose.bind(this);
   }
 
+  handleHelpClose(event) {
+    this.setState({
+      anchorEl: null,
+    });
+  }
   handleHelpOpen(event) {
     this.setState({
       anchorEl: this.state.anchorEl ? null : event.currentTarget,
@@ -50,6 +56,14 @@ class DateFilter extends React.Component {
             placement="bottom-end"
           >
             <div className="tooltip">
+              <Button
+                id="closeToolTip"
+                onClick={this.handleHelpClose}
+                title="Fermer l'aide à la recherche"
+                className="button close iconButton"
+              >
+                <i className="fas fa-times"></i>
+              </Button>
               <p>
                 Pour rechercher une date exacte, saisissez ou sélectionnez la
                 même date dans les champs «&nbsp;date de début&nbsp;» et

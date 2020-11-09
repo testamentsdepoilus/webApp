@@ -102,6 +102,7 @@ class TextSearch extends React.Component {
             filterLabel="recherche"
             autosuggest={true}
             showIcon={true}
+            iconPosition={"right"}
             customQuery={this.customQuery}
             URLParams={true}
             searchOperators={true}

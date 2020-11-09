@@ -330,6 +330,7 @@ class Results extends React.Component {
   // Render
   render() {
     const open = Boolean(this.state.anchorEl);
+    console.log("open :", open);
     const id = open ? "transitions-popper" : undefined;
     const open_search = Boolean(this.state.anchorElSearch);
     const id_search = open_search ? "transitions-popper" : undefined;
@@ -360,6 +361,14 @@ class Results extends React.Component {
                     placement="bottom-end"
                   >
                     <div className="tooltip">
+                      <Button
+                        id="closeToolTip"
+                        onClick={this.handleHelpClose}
+                        title="Fermer l'aide à la recherche"
+                        className="button close iconButton"
+                      >
+                        <i className="fas fa-times"></i>
+                      </Button>
                       <p className="popperTitle">Aide à la recherche :</p>
                       <p>
                         Vous pouvez saisir un mot ou plusieurs mots séparés par
