@@ -9,10 +9,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const SimpleCrypto = require("simple-crypto-js").default;
-const sgMail = require("@sendgrid/mail");
-const sendgridTransport = require("nodemailer-sendgrid-transport");
-console.log("api key :", process.env.SENDGRID_API_KEY);
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 require("dotenv").config();
 
 // use bodyParser to parse application/json content-type
@@ -45,7 +41,8 @@ let options = {
   scriptPath: process.env.py_path,
 };
 
-let auth = {};
+let auth = { email: process.env.auth_user, pass: process.env.auth_pass };
+
 client.search(
   {
     index: indexES,
@@ -113,53 +110,6 @@ client.search(
       }
 
       logger.error("ES connexion au serveur a échoué => " + err);
-    } else {
-      hits = result.body.hits.hits;
-      if (hits.length > 0) {
-        const admin = hits.filter((hit) => {
-          return (
-            hit._source["isAdmin"] === true &&
-            Boolean(hit._source["auth_config"])
-          );
-        });
-
-        if (admin.length > 0) {
-          auth = admin[0]._source["auth_config"];
-        }
-      } else {
-        // Add default user admin
-        const userData = {
-          first_name: "admin",
-          last_name: "admin",
-          user_name: "admin",
-          email: process.env.user_admin,
-          password: process.env.pass_admin,
-          created: new Date(),
-          confirmed: true,
-          isAdmin: true,
-          myBackups: {
-            myWills: [],
-            myTestators: [],
-            myPlaces: [],
-            myUnits: [],
-            mySearches: [],
-          },
-        };
-        bcrypt.hash(userData.password, 10, (err, hash) => {
-          userData.password = hash;
-          client.index(
-            {
-              index: indexES,
-              body: userData,
-            },
-            (err, result) => {
-              if (err) {
-                logger.error("Erreur indexation :  => " + err);
-              }
-            }
-          );
-        });
-      }
     }
   }
 );
@@ -213,35 +163,19 @@ router.post("/register", function (req, res, next) {
               });
 
               if (typeof auth === "object" && Object.keys(auth).length > 0) {
-                /*let transporter = nodemailer.createTransport({
-                  service: "gmail",
-                  auth: {
-                    user: auth.email,
-                    pass: simpleCrypto.decrypt(auth.password),
-                  },
-                })
-                console.log(process.env.sendgrid_apikey);
-                let transporter = nodemailer.createTransport(
-                  sendgridTransport({
-                    auth: {
-                      api_key: process.env.sendgrid_apikey, // SG password
-                    },
-                  })
-                );;*/
                 let transporter = nodemailer.createTransport({
-                  host: "smtp.sendgrid.net",
-                  port: 465,
-                  secure: true, // true for 465, false for other ports
+                  host: "smtp-relay.sendinblue.com",
+                  port: 587,
+                  secure: false, // true for 465, false for other ports
                   auth: {
-                    user: "apikey", // generated ethereal user
-                    pass:
-                      "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", // generated ethereal password
+                    user: auth.email, // generated ethereal user
+                    pass: auth.pass, // generated ethereal password
                   },
                 });
+
                 // verify connection configuration
                 transporter.verify(function (error, success) {
                   if (error) {
-                    console.log("in register :" + error);
                     logger.error("in register :" + error);
                     res.send({ status: 400, err: error });
                   } else {
@@ -265,7 +199,6 @@ router.post("/register", function (req, res, next) {
 
                     transporter.sendMail(mailOptions, function (err, info) {
                       if (err) {
-                        console.log("in register :" + err.message);
                         logger.error("in register :" + err.message);
                         res.send({ status: 400, err: err.message });
                       } else {
@@ -276,14 +209,12 @@ router.post("/register", function (req, res, next) {
                           },
                           (err, result) => {
                             if (err) {
-                              console.log("in create doc in ES :" + err);
                               logger.error("in register :" + err);
                               res.send({
                                 status: 400,
                                 err: "ES Connexion au serveur a échoué !",
                               });
                             } else {
-                              console.log("succes");
                               res.send({
                                 status: 200,
                                 res: userData.email + " registered",
@@ -297,57 +228,7 @@ router.post("/register", function (req, res, next) {
                 });
 
                 transporter.close();
-                /* const link =
-                  process.env.host + "/users/confirmation/" + emailToken;
-                const html =
-                  "<div>Bonjour " +
-                  userData.user_name +
-                  " <br/>" +
-                  "Merci de valider votre inscription au site d’édition numérique des testaments de Poilus en cliquant ici : <br/> <br/>" +
-                  "<a href=" +
-                  link +
-                  " style=\"text-align: center; font-family: 'Open Sans', 'Arial', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Lucida Grande', 'sans-serif'; color: #fff; background-color: #ee4e8b; border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; width: auto; line-height: 1.6; margin: 20px auto; padding: 15px 40px 15px 30px;\" > oui je valide mon inscription </a ></div>";
-                const msg = {
-                  to: userData.email, // Change to your recipient
-                  from: auth.email, // Change to your verified sender
-                  subject: "Validation d'inscription",
-                  html: html,
-                };
-
-                sgMail
-                  .send(msg)
-                  .then(() => {
-                    console.log("Email sent");
-                    client.index(
-                      {
-                        index: indexES,
-                        body: userData,
-                      },
-                      (err, result) => {
-                        if (err) {
-                          logger.error("in register :" + err);
-                          res.send({
-                            status: 400,
-                            err: "ES Connexion au serveur a échoué !",
-                          });
-                        } else {
-                          res.send({
-                            status: 200,
-                            res: userData.email + " registered",
-                          });
-                        }
-                      }
-                    );
-                  })
-                  .catch((error) => {
-                    console.error("catch :", error);
-                    logger.error("in register :" + error);
-                    res.send({ status: 400, err: error });
-                  });*/
               } else {
-                console.log(
-                  "in register : Merci de configurer le serveur d'envoie d'e-mail !"
-                );
                 logger.error(
                   "in register : Merci de configurer le serveur d'envoie d'e-mail !"
                 );
@@ -357,7 +238,6 @@ router.post("/register", function (req, res, next) {
                 });
               }
             } catch (e) {
-              console.log("catch :", e);
               logger.error("in register :" + e);
               res.send({
                 status: 400,
@@ -591,10 +471,12 @@ router.post("/updateConfigMail", function (req, res, next) {
         if (idx !== -1) {
           let isFailed = false;
           let transporter = nodemailer.createTransport({
-            service: "gmail",
+            host: "smtp-relay.sendinblue.com",
+            port: 587,
+            secure: false, // true for 465, false for other ports
             auth: {
-              user: email,
-              pass: password,
+              user: auth.email, // generated ethereal user
+              pass: auth.pass, // generated ethereal password
             },
           });
 
@@ -689,23 +571,14 @@ router.post("/resetPassWord", function (req, res, next) {
 
             if (typeof auth === "object" && Object.keys(auth).length > 0) {
               let transporter = nodemailer.createTransport({
-                service: "gmail",
+                host: "smtp-relay.sendinblue.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
                 auth: {
-                  user: auth.email,
-                  pass: simpleCrypto.decrypt(auth.password),
+                  user: auth.email, // generated ethereal user
+                  pass: auth.pass, // generated ethereal password
                 },
               });
-              /*  let transporter = nodemailer.createTransport({
-                host: "smtp2.ensea.fr", // hostname
-                port: 465, // port for secure SMTP
-                secure: true,
-                auth: Boolean(auth.email)
-                  ? {
-                      user: auth.email,
-                      pass: simpleCrypto.decrypt(auth.password),
-                    }
-                  : {},
-              });*/
 
               // verify connection configuration
               transporter.verify(function (error, success) {
@@ -716,7 +589,7 @@ router.post("/resetPassWord", function (req, res, next) {
                   });
                 } else {
                   const link =
-                    process.env.host_web + "/reinitialiserMDP/" + emailToken;
+                    process.env.host + "/reinitialiserMDP/" + emailToken;
                   const html =
                     "<div>Bonjour " +
                     hits[0]._source["user_name"] +
