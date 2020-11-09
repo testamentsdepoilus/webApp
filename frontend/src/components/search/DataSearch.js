@@ -41,7 +41,7 @@ export default class CustumerDataSearch extends Component {
 
   handleTestatorChange(value) {
     this.setState({
-      testator: value.split("+")[1] + " " + label.split("+")[0],
+      testator: value.split("+")[1] + " " + value.split("+")[0],
     });
   }
 
