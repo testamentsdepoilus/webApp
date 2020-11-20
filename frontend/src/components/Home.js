@@ -42,6 +42,7 @@ class Home extends Component {
     this.handlePlaceChange = this.handlePlaceChange.bind(this);
     this.handleMoreNewClick = this.handleMoreNewClick.bind(this);
     this.handleMoreArticleClick = this.handleMoreArticleClick.bind(this);
+    this.customQuery = this.customQuery.bind(this);
   }
 
   renderResultStats(stats) {
@@ -70,10 +71,24 @@ class Home extends Component {
 
   handleNameChange(value) {
     this.setState({
-      testator_name: value,
+      testator_name:
+        value === "" ? value : value.split("+")[1] + " " + value.split("+")[0],
     });
   }
-
+  customQuery = function (value, props) {
+    if (Boolean(value)) {
+      return {
+        query: {
+          match: {
+            "testator.name": {
+              query: value,
+              operator: "and",
+            },
+          },
+        },
+      };
+    }
+  };
   handlePlaceChange(value) {
     this.setState({
       place: value,
@@ -448,6 +463,7 @@ class Home extends Component {
                                 : "select selected",
                           }}
                           onChange={this.handleNameChange}
+                          customQuery={this.customQuery}
                         />
                       </Box>
                       {this.state.testator_name !== "" ? (
