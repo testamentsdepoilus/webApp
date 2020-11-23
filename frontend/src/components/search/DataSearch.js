@@ -24,6 +24,7 @@ export default class CustumerDataSearch extends Component {
     this.handleNotorialeChange = this.handleNotorialeChange.bind(this);
     this.handleCoteChange = this.handleCoteChange.bind(this);
     this.handleInstitutionChange = this.handleInstitutionChange.bind(this);
+    this.customQuery = this.customQuery.bind(this);
   }
   handleClick() {
     this.setState({
@@ -41,7 +42,8 @@ export default class CustumerDataSearch extends Component {
 
   handleTestatorChange(value) {
     this.setState({
-      testator: value.split("+")[1] + " " + value.split("+")[0],
+      testator:
+        value === "" ? value : value.split("+")[1] + " " + value.split("+")[0],
     });
   }
 
@@ -74,6 +76,21 @@ export default class CustumerDataSearch extends Component {
       occupation: value,
     });
   }
+
+  customQuery = function (value, props) {
+    if (Boolean(value)) {
+      return {
+        query: {
+          match: {
+            "testator.name": {
+              query: value,
+              operator: "and",
+            },
+          },
+        },
+      };
+    }
+  };
 
   render() {
     return (
@@ -109,13 +126,14 @@ export default class CustumerDataSearch extends Component {
               value={this.state.testator}
               size={2000}
               sortBy="asc"
-              showCount={true}
+              showCount={false}
               autosuggest={true}
               placeholder="Nom du testateur"
               URLParams={true}
               showSearch={true}
               searchPlaceholder="Saisir un nom de testateur"
               onChange={this.handleTestatorChange}
+              customQuery={this.customQuery}
               renderItem={(label, count, isSelected) => (
                 <div>
                   {label.split("+")[1] + " "}

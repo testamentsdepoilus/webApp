@@ -4,6 +4,7 @@ import {
   ReactiveBase,
   ReactiveComponent,
   SingleDropdownList,
+  MultiList,
 } from "@appbaseio/reactivesearch";
 import {
   getTotalHits,
@@ -23,6 +24,7 @@ import {
   Button,
 } from "@material-ui/core";
 import DateFilter from "./search/DateFilter";
+import ApexDonutChartWrapper from "../utils/ApexDonutChartWrapper";
 
 class Home extends Component {
   constructor(props) {
@@ -42,6 +44,7 @@ class Home extends Component {
     this.handlePlaceChange = this.handlePlaceChange.bind(this);
     this.handleMoreNewClick = this.handleMoreNewClick.bind(this);
     this.handleMoreArticleClick = this.handleMoreArticleClick.bind(this);
+    this.customQuery = this.customQuery.bind(this);
   }
 
   renderResultStats(stats) {
@@ -70,9 +73,25 @@ class Home extends Component {
 
   handleNameChange(value) {
     this.setState({
-      testator_name: value,
+      testator_name:
+        value === "" ? value : value.split("+")[1] + " " + value.split("+")[0],
     });
   }
+
+  customQuery = function (value, props) {
+    if (Boolean(value)) {
+      return {
+        query: {
+          match: {
+            "testator.name": {
+              query: value,
+              operator: "and",
+            },
+          },
+        },
+      };
+    }
+  };
 
   handlePlaceChange(value) {
     this.setState({
@@ -252,147 +271,162 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-        <Grid container direction="row" spacing={5}>
-          <Grid item xs={12} lg={4} className="rech_actu_viz">
-            <Grid container direction="row" spacing={2}>
-              <Grid item xs={12} md={4} lg={12} id="etat_recherche">
-                {Boolean(this.state.selectedArticle) ? (
+        <ReactiveBase
+          app={getParamConfig("es_index_wills")}
+          url={getParamConfig("es_host_with_auth")}
+          type="_doc"
+        >
+          <Grid container direction="row" spacing={5}>
+            <Grid item xs={12} lg={4} className="rech_actu_viz">
+              <Grid container direction="row" spacing={2}>
+                <Grid item xs={12} md={4} lg={12} id="etat_recherche">
+                  {Boolean(this.state.selectedArticle) ? (
+                    <Paper className="card">
+                      <h2 className="card-title">
+                        <i className="fas fa-bullhorn"></i> État de la recherche
+                      </h2>
+                      <h3> {this.state.selectedArticle._source["title"]} </h3>
+                      <div
+                        className="content"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            this.state.selectedArticle._source["summary"] !== ""
+                              ? this.state.selectedArticle._source["summary"]
+                              : this.state.selectedArticle._source["detail"],
+                        }}
+                      ></div>
+                      <Box display="flex" justifyContent="flex-end">
+                        <Button
+                          className="button outlined secondary-light"
+                          aria-label="Lire la suite"
+                          onClick={this.handleMoreArticleClick}
+                        >
+                          Lire la suite
+                        </Button>
+                      </Box>
+                    </Paper>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+                <Grid item xs={12} md={4} lg={12} id="actualites">
+                  {Boolean(this.state.selectedNews) ? (
+                    <Paper className="card">
+                      <h2 className="card-title">
+                        <i className="far fa-newspaper"></i> Actualités
+                      </h2>
+                      <h3> {this.state.selectedNews._source["title"]} </h3>
+                      <div
+                        className="content"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            this.state.selectedNews._source["summary"] !== ""
+                              ? this.state.selectedNews._source["summary"]
+                              : this.state.selectedNews._source["detail"],
+                        }}
+                      ></div>
+                      <Box display="flex" justifyContent="flex-end">
+                        <Button
+                          className="button outlined secondary-light"
+                          aria-label="Lire la suite"
+                          onClick={this.handleMoreNewClick}
+                        >
+                          Lire la suite
+                        </Button>
+                      </Box>
+                    </Paper>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+                <Grid item xs={12} md={4} lg={12} id="visualisation">
                   <Paper className="card">
                     <h2 className="card-title">
-                      <i className="fas fa-bullhorn"></i> État de la recherche
+                      <i className="far fa-chart-bar"></i> Visualiser les
+                      données
                     </h2>
-                    <h3> {this.state.selectedArticle._source["title"]} </h3>
-                    <div
-                      className="content"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          this.state.selectedArticle._source["summary"] !== ""
-                            ? this.state.selectedArticle._source["summary"]
-                            : this.state.selectedArticle._source["detail"],
-                      }}
-                    ></div>
-                    <Box display="flex" justifyContent="flex-end">
-                      <Button
-                        className="button outlined secondary-light"
-                        aria-label="Lire la suite"
-                        onClick={this.handleMoreArticleClick}
-                      >
-                        Lire la suite
-                      </Button>
-                    </Box>
-                  </Paper>
-                ) : (
-                  ""
-                )}
-              </Grid>
-              <Grid item xs={12} md={4} lg={12} id="actualites">
-                {Boolean(this.state.selectedNews) ? (
-                  <Paper className="card">
-                    <h2 className="card-title">
-                      <i className="far fa-newspaper"></i> Actualités
-                    </h2>
-                    <h3> {this.state.selectedNews._source["title"]} </h3>
-                    <div
-                      className="content"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          this.state.selectedNews._source["summary"] !== ""
-                            ? this.state.selectedNews._source["summary"]
-                            : this.state.selectedNews._source["detail"],
-                      }}
-                    ></div>
-                    <Box display="flex" justifyContent="flex-end">
-                      <Button
-                        className="button outlined secondary-light"
-                        aria-label="Lire la suite"
-                        onClick={this.handleMoreNewClick}
-                      >
-                        Lire la suite
-                      </Button>
-                    </Box>
-                  </Paper>
-                ) : (
-                  ""
-                )}
-              </Grid>
-              <Grid item xs={12} md={4} lg={12} id="visualisation">
-                <Paper className="card">
-                  <h2 className="card-title">
-                    <i className="far fa-chart-bar"></i> Visualiser les données
-                  </h2>
 
-                  <iframe
-                    src="https://edition-testaments-de-poilus.huma-num.fr/kibana7/app/kibana#/visualize/edit/2c250e30-1d2a-11eb-9438-2500570ff9d9?embed=true&_g=()"
-                    className="chart"
-                    id="chart"
-                    title="visualisation"
-                  ></iframe>
-                </Paper>
+                    <ReactiveComponent
+                      componentId="chart"
+                      defaultQuery={() => ({
+                        ...MultiList.generateQueryOptions({
+                          dataField: "will_identifier.institution.keyword",
+                          size: 20,
+                          sortBy: "asc",
+                        }),
+                      })}
+                      render={({ value, setQuery, aggregations }) => (
+                        <ApexDonutChartWrapper
+                          selectedValue={value}
+                          aggregations={aggregations}
+                          setQuery={setQuery}
+                          dataField="will_identifier.institution.keyword"
+                        />
+                      )}
+                    />
+                  </Paper>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
 
-          <Grid item xs={12} lg={8}>
-            <Grid item id="random_wills">
-              <Paper className="card">
-                <h2 className="card-title">
-                  <i className="fas fa-folder-open"></i> Quelques exemples de
-                  testaments
-                </h2>
-                <Grid
-                  container
-                  direction="row"
-                  align="center"
-                  spacing={0}
-                  className="random_wills"
-                >
-                  {this.state.images.map((tile) => (
-                    <Grid
-                      className="card"
-                      key={tile._id}
-                      item
-                      xs={12}
-                      sm={6}
-                      md={3}
-                    >
-                      <a
-                        href={
-                          getParamConfig("web_url") + "/testament/" + tile._id
-                        }
+            <Grid item xs={12} lg={8}>
+              <Grid item id="random_wills">
+                <Paper className="card">
+                  <h2 className="card-title">
+                    <i className="fas fa-folder-open"></i> Quelques exemples de
+                    testaments
+                  </h2>
+                  <Grid
+                    container
+                    direction="row"
+                    align="center"
+                    spacing={0}
+                    className="random_wills"
+                  >
+                    {this.state.images.map((tile) => (
+                      <Grid
+                        className="card"
+                        key={tile._id}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={3}
                       >
-                        <img
-                          src={
-                            tile._source["will_pages"][0]["picture_url"] +
-                            "/full/full/0/default.jpg"
-                          }
-                          alt={tile._source["will_pages"][0]["picture_url"]}
-                        />
-                      </a>
-                      <div>
                         <a
-                          className="testatorName"
                           href={
                             getParamConfig("web_url") + "/testament/" + tile._id
                           }
                         >
-                          {tile._source["testator.name"].split("+")[1] + " "}
-                          <span className="text-uppercase">
-                            {tile._source["testator.name"].split("+")[0]}
-                          </span>
+                          <img
+                            src={
+                              tile._source["will_pages"][0]["picture_url"] +
+                              "/full/full/0/default.jpg"
+                            }
+                            alt={tile._source["will_pages"][0]["picture_url"]}
+                          />
                         </a>
-                        <div>Cote {tile._source["will_identifier.cote"]}</div>
-                      </div>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Paper>
-            </Grid>
-            <Box className="bg-light-gray" mt={2.5}>
-              <ReactiveBase
-                app={getParamConfig("es_index_wills")}
-                url={getParamConfig("es_host_with_auth")}
-                type="_doc"
-              >
+                        <div>
+                          <a
+                            className="testatorName"
+                            href={
+                              getParamConfig("web_url") +
+                              "/testament/" +
+                              tile._id
+                            }
+                          >
+                            {tile._source["testator.name"].split("+")[1] + " "}
+                            <span className="text-uppercase">
+                              {tile._source["testator.name"].split("+")[0]}
+                            </span>
+                          </a>
+                          <div>Cote {tile._source["will_identifier.cote"]}</div>
+                        </div>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Paper>
+              </Grid>
+              <Box className="bg-light-gray" mt={2.5}>
                 <Grid container direction="row" spacing={0}>
                   <Grid className="card searchForm" item xs={12} md={6}>
                     <h2 className="card-title">
@@ -421,7 +455,7 @@ class Home extends Component {
                           componentId="nom_testateur"
                           dataField="testator.name.keyword"
                           value={this.state.testator_name}
-                          size={1000}
+                          size={2000}
                           sortBy="asc"
                           showCount={false}
                           autosuggest={true}
@@ -430,6 +464,7 @@ class Home extends Component {
                           showSearch={true}
                           placeholder="Saisissez un nom de testateur"
                           searchPlaceholder="Saisissez un nom de testateur"
+                          customQuery={this.customQuery}
                           renderItem={(label, count, isSelected) => (
                             <div>
                               {label.split("+")[1][0].toUpperCase() +
@@ -681,10 +716,10 @@ class Home extends Component {
                     }}
                   />
                 </Box>
-              </ReactiveBase>
-            </Box>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </ReactiveBase>
       </div>
     );
   }

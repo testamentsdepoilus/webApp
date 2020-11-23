@@ -1,24 +1,12 @@
 import React, { Component } from "react";
-import {
-  TextField,
-  Button,
-  Grid,
-  InputAdornment,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Breadcrumbs,
-  Link,
-} from "@material-ui/core";
+import { TextField, Button, Grid, Breadcrumbs, Link } from "@material-ui/core";
 import {
   getUserToken,
   updateConfigMail,
   getParamConfig,
   updateRole,
 } from "../../utils/functions";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import CloseIcon from "@material-ui/icons/Close";
+
 import { Link as RouterLink } from "react-router-dom";
 
 class ConfigMail extends Component {
