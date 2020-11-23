@@ -92,6 +92,21 @@ export default class CustumerDataSearch extends Component {
     });
   }
 
+  customQuery = function (value, props) {
+    if (Boolean(value)) {
+      return {
+        query: {
+          match: {
+            "testator.name": {
+              query: value,
+              operator: "and",
+            },
+          },
+        },
+      };
+    }
+  };
+
   render() {
     return (
       <div>
@@ -126,7 +141,7 @@ export default class CustumerDataSearch extends Component {
               value={this.state.testator}
               size={2000}
               sortBy="asc"
-              showCount={true}
+              showCount={false}
               autosuggest={true}
               placeholder="Nom du testateur"
               URLParams={true}

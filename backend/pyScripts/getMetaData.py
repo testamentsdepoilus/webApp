@@ -153,7 +153,7 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                 doc['contributions'].append(contribution)
     # will identifier
     ms_identifier = file_desc.sourceDesc.msDesc.msIdentifier
-    doc['will_identifier.institution'] = ms_identifier.institution.string.strip()
+    doc['will_identifier.institution'] = ms_identifier.institution.string.replace("’", "'").strip()
     doc['will_identifier.collection'] = ms_identifier.collection.string.strip()
     doc['will_identifier.idno'] = ms_identifier.idno.string.split("(")[
         0].strip()
@@ -222,14 +222,15 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     1].split('-')[1].strip()
                 place_tag = soup_place.find(
                     "place", {'xml:id': will_place['ref'].split('#')[1]})
-                doc['will_contents.will_place_norm'] = place_tag.settlement.string.string
-                if doc['will_contents.will_place_norm'] not in doc["will_contents.place"]:
-                    doc["will_contents.place"].append(
-                        doc['will_contents.will_place_norm'])
-                if place_tag.geo is not None:
-                    geo_point = place_tag.geo.string.split(' ')
-                    doc['will_contents.will_place'] = {
-                        "lat": geo_point[0], "lon": geo_point[1]}
+                if place_tag is not None:
+                    doc['will_contents.will_place_norm'] = place_tag.settlement.string.string
+                    if doc['will_contents.will_place_norm'] not in doc["will_contents.place"]:
+                        doc["will_contents.place"].append(
+                            doc['will_contents.will_place_norm'])
+                    if place_tag.geo is not None:
+                        geo_point = place_tag.geo.string.split(' ')
+                        doc['will_contents.will_place'] = {
+                            "lat": geo_point[0], "lon": geo_point[1]}
 
         pers_tag = soup_pers.find("person", {'xml:id': testator_ref})
         if pers_tag is not None:
@@ -441,7 +442,7 @@ if __name__ == "__main__":
     # for file_ in os.listdir('../../../../data/toto/'):
     # will_342_AN_0273_2020-04-08_10-44-17_V2.xml
     fileTei = os.path.join('../client/build/files/wills/',
-                           "will_AD78_0037.xml")
+                           "will_AD78_0041.xml")
     # fileTei = '/home/adoula/Downloads/will_AN_0001.xml'
     persFile = '../client/build/files/notices/personnes.xml'
     placeFile = '../client/build/files/notices/lieux.xml'
