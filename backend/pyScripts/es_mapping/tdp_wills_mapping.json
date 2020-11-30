@@ -180,6 +180,10 @@
       },
       "will_contents": {
         "properties": {
+          "will_date_text": {
+            "type": "object",
+            "enabled": false
+          },
           "will_date": {
             "type": "date"
           },

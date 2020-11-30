@@ -166,11 +166,18 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
     if phys_desc.objectDesc.supportDesc.support is not None:
         doc['will_physDesc.support'] = phys_desc.objectDesc.supportDesc.support.string
     if phys_desc.objectDesc.supportDesc.extent is not None:
-        doc['will_physDesc.supportDesc'] = phys_desc.objectDesc.supportDesc.extent.dimensions.previous_element
-        doc['will_physDesc.dim'] = dict()
-        doc['will_physDesc.dim']["unit"] = phys_desc.objectDesc.supportDesc.extent.dimensions['unit']
-        doc['will_physDesc.dim']["height"] = phys_desc.objectDesc.supportDesc.extent.dimensions.height.string.strip()
-        doc['will_physDesc.dim']["width"] = phys_desc.objectDesc.supportDesc.extent.dimensions.width.string.strip()
+        doc['will_physDesc.supportDesc'] = []
+        for item in phys_desc.objectDesc.supportDesc.extent.find_all("dimensions"):
+            support = dict()
+            support["text"] = item.previous_element
+            support['dim'] = dict()
+            if item['unit'] is not None:
+                support['dim']["unit"] = item['unit']
+            if item.height is not None:
+                support['dim']["height"] = item.height.string.strip()
+            if item.width is not None:
+                support['dim']["width"] = item.width.string.strip()
+            doc['will_physDesc.supportDesc'].append(support)
     if phys_desc.handDesc is not None:
         doc['will_physDesc.handDesc'] = phys_desc.handDesc.get_text().strip()
 
@@ -205,18 +212,22 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
 
         doc["will_contents.place"] = []
         will_date = ms_contents.find(type="willDate")
-        if will_date is not None:
+        doc['will_contents.will_date_text'] = ""
+        doc['will_contents.will_date'] = []
+        doc['will_contents.will_date_range'] = []
+        for will_date in ms_contents.find_all(type="willDate"):
+            doc['will_contents.will_date_text'] += will_date.next_element.string
             if 'when' in will_date.attrs:
-                doc['will_contents.will_date'] = will_date['when']
-                doc['will_contents.will_date_range'] = {
-                    "gte": will_date['when'], "lte": will_date['when']}
+                doc['will_contents.will_date'].append(will_date['when'])
+                doc['will_contents.will_date_range'].append({
+                    "gte": will_date['when'], "lte": will_date['when']})
             elif 'notAfter' in will_date.attrs and 'notBefore' in will_date.attrs:
-                doc['will_contents.will_date'] = will_date['notBefore']
-                doc['will_contents.will_date_range'] = {
-                    "gte": will_date['notBefore'], "lte": will_date['notAfter']}
+                doc['will_contents.will_date'].append(will_date['notBefore'])
+                doc['will_contents.will_date_range'].append({
+                    "gte": will_date['notBefore'], "lte": will_date['notAfter']})
+            doc['will_contents.will_date_text'] += will_date.next_sibling.string
         will_place = ms_contents.find(type="willPlace")
         if will_place is not None:
-
             if 'ref' in will_place.attrs:
                 doc["will_contents.will_place_ref"] = will_place['ref'].split('#')[
                     1].split('-')[1].strip()
@@ -273,14 +284,15 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     1].split('-')[1].strip()
                 place_tag = soup_place.find(
                     "place", {'xml:id': birth.placeName['ref'].split('#')[1]})
-                if place_tag.geo is not None:
-                    geo_point = place_tag.geo.string.split(' ')
-                    doc['will_contents.birth_place'] = {
-                        "lat": geo_point[0], "lon": geo_point[1]}
-                    doc['will_contents.birth_place_norm'] = place_tag.settlement.string
-                    if doc['will_contents.birth_place_norm'] not in doc["will_contents.place"]:
-                        doc["will_contents.place"].append(
-                            doc['will_contents.birth_place_norm'])
+                if place_tag is not None:
+                    if place_tag.geo is not None:
+                        geo_point = place_tag.geo.string.split(' ')
+                        doc['will_contents.birth_place'] = {
+                            "lat": geo_point[0], "lon": geo_point[1]}
+                        doc['will_contents.birth_place_norm'] = place_tag.settlement.string
+                        if doc['will_contents.birth_place_norm'] not in doc["will_contents.place"]:
+                            doc["will_contents.place"].append(
+                                doc['will_contents.birth_place_norm'])
 
             death = pers_tag.death
             # if 'NOT' not in death.date['when'] and 'MDH' not in death.date['when']:
@@ -313,21 +325,21 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                     doc['will_contents.death_place_ref'] = death.placeName['ref'].split('#')[1].split('-')[1].strip()
                     place_tag = soup_place.find(
                         "place", {'xml:id': death.placeName['ref'].split('#')[1]})
-
-                    if place_tag.geo is not None:
-                        geo_point = place_tag.geo.string.split(' ')
-                        doc['will_contents.death_place'] = {
-                            "lat": geo_point[0], "lon": geo_point[1]}
-                    if place_tag.settlement.string is not None:
-                        doc['will_contents.death_place_norm'] = place_tag.settlement.string
-                        if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
-                            doc["will_contents.place"].append(
-                                doc['will_contents.death_place_norm'])
-                    elif place_tag.geogName.string is not None:
-                        doc['will_contents.death_place_norm'] = place_tag.geogName.string
-                        if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
-                            doc["will_contents.place"].append(
-                                doc['will_contents.death_place_norm'])
+                    if place_tag is not None:
+                        if place_tag.geo is not None:
+                            geo_point = place_tag.geo.string.split(' ')
+                            doc['will_contents.death_place'] = {
+                                "lat": geo_point[0], "lon": geo_point[1]}
+                        if place_tag.settlement.string is not None:
+                            doc['will_contents.death_place_norm'] = place_tag.settlement.string
+                            if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
+                                doc["will_contents.place"].append(
+                                    doc['will_contents.death_place_norm'])
+                        elif place_tag.geogName.string is not None:
+                            doc['will_contents.death_place_norm'] = place_tag.geogName.string
+                            if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
+                                doc["will_contents.place"].append(
+                                    doc['will_contents.death_place_norm'])
                 if death.placeName.string is not None:
                     doc['will_contents.death_place_text'] = death.placeName.string
                     if isinstance(death.placeName.next_sibling, NavigableString) and death.placeName.next_sibling.string != "\n":
@@ -359,7 +371,8 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
     # will provenance
     will_provenance = file_desc.sourceDesc.msDesc.history.provenance.orgName
     doc['will_provenance'] = will_provenance.string
-
+    if will_provenance.has_attr('ref'):
+        doc['will_provenance_ref'] = will_provenance['ref']
     # picture (page scan) id & url
     facsimile = soup.find("facsimile")
     url_base = facsimile['xml:base']
@@ -442,15 +455,15 @@ if __name__ == "__main__":
     # for file_ in os.listdir('../../../../data/toto/'):
     # will_342_AN_0273_2020-04-08_10-44-17_V2.xml
     fileTei = os.path.join('../client/build/files/wills/',
-                           "will_AD78_0041.xml")
-    # fileTei = '/home/adoula/Downloads/will_AN_0001.xml'
+                           "will_AD95_0034.xml")
+
     persFile = '../client/build/files/notices/personnes.xml'
     placeFile = '../client/build/files/notices/lieux.xml'
     configFile = 'config.json'
     transcription_ = transcription(fileTei, configFile)
     edition_ = edition(fileTei, configFile)
     doc = get_meta_data(fileTei, persFile, placeFile, transcription_, edition_)
-    print(doc["will_contents.place"])
+    print(doc)
     print("**************************************")
     # print(doc['will_pages'][0]['edition'])
     print("**************************************")

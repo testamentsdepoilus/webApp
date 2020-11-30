@@ -13,4 +13,4 @@ frontend/.env.development
 frontend/.env.development-org
 frontend/.env.production
 frontend/.idea/
-backend/.gitignore
+backend/logs

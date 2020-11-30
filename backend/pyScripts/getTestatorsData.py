@@ -126,7 +126,16 @@ def get_meta_data(file_tei):
 				list_note = pers.note.find_all("p")
 				if len(list_note) > 0:
 					for element_p in list_note:
-						doc['note_history'].append(element_p.string.strip())
+						note_ = dict()
+						text = element_p.next_element
+						if isinstance(text, NavigableString):
+							note_["text"] = text.strip()
+							ref = text.next_element
+							if ref is not None and ref.name == "ref":
+								note_["ref_name"] = ref.get_text()
+								note_["ref_id"] = ref["target"].split('-')[1]
+							doc['note_history'].append(note_)
+
 
 		figure = pers.figure
 		if figure is not None:
@@ -138,11 +147,11 @@ def get_meta_data(file_tei):
 
 
 if __name__ == "__main__":
-	# fileTei = "../client/build/files/notices/persons.xml"
-	fileTei = "/home/adoula/Downloads/personnes.xml"
+	fileTei = "../client/build/files/notices/personnes.xml"
+	# fileTei = "/home/adoula/Downloads/personnes.xml"
 	output = get_meta_data(fileTei)
 
 	for pers in output:
 		# print(pers['id'] + ": " + pers["birth.date_text"])
-		if pers['id'] == '78':
-			print( pers["affiliation.orgName"])
+		# if pers['id'] == '10':
+		print( pers["note_history"])

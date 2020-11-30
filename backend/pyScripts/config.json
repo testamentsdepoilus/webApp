@@ -1,6 +1,6 @@
 {
   "tags": {
-    "p": ["fw", "dateline", "head", "signed"],
+    "p": ["fw", "dateline", "head"],
     "div": ["pb", "postscript"],
     "br": ["lb"],
     "li": ["item"],
@@ -35,7 +35,8 @@
       "subst",
       "del",
       "space",
-      "gap"
+      "gap",
+      "signed"
     ]
   },
   "attrs": ["type", "reason", "place", "agent", "function", "break", "dim"],

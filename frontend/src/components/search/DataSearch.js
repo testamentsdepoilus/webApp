@@ -47,21 +47,6 @@ export default class CustumerDataSearch extends Component {
     });
   }
 
-  customQuery = function (value, props) {
-    if (Boolean(value)) {
-      return {
-        query: {
-          match: {
-            "testator.name": {
-              query: value,
-              operator: "and",
-            },
-          },
-        },
-      };
-    }
-  };
-
   handleUnitChange(value) {
     this.setState({
       unit: value,

@@ -15,6 +15,7 @@ import {
   Button,
   Tooltip,
   CircularProgress,
+  Popper,
 } from "@material-ui/core";
 
 import GeoMap from "../utils/GeoMap";
@@ -30,6 +31,7 @@ export default class PlaceDisplay extends Component {
       place_id: this.props.id,
       myPlaces: [],
       isLoading: false,
+      anchorEl: null,
     };
 
     this.months = [
@@ -50,6 +52,8 @@ export default class PlaceDisplay extends Component {
     this.handleExportClick = this.handleExportClick.bind(this);
     this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
     this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
+    this.handleHelpOpen = this.handleHelpOpen.bind(this);
+    this.handleHelpClose = this.handleHelpClose.bind(this);
   }
 
   handleExportClick() {
@@ -347,8 +351,19 @@ export default class PlaceDisplay extends Component {
       });
     }
   }
-
+  handleHelpClose(event) {
+    this.setState({
+      anchorEl: null,
+    });
+  }
+  handleHelpOpen(event) {
+    this.setState({
+      anchorEl: this.state.anchorEl ? null : event.currentTarget,
+    });
+  }
   render() {
+    const open = Boolean(this.state.anchorEl);
+    const id = open ? "transitions-popper" : undefined;
     let output = null;
     if (this.props.data) {
       const place_uri = getParamConfig("web_url") + "/place/" + this.props.id;
@@ -440,7 +455,60 @@ export default class PlaceDisplay extends Component {
                     </Tooltip>
                   )}
                 </Box>
-
+                <Box className="d-flex" justifyContent="flex-end" key={3}>
+                  <div className="p-relative">
+                    <Button
+                      aria-describedby={id}
+                      onClick={this.handleHelpOpen}
+                      style={{ cursor: "help" }}
+                      className="button iconButton"
+                    >
+                      <i className="fas fa-question-circle"></i>
+                    </Button>
+                    <Popper
+                      id={id}
+                      open={open}
+                      anchorEl={this.state.anchorEl}
+                      placement="right-start"
+                    >
+                      <div className="tooltip">
+                        <Button
+                          id="closeToolTip"
+                          onClick={this.handleHelpClose}
+                          title="Fermer l'aide à la recherche"
+                          className="button close iconButton"
+                        >
+                          <i className="fas fa-times"></i>
+                        </Button>
+                        <ul>
+                          <li>
+                            [TES] = testateur : informations provenant du corps
+                            du testament rédigé par le Poilu ;
+                          </li>
+                          <li>
+                            [NOT] = notaire : informations provenant de la
+                            couverture de la minute notariale ou dans le
+                            jugement que cette minute contient ;
+                          </li>
+                          <li>
+                            [MDH] = mémoire des hommes : informations provenant
+                            de la fiche de la base de données des Morts pour la
+                            France de la Première Guerre mondiale ;
+                          </li>
+                          <li>
+                            [EC] = État civil : information provenant de
+                            registres ou d’actes d’état civil (conservés le plus
+                            souvent aux archives départementales) ;
+                          </li>
+                          <li>
+                            [AS] = autres sources : informations provenant
+                            d’autres sources
+                          </li>
+                        </ul>
+                      </div>
+                    </Popper>
+                  </div>
+                </Box>
                 <div
                   key={2}
                   ref={this.myRef}

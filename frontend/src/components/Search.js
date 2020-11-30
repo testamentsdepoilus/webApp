@@ -18,7 +18,6 @@ class Search extends Component {
         app={getParamConfig("es_index_wills")}
         url={getParamConfig("es_host_with_auth")}
         type="_doc"
-        enableAppbase={true}
       >
         <div className="search">
           <Breadcrumbs

@@ -7,12 +7,16 @@ import json
 def wrap_ul(tags):
     all_li = tags.find_all("li")
     if len(all_li) > 0 and all_li[0].parent.name != "ul":
+        for item in tags:
+            if item.find("li") and item.name == "p":
+                item.attrs = {"class": "p_ul"}
+            else:
+                break
         ul = BeautifulSoup(features="html.parser").new_tag('ul')
         all_li[0].insert_before(ul)
         for li in all_li:
             if li.parent.name != "ul":
                 ul.append(li)
-
 
 def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
     if tag.parent.name and tag.parent.name != "div":
@@ -37,6 +41,15 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
                     new_tag.extend(prev_tags[len(prev_tags) - 1][key])
                     tags.append(new_tag)
                     prev_tags = []
+            for element in tags:
+                if element not in ['\n', ' ']:
+                    if isinstance(element, NavigableString) or element.name not in ["p", "ul", "li"]:
+                        new_tag = BeautifulSoup(
+                            features="html.parser").new_tag('p')
+                        new_tag.extend(tags)
+                        tags.clear()
+                        tags.append(new_tag)
+                        break
             page_div.extend(tags)
             for element in page_div(text=lambda it: isinstance(it, Comment)):
                 element.extract()
@@ -49,8 +62,6 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
     for item in tag.next_siblings:
         if item is not None and item.name is not None:
             if item.get('class') == "pb":
-                # print(prev_tags)
-                # print("***************************************")
                 if len(prev_tags) > 0:
                     for i in range(len(prev_tags)-1):
                         for key in prev_tags[i].keys():
@@ -65,10 +76,23 @@ def parse_paragraph(tag, tags, page_div, output, type_class, prev_tags):
                         new_tag.extend(prev_tags[len(prev_tags) - 1][key])
                         tags.append(new_tag)
                         prev_tags = []
+                # p_tag = BeautifulSoup(
+                #     features="html.parser").new_tag("p")
+                # p_tag.extend(tags)
+
+                for element in tags:
+                    if element not in ['\n', ' ']:
+                        if isinstance(element, NavigableString) or element.name not in ["p", "ul", "li"]:
+                            new_tag = BeautifulSoup(
+                                features="html.parser").new_tag('p')
+                            new_tag.extend(tags)
+                            tags.clear()
+                            tags.append(new_tag)
+                            break
                 page_div.extend(tags)
                 for element in page_div(text=lambda it: isinstance(it, Comment)):
                     element.extract()
-
+                wrap_ul(page_div)
                 output.append(str(page_div))
                 tags = []
                 page_div = BeautifulSoup(features="html.parser").new_tag('div')
@@ -191,8 +215,8 @@ def edition(file_tei, config_file):
                         tag.next_element, tags, page_div, output_, "edition", prev_tags)
                 elif tag.name == "p":
                     for element in tags:
-                        if element not in ['\n', ' '] and element.name is not None:
-                            if element.name != "p":
+                        if element not in ['\n', ' ']:
+                            if isinstance(element, NavigableString) or element.name not in ["p", "ul", "li"]:
                                 new_tag = BeautifulSoup(
                                     features="html.parser").new_tag('p')
                                 new_tag.extend(tags)
@@ -275,8 +299,8 @@ def transcription(file_tei, config_file):
                 elif tag.name == "p":
                     # tags = list(filter(lambda a: a != '\n', tags))
                     for element in tags:
-                        if element not in ['\n', ' '] and element.name is not None:
-                            if element.name != "p":
+                        if element not in ['\n', ' ']:
+                            if isinstance(element, NavigableString) or element.name not in ["p", "ul", "li"]:
                                 new_tag = BeautifulSoup(
                                     features="html.parser").new_tag('p')
                                 new_tag.extend(tags)
@@ -390,8 +414,8 @@ def convertTag(node, x, tag, config):
             # node.next_element.insert_before("\\")
             # node.next_element.next_element.insert_after("/")
             node.insert(0, "\\")
-            node.insert(len(node.contents), "/ ")
-    elif node.name == "note":
+            node.insert(len(node.contents), "/")
+    elif node.name == "note" and "resp" in node.attrs:
         node.insert(len(node.contents),
                     " (auteur de cette note : "+node.attrs["resp"] + ")")
         new_attrs['class'] += "-" + node.parent.name
@@ -409,11 +433,11 @@ def convertTag(node, x, tag, config):
 
 
 if __name__ == "__main__":
-    fileTei = "/home/adoula/Downloads/will_AN_0125.xml"
+    fileTei = "../client/build/files/wills/will_AN_0094.xml"
     configFile = 'config.json'
     revised = transcription(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised['will'][1])
+    print(revised)
     # print("*****************")
     # print(edit_soup.get_text())

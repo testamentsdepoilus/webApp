@@ -20,6 +20,7 @@ import {
   MenuItem,
   Tooltip,
   CircularProgress,
+  Popper,
 } from "@material-ui/core";
 
 import ImageIIF from "../utils/ImageIIIF";
@@ -59,6 +60,7 @@ export default class WillDisplay extends Component {
       testator_notice: null,
       will_notice: null,
       isLoading: false,
+      anchorElHelp: null,
     };
 
     this.months = [
@@ -87,6 +89,8 @@ export default class WillDisplay extends Component {
     this.handleExportPDFClick = this.handleExportPDFClick.bind(this);
     this.handleAddShoppingWill = this.handleAddShoppingWill.bind(this);
     this.handleremoveShoppingWill = this.handleremoveShoppingWill.bind(this);
+    this.handleHelpOpen = this.handleHelpOpen.bind(this);
+    this.handleHelpClose = this.handleHelpClose.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -513,8 +517,33 @@ export default class WillDisplay extends Component {
         console.log("error :", error);
       });
   }
-
+  handleHelpClose(event) {
+    this.setState({
+      anchorElHelp: null,
+    });
+  }
+  handleHelpOpen(event) {
+    this.setState({
+      anchorElHelp: this.state.anchorElHelp ? null : event.currentTarget,
+    });
+  }
   render() {
+    const open = Boolean(this.state.anchorElHelp);
+    const id = open ? "transitions-popper" : undefined;
+    let supportDesc = "";
+    this.props.data["will_physDesc.supportDesc"].forEach((item) => {
+      supportDesc += Boolean(item["text"]) ? item["text"] : "";
+      supportDesc += Boolean(item["dim"]["width"])
+        ? item["dim"]["width"] + " "
+        : "";
+      supportDesc += Boolean(item["dim"]["unit"])
+        ? item["dim"]["unit"] + " x "
+        : "";
+      supportDesc += Boolean(item["dim"]["height"])
+        ? item["dim"]["height"] + " "
+        : "";
+      supportDesc += Boolean(item["dim"]["unit"]) ? item["dim"]["unit"] : "";
+    });
     const nextPage = (
       <Button
         className="iconButton nextPage"
@@ -532,8 +561,20 @@ export default class WillDisplay extends Component {
         this.props.data["will_pages"].length <= this.state.idx
           ? 0
           : this.state.idx;
-      let will_date = [];
-      if (Boolean(this.props.data["will_contents.will_date_range"])) {
+      /*let will_date = [];
+      this.props.data["will_contents.will_date_range"].map((date) => {
+        let date_gte = new Date(date["gte"]);
+        date_gte = date_gte.toLocaleDateString().split("/");
+        if (date["gte"] !== date["lte"]) {
+          let date_lte = new Date(date["lte"]);
+          date_lte = date_lte.toLocaleDateString().split("/");
+          will_date.push([date_gte, date_lte]);
+        } else {
+          will_date.push([date_gte]);
+        }
+      });*/
+      console.log("will_date :", this.props.data);
+      /* if (Boolean(this.props.data["will_contents.will_date_range"])) {
         let date_ = new Date(
           this.props.data["will_contents.will_date_range"]["gte"]
         );
@@ -547,7 +588,7 @@ export default class WillDisplay extends Component {
           );
           will_date.push(date_.toLocaleDateString().split("/"));
         }
-      }
+      }*/
 
       const isAdded = Boolean(this.userToken)
         ? this.state.myWills.findIndex((el) => el === this.props.id)
@@ -663,6 +704,60 @@ export default class WillDisplay extends Component {
                     </Tooltip>
                   )}
                 </Box>
+                <Box className="d-flex" justifyContent="flex-end" key={3}>
+                  <div className="p-relative">
+                    <Button
+                      aria-describedby={id}
+                      onClick={this.handleHelpOpen}
+                      style={{ cursor: "help" }}
+                      className="button iconButton"
+                    >
+                      <i className="fas fa-question-circle"></i>
+                    </Button>
+                    <Popper
+                      id={id}
+                      open={open}
+                      anchorEl={this.state.anchorElHelp}
+                      placement="bottom-end"
+                    >
+                      <div className="tooltip">
+                        <Button
+                          id="closeToolTip"
+                          onClick={this.handleHelpClose}
+                          title="Fermer l'aide à la recherche"
+                          className="button close iconButton"
+                        >
+                          <i className="fas fa-times"></i>
+                        </Button>
+                        <ul>
+                          <li>
+                            [TES] = testateur : informations provenant du corps
+                            du testament rédigé par le Poilu ;
+                          </li>
+                          <li>
+                            [NOT] = notaire : informations provenant de la
+                            couverture de la minute notariale ou dans le
+                            jugement que cette minute contient ;
+                          </li>
+                          <li>
+                            [MDH] = mémoire des hommes : informations provenant
+                            de la fiche de la base de données des Morts pour la
+                            France de la Première Guerre mondiale ;
+                          </li>
+                          <li>
+                            [EC] = État civil : information provenant de
+                            registres ou d’actes d’état civil (conservés le plus
+                            souvent aux archives départementales) ;
+                          </li>
+                          <li>
+                            [AS] = autres sources : informations provenant
+                            d’autres sources
+                          </li>
+                        </ul>
+                      </div>
+                    </Popper>
+                  </div>
+                </Box>
                 <div id="noticeTitleInfo" className="noticeTitleInfo" key={2}>
                   <div className="d-flex itemTitle">
                     <i className="fab fa-2x fa-stack-overflow"></i>
@@ -717,38 +812,22 @@ export default class WillDisplay extends Component {
                         ""
                       )}
                     </div>
-                    {will_date.length > 0 ||
+                    {Boolean(this.props.data["will_contents.will_date_text"]) ||
                     Boolean(
                       this.props.data["will_contents.will_place_norm"]
                     ) ? (
                       <div>
-                        {will_date.length === 1
-                          ? " Testament rédigé le " +
-                            will_date[0][0] +
-                            " " +
-                            this.months[will_date[0][1] - 1] +
-                            " " +
-                            will_date[0][2]
-                          : will_date.length === 2
-                          ? "Date de rédaction : " +
-                            will_date[0][0] +
-                            " " +
-                            this.months[will_date[0][1] - 1] +
-                            " " +
-                            will_date[0][2] +
-                            " et " +
-                            will_date[1][0] +
-                            " " +
-                            this.months[will_date[1][1] - 1] +
-                            " " +
-                            will_date[1][2]
-                          : ""}{" "}
+                        Date de rédaction :
+                        {Boolean(
+                          this.props.data["will_contents.will_date_text"]
+                        )
+                          ? " " +
+                            this.props.data["will_contents.will_date_text"]
+                          : ""}
                         {Boolean(
                           this.props.data["will_contents.will_place_norm"]
                         ) ? (
                           <span>
-                            {" "}
-                            à{" "}
                             {Boolean(
                               this.props.data["will_contents.will_place_ref"]
                             ) ? (
@@ -785,15 +864,26 @@ export default class WillDisplay extends Component {
                       <span>{this.props.data["will_identifier.cote"]}</span>
                     </div>
                     <div>
+                      Provenance
+                      {" : "}
+                      {this.props.data["will_provenance_ref"] ? (
+                        <Link
+                          href={this.props.data["will_provenance_ref"]}
+                          target="_blank"
+                        >
+                          {this.props.data["will_provenance"]}
+                        </Link>
+                      ) : (
+                        this.props.data["will_provenance"]
+                      )}
+                    </div>
+                    <div>
                       {"Support : " + this.props.data["will_physDesc.support"]}
                     </div>
                     <div>
                       {"Importance matérielle et dimensions : " +
-                        this.props.data["will_physDesc.supportDesc"]}
-                      {this.props.data["will_physDesc.dim"]["width"] + " "}
-                      {this.props.data["will_physDesc.dim"]["unit"]} x{" "}
-                      {this.props.data["will_physDesc.dim"]["height"] + " "}
-                      {this.props.data["will_physDesc.dim"]["unit"]}
+                        supportDesc +
+                        "."}
                     </div>
                     <div>
                       {"Type d'écriture : " +
