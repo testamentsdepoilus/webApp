@@ -327,17 +327,18 @@ export default class ResultWills extends React.Component {
         ? this.state.myWills.findIndex((el) => el === item["_id"])
         : -1;
 
-      let will_date = Boolean(item["will_contents.will_date"])
-        ? new Date(item["will_contents.will_date"])
-        : null;
-      will_date = Boolean(will_date) ? will_date.toLocaleDateString() : null;
       let title_testator = (
         <p>
           Testament de {" " + item["testator.forename"]}{" "}
           <span className={"text-uppercase"}>
             {item["testator.surname"] + ","}
           </span>
-          <span> {Boolean(will_date) ? "rédigé le " + will_date : ""} </span>
+          <span>
+            {" "}
+            {Boolean(item["will_contents.will_date_text"])
+              ? "rédigé le " + item["will_contents.will_date_text"]
+              : ""}{" "}
+          </span>
         </p>
       );
 
@@ -370,9 +371,10 @@ export default class ResultWills extends React.Component {
                         </span>
                       </Link>
                     </Tooltip>
-                    {Boolean(will_date) ? (
+                    {Boolean(item["will_contents.will_date_text"]) ? (
                       <Typography className="will_date">
-                        Testament rédigé le {will_date}
+                        Testament rédigé le{" "}
+                        {item["will_contents.will_date_text"]}
                       </Typography>
                     ) : (
                       ""

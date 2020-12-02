@@ -19,24 +19,6 @@ import {
 } from "@material-ui/core";
 
 export function ListWills(props) {
-  const will_dates = props.data.map((item) => {
-    let will_date = [];
-    if (Boolean(item._source["will_contents.will_date_range"])) {
-      let date_ = new Date(
-        item._source["will_contents.will_date_range"]["gte"]
-      );
-      will_date.push(date_.toLocaleDateString().split("/"));
-      if (
-        item._source["will_contents.will_date_range"]["gte"] !==
-        item._source["will_contents.will_date_range"]["lte"]
-      ) {
-        date_ = new Date(item._source["will_contents.will_date_range"]["lte"]);
-        will_date.push(date_.toLocaleDateString().split("/"));
-      }
-    }
-    return will_date;
-  });
-
   if (props.data.length > 0) {
     return (
       <div id="listWills">
@@ -49,27 +31,16 @@ export function ListWills(props) {
         <div>
           <ul>
             {props.data.map((will, i) => {
+              console.log(will);
               const will_uri =
                 getParamConfig("web_url") + "/testament/" + will["_id"];
               return (
                 <li key={i}>
                   <Link href={will_uri} target="_blank">
                     Testament
-                    {will_dates[i].length > 0
+                    {Boolean(will._source["will_contents.will_date_text"])
                       ? " rédigé le " +
-                        will_dates[i][0][0] +
-                        " " +
-                        props.months[will_dates[i][0][1] - 1] +
-                        " " +
-                        will_dates[i][0][2]
-                      : ""}
-                    {will_dates[i].length === 2
-                      ? " et le " +
-                        will_dates[i][1][0] +
-                        " " +
-                        props.months[will_dates[i][1][1] - 1] +
-                        " " +
-                        will_dates[i][1][2]
+                        will._source["will_contents.will_date_text"]
                       : ""}
                   </Link>
                 </li>
@@ -204,7 +175,7 @@ export default class TestatorDisplay extends Component {
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_wills"),
         JSON.stringify({
-          _source: ["_id", "will_contents.will_date_range", "testator.ref"],
+          _source: ["_id", "will_contents.will_date_text", "testator.ref"],
           query: {
             term: {
               "testator.ref": this.props.id,

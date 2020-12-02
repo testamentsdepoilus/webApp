@@ -696,27 +696,16 @@ export default class PlaceDisplay extends Component {
                                     >
                                       {hit._source["testator.surname"]}
                                     </span>
-                                    {will_date.length === 1
+                                    {Boolean(
+                                      hit._source[
+                                        "will_contents.will_date_text"
+                                      ]
+                                    )
                                       ? ", rédigé le " +
-                                        will_date[0][0] +
-                                        " " +
-                                        this.months[will_date[0][1] - 1] +
-                                        " " +
-                                        will_date[0][2]
-                                      : will_date.length === 2
-                                      ? ", rédigé le " +
-                                        will_date[0][0] +
-                                        " " +
-                                        this.months[will_date[0][1] - 1] +
-                                        " " +
-                                        will_date[0][2] +
-                                        " et " +
-                                        will_date[1][0] +
-                                        " " +
-                                        this.months[will_date[1][1] - 1] +
-                                        " " +
-                                        will_date[1][2]
-                                      : ""}{" "}
+                                        hit._source[
+                                          "will_contents.will_date_text"
+                                        ]
+                                      : ""}
                                   </Link>
                                 </li>
                               );

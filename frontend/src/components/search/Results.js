@@ -330,7 +330,6 @@ class Results extends React.Component {
   // Render
   render() {
     const open = Boolean(this.state.anchorEl);
-    console.log("open :", open);
     const id = open ? "transitions-popper" : undefined;
     const open_search = Boolean(this.state.anchorElSearch);
     const id_search = open_search ? "transitions-popper" : undefined;

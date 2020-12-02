@@ -595,12 +595,6 @@ class Home extends Component {
                       }}
                       renderResultStats={this.renderResultStats}
                       renderItem={function (res) {
-                        let will_date = Boolean(res["will_contents.will_date"])
-                          ? new Date(res["will_contents.will_date"])
-                          : null;
-                        will_date = Boolean(will_date)
-                          ? will_date.toLocaleDateString()
-                          : null;
                         let title_testator = (
                           <p>
                             Testament de {" " + res["testator.forename"]}{" "}
@@ -609,9 +603,10 @@ class Home extends Component {
                             </span>
                             <span>
                               {" "}
-                              {Boolean(will_date)
-                                ? " rédigé le " + will_date
-                                : ""}{" "}
+                              {Boolean(res["will_contents.will_date_text"])
+                                ? " rédigé le " +
+                                  res["will_contents.will_date_text"]
+                                : ""}
                             </span>
                           </p>
                         );
