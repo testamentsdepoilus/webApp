@@ -128,7 +128,6 @@ class ManageES extends Component {
       "tdp_places",
       "tdp_military_unit",
       "tdp_cms",
-      "tdp_users",
     ];
     let formData = new FormData();
     let input = document.getElementById("file_uploads");
@@ -259,17 +258,6 @@ class ManageES extends Component {
                       className="form"
                       onSubmit={this.onSubmit}
                     >
-                      <TextField
-                        id="host"
-                        className="input"
-                        required
-                        fullWidth
-                        label="ElasticSearch host"
-                        name="host"
-                        autoFocus
-                        value={this.state.host}
-                        onChange={this.onChange}
-                      />
                       <div className="select_index">
                         <InputLabel id="order-select-label">
                           Choix d'index
@@ -298,9 +286,6 @@ class ManageES extends Component {
                             ? [
                                 <option value={5} key={5}>
                                   tdp_cms
-                                </option>,
-                                <option value={6} key={6}>
-                                  tdp_users
                                 </option>,
                               ]
                             : []}

@@ -330,12 +330,12 @@ def get_meta_data(file_tei, file_pers, file_place, tei_transcription={}, tei_edi
                             geo_point = place_tag.geo.string.split(' ')
                             doc['will_contents.death_place'] = {
                                 "lat": geo_point[0], "lon": geo_point[1]}
-                        if place_tag.settlement.string is not None:
+                        if place_tag.settlement is not None and place_tag.settlement.string is not None:
                             doc['will_contents.death_place_norm'] = place_tag.settlement.string
                             if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
                                 doc["will_contents.place"].append(
                                     doc['will_contents.death_place_norm'])
-                        elif place_tag.geogName.string is not None:
+                        elif place_tag.geogName is not None and place_tag.geogName.string is not None:
                             doc['will_contents.death_place_norm'] = place_tag.geogName.string
                             if doc['will_contents.death_place_norm'] not in doc["will_contents.place"]:
                                 doc["will_contents.place"].append(
@@ -455,7 +455,7 @@ if __name__ == "__main__":
     # for file_ in os.listdir('../../../../data/toto/'):
     # will_342_AN_0273_2020-04-08_10-44-17_V2.xml
     fileTei = os.path.join('../client/build/files/wills/',
-                           "will_AD95_0034.xml")
+                           "will_AN_0372.xml")
 
     persFile = '../client/build/files/notices/personnes.xml'
     placeFile = '../client/build/files/notices/lieux.xml'
@@ -463,7 +463,7 @@ if __name__ == "__main__":
     transcription_ = transcription(fileTei, configFile)
     edition_ = edition(fileTei, configFile)
     doc = get_meta_data(fileTei, persFile, placeFile, transcription_, edition_)
-    print(doc)
+    print(doc["will_contents.will_date_text"])
     print("**************************************")
     # print(doc['will_pages'][0]['edition'])
     print("**************************************")
