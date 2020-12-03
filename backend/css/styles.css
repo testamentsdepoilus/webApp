@@ -463,3 +463,26 @@ h1 .item {
 .transcription  [class^="damage"]:hover:after {
     background-color: #B91918;
 }
+
+/* add with signed testator */
+.edition .add-inline-testatorComment,
+.edition .add-below-testatorComment,
+.edition .add-above-testatorComment,
+.edition .add-marginRight-testatorComment,
+.edition .add-marginLeft-testatorComment,
+.edition .add-marginBottom-testatorComment,
+.edition .signed-marginalAdditionSignature{
+    display: none;
+}
+
+/* addrLine */
+.edition [class^="addrLine"],
+.transcription [class^="addrLine"]{
+    display: block;
+}
+
+.transcription [class^="p_ul"],
+.edition [class^="p_ul"] {
+    -webkit-padding-start: 20px;
+    padding-inline-start: 20px;
+}
