@@ -48,7 +48,8 @@ class ContributorFilters extends React.Component {
             componentId="contributeur"
             value={this.state.contributeur}
             dataField="contributions.persName.keyword"
-            size={1000}
+            nestedField={"contributions"}
+            size={2000}
             showCount={true}
             autosuggest={true}
             placeholder="Nom du contributeur"

@@ -51,6 +51,7 @@ import "./styles/Responsive.css";
 import "./styles/Contact.css";
 import "./styles/ManageES.css";
 import "./styles/WillDisplay.css";
+import "./styles/PlaceDisplay.css";
 
 import LostPassWord from "./components/admin/LostPassWord";
 import ResetMDP from "./components/admin/ResetMDP";

@@ -469,17 +469,22 @@ export default class PlaceDisplay extends Component {
                       id={id}
                       open={open}
                       anchorEl={this.state.anchorEl}
-                      placement="right-start"
+                      placement="bottom-end"
                     >
                       <div className="tooltip">
                         <Button
                           id="closeToolTip"
                           onClick={this.handleHelpClose}
-                          title="Fermer l'aide à la recherche"
+                          title="Fermer l'aide"
                           className="button close iconButton"
                         >
                           <i className="fas fa-times"></i>
                         </Button>
+                        <p>
+                          Les mentions entre crochets indiquent les sources de
+                          l’information. Voici à quoi les acronymes suivants
+                          correspondent :
+                        </p>
                         <ul>
                           <li>
                             [TES] = testateur : informations provenant du corps

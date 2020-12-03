@@ -724,11 +724,16 @@ export default class WillDisplay extends Component {
                         <Button
                           id="closeToolTip"
                           onClick={this.handleHelpClose}
-                          title="Fermer l'aide à la recherche"
+                          title="Fermer l'aide"
                           className="button close iconButton"
                         >
                           <i className="fas fa-times"></i>
                         </Button>
+                        <p>
+                          Les mentions entre crochets indiquent les sources de
+                          l’information. Voici à quoi les acronymes suivants
+                          correspondent :
+                        </p>
                         <ul>
                           <li>
                             [TES] = testateur : informations provenant du corps

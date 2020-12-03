@@ -129,7 +129,7 @@ def get_meta_data(file_tei):
 						note_ = dict()
 						text = element_p.next_element
 						if isinstance(text, NavigableString):
-							note_["text"] = text.strip()
+							note_["text"] = text
 							ref = text.next_element
 							if ref is not None and ref.name == "ref":
 								note_["ref_name"] = ref.get_text()

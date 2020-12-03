@@ -293,29 +293,47 @@ h1 .item {
 }
 
 /* add */
+.transcription [class*="add"][class*="inline"][class*="testatorComment"]:hover:after,
 .transcription .add-inline:hover:after{
+
     content: "Ajouté en ligne";
+
 }
+
+.transcription [class*="add"][class*="below"][class*="testatorComment"]:hover:after,
 .transcription .add-below:hover:after{
+
     content: "Ajouté au-dessous";
+
 }
+
+.transcription [class*="add"][class*="above"][class*="testatorComment"]:hover:after,
 .transcription .add-above:hover:after{
+
     content: "Ajouté au-dessus";
+
 }
+
+.transcription [class*="add"][class*="marginRight"][class*="testatorComment"]:hover:after,
 .transcription .add-marginRight:hover:after{
+
     content: "Ajouté en marge à droite";
+
 }
+
+.transcription [class*="add"][class*="marginLeft"][class*="testatorComment"]:hover:after,
 .transcription .add-marginLeft:hover:after{
+
     content: "Ajouté en marge à gauche";
+
 }
+
+.transcription [class*="add"][class*="marginBottom"][class*="testatorComment"]:hover:after,
 .transcription .add-marginBottom:hover:after{
+
     content: "Ajouté en marge au-dessous";
+
 }
-
-
-
-
-
 
 /* damage */
 .transcription  [class^="damage"]:hover{
@@ -465,12 +483,7 @@ h1 .item {
 }
 
 /* add with signed testator */
-.edition .add-inline-testatorComment,
-.edition .add-below-testatorComment,
-.edition .add-above-testatorComment,
-.edition .add-marginRight-testatorComment,
-.edition .add-marginLeft-testatorComment,
-.edition .add-marginBottom-testatorComment,
+.edition [class*="add"][class*="testatorComment"],
 .edition .signed-marginalAdditionSignature{
     display: none;
 }
