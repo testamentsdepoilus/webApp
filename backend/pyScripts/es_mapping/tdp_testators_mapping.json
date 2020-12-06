@@ -32,6 +32,9 @@
           "date": {
             "type": "date_range"
           },
+          "date_lte": {
+            "type": "date"
+          },
            "date_text": {
                "type": "object",
                 "enabled": false
@@ -52,6 +55,9 @@
         "properties": {
           "date": {
             "type": "date_range"
+          },
+          "date_lte": {
+            "type": "date"
           },
             "date_text": {
                "type": "object",

@@ -285,10 +285,12 @@ router.post("/updateES", function (req, res, next) {
         "--host=" + process.env.host_es,
         "--index=" + req.body.index,
       ];
+
       let mapping_file = "--file=";
       switch (req.body.index) {
         case "tdp_wills":
           mapping_file += process.env.mapping_path + "/tdp_wills_mapping.json";
+          options["args"].push("--path=" + process.env.wills_path);
           break;
         case "tdp_testators":
           mapping_file +=
@@ -347,10 +349,17 @@ router.post("/updateES", function (req, res, next) {
               err: "Erreur: " + err,
             });
           } else {
-            res.send({
-              status: 200,
-              mess: "l'index <" + req.body.index + "> a été supprimé",
-            });
+            try {
+              res.send({
+                status: 200,
+                mess: "l'index <" + req.body.index + "> a été supprimé",
+              });
+            } catch (e) {
+              res.send({
+                status: 400,
+                err: "Erreur : impossible de supprimer les testaments.",
+              });
+            }
           }
         }
       );

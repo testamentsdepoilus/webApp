@@ -70,28 +70,28 @@ class Testators extends Component {
       case 3:
         this.setState({
           value: event.target.value,
-          field: "birth.date",
+          field: "birth.date_lte",
           order: "asc",
         });
         break;
       case 4:
         this.setState({
           value: event.target.value,
-          field: "birth.date",
+          field: "birth.date_lte",
           order: "desc",
         });
         break;
       case 5:
         this.setState({
           value: event.target.value,
-          field: "death.date",
+          field: "death.date_lte",
           order: "asc",
         });
         break;
       case 6:
         this.setState({
           value: event.target.value,
-          field: "death.date",
+          field: "death.date_lte",
           order: "desc",
         });
         break;

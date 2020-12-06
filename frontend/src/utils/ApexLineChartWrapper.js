@@ -15,8 +15,7 @@ const ApexLineChartWrapper = (props) => {
       values.push(doc_count);
     });
   }
-  console.log("keys :", keys);
-  console.log("values :", values);
+
   return (
     <Linechart labels={keys} lineData={values} chartOptions={chartOptions} />
   );

@@ -43,7 +43,7 @@ class About extends Component {
       getParamConfig("es_host") + "/" + getParamConfig("es_index_cms")
     ).then((res) => {
       const total = typeof res === "object" ? res.value : res;
-      console.log("total :", total);
+
       getHitsFromQuery(
         getParamConfig("es_host") + "/" + getParamConfig("es_index_cms"),
         JSON.stringify({

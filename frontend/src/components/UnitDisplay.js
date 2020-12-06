@@ -330,22 +330,22 @@ export default class UnitDisplay extends Component {
                         <ul>
                           <li>
                             [TES] = testateur : informations provenant du corps
-                            du testament rédigé par le Poilu ;
+                            du testament rédigé par le Poilu
                           </li>
                           <li>
                             [NOT] = notaire : informations provenant de la
                             couverture de la minute notariale ou dans le
-                            jugement que cette minute contient ;
+                            jugement que cette minute contient
                           </li>
                           <li>
                             [MDH] = mémoire des hommes : informations provenant
                             de la fiche de la base de données des Morts pour la
-                            France de la Première Guerre mondiale ;
+                            France de la Première Guerre mondiale
                           </li>
                           <li>
                             [EC] = État civil : information provenant de
                             registres ou d’actes d’état civil (conservés le plus
-                            souvent aux archives départementales) ;
+                            souvent aux archives départementales)
                           </li>
                           <li>
                             [AS] = autres sources : informations provenant

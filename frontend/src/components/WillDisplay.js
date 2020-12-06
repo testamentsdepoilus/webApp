@@ -561,34 +561,6 @@ export default class WillDisplay extends Component {
         this.props.data["will_pages"].length <= this.state.idx
           ? 0
           : this.state.idx;
-      /*let will_date = [];
-      this.props.data["will_contents.will_date_range"].map((date) => {
-        let date_gte = new Date(date["gte"]);
-        date_gte = date_gte.toLocaleDateString().split("/");
-        if (date["gte"] !== date["lte"]) {
-          let date_lte = new Date(date["lte"]);
-          date_lte = date_lte.toLocaleDateString().split("/");
-          will_date.push([date_gte, date_lte]);
-        } else {
-          will_date.push([date_gte]);
-        }
-      });*/
-      console.log("will_date :", this.props.data);
-      /* if (Boolean(this.props.data["will_contents.will_date_range"])) {
-        let date_ = new Date(
-          this.props.data["will_contents.will_date_range"]["gte"]
-        );
-        will_date.push(date_.toLocaleDateString().split("/"));
-        if (
-          this.props.data["will_contents.will_date_range"]["gte"] !==
-          this.props.data["will_contents.will_date_range"]["lte"]
-        ) {
-          date_ = new Date(
-            this.props.data["will_contents.will_date_range"]["lte"]
-          );
-          will_date.push(date_.toLocaleDateString().split("/"));
-        }
-      }*/
 
       const isAdded = Boolean(this.userToken)
         ? this.state.myWills.findIndex((el) => el === this.props.id)
@@ -737,22 +709,22 @@ export default class WillDisplay extends Component {
                         <ul>
                           <li>
                             [TES] = testateur : informations provenant du corps
-                            du testament rédigé par le Poilu ;
+                            du testament rédigé par le Poilu
                           </li>
                           <li>
                             [NOT] = notaire : informations provenant de la
                             couverture de la minute notariale ou dans le
-                            jugement que cette minute contient ;
+                            jugement que cette minute contient
                           </li>
                           <li>
                             [MDH] = mémoire des hommes : informations provenant
                             de la fiche de la base de données des Morts pour la
-                            France de la Première Guerre mondiale ;
+                            France de la Première Guerre mondiale
                           </li>
                           <li>
                             [EC] = État civil : information provenant de
                             registres ou d’actes d’état civil (conservés le plus
-                            souvent aux archives départementales) ;
+                            souvent aux archives départementales)
                           </li>
                           <li>
                             [AS] = autres sources : informations provenant

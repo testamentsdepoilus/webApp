@@ -1,6 +1,8 @@
 import json
 from elasticsearch import Elasticsearch
 import argparse
+import os
+import shutil
 
 if __name__ == '__main__':
     # construct the argument parser and parse the arguments
@@ -8,12 +10,17 @@ if __name__ == '__main__':
     ap.add_argument("-iF", "--file", required=True, help="input mapping config file")
     ap.add_argument("-iH", "--host", required=True, help="ES host name")
     ap.add_argument("-iX", "--index", required=True, help="ES index name")
+    ap.add_argument("-iPath", "--path", required=False, help="Create path to store data")
     args = vars(ap.parse_args())
 
     with open(args["file"]) as f:
         d = json.load(f)
 
     try:
+        if args["path"] is not None and args["index"] == "tdp_wills":
+            if os.path.isdir(args["path"]):
+                shutil.rmtree(args["path"])
+            os.mkdir(args["path"])
         es = Elasticsearch(
                 hosts=args['host']
             )

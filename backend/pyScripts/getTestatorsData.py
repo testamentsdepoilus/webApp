@@ -30,6 +30,7 @@ def get_meta_data(file_tei):
 		birth = pers.birth
 		doc['birth.date_text'] = birth.next_element.string
 		doc['birth.date'] = []
+		doc['birth.date_lte'] = []
 		for date in birth.find_all('date'):
 			if date.string is not None:
 				doc['birth.date_text'] += date.string
@@ -39,9 +40,11 @@ def get_meta_data(file_tei):
 				if "[" in date['when']:
 					doc['birth.date'].append(
 						{"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
+					doc['birth.date_lte'].append(date['when'].split("[")[0].strip())
 				else:
 					doc['birth.date'].append(
 						{"gte": date['when'].strip(), "lte": date['when'].strip()})
+					doc['birth.date_lte'].append(date['when'].strip())
 			elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
 				date_notBefore = date['notBefore']
 				date_notAfter = date['notAfter']
@@ -50,6 +53,7 @@ def get_meta_data(file_tei):
 				if "[" in date_notAfter:
 					date_notAfter = date_notAfter.split("[")[0].strip()
 				doc['birth.date'].append({"gte": date_notBefore.strip(), "lte": date_notAfter.strip()})
+				doc['birth.date_lte'].append(date_notAfter.strip())
 		birth_place = birth.placeName
 		if birth_place is not None:
 			if 'ref' in birth_place.attrs:
@@ -60,6 +64,7 @@ def get_meta_data(file_tei):
 		death = pers.death
 		doc['death.date_text'] = death.next_element.string
 		doc['death.date'] = []
+		doc['death.date_lte'] = []
 		for date in death.find_all('date'):
 			doc['death.date_text'] += date.string
 			if isinstance(date.next_sibling, NavigableString) and date.next_sibling.string != "\n":
@@ -68,9 +73,11 @@ def get_meta_data(file_tei):
 				if "[" in date['when']:
 					doc['death.date'].append(
 						{"gte": date['when'].split("[")[0].strip(), "lte": date['when'].split("[")[0].strip()})
+					doc['death.date_lte'].append(date['when'].split("[")[0].strip())
 				else:
 					doc['death.date'].append(
 						{"gte": date['when'].strip(), "lte": date['when'].strip()})
+					doc['death.date_lte'].append(date['when'].strip())
 			elif 'notAfter' in date.attrs and 'notBefore' in date.attrs:
 				date_notBefore = date['notBefore']
 				date_notAfter = date['notAfter']
@@ -79,7 +86,7 @@ def get_meta_data(file_tei):
 				if "[" in date_notAfter:
 					date_notAfter = date_notAfter.split("[")[0].strip()
 				doc['death.date'].append({"gte": date_notBefore.strip(), "lte": date_notAfter.strip()})
-
+				doc['death.date_lte'].append(date_notAfter.strip())
 		death_place = death.placeName
 		if death_place is not None:
 			if 'ref' in death_place.attrs:

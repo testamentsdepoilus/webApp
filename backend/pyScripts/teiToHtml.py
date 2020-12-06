@@ -433,11 +433,11 @@ def convertTag(node, x, tag, config):
 
 
 if __name__ == "__main__":
-    fileTei = "../client/build/files/wills/will_AN_0094.xml"
+    fileTei = "../client/build/files/wills/will_AD78_0053.xml"
     configFile = 'config.json'
-    revised = transcription(fileTei, configFile)
+    revised = edition(fileTei, configFile)
     # edit_soup = BeautifulSoup(revised['will'][0], 'html.parser')
     # print("***********************")
-    print(revised)
+    print(revised["will"][0])
     # print("*****************")
     # print(edit_soup.get_text())

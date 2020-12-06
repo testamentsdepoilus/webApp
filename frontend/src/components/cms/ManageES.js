@@ -126,7 +126,6 @@ class ManageES extends Component {
       "tdp_testators",
       "tdp_places",
       "tdp_military_unit",
-      "tdp_cms",
     ];
     let formData = new FormData();
     let input = document.getElementById("file_uploads");
@@ -281,13 +280,6 @@ class ManageES extends Component {
                           <option value={4} key={4}>
                             tdp_units
                           </option>
-                          {this.state.selectedId !== "add"
-                            ? [
-                                <option value={5} key={5}>
-                                  tdp_cms
-                                </option>,
-                              ]
-                            : []}
                         </NativeSelect>
                       </div>
                       {this.state.selectedId === "add" ? (

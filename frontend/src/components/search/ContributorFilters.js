@@ -58,6 +58,12 @@ class ContributorFilters extends React.Component {
             showSearch={true}
             searchPlaceholder="Saisir un nom de contributeur"
             onChange={this.handleContributeurChange}
+            transformData={(data) => {
+              data.sort(function (a, b) {
+                return a["key"].localeCompare(b["key"]);
+              });
+              return data;
+            }}
             innerClass={{
               list: "list",
               select:
