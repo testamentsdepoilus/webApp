@@ -383,7 +383,7 @@ class Home extends Component {
                     spacing={0}
                     className="random_wills"
                   >
-                    {this.state.images.map((tile) => (
+                    {this.state.images.map((tile, i) => (
                       <Grid
                         className="card"
                         key={tile._id}
@@ -400,9 +400,9 @@ class Home extends Component {
                           <img
                             src={
                               tile._source["will_pages"][0]["picture_url"] +
-                              "/full/full/0/default.jpg"
+                              "/full/pct:25/0/default.jpg"
                             }
-                            alt={tile._source["will_pages"][0]["picture_url"]}
+                            alt={"image " + i}
                           />
                         </a>
                         <div>
