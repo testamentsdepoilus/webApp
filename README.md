@@ -7,7 +7,7 @@ Le code développé dans le cadre de ce projet est proposé en openSource sous l
 
 ### Architercture de l'application 
 
-![web_app_architecture](https://testaments-de-poilus.huma-num.fr/api/web/uploads/web_app_architecture.png)
+![web_app_architecture](https://github.com/testamentsdepoilus/webApp/blob/master/frontend/public/images/web_app_architecture.png)
 
 L'application utilise les composants logiciels suivants :
 
