@@ -110,7 +110,7 @@ class Testators extends Component {
       <div className="notices testators">
         <ReactiveBase
           app={getParamConfig("es_index_testators")}
-          url={getParamConfig("es_host_with_auth")}
+          url={getParamConfig("es_host")}
           type="_doc"
         >
           <Breadcrumbs

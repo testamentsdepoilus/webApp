@@ -39,7 +39,7 @@ class Explore extends Component {
         <div className="bg-white paddingContainer">
           <ReactiveBase
             app={getParamConfig("es_index_wills")}
-            url={getParamConfig("es_host_with_auth")}
+            url={getParamConfig("es_host")}
             type="_doc"
           >
             <Grid container justify="center" alignItems="center" spacing={2}>

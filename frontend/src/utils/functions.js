@@ -74,7 +74,6 @@ export function readXmlFile(file) {
 export function getParamConfig(param) {
   let config = {};
   config["es_host"] = process.env.REACT_APP_ES_HOST;
-  config["es_host_with_auth"] = process.env.REACT_APP_ES_HOST_with_auth;
   config["es_index_wills"] = process.env.REACT_APP_ES_INDEX_WILLS;
   config["es_index_cms"] = process.env.REACT_APP_ES_INDEX_CMS;
   config["es_index_user"] = process.env.REACT_APP_ES_INDEX_USERS;

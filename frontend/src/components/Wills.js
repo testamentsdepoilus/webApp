@@ -91,7 +91,7 @@ class Wills extends Component {
       <div className="notices wills">
         <ReactiveBase
           app={getParamConfig("es_index_wills")}
-          url={getParamConfig("es_host_with_auth")}
+          url={getParamConfig("es_host")}
           type="_doc"
         >
           <Breadcrumbs

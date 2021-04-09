@@ -88,7 +88,7 @@ class Units extends Component {
       <div className="notices units">
         <ReactiveBase
           app={getParamConfig("es_index_units")}
-          url={getParamConfig("es_host_with_auth")}
+          url={getParamConfig("es_host")}
           type="_doc"
         >
           <Breadcrumbs
