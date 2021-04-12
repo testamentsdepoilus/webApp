@@ -17,10 +17,11 @@ if __name__ == '__main__':
         d = json.load(f)
 
     try:
-        if args["path"] is not None and args["index"] == "tdp_wills":
-            if os.path.isdir(args["path"]):
+        if args["path"] is not None:
+            if os.path.exists(args["path"]) and args["index"] == "tdp_wills":
                 shutil.rmtree(args["path"])
-            os.mkdir(args["path"])
+            if os.path.exists(args["path"]) == False:
+                os.makedirs(args["path"])
         es = Elasticsearch(
                 hosts=args['host']
             )

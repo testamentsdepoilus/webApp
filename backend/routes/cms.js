@@ -295,13 +295,16 @@ router.post("/updateES", function (req, res, next) {
         case "tdp_testators":
           mapping_file +=
             process.env.mapping_path + "tdp_testators_mapping.json";
+          options["args"].push("--path=" + process.env.notices_path);
           break;
         case "tdp_places":
           mapping_file += process.env.mapping_path + "tdp_places_mapping.json";
+          options["args"].push("--path=" + process.env.notices_path);
           break;
         case "tdp_military_unit":
           mapping_file +=
             process.env.mapping_path + "tdp_militaryUnits_mapping.json";
+          options["args"].push("--path=" + process.env.notices_path);
           break;
         case "tdp_cms":
           mapping_file += process.env.mapping_path + "tdp_cms_mapping.json";
@@ -337,8 +340,7 @@ router.post("/updateES", function (req, res, next) {
       });
       break;
     case "remove":
-      const es_client = new Client({ node: req.body.host });
-      es_client.indices.delete(
+      client.indices.delete(
         {
           index: req.body.index,
         },
